@@ -5,7 +5,6 @@ user interface to assign them to various cases.
 # TODO
 * Double animation on reload
 * Prettify case selection a little
-* Modules into seperate Folder
 * Add startpage
 
 # LATER

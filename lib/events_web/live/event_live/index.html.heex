@@ -17,7 +17,7 @@
 
 
 <div id="events" phx-update="stream" class="space-y-4">
-  <% prev_date = ~U[1970-01-12 00:01:00.00Z] %>  
+  <%!-- prev_date = ~U[1970-01-12 00:01:00.00Z] --%>  
   <%= for {id, event} <- @streams.events do %>
   <%!-- <%= for {id, event} <- @streams.events |> Enum.filter(fn event -> event.case_id == @case_id end) do %> --%>
 

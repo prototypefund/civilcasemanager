@@ -17,7 +17,7 @@
 
 
 <div id="events" phx-update="stream" class="space-y-4">
-  <%!-- prev_date = ~U[1970-01-12 00:01:00.00Z] --%>  
+  <%!-- prev_date = ~U[1970-01-12 00:01:00.00Z] --%>
   <%= for {id, event} <- @streams.events do %>
   <%!-- <%= for {id, event} <- @streams.events |> Enum.filter(fn event -> event.case_id == @case_id end) do %> --%>
 
@@ -28,13 +28,13 @@
       <% prev_date = event.received_at %>
     <% end %> --%>
 
-    <div id={id} class="flex flex-row items-center shadow rounded-lg p-4 space-x-4 border-2 border-calypso-50" phx-click={JS.navigate(~p"/events/#{event}")}>
+    <div id={id} class="flex flex-row items-center shadow rounded-lg p-4 space-x-4 border-2 border-calypso-50" phx-click={JS.navigate(~p"/events/#{event}")} phx-hook="FadeIn">
 
       <div class="flex-none">
         <!-- TODO: Icon based on event type -->
         <.icon name="hero-envelope-solid bg-cerise-500" class="h-5 w-5" />
       </div>
-      
+
       <div class="flex-grow">
         <div class="text-lg font-medium">
           <%= event.title %>

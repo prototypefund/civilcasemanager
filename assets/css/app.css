@@ -4,11 +4,18 @@
 
 /* This file is for your main application CSS */
 
-#events > div {
+/* #events > div {
     animation: fadein 0.5s;
-}
+} */
 
-@keyframes fadein {
+.fade-in {
+    animation: fadeIn ease 1s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+  }
+  
+
+@keyframes fadeIn {
     from {
         opacity:0;
     }

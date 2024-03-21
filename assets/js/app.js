@@ -26,8 +26,21 @@ let Hooks = {};
 
 Hooks.FadeIn = {
   updated() {
-    console.log("UPDATE")
     this.el.classList.add("fade-in");
+  },
+  mounted() {
+    if (document.body.classList.contains("initial-mount-complete")) {
+      this.el.classList.add("fade-in");
+    }
+  }
+};
+
+Hooks.ParentMount = {
+  mounted() {
+    // Enable insert animation 100ms after page load
+    setTimeout(function(){
+      document.body.classList.add("initial-mount-complete");
+    }, 100)
   }
 };
 

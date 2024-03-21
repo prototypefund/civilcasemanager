@@ -8,7 +8,7 @@
     animation: fadein 0.5s;
 } */
 
-.fade-in {
+body.initial-mount-complete .fade-in {
     animation: fadeIn ease 1s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;

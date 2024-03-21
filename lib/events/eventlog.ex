@@ -77,16 +77,10 @@ defmodule Events.Eventlog do
   def update_event(%Event{} = event, attrs) do
     event
     |> Event.changeset(attrs)
-    |> assign_cases(attrs)
-    #|> Ecto.Changeset.cast_assoc(:cases, attrs["cases"])
     |> Repo.update()
     |> broadcast(:event_updated)
   end
 
-  defp assign_cases(changeset, []), do: changeset
-  defp assign_cases(changeset, attrs) do
-    Ecto.Changeset.put_assoc(changeset, :cases, Events.Cases.get_cases((attrs["cases"])))
-  end
 
   @doc """
   Deletes a event.

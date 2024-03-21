@@ -28,12 +28,13 @@ defmodule Events.Eventlog.Event do
     |> truncate_field(:body, 65_535)
     |> truncate_field(:metadata, 65_535)
     |> put_received_at_if_nil()
-    #|> assign_cases(attrs)
+    |> assign_cases(attrs["cases"])
   end
 
   defp assign_cases(changeset, []), do: changeset
-  defp assign_cases(changeset, attrs) do
-    Ecto.Changeset.put_assoc(changeset, :cases, Events.Cases.get_cases((attrs["cases"])))
+  defp assign_cases(changeset, nil), do: changeset
+  defp assign_cases(changeset, cases) do
+    Ecto.Changeset.put_assoc(changeset, :cases, Events.Cases.get_cases(cases))
   end
 
   defp put_received_at_if_nil(changeset) do

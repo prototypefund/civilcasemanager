@@ -52,9 +52,6 @@ defmodule Events.IMAPFetcher do
     ## TODO
   end
 
-
-
-
   defp publish_email(message, state) do
     IO.puts("Received an email with subject `#{message.subject}`:")
     IO.inspect(message)

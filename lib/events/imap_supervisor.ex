@@ -10,15 +10,15 @@ defmodule Events.IMAPSupervisor do
   def init(args) do
     children = [
       %{
-        id: :IMAPWORKER,
-        start: {Events.IMAPWorker, :start_link, [args]},
-        restart: :permanent,
-        type: :worker
-      },
-      %{
         id: :YUGOCLIENT,
         start: {Yugo.Client, :start_link, [args]},
         restart: :temporary,
+        type: :worker
+      },
+      %{
+        id: :IMAPWORKER,
+        start: {Events.IMAPWorker, :start_link, [args]},
+        restart: :permanent,
         type: :worker
       }
     ]

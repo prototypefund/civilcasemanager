@@ -9,14 +9,11 @@ defmodule Events.IMAPWorker do
   def init(opts) do
     IO.puts("Hello from IMAP")
 
-    ## FIXME: Give unique ids for each instance!!
-    client_name = Keyword.get(opts, :client_name, :YUGO_CLIENT_1)
-
     # Set up the email filter
     my_filter = Yugo.Filter.all()
 
     # Subscribe to emails
-    Yugo.subscribe(client_name, my_filter)
+    Yugo.subscribe(opts[:name], my_filter)
 
     # Store sthe manager PIDs in state for later reference
     # The state is passed to handle_info for later usage.

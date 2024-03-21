@@ -5,9 +5,8 @@ user interface to assign them to various cases.
 # TODO
 * Double animation on reload
 * Prettify case selection a little
-* Add startpage
 
-# LATER
+* # LATER
 * Check names in IMAP regarding parallel execution. 
 * https://fly.io/phoenix-files/liveview-multi-select/
 * Use prod for staging server

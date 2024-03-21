@@ -29,6 +29,7 @@ defmodule EventsWeb.CaseLive.FormComponent do
         <.input field={@form[:closed_at]} type="datetime-local" label="Closed at" />
         <.input field={@form[:archived_at]} type="datetime-local" label="Archived at" />
         <.input field={@form[:is_archived]} type="checkbox" label="Is archived" />
+        <.input field={@form[:freetext]} type="textarea" label="Notes" />
         <.input
           field={@form[:status]}
           type="select"

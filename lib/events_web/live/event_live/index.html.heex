@@ -32,7 +32,7 @@
 
       <div class="flex-none">
         <!-- TODO: Icon based on event type -->
-        <.icon name="hero-envelope-solid bg-flamingo-500" class="h-5 w-5" />
+        <.icon name="hero-envelope-solid bg-cerise-500" class="h-5 w-5" />
       </div>
       
       <div class="flex-grow">
@@ -50,13 +50,13 @@
       <div class="flex-none">
         <!-- Actions -->
         <.link patch={~p"/events/#{event}/edit"}>
-          <.icon name="hero-pencil-square" class="text-calypso-700" />
+          <.icon name="hero-pencil-square" class="text-teal-500" />
         </.link>
         <.link
           phx-click={JS.push("delete", value: %{id: event.id}) |> hide("##{id}")}
           data-confirm="Are you sure?"
         >
-          <.icon name="hero-trash" class="text-red-900"/>
+          <.icon name="hero-trash" class="text-chestnut-500"/>
         </.link>
       </div>
     </div>

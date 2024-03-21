@@ -16,14 +16,8 @@
   <:col :let={{_id, case}} label="Title"><%= case.title %></:col>
   <:col :let={{_id, case}} label="Description"><%= case.description %></:col>
   <:col :let={{_id, case}} label="Created at"><%= case.created_at %></:col>
-  <:col :let={{_id, case}} label="Updated at"><%= case.updated_at %></:col>
-  <:col :let={{_id, case}} label="Deleted at"><%= case.deleted_at %></:col>
-  <:col :let={{_id, case}} label="Opened at"><%= case.opened_at %></:col>
-  <:col :let={{_id, case}} label="Closed at"><%= case.closed_at %></:col>
-  <:col :let={{_id, case}} label="Archived at"><%= case.archived_at %></:col>
   <:col :let={{_id, case}} label="Is archived"><%= case.is_archived %></:col>
   <:col :let={{_id, case}} label="Status"><%= case.status %></:col>
-  <:col :let={{_id, case}} label="Status note"><%= case.status_note %></:col>
   <:action :let={{_id, case}}>
     <div class="sr-only">
       <.link navigate={~p"/cases/#{case}"}>Show</.link>

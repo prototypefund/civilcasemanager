@@ -16,7 +16,9 @@
   <:item title="From"><%= @event.from %></:item>
   <:item title="Cases">
     <%= for case <- @event.cases do %>
-      <%= case.identifier %>
+      <div class={"#{if case.status == :open, do: 'bg-emerald-200 border-emerald-300', else: 'bg-gray-200 border-gray-300' } border   rounded-md px-2 py-1"}>
+        <%= case.identifier %>
+      </div>
     <% end %>
   </:item>
 </.list>

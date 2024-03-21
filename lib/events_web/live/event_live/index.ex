@@ -39,6 +39,11 @@ defmodule EventsWeb.EventLive.Index do
   end
 
   @impl true
+  def handle_info({:event_updated, event}, socket) do
+    {:noreply, stream_insert(socket, :events, event, at: 0)}
+  end
+
+  @impl true
   def handle_info({EventsWeb.EventLive.FormComponent, {:saved, event}}, socket) do
     {:noreply, stream_insert(socket, :events, event)}
   end

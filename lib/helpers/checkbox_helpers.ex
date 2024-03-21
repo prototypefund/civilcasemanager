@@ -24,14 +24,15 @@ defmodule Events.Helpers.CheckboxHelper do
     {selected, _} = get_selected_values(form, field, opts)
     IO.inspect(selected)
     selected_as_strings = Enum.map(selected, &"#{&1}")
-    #selected_as_strings = []
+
     for {value, key} <- options, into: [] do
-      content_tag(:label, class: "checkbox-inline") do
+      content_tag(:label, class: "checkbox-inline mr-2 text-sm  leading-6 text-zinc-800 mx-1") do
         [
           tag(:input,
             name: input_name(form, field) <> "[]",
             id: input_id(form, field, key),
             type: "checkbox",
+            class: "mr-2",
             value: key,
             checked: Enum.member?(selected_as_strings, "#{key}")
           ),

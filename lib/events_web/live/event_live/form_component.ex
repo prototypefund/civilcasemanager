@@ -31,6 +31,9 @@ defmodule EventsWeb.EventLive.FormComponent do
         <.input field={@form[:body]} type="textarea" label="Body" />
         <.input field={@form[:metadata]} type="textarea" label="Metadata" />
         <.input field={@form[:from]} type="text" label="From" />
+        <label class="block text-sm font-semibold leading-6 text-zinc-800" >
+          Associated cases
+        </label>
          <%=
           Events.Helpers.CheckboxHelper.multiselect_checkboxes(
             @form,

@@ -3,7 +3,7 @@ defmodule Events.FetchSupervisor do
   use Supervisor
 
   def start_link(opts) do
-    Supervisor.start_link(__MODULE__, opts, name: __MODULE__)
+    Supervisor.start_link(__MODULE__, opts, name: __MODULE__, strategy: :one_for_one, restart: :transient)
   end
 
   @impl true

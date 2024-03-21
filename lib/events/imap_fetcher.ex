@@ -1,22 +1,14 @@
 defmodule Events.IMAPFetcher do
   use GenServer
-  @behaviour Events.FetchBehaviour
 
-
-  ## TODO: Think about names....
-  @impl true
   def start_link(opts) do
-    case GenServer.start_link(__MODULE__, opts, name: Keyword.get(opts, :name, __MODULE__)) do
-      {:ok, pid} ->
-        IO.puts("Hello from IMAP")
-        {:ok, pid}
-      {:error, reason} ->
-        {:error, reason}
-    end
+    GenServer.start_link(__MODULE__, opts, name: Keyword.get(opts, :name, __MODULE__))
   end
 
   @impl true
   def init(opts) do
+    IO.puts("Hello from IMAP")
+
     # Take the options we need
     ## FIXME whole applications refuses to start if map not correct.
     yugo_opts = Keyword.take(opts, [:server, :username, :password])
@@ -39,6 +31,7 @@ defmodule Events.IMAPFetcher do
     {:ok, %{yugo_pid: yugo_pid, manager_pid: opts[:manager_pid]}}
   end
 
+
   @impl true
   def handle_info({:email, _client, message}, state) do
     publish_email(message, state)
@@ -46,8 +39,8 @@ defmodule Events.IMAPFetcher do
   end
 
   @impl true
-  def fetch_data(_opts) do
-    ## TODO
+  def handle_call({:fetch_data}, _from, _state) do
+    ## Just an example
   end
 
   defp publish_email(message, state) do

@@ -19,7 +19,6 @@ defmodule Events.IMAPFetcher do
   def init(opts) do
     # Take the options we need
     ## FIXME whole applications refuses to start if map not correct.
-    ## FIXME yugo crashes if server is just a random string
     yugo_opts = Keyword.take(opts, [:server, :username, :password])
 
     ## FIXME: Give unique ids for each instance!!
@@ -56,8 +55,7 @@ defmodule Events.IMAPFetcher do
     IO.inspect(message)
     IO.inspect(state[:manager_pid])
 
-    ## TODO: Add email headers!
-    ## TODO Think about body types (what to do with html emails)
+    ## TODO: Add email headers?
     event = %Events.FetchEvent{
       type: "imap",
       body: extract_body(message.body),
@@ -72,7 +70,24 @@ defmodule Events.IMAPFetcher do
 
   defp extract_body({"text/plain", _options, actual_body}), do: actual_body
   defp extract_body({"text/html", _options, actual_body}), do: actual_body
-  defp extract_body(_), do: nil
+
+  ## Sometimes we get both
+  ## TODO: More concise?
+  defp extract_body(body) when is_list(body) do
+    body
+    |> Enum.find(fn {content_type, _, _} -> content_type == "text/plain" end)
+    |> case do
+      nil ->
+        # Fallback to "text/html" if "text/plain" is not found, or nil if neither are present
+        Enum.find(body, fn {content_type, _, _} -> content_type == "text/html" end)
+        |> extract_body_from_tuple()
+      {_content_type, _options, actual_body} ->
+        actual_body
+    end
+  end
+
+  defp extract_body_from_tuple(nil), do: nil
+  defp extract_body_from_tuple({_, _, actual_body}), do: actual_body
 
   def extract_email_address(from) do
     from

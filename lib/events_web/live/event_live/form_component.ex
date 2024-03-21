@@ -36,7 +36,7 @@ defmodule EventsWeb.EventLive.FormComponent do
             @form,
             :cases,
             Enum.map(Events.Cases.list_open_cases(), fn case -> {case.identifier, case.id} end),
-            selected: Enum.map(@form.data.cases,&(&1.id))
+            selected: (if is_list(@form.data.cases), do: Enum.map(@form.data.cases, &(&1.id)), else: [])
           )
         %>
         <:actions>

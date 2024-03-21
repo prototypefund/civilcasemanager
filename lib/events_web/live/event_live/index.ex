@@ -30,6 +30,7 @@ defmodule EventsWeb.EventLive.Index do
   defp apply_action(socket, :index, _params) do
     socket
     |> assign(:page_title, "Listing Events")
+    |> assign(:prev_date, ~U[1970-01-12 00:01:00.00Z])
     |> assign(:event, nil)
   end
 

@@ -10,7 +10,7 @@ user interface to assign them to various cases.
 * Also, should maybe id be binary id and equal identifier??
 * Use own supervisor for Slack
 
-# LATER
+# Later
 
 * Check names in IMAP regarding parallel execution. 
 * https://fly.io/phoenix-files/liveview-multi-select/
@@ -31,6 +31,7 @@ https://github.com/woylie/let_me
 
 To start the server:
 
+  * Copy EXAMPLEworkers.exs to workers.exs and configure as needed.
   * Run `mix setup` to install and setup dependencies
   * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
 

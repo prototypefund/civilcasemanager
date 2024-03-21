@@ -15,7 +15,8 @@ defmodule Events.Application do
       # Start the Finch HTTP client for sending emails
       {Finch, name: Events.Finch},
       # Start the FetchCoordinator
-      {Events.FetchCoordinator, worker_configs()},
+      {Events.FetchManager, name: :fetch_manager},
+      {Events.FetchSupervisor, supervisor_opts()},
       # Start to serve requests, typically the last entry
       EventsWeb.Endpoint
     ]
@@ -26,9 +27,11 @@ defmodule Events.Application do
     Supervisor.start_link(children, opts)
   end
 
-  ## TODO Hard coded
-  def worker_configs() do
-    [{Events.IMAPFetcher, [server: "imap.riseup.net", username: "xxy", password: "zzz", name: :EXAMPLE]}]
+  def supervisor_opts do
+    ## TODO: Remove pid from her (is nil!!)
+    manager_pid = Process.whereis(:fetch_manager)
+    worker_configs = Application.get_env(:events, :worker_configs, [])
+    [manager_pid: Process.whereis(:fetch_manager), worker_configs: worker_configs]
   end
 
   # Tell Phoenix to update the endpoint configuration

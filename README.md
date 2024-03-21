@@ -1,3 +1,9 @@
+# TODO
+
+* Modules into seperate Folder
+* Allow config of modules ---> expose config interface
+* Yugo without a server in the domain acts up!!
+
 # Events
 
 To start your Phoenix server:

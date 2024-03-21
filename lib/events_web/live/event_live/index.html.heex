@@ -16,8 +16,10 @@
   <:col :let={{_id, event}} label="Time Received"><%= event.received_at %></:col>
   <:col :let={{_id, event}} label="Case"><%= event.case_id %></:col>
   <:col :let={{_id, event}} label="Title"><%= event.title %></:col>
-  <:col :let={{_id, event}} label="Body"><%= event.body %></:col>
-  <:col :let={{_id, event}} label="Origin"><%= event.origin %></:col>
+  <:col :let={{_id, event}} label="Body">
+    <%= String.slice(event.body, 0, 80) %>
+  </:col>
+  <:col :let={{_id, event}} label="From"><%= event.from %></:col>
   <:col :let={{_id, event}} label="Manual"><%= event.manual %></:col>
   <:action :let={{_id, event}}>
     <div class="sr-only">

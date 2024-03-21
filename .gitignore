@@ -35,3 +35,4 @@ events-*.tar
 npm-debug.log
 /assets/node_modules/
 
+config/workers.exs

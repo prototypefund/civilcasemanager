@@ -108,7 +108,7 @@ defmodule Events.Eventlog do
     Phoenix.PubSub.subscribe(Events.PubSub, "events")
   end
 
-  defp broadcast({:error, _reason} = error, _event), do: error
+  defp broadcast({:error, changeset}, _change_type), do: {:error, changeset}
   defp broadcast({:ok, event}, change_type) do
     Phoenix.PubSub.broadcast(Events.PubSub, "events", {change_type, event})
     {:ok, event}

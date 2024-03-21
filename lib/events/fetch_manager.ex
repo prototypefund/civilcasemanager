@@ -1,4 +1,6 @@
 defmodule Events.FetchManager do
+  import Events.Eventlog, only: [broadcast: 2]
+
   use GenServer
   alias Events.Eventlog.Event
   alias Events.Repo
@@ -31,12 +33,5 @@ defmodule Events.FetchManager do
     end
 
     {:noreply, state}
-  end
-
-  ## TODO: Duplicated function from eventlog.ex
-  defp broadcast({:error, changeset}, _change_type), do: {:error, changeset}
-  defp broadcast({:ok, event}, change_type) do
-    Phoenix.PubSub.broadcast(Events.PubSub, "events", {change_type, event})
-    {:ok, event}
   end
 end

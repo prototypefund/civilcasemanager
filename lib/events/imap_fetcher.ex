@@ -17,7 +17,6 @@ defmodule Events.IMAPFetcher do
 
   @impl true
   def init(opts) do
-    IO.inspect(opts)
     # Take the options we need
     ## FIXME whole applications refuses to start if map not correct.
     ## FIXME yugo crashes if server is just a random string
@@ -58,7 +57,6 @@ defmodule Events.IMAPFetcher do
     IO.inspect(state[:manager_pid])
 
     ## TODO: Add email headers!
-    ## TODO: Lets try with out date setting.
     ## TODO Think about body types (what to do with html emails)
     event = %Events.FetchEvent{
       type: "imap",

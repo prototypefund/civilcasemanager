@@ -28,10 +28,7 @@ defmodule Events.Application do
   end
 
   def supervisor_opts do
-    ## TODO: Remove pid from her (is nil!!)
-    manager_pid = Process.whereis(:fetch_manager)
-    worker_configs = Application.get_env(:events, :worker_configs, [])
-    [manager_pid: Process.whereis(:fetch_manager), worker_configs: worker_configs]
+    Application.get_env(:events, :worker_configs, [])
   end
 
   # Tell Phoenix to update the endpoint configuration

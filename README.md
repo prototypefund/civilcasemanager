@@ -4,16 +4,20 @@ user interface to assign them to various cases.
 
 # TODO
 * Double animation on reload
-* Create staging deploy on vps
+* Prettify case selection a little
 * Modules into seperate Folder
 * Schick machen und pitchen
-* Documentation of corecomponent slacking.
+* Add startpage
 
 # LATER
 * Check names in IMAP regarding parallel execution. 
+* https://fly.io/phoenix-files/liveview-multi-select/
+* Use prod for staging server
+* Documentation of corecomponent lacking.
+* https://dev.to/seojeek/phoenix-deploys-with-elixir-1-9-with-systemd-no-docker-1od0
 
 ## Maybe
-* DB: Add belongs_to :type, many_to_many :groups
+* DB: many_to_many :groups
 * Make the modules export their "type" (eg. "imap")
 * Make manual (boolean) a type.
 

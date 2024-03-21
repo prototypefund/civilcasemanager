@@ -31,7 +31,7 @@ defmodule EventsWeb.Router do
 
       live "/events/:id", EventLive.Show, :show
       live "/events/:id/show/edit", EventLive.Show, :edit
-      ## TODO Make permission to create new accounts more granular
+      ## MAYBE Make permission to create new accounts more granular
       live "/users/register", UserRegistrationLive, :new
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email

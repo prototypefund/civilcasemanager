@@ -1,4 +1,6 @@
 defmodule Events.IMAPWorker do
+  import Phoenix.HTML
+
   use GenServer
 
   def start_link(opts) do
@@ -37,39 +39,33 @@ defmodule Events.IMAPWorker do
     IO.inspect(message)
     IO.inspect(state[:manager_pid])
 
-    ## TODO: Add email headers?
     event = %Events.FetchEvent{
       type: "imap",
       body: extract_body(message.body),
       from: extract_email_address(message.from),
       title: message.subject,
-      received_at: DateTime.utc_now()
+      received_at: DateTime.utc_now(),
+      metadata: String.replace(message.rfc822_header, "\r\n", "\n")
     }
 
     ## Cast messages dont expect a reply, call messages do.
     GenServer.cast(state[:manager_pid], {:new_event, event})
   end
 
-  defp extract_body({"text/plain", _options, actual_body}), do: actual_body
-  defp extract_body({"text/html", _options, actual_body}), do: actual_body
+  defp extract_body({"text/plain", _opts, actual_body}), do: actual_body
+  defp extract_body({"text/html", _opts, actual_body}), do: actual_body |> html_escape() |> safe_to_string()
 
-  ## Sometimes we get both
-  ## TODO: More concise?
+  ## A message can contain both
   defp extract_body(body) when is_list(body) do
-    body
-    |> Enum.find(fn {content_type, _, _} -> content_type == "text/plain" end)
-    |> case do
-      nil ->
-        # Fallback to "text/html" if "text/plain" is not found, or nil if neither are present
-        Enum.find(body, fn {content_type, _, _} -> content_type == "text/html" end)
-        |> extract_body_from_tuple()
-      {_content_type, _options, actual_body} ->
-        actual_body
-    end
+    extract_body_from_list(body, "text/plain") || extract_body_from_list(body, "text/html")
   end
 
-  defp extract_body_from_tuple(nil), do: nil
-  defp extract_body_from_tuple({_, _, actual_body}), do: actual_body
+  defp extract_body_from_list(body, content_type) do
+    case Enum.find(body, fn {type, _, _} -> type == content_type end) do
+      nil -> nil
+      body -> extract_body(body)
+    end
+  end
 
   def extract_email_address(from) do
     from

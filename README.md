@@ -1,8 +1,13 @@
-# TODO
+# Civil Case Manager & Logger
+Receives incoming information (currently IMAP Idle, VOIP, SMS planned) and provides a 
+user interface to assign them to various cases. 
 
+# TODO
+* Import UI
+* Take case schema from Open Case  & import it.
+* Create staging deploy on vps
 * Modules into seperate Folder
-* Allow config of modules ---> expose config interface
-* Yugo without a server in the domain acts up!!
+* Check names in IMAP regarding parallel execution. 
 
 # Events
 
@@ -15,10 +20,3 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
 
-## Learn more
-
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix

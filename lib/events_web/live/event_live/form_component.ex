@@ -24,6 +24,7 @@ defmodule EventsWeb.EventLive.FormComponent do
         <.input field={@form[:case_id]} type="text" label="Case" />
         <.input field={@form[:title]} type="text" label="Title" />
         <.input field={@form[:body]} type="textarea" label="Body" />
+        <.input field={@form[:metadata]} type="textarea" label="Metadata" />
         <.input field={@form[:from]} type="text" label="From" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Event</.button>

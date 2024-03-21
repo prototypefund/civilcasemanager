@@ -1,15 +1,17 @@
 # Civil Case Manager & Logger
-Receives incoming information (currently IMAP Idle, VOIP, SMS planned) and provides a 
+Receives incoming information (currently IMAP Idle, and Slack, (VOIP, SMS planned)) and provides a 
 user interface to assign them to various cases. 
 
 # TODO
+
 * Prettify case selection a little
 * Slack import: Create case if not existing
 * Case IDs reset every year! Prefix them internally
 * Also, should maybe id be binary id and equal identifier??
 * Use own supervisor for Slack
 
-* # LATER
+# LATER
+
 * Check names in IMAP regarding parallel execution. 
 * https://fly.io/phoenix-files/liveview-multi-select/
 * Open issue report: Documentation of corecomponent lacking.
@@ -25,13 +27,12 @@ if more advanced Access Control is needed:
 https://github.com/woylie/let_me
 
 
-# Events
+# To use
 
-To start your Phoenix server:
+To start the server:
 
   * Run `mix setup` to install and setup dependencies
   * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).

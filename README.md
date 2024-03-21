@@ -6,7 +6,6 @@ user interface to assign them to various cases.
 * Double animation on reload
 * Prettify case selection a little
 * Modules into seperate Folder
-* Schick machen und pitchen
 * Add startpage
 
 # LATER

@@ -1,4 +1,4 @@
-defmodule Events.IMAPWorker do
+defmodule Events.Datasources.IMAPWorker do
   import Phoenix.HTML
 
   use GenServer

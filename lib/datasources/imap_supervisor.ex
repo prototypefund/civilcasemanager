@@ -1,6 +1,7 @@
-defmodule Events.IMAPSupervisor do
+defmodule Events.Datasources.IMAPSupervisor do
 
   use Supervisor
+
 
   def start_link(args) do
       Supervisor.start_link(__MODULE__, args, name: __MODULE__)
@@ -17,7 +18,7 @@ defmodule Events.IMAPSupervisor do
       },
       %{
         id: :IMAPWORKER,
-        start: {Events.IMAPWorker, :start_link, [args]},
+        start: {Events.Datasources.IMAPWorker, :start_link, [args]},
         restart: :permanent,
         type: :worker
       }

@@ -11,11 +11,11 @@ defmodule Events.Cases.Case do
     field :identifier, :string
     field :is_archived, :boolean, default: false
     field :opened_at, :utc_datetime
-    field :status, Events.Cases.Status
+    field :status, Ecto.Enum, values: [draft: 0, open: 1, closed: 2]
     field :status_note, :string
     field :title, :string
 
-    many_to_many :events, Events.Eventlog.Event, join_through: "cases_events"
+    many_to_many :events, Events.Eventlog.Event, join_through: Events.CasesEvents
 
     timestamps(type: :utc_datetime)
   end
@@ -24,6 +24,6 @@ defmodule Events.Cases.Case do
   def changeset(case, attrs) do
     case
     |> cast(attrs, [:identifier, :title, :description, :created_at, :deleted_at, :opened_at, :closed_at, :archived_at, :is_archived, :status, :status_note])
-    |> validate_required([:identifier, :title, :description, :created_at, :deleted_at, :opened_at, :closed_at, :archived_at, :is_archived, :status, :status_note])
+    |> validate_required([:identifier,  :status])
   end
 end

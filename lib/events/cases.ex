@@ -22,6 +22,20 @@ defmodule Events.Cases do
   end
 
   @doc """
+  Returns the list of open cases.
+
+  ## Examples
+
+  iex> list_open_cases()
+  [%Case{},...]
+
+  """
+  def list_open_cases do
+    Repo.all(from c in Case, where: c.status == :open)
+  end
+
+
+  @doc """
   Gets a single case.
 
   Raises `Ecto.NoResultsError` if the Case does not exist.
@@ -36,6 +50,19 @@ defmodule Events.Cases do
 
   """
   def get_case!(id), do: Repo.get!(Case, id)
+
+  @doc """
+  Gets the list of cases based on provided IDs.
+
+  ## Examples
+
+      iex> get_cases([1, 2, 3])
+      [%Case{}, %Case{}, %Case{}]
+
+  """
+  def get_cases(ids) do
+    Repo.all(from c in Case, where: c.id in ^ids)
+  end
 
   @doc """
   Creates a case.

@@ -3,8 +3,13 @@ Receives incoming information (currently IMAP Idle, VOIP, SMS planned) and provi
 user interface to assign them to various cases. 
 
 # TODO
+* Double animation on reload
 * Create staging deploy on vps
 * Modules into seperate Folder
+* Schick machen und pitchen
+* Documentation of corecomponent slacking.
+
+# LATER
 * Check names in IMAP regarding parallel execution. 
 
 ## Maybe

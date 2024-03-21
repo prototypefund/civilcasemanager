@@ -19,13 +19,30 @@ defmodule EventsWeb.EventLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:type]} type="text" label="Type" />
+        <%!-- <.input field={@form[:type]} type="text" label="Type" />
         <.input field={@form[:received_at]} type="datetime-local" label="Zulu time received" />
-        <.input field={@form[:case_id]} type="text" label="Case" />
+        <.input field={@form[:cases]}
+          label="Case"
+          type="select"
+          multiple
+          options={Enum.map(Events.Cases.list_open_cases(), fn case -> {case.identifier, case.id} end)}
+        /> --%>
+        <%!-- <.inputs_for :let={n_case} field={@form[:cases]}>
+          <.input type="text" field={n_case[:id]} />
+        </.inputs_for> --%>
+
         <.input field={@form[:title]} type="text" label="Title" />
         <.input field={@form[:body]} type="textarea" label="Body" />
         <.input field={@form[:metadata]} type="textarea" label="Metadata" />
         <.input field={@form[:from]} type="text" label="From" />
+        <%=
+          Events.Helpers.CheckboxHelper.multiselect_checkboxes(
+            @form,
+            :cases,
+            Enum.map(Events.Cases.list_open_cases(), fn case -> {case.identifier, case.id} end),
+            selected: Enum.map(@form.data.cases,&(&1.id))
+          )
+        %>
         <:actions>
           <.button phx-disable-with="Saving...">Save Event</.button>
         </:actions>

@@ -29,7 +29,12 @@ defmodule EventsWeb.CaseLive.FormComponent do
         <.input field={@form[:closed_at]} type="datetime-local" label="Closed at" />
         <.input field={@form[:archived_at]} type="datetime-local" label="Archived at" />
         <.input field={@form[:is_archived]} type="checkbox" label="Is archived" />
-        <.input field={@form[:status]} type="text" label="Status" />
+        <.input
+          field={@form[:status]}
+          type="select"
+          label="Status"
+          options={Ecto.Enum.values(Events.Cases.Case, :status)}
+        />
         <.input field={@form[:status_note]} type="text" label="Status note" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Case</.button>

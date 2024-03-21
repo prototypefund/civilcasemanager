@@ -11,11 +11,16 @@
 <.list>
   <:item title="Type"><%= @event.type %></:item>
   <:item title="Time"><%= @event.received_at %></:item>
-  <:item title="Case"><%= @event.case_id %></:item>
   <:item title="Title"><%= @event.title %></:item>
   <:item title="Body"><%= @event.body %></:item>
   <:item title="From"><%= @event.from %></:item>
+  <:item title="Cases">
+    <%= for case <- @event.cases do %>
+      <%= case.identifier %>
+    <% end %>
+  </:item>
 </.list>
+
 
 <.back navigate={~p"/events"}>Back to events</.back>
 

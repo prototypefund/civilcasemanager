@@ -4,7 +4,6 @@ defmodule Events.Eventlog.Event do
 
   schema "events" do
     field :body, :string
-    field :case_id, :string
     field :from, :string
     field :received_at, :utc_datetime
     field :title, :string
@@ -14,7 +13,7 @@ defmodule Events.Eventlog.Event do
     field :deleted_at, :utc_datetime
     field :edited_at, :utc_datetime
 
-    many_to_many :cases, Events.Cases.Case, join_through: "cases_events"
+    many_to_many :cases, Events.Cases.Case, join_through: Events.CasesEvents, on_replace: :delete
 
     timestamps(type: :utc_datetime)
   end
@@ -24,11 +23,17 @@ defmodule Events.Eventlog.Event do
     event
     ## Here are the fields than be updated through user interaction
     ## Check if complete
-    |> cast(attrs, [:type, :received_at, :body, :case_id, :title, :manual, :from, :metadata])
+    |> cast(attrs, [:type, :received_at, :body, :title, :manual, :from, :metadata])
     |> validate_required([:type, :body])
     |> truncate_field(:body, 65_535)
     |> truncate_field(:metadata, 65_535)
     |> put_received_at_if_nil()
+    #|> assign_cases(attrs)
+  end
+
+  defp assign_cases(changeset, []), do: changeset
+  defp assign_cases(changeset, attrs) do
+    Ecto.Changeset.put_assoc(changeset, :cases, Events.Cases.get_cases((attrs["cases"])))
   end
 
   defp put_received_at_if_nil(changeset) do

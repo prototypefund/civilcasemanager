@@ -60,7 +60,7 @@ defmodule Events.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.2"},
-      {:yugo, path: "../yugo"},
+      {:yugo, git: "https://gitlab.com/dev-sw-1/yugo.git"},
       {:phoenix_html_helpers, "~> 1.0"}
     ]
   end

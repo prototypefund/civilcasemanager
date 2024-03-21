@@ -1,4 +1,4 @@
-defmodule Events.IMAPFetcher do
+defmodule Events.IMAPWorker do
   use GenServer
 
   def start_link(opts) do
@@ -9,26 +9,18 @@ defmodule Events.IMAPFetcher do
   def init(opts) do
     IO.puts("Hello from IMAP")
 
-    # Take the options we need
-    ## FIXME whole applications refuses to start if map not correct.
-    yugo_opts = Keyword.take(opts, [:server, :username, :password])
-
     ## FIXME: Give unique ids for each instance!!
-    client_opts = Keyword.put(yugo_opts, :name, :EXAMPLE)
-    ## try this: {:server, :username}
-
-    # Start Yugo
-    {:ok, yugo_pid} = Yugo.Client.start_link(client_opts)
+    client_name = Keyword.get(opts, :client_name, :YUGO_CLIENT_1)
 
     # Set up the email filter
     my_filter = Yugo.Filter.all()
 
     # Subscribe to emails
-    Yugo.subscribe(:EXAMPLE, my_filter)
+    Yugo.subscribe(client_name, my_filter)
 
-    # Store some PIDs in state for later reference
+    # Store sthe manager PIDs in state for later reference
     # The state is passed to handle_info for later usage.
-    {:ok, %{yugo_pid: yugo_pid, manager_pid: opts[:manager_pid]}}
+    {:ok, %{manager_pid: opts[:manager_pid]}}
   end
 
 

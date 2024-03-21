@@ -31,6 +31,14 @@ defmodule EventsWeb.Router do
 
       live "/events/:id", EventLive.Show, :show
       live "/events/:id/show/edit", EventLive.Show, :edit
+
+      live "/cases", CaseLive.Index, :index
+      live "/cases/new", CaseLive.Index, :new
+      live "/cases/:id/edit", CaseLive.Index, :edit
+
+      live "/cases/:id", CaseLive.Show, :show
+      live "/cases/:id/show/edit", CaseLive.Show, :edit
+
       ## MAYBE Make permission to create new accounts more granular
       live "/users/register", UserRegistrationLive, :new
       live "/users/settings", UserSettingsLive, :edit

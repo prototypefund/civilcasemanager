@@ -1,0 +1,37 @@
+<.header>
+  Case <%= @case.id %>
+  <:subtitle>This is a case record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/cases/#{@case}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit case</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Identifier"><%= @case.identifier %></:item>
+  <:item title="Title"><%= @case.title %></:item>
+  <:item title="Description"><%= @case.description %></:item>
+  <:item title="Created at"><%= @case.created_at %></:item>
+  <:item title="Updated at"><%= @case.updated_at %></:item>
+  <:item title="Deleted at"><%= @case.deleted_at %></:item>
+  <:item title="Opened at"><%= @case.opened_at %></:item>
+  <:item title="Closed at"><%= @case.closed_at %></:item>
+  <:item title="Archived at"><%= @case.archived_at %></:item>
+  <:item title="Is archived"><%= @case.is_archived %></:item>
+  <:item title="Status"><%= @case.status %></:item>
+  <:item title="Status note"><%= @case.status_note %></:item>
+</.list>
+
+<.back navigate={~p"/cases"}>Back to cases</.back>
+
+<.modal :if={@live_action == :edit} id="case-modal" show on_cancel={JS.patch(~p"/cases/#{@case}")}>
+  <.live_component
+    module={EventsWeb.CaseLive.FormComponent}
+    id={@case.id}
+    title={@page_title}
+    action={@live_action}
+    case={@case}
+    patch={~p"/cases/#{@case}"}
+  />
+</.modal>

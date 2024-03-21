@@ -1,0 +1,52 @@
+<.header>
+  Listing Cases
+  <:actions>
+    <.link patch={~p"/cases/new"}>
+      <.button>New Case</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="cases"
+  rows={@streams.cases}
+  row_click={fn {_id, case} -> JS.navigate(~p"/cases/#{case}") end}
+>
+  <:col :let={{_id, case}} label="Identifier"><%= case.identifier %></:col>
+  <:col :let={{_id, case}} label="Title"><%= case.title %></:col>
+  <:col :let={{_id, case}} label="Description"><%= case.description %></:col>
+  <:col :let={{_id, case}} label="Created at"><%= case.created_at %></:col>
+  <:col :let={{_id, case}} label="Updated at"><%= case.updated_at %></:col>
+  <:col :let={{_id, case}} label="Deleted at"><%= case.deleted_at %></:col>
+  <:col :let={{_id, case}} label="Opened at"><%= case.opened_at %></:col>
+  <:col :let={{_id, case}} label="Closed at"><%= case.closed_at %></:col>
+  <:col :let={{_id, case}} label="Archived at"><%= case.archived_at %></:col>
+  <:col :let={{_id, case}} label="Is archived"><%= case.is_archived %></:col>
+  <:col :let={{_id, case}} label="Status"><%= case.status %></:col>
+  <:col :let={{_id, case}} label="Status note"><%= case.status_note %></:col>
+  <:action :let={{_id, case}}>
+    <div class="sr-only">
+      <.link navigate={~p"/cases/#{case}"}>Show</.link>
+    </div>
+    <.link patch={~p"/cases/#{case}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, case}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: case.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="case-modal" show on_cancel={JS.patch(~p"/cases")}>
+  <.live_component
+    module={EventsWeb.CaseLive.FormComponent}
+    id={@case.id || :new}
+    title={@page_title}
+    action={@live_action}
+    case={@case}
+    patch={~p"/cases"}
+  />
+</.modal>

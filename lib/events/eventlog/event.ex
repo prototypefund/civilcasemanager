@@ -14,6 +14,8 @@ defmodule Events.Eventlog.Event do
     field :deleted_at, :utc_datetime
     field :edited_at, :utc_datetime
 
+    many_to_many :cases, Events.Cases.Case, join_through: "cases_events"
+
     timestamps(type: :utc_datetime)
   end
 

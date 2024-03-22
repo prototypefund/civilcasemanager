@@ -18,8 +18,10 @@ defmodule Events.FetchSupervisor do
     children = Enum.map(opts, fn {worker_module, worker_opts} ->
       # Generate a child spec for each worker module
       worker_opts = Keyword.put(worker_opts, :manager_pid, manager_pid)
-      {worker_module, worker_opts}
+      Supervisor.child_spec({worker_module, worker_opts}, id: worker_opts[:name])
     end)
+
+    IO.inspect(children)
 
     Supervisor.init(children, strategy: :one_for_one)
   end

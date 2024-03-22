@@ -20,6 +20,7 @@ defmodule EventsWeb.LiveComponents do
       phx-target={@target}
       phx-change={@on_change}
       phx-submit={@on_change}
+      class="flex"
     >
       <.filter_fields :let={i} form={@form} fields={@fields}>
         <.input

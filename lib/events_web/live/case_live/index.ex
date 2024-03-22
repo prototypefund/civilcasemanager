@@ -15,19 +15,7 @@ defmodule EventsWeb.CaseLive.Index do
 
   @impl true
   def handle_params(params, _url, socket) do
-    case Events.Cases.list_cases(params) do
-      {:ok, {cases, meta}} ->
-        {:noreply,
-          socket
-            |> assign(:meta, meta)
-            |> stream(:cases, cases, reset: true)}
-
-      {:error, _meta} ->
-        # This will reset invalid parameters. Alternatively, you can assign
-        # only the meta and render the errors, or you can ignore the error
-        # case entirely.
-        {:noreply, push_navigate(socket, to: ~p"/cases")}
-    end
+    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do
@@ -42,10 +30,21 @@ defmodule EventsWeb.CaseLive.Index do
     |> assign(:case, %Case{})
   end
 
-  defp apply_action(socket, :index, _params) do
-    socket
-    |> assign(:page_title, "Listing Cases")
-    |> assign(:case, nil)
+  defp apply_action(socket, :index, params) do
+    case Events.Cases.list_cases(params) do
+      {:ok, {cases, meta}} ->
+        socket
+          |> assign(:meta, meta)
+          |> stream(:cases, cases, reset: true)
+          |> assign(:page_title, "Listing Cases")
+          |> assign(:case, nil)
+
+      {:error, _meta} ->
+        # This will reset invalid parameters. Alternatively, you can assign
+        # only the meta and render the errors, or you can ignore the error
+        # case entirely.
+        push_navigate(socket, to: ~p"/cases")
+    end
   end
 
   @impl true

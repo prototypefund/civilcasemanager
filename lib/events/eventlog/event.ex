@@ -3,6 +3,13 @@ defmodule Events.Eventlog.Event do
   import Ecto.Changeset
   import Events.ChangesetValidators
 
+
+  @derive {
+    Flop.Schema,
+    filterable: [:type, :title],
+    sortable: [:received_at]
+  }
+
   schema "events" do
     field :body, :string
     field :from, :string

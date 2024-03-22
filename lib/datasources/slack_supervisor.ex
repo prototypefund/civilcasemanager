@@ -1,6 +1,6 @@
 defmodule Events.Datasources.SlackSupervisor do
   def event_type, do: "slack"
-  def hero_icon, do: "cube-transparent-solid"
+  def icon_class, do: "hero-cube-transparent-solid"
 
   use Supervisor
 

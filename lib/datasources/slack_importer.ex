@@ -5,13 +5,16 @@ defmodule Events.Datasources.SlackImporter do
 
   @impl true
 
+  # Define allowed prefixes
+  @allowed_prefixes ["EB", "DC", "3SC", "AP"]
 
-  def handle_event(type, payload) do
-    IO.inspect(payload)
-  end
+  # Use this to debug messages
+  # def handle_event(type, payload) do
+  #   IO.inspect(payload)
+  # end
 
   ## Handles replys in threads (thread_ts is set)
-  def handle_event("message", %{"channel" => channel, "text" => text, "user" => user, "ts" => ts, "thread_ts" => thread_ts}) do
+  def handle_event("message", %{"channel" => channel, "text" => text, "user" => user, "thread_ts" => thread_ts}) do
 
     # Use Slack API to fetch the parent thread using thread_ts
     {:ok, %{"messages" => thread_parent}} = get_thread(channel, thread_ts)
@@ -20,33 +23,35 @@ defmodule Events.Datasources.SlackImporter do
     [%{"text" => thread_title} | _] = thread_parent
 
     # Extract the ID from the Title
-    {status, case_title} = check_valid_case_string(thread_title)
+    {status, result} = extract_data_from_title(thread_title)
 
     if status == :ok do
-      case_data = extract_data_from_title(case_title)
-      publish_event(case_data, text, user)
-      send_message(channel, "New REPLY for #{case_data[:case_identifier]}")
+      publish_event(result, text, user)
+      send_message(channel, "New REPLY for #{result[:identifier]}")
     else
-      send_message(channel, "Error parsing the title: #{case_title}")
+      send_message(channel, "Error parsing the title: #{result}")
     end
   end
 
 
   ## Handles new threads (thread_ts is not set)
-  def handle_event("message", %{"channel" => channel, "text" => text, "user" => user, "ts" => ts}) do
+  def handle_event("message", %{"channel" => channel, "text" => text, "user" => user}) do
 
     # Extract the ID from the Title
-    {status, case_title} = check_valid_case_string(text)
+    {status, result} = extract_data_from_title(text)
 
     if status == :ok do
-      case_data = extract_data_from_title(case_title)
-      publish_event(case_data, text, user)
-      send_message(channel, "New THREAD for #{case_data[:case_identifier]}")
+      publish_event(result, "Case created through Slack:" <> text, user)
+      send_message(channel, "New THREAD for #{result[:identifier]}")
     else
-      send_message(channel, "Error parsing the title: #{case_title}")
+      send_message(channel, "Error parsing the title: #{result}")
     end
   end
 
+  def handle_event(type, payload) do
+    Logger.debug("Unhandled #{type} event: #{inspect(payload)}")
+    :ok
+  end
 
   defp publish_event(case_data, text, user) do
      # TODO: Store the PID in context instead of looking it up every time
@@ -56,80 +61,91 @@ defmodule Events.Datasources.SlackImporter do
        type: "slack",
        body: text,
        from: user,
-       title: case_data[:case_identifier],
+       title: case_data[:identifier],
        received_at: DateTime.utc_now(),
        metadata: case_data[:additional] || "",
-       cases: [%{:id => 1}],
-       case_identifier: case_data[:case_identifier]
+       case_data: case_data
      }
 
      GenServer.cast(manager_pid, {:new_event, event})
   end
 
+  defp extract_data_from_title(string) do
+    # First strip any markdown bold formatting (*)
+    string = String.replace(string, "*", "")
+
+    # Check if the string starts with any of the legal prefixes
+    found_prefix = Enum.find(@allowed_prefixes, fn prefix -> String.starts_with?(string, prefix) end)
+
+    case found_prefix do
+      nil -> {:error, string}
+      prefix -> {:ok, String.replace(string, prefix <> " ", prefix) |> case_data_to_map() }
+    end
+  end
 
 
-
-  defp extract_data_from_title(title) do
+  defp case_data_to_map(title) when (is_binary(title)) do
     # Split title by " - "
-    components_to_map(String.split(title, " - "))
+    case_data_to_map(String.split(title, " - "))
   end
 
-  defp components_to_map([case_id, case_date, additional]) do
-    %{case_identifier: case_id, case_date: case_date, additional: additional}
+  defp case_data_to_map([case_id, created_at, additional]) do
+    %{identifier: case_id, created_at: created_at |> split_date() |> fix_date(), additional: additional}
   end
 
-  defp components_to_map([case_id, case_date]) do
-    %{case_identifier: case_id, case_date: case_date}
+  defp case_data_to_map([case_id, created_at]) do
+    %{identifier: case_id, created_at: created_at |> split_date() |> fix_date()}
   end
 
-
-
-
-
-
-  ## Define allowed prefixes here. Modularize later
-  defp check_valid_case_string("EB " <> suffix) do
-    {:ok, "EB" <> suffix}
+  defp case_data_to_map([case_id]) do
+    %{identifier: case_id}
   end
 
-  defp check_valid_case_string("EB" <> suffix) do
-    {:ok, "EB" <> suffix}
+  defp split_date(date_string) do
+    String.split(date_string, ".")
   end
 
-  defp check_valid_case_string("DC " <> suffix) do
-    {:ok, "DC" <> suffix}
+  # Parse the given date string. If it is todays date,
+  # replace it by a current UTC Timestamp
+  defp fix_date([day, month, year]) do
+
+    # Rearrange parts to ISO 8601 format
+    date_string = "#{year}-#{month}-#{day}"
+
+    case Date.from_iso8601(date_string) do
+      {:ok, date} ->
+        if Date.utc_today() == date do
+          DateTime.utc_now()
+        else
+          case DateTime.new(date, ~T[00:00:00]) do
+            {:ok, datetime} -> datetime
+            _ -> date_string
+          end
+        end
+      _ -> date_string
+    end
   end
 
-  defp check_valid_case_string("DC" <> suffix) do
-    {:ok, "DC" <> suffix}
-  end
-
-  defp check_valid_case_string("3SC " <> suffix) do
-    {:ok, "3SC" <> suffix}
-  end
-
-  defp check_valid_case_string("3SC" <> suffix) do
-    {:ok, "3SC" <> suffix}
-  end
-
-  defp check_valid_case_string(any_string) do
-    {:error, any_string}
+  # Fallback when Split doesnt return three parts
+  defp fix_date(date_string) do
+    date_string
   end
 
 
   # Use Slack API to fetch the parent thread using thread_ts
   defp get_thread(channel, ts) do
+
+    # The bot token is defined in config :events, :worker_configs
+    # retrieve it here
+    bot_token = Application.get_env(:events, :bot_token)
+    IO.inspect(bot_token)
+
     Slack.API.get("conversations.history",
-      "TOKEN",
+      bot_token,
       %{channel: channel,
       latest: ts,
       limit: 1,
       inclusive: true}
     )
-  end
-
-  def handle_event(type, payload) do
-    Logger.debug("Unhandled #{type} event: #{inspect(payload)}")
-    :ok
   end
 end

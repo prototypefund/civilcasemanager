@@ -17,12 +17,13 @@ defmodule Events.FetchManager do
   @impl true
   def handle_cast({:new_event, event}, state) do
     IO.puts("Manager received a new event with title: #{event.from}")
-    IO.inspect(event)
 
     # Convert the struct to a map before insertion
     event_map = event
       |> Map.from_struct()
       |> Map.put(:manual, false)
+
+    IO.inspect(event_map, label: "Event Map")
 
     # Use Event.changeset/2 for insertion as before
     case %Event{} |> Event.changeset(event_map) |> Repo.insert() |> broadcast(:event_created) do
@@ -34,4 +35,5 @@ defmodule Events.FetchManager do
 
     {:noreply, state}
   end
+
 end

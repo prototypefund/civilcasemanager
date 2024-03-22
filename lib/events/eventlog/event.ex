@@ -1,8 +1,6 @@
 defmodule Events.Eventlog.Event do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Events.Repo
-  import Ecto.Query, only: [from: 2]
 
   schema "events" do
     field :body, :string
@@ -22,7 +20,7 @@ defmodule Events.Eventlog.Event do
 
   @doc false
   def changeset(event, attrs) do
-    event
+    new = event
     ## Here are the fields than be updated through user interaction
     ## Check if complete
     |> cast(attrs, [:type, :received_at, :body, :title, :manual, :from, :metadata])
@@ -30,8 +28,11 @@ defmodule Events.Eventlog.Event do
     |> truncate_field(:body, 65_535)
     |> truncate_field(:metadata, 65_535)
     |> put_received_at_if_nil()
+    #|> cast_assoc(:cases, with: &Events.Cases.Case.changeset/2)
     |> assign_cases_by_id(attrs["cases"])
-    |> assign_cases_by_identifier(attrs[:case_identifier])
+    |> assign_cases_by_identifier(attrs[:case_data])
+    IO.inspect(new, label: "New Event Changeset")
+    new
   end
 
   defp assign_cases_by_id(changeset, []), do: changeset
@@ -44,9 +45,24 @@ defmodule Events.Eventlog.Event do
   ## TODO: Create case if not existing
   defp assign_cases_by_identifier(changeset, []), do: changeset
   defp assign_cases_by_identifier(changeset, nil), do: changeset
-  defp assign_cases_by_identifier(changeset, case_identifier) do
-    IO.inspect(case_identifier, label: "Cases Identifier")
-    Ecto.Changeset.put_assoc(changeset, :cases, [Events.Cases.get_case_by_identifier(case_identifier)])
+  defp assign_cases_by_identifier(changeset, case_data) do
+    IO.inspect(case_data, label: "Cases Identifier")
+    Ecto.Changeset.put_assoc(changeset, :cases, [get_or_create_case(case_data)])
+  end
+
+  defp get_or_create_case(case_data) do
+    case = Events.Cases.get_case_by_identifier(case_data[:identifier])
+
+    # Return the case if it exists, otherwise create a new one,
+    # using the case_data map to populate the fields
+    case = case || %Events.Cases.Case{
+      identifier: case_data[:identifier],
+      created_at: case_data[:created_at],
+      title: case_data[:additional]
+    }
+
+    IO.inspect(case, label: "Case")
+    case
   end
 
   defp put_received_at_if_nil(changeset) do

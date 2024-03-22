@@ -6,7 +6,6 @@ defmodule Events.FetchEvent do
     title: "",
     received_at: DateTime.utc_now(),
     metadata: "",
-    cases: nil,
-    case_identifier: nil
+    case_data: nil
   ]
 end

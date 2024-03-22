@@ -7,22 +7,22 @@
   </:actions>
 </.header>
 
-<div id="cases">
+<div id="cases" class="flex flex-wrap -m-4">
   <%= for {id, case} <- @streams.cases do %>
     <div
       id={id}
-      onclick="JS.navigate(~p'/cases/#{case}')"
-class="flex gap-x-3 flex-row items-center shadow rounded-lg p-4 space-x-4 border-2 border-calypso-50">
-      <div class="flex-none">
-       <%=  render_status_icon(case) %>
-
-
-      </div>
+      phx-click={JS.navigate(~p"/cases/#{case}")}
+      class="p-4 w-full sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/3"
+    >
+      <div class="flex gap-x-3 flex-row items-center shadow rounded-lg p-4 space-x-4 border-2 border-calypso-50 hover:bg-gray-50 transition duration-150 ease-in-out">
+        <div class="flex-none">
+          <%= render_status_icon(case) %>
+        </div>
         <div class="grow">
           <div>
             <p class="row-1 text-gray-900 leading-snug text-base flex items-start gap-x-2">
               <strong class="text-base !leading-tight font-medium">
-                <a href={~p"/cases/#{case}"} class="stretched-link" >
+                <a href={~p"/cases/#{case}"} class="stretched-link">
                   <%= case.identifier %>
                 </a>
               </strong>
@@ -45,10 +45,11 @@ class="flex gap-x-3 flex-row items-center shadow rounded-lg p-4 space-x-4 border
             </button>
           </div>
         </div>
-
+      </div>
     </div>
   <% end %>
 </div>
+
 
 <.modal :if={@live_action in [:new, :edit]} id="case-modal" show on_cancel={JS.patch(~p"/cases")}>
   <.live_component

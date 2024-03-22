@@ -1,5 +1,4 @@
 defmodule Events.Helpers.CheckboxHelper do
-  import Phoenix.HTML
   import Phoenix.HTML.Form
   use PhoenixHTMLHelpers
 

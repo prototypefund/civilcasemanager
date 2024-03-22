@@ -49,7 +49,13 @@ defmodule Events.Cases do
       ** (Ecto.NoResultsError)
 
   """
-  def get_case!(id), do: Repo.get!(Case, id)
+  def get_case!(id) do
+    Repo.one(
+      from c in Case,
+      where: c.id == ^id,
+      preload: [:events]
+    )
+  end
 
   @doc """
   Gets the list of cases based on provided IDs.

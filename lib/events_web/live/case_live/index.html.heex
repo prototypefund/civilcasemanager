@@ -7,32 +7,48 @@
   </:actions>
 </.header>
 
-<.table
-  id="cases"
-  rows={@streams.cases}
-  row_click={fn {_id, case} -> JS.navigate(~p"/cases/#{case}") end}
->
-  <:col :let={{_id, case}} label="Identifier"><%= case.identifier %></:col>
-  <:col :let={{_id, case}} label="Title"><%= case.title %></:col>
-  <:col :let={{_id, case}} label="Description"><%= case.description %></:col>
-  <:col :let={{_id, case}} label="Created at"><%= case.created_at %></:col>
-  <:col :let={{_id, case}} label="Is archived"><%= case.is_archived %></:col>
-  <:col :let={{_id, case}} label="Status"><%= case.status %></:col>
-  <:action :let={{_id, case}}>
-    <div class="sr-only">
-      <.link navigate={~p"/cases/#{case}"}>Show</.link>
+<div id="cases">
+  <%= for {id, case} <- @streams.cases do %>
+    <div
+      id={id}
+      onclick="JS.navigate(~p'/cases/#{case}')"
+class="flex gap-x-3 flex-row items-center shadow rounded-lg p-4 space-x-4 border-2 border-calypso-50">
+      <div class="flex-none">
+       <%=  render_status_icon(case) %>
+
+
+      </div>
+        <div class="grow">
+          <div>
+            <p class="row-1 text-gray-900 leading-snug text-base flex items-start gap-x-2">
+              <strong class="text-base !leading-tight font-medium">
+                <a href={~p"/cases/#{case}"} class="stretched-link" >
+                  <%= case.identifier %>
+                </a>
+              </strong>
+              <span class="ml-auto flex gap-2">
+                <!-- Additional information like date or status could go here -->
+              </span>
+            </p>
+            <p class="text-gray-700 leading-snug text-sm">
+              <span class="prevent-long-lines"><%= case.title %></span>
+            </p>
+            <p class="mt-1 flex items-center gap-x-1 text-[12px] text-gray-500/80">
+              <!-- Timestamp or other small details -->
+            </p>
+          </div>
+        </div>
+        <div class="relative">
+          <div>
+            <button type="button" title="Open actions menu" class="action-menu-button">
+              <!-- Icon or text for actions menu -->
+            </button>
+          </div>
+        </div>
+
     </div>
-    <.link patch={~p"/cases/#{case}/edit"}>Edit</.link>
-  </:action>
-  <:action :let={{id, case}}>
-    <.link
-      phx-click={JS.push("delete", value: %{id: case.id}) |> hide("##{id}")}
-      data-confirm="Are you sure?"
-    >
-      Delete
-    </.link>
-  </:action>
-</.table>
+  <% end %>
+</div>
 
 <.modal :if={@live_action in [:new, :edit]} id="case-modal" show on_cancel={JS.patch(~p"/cases")}>
   <.live_component

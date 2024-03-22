@@ -4,6 +4,8 @@ defmodule EventsWeb.CaseLive.Index do
   alias Events.Cases
   alias Events.Cases.Case
 
+  use PhoenixHTMLHelpers
+
   @impl true
   def mount(_params, _session, socket) do
     {:ok, stream(socket, :cases, Cases.list_cases())}
@@ -43,5 +45,20 @@ defmodule EventsWeb.CaseLive.Index do
     {:ok, _} = Cases.delete_case(case)
 
     {:noreply, stream_delete(socket, :cases, case)}
+  end
+
+  ## Render an icon based on the case status
+  defp render_status_icon(case) do
+    icon_name = case case.status do
+      :open -> "hero-lock-open-solid text-emerald-500"
+      :closed -> "hero-lock-closed text-gray-500"
+      :invalid -> "hero-question-mark-circle text-red-500"
+      _ -> "hero-help-outline text-blue-500"
+    end
+
+    content_tag(:span, class: "#{icon_name} h-5 w-5") do
+
+    end
+
   end
 end

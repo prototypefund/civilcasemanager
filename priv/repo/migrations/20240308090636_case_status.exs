@@ -3,7 +3,8 @@ defmodule Events.Repo.Migrations.CaseStatus do
 
   def change do
     alter table(:cases) do
-      modify :status, :integer
+      remove :status
+      add :status, :integer
     end
   end
 end

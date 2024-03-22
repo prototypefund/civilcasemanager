@@ -1,6 +1,32 @@
 <.header>
   All Cases
   <:actions>
+    <.filter_form
+      fields={[
+
+        identifier: [
+          label: "Identifier",
+          op: :ilike_and,
+          type: "text"
+        ],
+
+        status: [
+          label: "Status",
+          type: "select",
+          prompt: "",
+          options: [
+            {"open", :open},
+            {"closed", :closed},
+            {"archived", :archived}
+          ]
+        ]
+
+
+
+      ]}
+      meta={@meta}
+      id="user-filter-form"
+    />
     <.link patch={~p"/cases/new"}>
       <.button>Open New Case</.button>
     </.link>

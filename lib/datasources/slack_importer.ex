@@ -115,7 +115,7 @@ defmodule Events.Datasources.SlackImporter do
     case Date.from_iso8601(date_string) do
       {:ok, date} ->
         if Date.utc_today() == date do
-          DateTime.utc_now()
+          DateTime.utc_now() |> DateTime.truncate(:second)
         else
           case DateTime.new(date, ~T[00:00:00]) do
             {:ok, datetime} -> datetime

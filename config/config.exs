@@ -61,6 +61,8 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+config :flop, repo: Events.Repo
+
 # Import workers config
 import_config "workers.exs"
 

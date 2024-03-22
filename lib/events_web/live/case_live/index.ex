@@ -6,6 +6,8 @@ defmodule EventsWeb.CaseLive.Index do
 
   use PhoenixHTMLHelpers
 
+  import EventsWeb.LiveComponents
+
   @impl true
   def mount(_params, _session, socket) do
     {:ok, stream(socket, :cases, Cases.list_cases())}
@@ -13,7 +15,19 @@ defmodule EventsWeb.CaseLive.Index do
 
   @impl true
   def handle_params(params, _url, socket) do
-    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+    case Events.Cases.list_cases(params) do
+      {:ok, {cases, meta}} ->
+        {:noreply,
+          socket
+            |> assign(:meta, meta)
+            |> stream(:cases, cases, reset: true)}
+
+      {:error, _meta} ->
+        # This will reset invalid parameters. Alternatively, you can assign
+        # only the meta and render the errors, or you can ignore the error
+        # case entirely.
+        {:noreply, push_navigate(socket, to: ~p"/cases")}
+    end
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do
@@ -32,6 +46,12 @@ defmodule EventsWeb.CaseLive.Index do
     socket
     |> assign(:page_title, "Listing Cases")
     |> assign(:case, nil)
+  end
+
+  @impl true
+  def handle_event("update-filter", params, socket) do
+    params = Map.delete(params, "_target")
+    {:noreply, push_patch(socket, to: ~p"/cases?#{params}")}
   end
 
   @impl true

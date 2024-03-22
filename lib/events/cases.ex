@@ -22,6 +22,20 @@ defmodule Events.Cases do
   end
 
   @doc """
+  Returns the list of cases using Flop
+
+  ## Examples
+
+      iex> list_cases()
+      [%Case{}, ...]
+
+  """
+  def list_cases(params) do
+    Flop.validate_and_run(Case, params, for: Case)
+  end
+
+  @spec list_open_cases() :: any()
+  @doc """
   Returns the list of open cases.
 
   ## Examples

@@ -40,7 +40,6 @@ defmodule EventsWeb.Router do
       live "/cases/:id/show/edit", CaseLive.Show, :edit
 
       ## MAYBE Make permission to create new accounts more granular
-      live "/users/register", UserRegistrationLive, :new
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
     end
@@ -52,6 +51,8 @@ defmodule EventsWeb.Router do
 
     live_session :redirect_if_user_is_authenticated,
       on_mount: [{EventsWeb.UserAuth, :redirect_if_user_is_authenticated}] do
+      live "/users/register", UserRegistrationLive, :new
+
       live "/users/log_in", UserLoginLive, :new
       live "/users/reset_password", UserForgotPasswordLive, :new
       live "/users/reset_password/:token", UserResetPasswordLive, :edit

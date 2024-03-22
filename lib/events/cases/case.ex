@@ -3,6 +3,13 @@ defmodule Events.Cases.Case do
   import Ecto.Changeset
   import Events.ChangesetValidators
 
+
+  @derive {
+    Flop.Schema,
+    filterable: [:status],
+    sortable: [:identifier, :created_at]
+  }
+
   schema "cases" do
     field :archived_at, :utc_datetime
     field :closed_at, :utc_datetime

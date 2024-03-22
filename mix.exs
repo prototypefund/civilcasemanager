@@ -38,6 +38,7 @@ defmodule Events.MixProject do
       {:ecto_sql, "~> 3.10"},
       {:ecto_enum, "~> 1.4"},
       {:myxql, ">= 0.0.0"},
+      {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 4.0"},
       {:phoenix_live_reload, "~>1.5.1", only: :dev},
       {:phoenix_live_view, "> 0.20.2"},
@@ -62,7 +63,8 @@ defmodule Events.MixProject do
       {:bandit, "~> 1.2"},
       {:yugo, git: "https://gitlab.com/dev-sw-1/yugo.git"},
       {:phoenix_html_helpers, "~> 1.0"},
-      {:slack_elixir, "~> 1.1.0"}
+      {:slack_elixir, "~> 1.1.0"},
+      {:flop_phoenix, "~> 0.22.7"}
     ]
   end
 

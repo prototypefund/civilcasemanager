@@ -18,7 +18,7 @@ defmodule Events.Cases do
 
   """
   def list_cases do
-    Repo.all(Case)
+    Repo.all(from c in Case, order_by: [desc: c.created_at])
   end
 
   @doc """
@@ -31,7 +31,7 @@ defmodule Events.Cases do
 
   """
   def list_open_cases do
-    Repo.all(from c in Case, where: c.status == :open)
+    Repo.all(from c in Case, where: c.status == :open, order_by: [desc: c.created_at])
   end
 
 
@@ -99,6 +99,7 @@ defmodule Events.Cases do
     %Case{}
     |> Case.changeset(attrs)
     |> Repo.insert()
+    #|> broadcast(:case_created)
   end
 
   @doc """
@@ -117,6 +118,7 @@ defmodule Events.Cases do
     case
     |> Case.changeset(attrs)
     |> Repo.update()
+    #|> broadcast(:case_updated)
   end
 
   @doc """
@@ -147,4 +149,21 @@ defmodule Events.Cases do
   def change_case(%Case{} = case, attrs \\ %{}) do
     Case.changeset(case, attrs)
   end
+
+  @doc """
+  Subscribes to changes to the case.
+  """
+  def subscribe do
+    Phoenix.PubSub.subscribe(Events.PubSub, "cases")
+  end
+
+  @doc """
+  Broadcasts changes to the case.
+  """
+  def broadcast({:error, changeset}, _change_type), do: {:error, changeset}
+  def broadcast({:ok, case}, change_type) do
+    Phoenix.PubSub.broadcast(Events.PubSub, "cases", {change_type, case})
+    {:ok, case}
+  end
+
 end

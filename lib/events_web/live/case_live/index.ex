@@ -35,9 +35,20 @@ defmodule EventsWeb.CaseLive.Index do
   end
 
   @impl true
+  def handle_info({:case_created, case}, socket) do
+    {:noreply, stream_insert(socket, :cases, case, at: 0)}
+  end
+
+  @impl true
+  def handle_info({:case_updated, case}, socket) do
+    {:noreply, stream_insert(socket, :cases, case, at: 0)}
+  end
+
+  @impl true
   def handle_info({EventsWeb.CaseLive.FormComponent, {:saved, case}}, socket) do
     {:noreply, stream_insert(socket, :cases, case)}
   end
+
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
@@ -47,13 +58,36 @@ defmodule EventsWeb.CaseLive.Index do
     {:noreply, stream_delete(socket, :cases, case)}
   end
 
+  defp render_timestamp(case) do
+    now = DateTime.utc_now()
+    diff = DateTime.diff(now, case.created_at)
+
+    timestamp = cond do
+      diff < 60 ->
+        "#{diff} seconds ago"
+      diff < 3600 ->
+        "#{div(diff, 60)} minutes ago"
+      diff < 86400 ->
+        "#{div(diff, 3600)} hours ago"
+      true ->
+        "#{Date.to_string(case.created_at)}"
+    end
+
+    content_tag(:span, class: "flex items-center gap-1") do
+      [
+        content_tag(:i, "", class: "hero-clock text-gray-700 h-3 w-3"),
+        timestamp
+      ]
+    end
+  end
+
   ## Render an icon based on the case status
   defp render_status_icon(case) do
     icon_name = case case.status do
-      :open -> "hero-lock-open-solid text-emerald-500"
+      :open -> "hero-inbox-solid text-emerald-500"
       :closed -> "hero-lock-closed text-gray-500"
-      :invalid -> "hero-question-mark-circle text-red-500"
-      _ -> "hero-help-outline text-blue-500"
+      :archived -> "hero-archive-box text-gray-500"
+      _ -> "hero-question-mark-circle text-blue-500"
     end
 
     content_tag(:span, class: "#{icon_name} h-5 w-5") do

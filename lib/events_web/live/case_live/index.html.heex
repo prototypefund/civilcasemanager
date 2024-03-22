@@ -27,11 +27,12 @@
                 </a>
               </strong>
               <span class="ml-auto flex gap-2">
-                <!-- Additional information like date or status could go here -->
+
               </span>
             </p>
             <p class="text-gray-700 leading-snug text-sm">
               <span class="prevent-long-lines"><%= case.title %></span>
+              <%= render_timestamp(case) %>
             </p>
             <p class="mt-1 flex items-center gap-x-1 text-[12px] text-gray-500/80">
               <!-- Timestamp or other small details -->

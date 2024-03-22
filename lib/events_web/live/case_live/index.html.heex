@@ -1,32 +1,34 @@
 <.header>
   All Cases
   <:actions>
-    <.filter_form
-      fields={[
+    <%= if assigns[:meta] do %>
+      <.filter_form
+        fields={[
 
-        identifier: [
-          label: "",
-          op: :ilike_and,
-          type: "text",
-          rest: [
-            placeholder: gettext("Search")
-          ]
-        ],
+          identifier: [
+            label: "",
+            op: :ilike_and,
+            type: "text",
+            rest: [
+              placeholder: gettext("Search")
+            ]
+          ],
 
-        status: [
-          label: "Status",
-          type: "select",
-          prompt: "",
-          options: [
-            {gettext("Open"), :open},
-            {gettext("Closed"), :closed},
-            {gettext("Archived"), :archived}
+          status: [
+            label: "Status",
+            type: "select",
+            prompt: "",
+            options: [
+              {gettext("Open"), :open},
+              {gettext("Closed"), :closed},
+              {gettext("Archived"), :archived}
+            ]
           ]
-        ]
-      ]}
-      meta={@meta}
-      id="user-filter-form"
-    />
+        ]}
+        meta={@meta}
+        id="user-filter-form"
+      />
+    <% end %>
     <.link patch={~p"/cases/new"}>
       <.button>Open New Case</.button>
     </.link>

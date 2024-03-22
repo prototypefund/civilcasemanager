@@ -1,7 +1,8 @@
 defmodule Events.Datasources.SlackSupervisor do
+  def event_type, do: "slack"
+  def hero_icon, do: "cube-transparent-solid"
 
   use Supervisor
-
 
   def start_link(args) do
       Supervisor.start_link(__MODULE__, args, name: __MODULE__)

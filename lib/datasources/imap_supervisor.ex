@@ -1,4 +1,6 @@
 defmodule Events.Datasources.IMAPSupervisor do
+  def event_type, do: "imap"
+  def hero_icon, do: "envelope-solid"
 
   use Supervisor
 

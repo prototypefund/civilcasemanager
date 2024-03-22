@@ -41,7 +41,7 @@ defmodule Events.Datasources.SlackImporter do
     {status, result} = extract_data_from_title(text)
 
     if status == :ok do
-      publish_event(result, "Case created through Slack:" <> text, user)
+      publish_event(result, "Case created through Slack: " <> text, user)
       send_message(channel, "New THREAD for #{result[:identifier]}")
     else
       send_message(channel, "Error parsing the title: #{result}")
@@ -135,10 +135,10 @@ defmodule Events.Datasources.SlackImporter do
   # Use Slack API to fetch the parent thread using thread_ts
   defp get_thread(channel, ts) do
 
-    # The bot token is defined in config :events, :worker_configs
+    # TODO: The bot token is defined in config :events, :worker_configs
     # retrieve it here
+    # See open issue on github
     bot_token = Application.get_env(:events, :bot_token)
-    IO.inspect(bot_token)
 
     Slack.API.get("conversations.history",
       bot_token,

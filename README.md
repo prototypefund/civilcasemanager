@@ -2,17 +2,19 @@
 Receives incoming information (currently IMAP Idle, and Slack, (VOIP, SMS planned)) and provides a 
 user interface to assign them to various cases. 
 
-# TODO
+# Next Steps
+* Sketch Side by side view
+* Event types and icons
 
+# TODO
 * Prettify case selection a little
-* Slack import: Create case if not existing
 * Case IDs reset every year! Prefix them internally
 * Also, should maybe id be binary id and equal identifier??
-* Use own supervisor for Slack
+
+# Nice to have
+* Markdown Editor: https://www.wysimark.com/docs/js
 
 # Later
-
-* Check names in IMAP regarding parallel execution. 
 * https://fly.io/phoenix-files/liveview-multi-select/
 * Open issue report: Documentation of corecomponent lacking.
 * https://dev.to/seojeek/phoenix-deploys-with-elixir-1-9-with-systemd-no-docker-1od0

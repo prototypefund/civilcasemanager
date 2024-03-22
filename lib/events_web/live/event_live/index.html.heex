@@ -31,8 +31,7 @@
     <div id={id} class="flex flex-row items-center shadow rounded-lg p-4 space-x-4 border-2 border-calypso-50" phx-click={JS.navigate(~p"/events/#{event}")} phx-hook="FadeIn">
 
       <div class="flex-none">
-        <!-- TODO: Icon based on event type -->
-        <.icon name="hero-envelope-solid bg-cerise-500" class="h-5 w-5" />
+        <.icon name={Events.FetchSupervisor.get_icon_for(event.type)} class="h-5 w-5" />
       </div>
 
       <div class="flex-grow">

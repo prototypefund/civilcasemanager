@@ -92,7 +92,7 @@ defmodule EventsWeb.CaseLive.Index do
         "#{Date.to_string(case.created_at)}"
     end
 
-    content_tag(:span, class: "flex items-center gap-1") do
+    content_tag(:span, class: "flex items-center gap-1 text-xs") do
       [
         content_tag(:i, "", class: "hero-clock text-gray-700 h-3 w-3"),
         timestamp

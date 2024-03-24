@@ -101,7 +101,7 @@ defmodule EventsWeb.CaseLive.Index do
   end
 
   ## Render an icon based on the case status
-  defp render_status_icon(case) do
+  defp render_status_icon(case, classes) do
     icon_name = case case.status do
       :open -> "hero-inbox-solid text-emerald-500"
       :closed -> "hero-lock-closed text-gray-500"
@@ -109,7 +109,7 @@ defmodule EventsWeb.CaseLive.Index do
       _ -> "hero-question-mark-circle text-blue-500"
     end
 
-    content_tag(:span, class: "#{icon_name} h-5 w-5") do
+    content_tag(:span, class: "#{icon_name} #{classes}") do
 
     end
 

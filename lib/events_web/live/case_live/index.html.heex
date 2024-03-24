@@ -42,15 +42,12 @@
       phx-click={JS.navigate(~p"/cases/#{case}")}
       class="p-4 w-full sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/3"
     >
-      <div class="flex gap-x-3 flex-row items-center shadow rounded-lg p-4 space-x-4 border-2 border-calypso-50 hover:bg-gray-50 transition duration-150 ease-in-out">
-        <div class="flex-none">
-          <%= render_status_icon(case) %>
-        </div>
+      <div class="flex gap-x-3 flex-row items-center shadow rounded-lg p-3 space-x-4 border-2 border-calypso-50 hover:bg-gray-50 transition duration-150 ease-in-out">
         <div class="grow">
-          <div>
             <p class="row-1 text-gray-900 leading-snug text-base flex items-start gap-x-2">
-              <strong class="text-base !leading-tight font-medium">
-                <a href={~p"/cases/#{case}"} class="stretched-link">
+              <%= render_status_icon(case, "h-4 w-4") %>
+              <strong class="text-base !leading-tight font-semibold">
+                <a href={~p"/cases/#{case}"} class="">
                   <%= case.identifier %>
                 </a>
               </strong>
@@ -73,7 +70,6 @@
               <!-- Icon or text for actions menu -->
             </button>
           </div>
-        </div>
       </div>
     </div>
   <% end %>

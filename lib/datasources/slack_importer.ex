@@ -35,7 +35,7 @@ defmodule Events.Datasources.SlackImporter do
 
 
   ## Handles new threads (thread_ts is not set)
-  def handle_event("message", %{"channel" => channel, "text" => text, "user" => user}, bot) do
+  def handle_event("message", %{"channel" => channel, "text" => text, "user" => user}, _bot) do
 
     # Extract the ID from the Title
     {status, result} = extract_data_from_title(text)

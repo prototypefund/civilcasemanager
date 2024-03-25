@@ -9,8 +9,6 @@ defmodule Events.Datasources.IMAPWorker do
 
   @impl true
   def init(opts) do
-    IO.puts("Hello from IMAP")
-
     # Set up the email filter
     my_filter = Yugo.Filter.all()
 
@@ -27,11 +25,6 @@ defmodule Events.Datasources.IMAPWorker do
   def handle_info({:email, _client, message}, state) do
     publish_email(message, state)
     {:noreply, state}
-  end
-
-  @impl true
-  def handle_call({:fetch_data}, _from, _state) do
-    ## Just an example
   end
 
   defp publish_email(message, state) do

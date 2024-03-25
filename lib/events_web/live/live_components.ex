@@ -20,7 +20,7 @@ defmodule EventsWeb.LiveComponents do
       phx-target={@target}
       phx-change={@on_change}
       phx-submit={@on_change}
-      class="flex"
+      class="flex space-x-4" # Add space between flex items using tailwind
     >
       <.filter_fields :let={i} form={@form} fields={@fields}>
         <.input
@@ -28,11 +28,13 @@ defmodule EventsWeb.LiveComponents do
           label={i.label}
           type={i.type}
           phx-debounce={500}
+          class="inline w-auto mr-2"
+          label_class="inline"
           {i.rest}
         />
       </.filter_fields>
 
-      <button class="button" name="reset">reset</button>
+      <!--<button class="button hero-x-circle-solid" name="reset">reset</button>-->
     </.form>
     """
   end

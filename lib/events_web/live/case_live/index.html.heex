@@ -35,7 +35,7 @@
   </:actions>
 </.header>
 
-<div id="cases" class="flex flex-wrap -mx-4">
+<div phx-hook="ParentMount" id="cases" class="flex flex-wrap -mx-4" phx-update="stream">
   <%= for {id, case} <- @streams.cases do %>
     <div
       id={id}

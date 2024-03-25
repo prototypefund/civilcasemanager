@@ -85,7 +85,7 @@ defmodule Events.Cases do
   end
 
   @doc """
-  Get a case by the specified identifier
+  Get a case by the specified identifier.
 
   ## Examples
 
@@ -113,7 +113,7 @@ defmodule Events.Cases do
     %Case{}
     |> Case.changeset(attrs)
     |> Repo.insert()
-    #|> broadcast(:case_created)
+    |> broadcast(:case_created)
   end
 
   @doc """
@@ -132,7 +132,7 @@ defmodule Events.Cases do
     case
     |> Case.changeset(attrs)
     |> Repo.update()
-    #|> broadcast(:case_updated)
+    |> broadcast(:case_updated)
   end
 
   @doc """

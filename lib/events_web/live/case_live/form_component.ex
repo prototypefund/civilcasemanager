@@ -66,7 +66,7 @@ defmodule EventsWeb.CaseLive.FormComponent do
   defp save_case(socket, :edit, case_params) do
     case Cases.update_case(socket.assigns.case, case_params) do
       {:ok, case} ->
-        notify_parent({:saved, case})
+        #notify_parent({:saved, case})
 
         {:noreply,
          socket
@@ -81,7 +81,7 @@ defmodule EventsWeb.CaseLive.FormComponent do
   defp save_case(socket, :new, case_params) do
     case Cases.create_case(case_params) do
       {:ok, case} ->
-        notify_parent({:saved, case})
+        #notify_parent({:saved, case})
 
         {:noreply,
          socket

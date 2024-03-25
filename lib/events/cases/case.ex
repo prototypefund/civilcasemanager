@@ -35,8 +35,25 @@ defmodule Events.Cases.Case do
     |> validate_required([:identifier, :status])
     |> put_timestamp_if_nil(:created_at)
     |> put_timestamp_if_nil(:opened_at)
+    |> validate_identifier_format(:identifier, :created_at)
     |> truncate_field(:freetext, 65_535)
     |> IO.inspect()
+  end
+
+  # Check the ID for year suffix
+  defp validate_identifier_format(changeset, field, fallback_time) do
+    current_value = get_field(changeset, field)
+
+    case current_value do
+      nil -> changeset
+      id -> case String.split(id, "-") do
+        [_num, _year] -> changeset
+        [num] ->
+          year = DateTime.to_date(get_field(changeset, fallback_time)).year
+          put_change(changeset, field, "#{num}-#{year}")
+      end
+    end
+
   end
 
 end

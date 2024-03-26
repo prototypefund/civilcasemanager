@@ -41,7 +41,7 @@ defmodule Events.Datasources.SlackImporter do
     {status, result} = extract_data_from_title(text)
 
     if status == :ok do
-      publish_event(result, "Case created through Slack: " <> text, user)
+      publish_event(result, "Case created through Slack: \n" <> text, user)
       send_message(channel, "New THREAD for #{result[:identifier]}")
     else
       send_message(channel, "Error parsing the title: #{result}")

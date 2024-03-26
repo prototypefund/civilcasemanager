@@ -50,7 +50,7 @@
             <.icon name="hero-trash" class="text-chestnut-500"/>
           </.link>
         </:actions>
-          <%= event.body %>
+          <%= raw(Earmark.as_html!(event.body)) %>
       </.card>
     </div>
   <% end %>

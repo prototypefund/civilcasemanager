@@ -65,7 +65,8 @@ defmodule Events.MixProject do
       # TODO: Remove this
       {:phoenix_html_helpers, "~> 1.0"},
       {:slack_elixir, "~> 1.2.0"},
-      {:flop_phoenix, "~> 0.22.7"}
+      {:flop_phoenix, "~> 0.22.7"},
+      {:earmark, "~> 1.1"}
     ]
   end
 

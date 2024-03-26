@@ -16,11 +16,11 @@ defmodule EventsWeb.EventLive.FormSmall do
       >
         <.input field={@form[:type]} type="hidden" value="manual" />
         <.input field={@form[:title]} type="hidden" value={@case.identifier} />
-        <.input field={@form[:body]} type="textarea" label="New" />
+        <.input field={@form[:body]} type="textarea" placeholder={gettext("Enter some notes here")} />
         <.input field={@form[:from]} type="hidden" value={@current_user.email} />
-        <!--<.input field={@form[:cases]} type="hidden" value={[@case]} />-->
+        <.input field={@form[:cases]} type="hidden" value={@case.id} />
         <:actions>
-          <.button phx-disable-with="Saving..." class="text-white !bg-indigo-600 rounded-md !hover:bg-indigo-500">Submit</.button>
+            <.button phx-disable-with="Saving..." class="-mt-5 text-white !bg-indigo-600 rounded-md !hover:bg-indigo-500 ml-auto">Submit</.button>
         </:actions>
       </.simple_form>
     </div>
@@ -48,26 +48,6 @@ defmodule EventsWeb.EventLive.FormSmall do
   end
 
   def handle_event("save", %{"event" => event_params}, socket) do
-    IO.inspect(socket.assigns.action, label: "socket.assigns.action")
-    save_event(socket, socket.assigns.action, event_params)
-  end
-
-  defp save_event(socket, :edit, event_params) do
-    case Eventlog.update_event(socket.assigns.event, event_params) do
-      {:ok, event} ->
-        notify_parent({:saved, event})
-
-        {:noreply,
-         socket
-         |> put_flash(:info, "Event updated successfully")
-         |> push_patch(to: socket.assigns.patch)}
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign_form(socket, changeset)}
-    end
-  end
-
-  defp save_event(socket, :new, event_params) do
     case Eventlog.create_event(event_params) do
       {:ok, event} ->
         notify_parent({:saved, event})
@@ -75,22 +55,7 @@ defmodule EventsWeb.EventLive.FormSmall do
         {:noreply,
          socket
          |> put_flash(:info, "Event created successfully")
-         |> push_patch(to: socket.assigns.patch)}
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign_form(socket, changeset)}
-    end
-  end
-
-  # FIXME: Socket assigns are wrong here
-  defp save_event(socket, :show, event_params) do
-    case Eventlog.create_event(event_params) do
-      {:ok, event} ->
-        notify_parent({:saved, event})
-
-        {:noreply,
-         socket
-         |> put_flash(:info, "Event created successfully")
+         #put_patch...
         }
 
       {:error, %Ecto.Changeset{} = changeset} ->

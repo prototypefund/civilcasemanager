@@ -1,5 +1,5 @@
 
-<div class="flex gap-4">
+<div class="flex gap-4  items-start">
   <div class="w-1/2">
   <.header>
   <%= @case.identifier %>
@@ -24,18 +24,21 @@
   </div>
 
   <div class="w-1/2">
+
+
     <.live_component
       module={EventsWeb.EventLive.FormSmall}
       id={:new}
       title={@page_title}
       action={@live_action}
       case={@case}
-      event={@new_event}
+      event={%Event{}}
       current_user={@current_user}
       patch={~p"/events"}
     />
 
-    <h2 class="text-lg font-semibold leading-8 text-zinc-800">Associated Events</h2>
+    <h2 class="mt-10 text-lg font-semibold leading-8 text-zinc-800">Associated Events</h2>
+
       <%= for event <- @case.events do %>
         <.card id={Integer.to_string(event.id)}>
           <:icon>

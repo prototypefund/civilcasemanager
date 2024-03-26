@@ -5,13 +5,6 @@
       <.button class="bg-calypso-700">New manual Event</.button>
     </.link>
   </:actions>
-
-  <%!-- <select phx-change="filter" phx-target={@myself} phx-update="ignore">
-    <%= for case <- @cases do %>
-      <option value={case.id}>{case.title}</option>
-    <% end %>
-  </select> --%>
-
 </.header>
 
 <div phx-hook="ParentMount" id="events"  class="flex flex-wrap -mx-4" phx-update="stream">

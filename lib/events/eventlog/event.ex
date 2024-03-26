@@ -44,6 +44,13 @@ defmodule Events.Eventlog.Event do
 
   defp assign_cases_by_id(changeset, []), do: changeset
   defp assign_cases_by_id(changeset, nil), do: changeset
+  defp assign_cases_by_id(changeset, cases) when is_binary(cases) do
+    { id, _ } = Integer.parse(cases)
+    IO.inspect(id, label: "Cases")
+    Ecto.Changeset.put_assoc(changeset, :cases,
+      Events.Cases.get_cases([id])
+    )
+  end
   defp assign_cases_by_id(changeset, cases) do
     IO.inspect(cases, label: "Cases")
     Ecto.Changeset.put_assoc(changeset, :cases, Events.Cases.get_cases(cases))

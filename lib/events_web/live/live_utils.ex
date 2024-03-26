@@ -1,7 +1,6 @@
 defmodule EventsWeb.LiveUtils do
 
   use PhoenixHTMLHelpers
-  import EventsWeb.LiveComponents
 
   def render_timestamp(timestamp) do
     now = DateTime.utc_now()

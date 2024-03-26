@@ -36,14 +36,18 @@ defmodule Events.FetchSupervisor do
 
   def get_icon_for(event_type) do
     type_registry = Application.get_env(:events, :type_registry, %{})
-    {icon_class, _} = Map.get(type_registry, event_type)
-    icon_class || "hero-question-mark-circle"
+    case Map.get(type_registry, event_type) do
+      nil -> "hero-question-mark-circle"
+      {icon_class, _} -> icon_class
+    end
   end
 
   def get_color_for(event_type) do
     type_registry = Application.get_env(:events, :type_registry, %{})
-    {_, color} = Map.get(type_registry, event_type)
-    color || "gray"
+    case Map.get(type_registry, event_type) do
+      nil -> "gray"
+      {_, color}  -> color
+    end
   end
 
 end

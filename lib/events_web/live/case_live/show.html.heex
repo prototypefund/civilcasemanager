@@ -24,13 +24,13 @@
   </div>
 
   <div class="w-1/2">
-      <.live_component
+    <.live_component
       module={EventsWeb.EventLive.FormSmall}
       id={:new}
       title={@page_title}
       action={@live_action}
       case={@case}
-      event={Enum.at(@case.events, 0)}
+      event={@new_event}
       current_user={@current_user}
       patch={~p"/events"}
     />

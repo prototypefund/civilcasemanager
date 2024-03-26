@@ -4,12 +4,14 @@ user interface to assign them to various cases.
 
 # Next Steps
 * Sketch Side by side view
-* Event types and icons
-
+  
 # TODO
 * Prettify case selection a little
-* Case IDs reset every year! Prefix them internally
 * Also, should maybe id be binary id and equal identifier??
+
+# Minor
+* New cases are streamed unfiltered
+* Revisit automatic case creation
 
 # Nice to have
 * Markdown Editor: https://www.wysimark.com/docs/js

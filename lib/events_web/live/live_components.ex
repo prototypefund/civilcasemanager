@@ -27,7 +27,7 @@ defmodule EventsWeb.LiveComponents do
           field={i.field}
           label={i.label}
           type={i.type}
-          phx-debounce={500}
+          phx-debounce={150}
           class="inline w-auto mr-2"
           label_class="inline"
           {i.rest}

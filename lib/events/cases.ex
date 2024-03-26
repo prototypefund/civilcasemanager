@@ -21,12 +21,29 @@ defmodule Events.Cases do
     Repo.all(from c in Case, order_by: [desc: c.created_at])
   end
 
+
   @doc """
   Returns the list of cases using Flop
 
   ## Examples
 
-      iex> list_cases()
+      iex> list_cases(params)
+      [%Case{}, ...]
+
+  """
+  def list_cases!(params) do
+    case Flop.validate_and_run(Case, params, for: Case) do
+      {:ok, cases} -> cases
+      {:error, _} -> []
+    end
+  end
+
+  @doc """
+  Returns the list of cases using Flop
+
+  ## Examples
+
+      iex> list_cases(params)
       [%Case{}, ...]
 
   """

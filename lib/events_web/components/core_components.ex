@@ -609,6 +609,83 @@ defmodule EventsWeb.CoreComponents do
     """
   end
 
+
+  @doc """
+  Renders a card component with a title, an icon, a tag, a body, and a timestamp
+
+  ## Examples
+
+      <.card title="Card Title" icon="hero-annotation" tag="New" tag_class="bg-emerald-50 text-emerald-800" timestamp="4 hours ago" >
+        <p>Card body</p>
+      </.card>
+  """
+
+
+  slot :inner_block, required: true
+  slot :icon, required: true
+  slot :title, required: true
+  slot :tag, default: nil
+  slot :timestamp, default: nil
+
+  def card(assigns) do
+    ~H"""
+
+    <div class="flex gap-x-3 flex-row items-center shadow rounded-lg p-3 space-x-4 border-2 border-calypso-50 hover:bg-gray-50">
+      <div class="grow">
+        <p class="row-1 text-gray-900 leading-snug text-base flex items-center gap-x-2 mb-1">
+          <%= render_slot(@icon) %>
+          <strong class="text-base !leading-tight font-semibold">
+            <%= render_slot(@title) %>
+          </strong>
+          <span class="ml-auto flex gap-2">
+            <%= render_slot(@tag) %>
+          </span>
+        </p>
+        <p class="text-gray-700">
+          <div class="prevent-long-lines text-sm mb-1">
+            <%= render_slot(@inner_block) %>
+          </div>
+          <%= render_slot(@timestamp) %>
+        </p>
+      </div>
+    </div>
+    """
+  end
+
+
+  @doc """
+  Renders a small tag with customizable class
+
+  ## Examples
+
+      <.tag class="bg-emerald-50 text-emerald-800">New</.tag>
+  """
+  attr :class, :string, default: nil
+  attr :color, :string, default: "gray"
+  slot :inner_block, required: true
+
+  def tag_badge(assigns) do
+
+    # Allow tweaking of scheme
+    colors = case assigns.color do
+      "gray" -> ["bg-gray-100", "border-gray-300", "text-gray-700"]
+      "emerald" -> ["bg-emerald-100", "border-emerald-300", "text-emerald-700"]
+      _ -> ["bg-#{assigns.color}-100", "border-#{assigns.color}-300", "text-#{assigns.color}-700"]
+    end
+
+    assigns = assign(assigns, :colors, colors)
+
+    ~H"""
+    <span class={[
+      "border rounded-md px-1 text-xs",
+      @colors,
+      @class]}>
+      <%= render_slot(@inner_block) %>
+    </span>
+    """
+  end
+
+
   ## JS Commands
 
   def show(js \\ %JS{}, selector) do
@@ -683,4 +760,7 @@ defmodule EventsWeb.CoreComponents do
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
   end
+
+
+
 end

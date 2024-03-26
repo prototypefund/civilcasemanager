@@ -10,7 +10,8 @@ defmodule EventsWeb.CaseLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, stream(socket, :cases, Cases.list_cases())}
+    if connected?(socket), do: Cases.subscribe()
+    {:ok, stream(socket, :cases, [])}
   end
 
   @impl true
@@ -31,7 +32,7 @@ defmodule EventsWeb.CaseLive.Index do
   end
 
   defp apply_action(socket, :index, params) do
-    case Events.Cases.list_cases(params) do
+    case Cases.list_cases(params) do
       {:ok, {cases, meta}} ->
         socket
           |> assign(:meta, meta)
@@ -97,6 +98,33 @@ defmodule EventsWeb.CaseLive.Index do
         content_tag(:i, "", class: "hero-clock text-gray-700 h-3 w-3"),
         timestamp
       ]
+    end
+  end
+
+  defp get_pretty_identifier(case) do
+    # Get first part of identifier
+    case.identifier
+    |> String.split("-")
+    |> hd()
+  end
+
+  defp get_year_from_id(case) do
+    # Get second part of identifier or nothing if it doesn't exist
+    case.identifier
+    |> String.split("-")
+    |> tl()
+    |> Enum.at(0)
+  end
+
+  defp get_color_for_year_tag(case) do
+    year = get_year_from_id(case)
+
+    if (year) do
+      if year == Integer.to_string(Date.utc_today().year) do
+        "emerald"
+      else
+        "gray"
+      end
     end
   end
 

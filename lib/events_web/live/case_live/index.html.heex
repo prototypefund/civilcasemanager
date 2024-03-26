@@ -40,34 +40,30 @@
     <div
       id={id}
       phx-click={JS.navigate(~p"/cases/#{case}")}
-      class="p-3 w-full sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/3"
+      class="p-3 w-full sm:w-1/2 md:w-1/2 lg:w-1/3 xl:w-1/3"
     >
-      <div class="flex gap-x-3 flex-row items-center shadow rounded-lg p-3 space-x-4 border-2 border-calypso-50 hover:bg-gray-50">
-        <div class="grow">
-            <p class="row-1 text-gray-900 leading-snug text-base flex items-center gap-x-2 mb-1">
-              <%= render_status_icon(case, "h-4 w-4") %>
-              <strong class="text-base !leading-tight font-semibold">
-                <a href={~p"/cases/#{case}"} class="">
-                  <%= case.identifier %>
-                </a>
-              </strong>
-              <span class="ml-auto flex gap-2">
 
-              </span>
-            </p>
-            <p class="text-gray-700">
-              <div class="prevent-long-lines text-sm mb-1"><%= case.title %></div>
-              <%= render_timestamp(case) %>
-            </p>
-          </div>
-        </div>
-        <div class="relative">
-          <div>
-            <button type="button" title="Open actions menu" class="action-menu-button">
-              <!-- Icon or text for actions menu -->
-            </button>
-          </div>
-      </div>
+      <.card>
+        <:icon>
+          <%= render_status_icon(case, "h-4 w-4") %>
+        </:icon>
+        <:title>
+          <a href={~p"/cases/#{case}"} class="">
+            <%= get_pretty_identifier(case) %>
+          </a>
+        </:title>
+        <:tag>
+          <%= if get_year_from_id(case) do %>
+           <.tag_badge color={get_color_for_year_tag(case)}>
+            <%= get_year_from_id(case) %>
+           </.tag_badge>
+          <% end %>
+        </:tag>
+        <:timestamp>
+          <%= render_timestamp(case) %>
+        </:timestamp>
+          <%= case.title %>
+      </.card>
     </div>
   <% end %>
 </div>

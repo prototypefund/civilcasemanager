@@ -23,7 +23,11 @@ defmodule Events.FetchManager do
       |> Map.from_struct()
       |> Map.put(:manual, false)
 
-    IO.inspect(event_map, label: "Event Map")
+
+    # If we have a case_data field, create the necessary case
+    event_map = event_map
+      |> create_case_on_the_fly()
+
 
     # Use Event.changeset/2 for insertion as before
     case %Event{} |> Event.changeset(event_map) |> Repo.insert() |> broadcast(:event_created) do
@@ -34,6 +38,32 @@ defmodule Events.FetchManager do
     end
 
     {:noreply, state}
+  end
+
+  defp create_case_on_the_fly(event_map) do
+    case_data = event_map[:case_data]
+    existing_case = Events.Cases.get_case_by_identifier(case_data[:identifier])
+
+    case existing_case do
+      nil ->
+        Map.put(event_map, :case_id, create_case(case_data).id)
+      _ ->
+        event_map
+    end
+
+  end
+
+  defp create_case(case_data) do
+    # TODO: Potential race condition
+    {:ok, case} = Events.Cases.create_case(
+      %{
+        identifier: case_data[:identifier],
+        created_at: case_data[:created_at],
+        title: case_data[:additional]
+      }
+    )
+    IO.inspect(case)
+    case
   end
 
 end

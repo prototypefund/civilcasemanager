@@ -36,7 +36,6 @@ defmodule Events.Eventlog.Event do
     |> truncate_field(:body, 65_535)
     |> truncate_field(:metadata, 65_535)
     |> put_timestamp_if_nil(:received_at)
-    #|> cast_assoc(:cases, with: &Events.Cases.Case.changeset/2)
     |> assign_cases_by_id(attrs["cases"])
     |> assign_cases_by_identifier(attrs[:case_data])
     IO.inspect(new, label: "New Event Changeset")
@@ -50,7 +49,7 @@ defmodule Events.Eventlog.Event do
     Ecto.Changeset.put_assoc(changeset, :cases, Events.Cases.get_cases(cases))
   end
 
-  ## TODO: Create case if not existing
+  ## TODO: Is this the best place for this function?
   defp assign_cases_by_identifier(changeset, []), do: changeset
   defp assign_cases_by_identifier(changeset, nil), do: changeset
   defp assign_cases_by_identifier(changeset, case_data) do

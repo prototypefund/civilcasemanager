@@ -14,52 +14,46 @@
 
 </.header>
 
-
-
-<div phx-hook="ParentMount" id="events" phx-update="stream" class="space-y-4">
-  <%!-- prev_date = ~U[1970-01-12 00:01:00.00Z] --%>
+<div phx-hook="ParentMount" id="events"  class="space-y-4 flex flex-wrap -mx-4" phx-update="stream">
   <%= for {id, event} <- @streams.events do %>
-  <%!-- <%= for {id, event} <- @streams.events |> Enum.filter(fn event -> event.case_id == @case_id end) do %> --%>
-
-    <%!-- <%= if DateTime.compare(prev_date, event.received_at) != :eq do %>
-      <div class="text-lg font-medium">
-        <%= Date.to_string(event.received_at) %>
-      </div>
-      <% prev_date = event.received_at %>
-    <% end %> --%>
-
-    <div id={id} class="flex flex-row items-center shadow rounded-lg p-4 space-x-4 border-2 border-calypso-50" phx-click={JS.navigate(~p"/events/#{event}")} phx-hook="FadeIn">
-
-      <div class="flex-none">
-        <.icon name={Events.FetchSupervisor.get_icon_for(event.type)} class="h-5 w-5" />
-      </div>
-
-      <div class="flex-grow">
-        <div class="text-lg font-medium">
-          <%= event.title %>
-        </div>
-        <div class="text-sm text-gray-600">
-          <%= event.received_at |> DateTime.to_string() %>
-        </div>
-        <p class="mt-1 text-sm text-gray-500">
+    <div
+      id={id}
+      phx-click={JS.navigate(~p"/events/#{event}")}
+      phx-hook="FadeIn"
+      class="p-3 w-full sm:w-1/2 md:w-1/2 lg:w-1/3 xl:w-1/3"
+    >
+      <.card>
+        <:icon>
+          <.icon name={Events.FetchSupervisor.get_icon_for(event.type)} class="h-4 w-4" />
+        </:icon>
+        <:title>
+          <a href={~p"/events/#{event}"} class="">
+            <%= event.title %>
+          </a>
+        </:title>
+        <:tag>
+           <.tag_badge>
+            <%= event.type %>
+           </.tag_badge>
+        </:tag>
+        <:timestamp>
+          <%= EventsWeb.LiveUtils.render_timestamp(event.received_at) %>
+        </:timestamp>
+        <:actions>
+          <.link patch={~p"/events/#{event}/edit"}>
+            <.icon name="hero-pencil-square" class="text-teal-500" />
+          </.link>
+          <.link
+            phx-click={JS.push("delete", value: %{id: event.id}) |> hide("##{id}")}
+            data-confirm="Are you sure?"
+          >
+            <.icon name="hero-trash" class="text-chestnut-500"/>
+          </.link>
+        </:actions>
           <%= event.body %>
-        </p>
-      </div>
-
-      <div class="flex-none">
-        <!-- Actions -->
-        <.link patch={~p"/events/#{event}/edit"}>
-          <.icon name="hero-pencil-square" class="text-teal-500" />
-        </.link>
-        <.link
-          phx-click={JS.push("delete", value: %{id: event.id}) |> hide("##{id}")}
-          data-confirm="Are you sure?"
-        >
-          <.icon name="hero-trash" class="text-chestnut-500"/>
-        </.link>
-      </div>
+      </.card>
     </div>
-<% end %>
+  <% end %>
 </div>
 
 

@@ -20,7 +20,7 @@ defmodule EventsWeb.LiveComponents do
       phx-target={@target}
       phx-change={@on_change}
       phx-submit={@on_change}
-      class="flex space-x-4" # Add space between flex items using tailwind
+      class="flex space-x-4"
     >
       <.filter_fields :let={i} form={@form} fields={@fields}>
         <.input

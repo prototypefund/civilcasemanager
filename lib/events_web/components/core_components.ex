@@ -626,6 +626,7 @@ defmodule EventsWeb.CoreComponents do
   slot :title, required: true
   slot :tag, default: nil
   slot :timestamp, default: nil
+  slot :actions, default: nil
 
   def card(assigns) do
     ~H"""
@@ -647,6 +648,9 @@ defmodule EventsWeb.CoreComponents do
           </div>
           <%= render_slot(@timestamp) %>
         </p>
+      </div>
+      <div class="flex-none">
+        <%= render_slot(@actions) %>
       </div>
     </div>
     """

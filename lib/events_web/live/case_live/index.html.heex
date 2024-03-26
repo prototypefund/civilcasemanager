@@ -60,7 +60,7 @@
           <% end %>
         </:tag>
         <:timestamp>
-          <%= render_timestamp(case) %>
+          <%= EventsWeb.LiveUtils.render_timestamp(case.created_at) %>
         </:timestamp>
           <%= case.title %>
       </.card>

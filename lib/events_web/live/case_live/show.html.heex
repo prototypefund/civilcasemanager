@@ -1,4 +1,7 @@
-<.header>
+
+<div class="flex gap-4">
+  <div class="w-1/2">
+  <.header>
   <%= @case.identifier %>
   <:subtitle><%= @case.title %></:subtitle>
   <:actions>
@@ -8,25 +11,30 @@
   </:actions>
 </.header>
 
-<.list>
-  <:item title="Description"><%= @case.description %></:item>
-  <:item title="Created at"><%= @case.created_at %></:item>
-  <:item title="Status"><%= @case.status %></:item>
-  <:item title="Status note"><%= @case.status_note %></:item>
 
-</.list>
+  <.list>
+    <:item title="Description"><%= @case.description %></:item>
+    <:item title="Created at"><%= @case.created_at %></:item>
+    <:item title="Status"><%= @case.status %></:item>
+    <:item title="Status note"><%= @case.status_note %></:item>
 
-<h2 class="text-md font-weight-bold">Associated Events</h2>
-  <ul>
-    <%= for event <- @case.events do %>
-      <.link patch={~p"/events/#{event}"}>
-        Event <%= event.id %>
-      </.link>
-      <br>
-    <% end %>
-  </ul>
+  </.list>
 
-<.back navigate={~p"/cases"}>Return to overview</.back>
+  <.back navigate={~p"/cases"}>Return to overview</.back>
+  </div>
+
+  <div class="w-1/2">
+    <h2 class="text-lg font-semibold leading-8 text-zinc-800">Associated Events</h2>
+    <ul>
+      <%= for event <- @case.events do %>
+        <.link patch={~p"/events/#{event}"}>
+          Event <%= event.id %>
+        </.link>
+        <br>
+      <% end %>
+    </ul>
+  </div>
+</div>
 
 <.modal :if={@live_action == :edit} id="case-modal" show on_cancel={JS.patch(~p"/cases/#{@case}")}>
   <.live_component

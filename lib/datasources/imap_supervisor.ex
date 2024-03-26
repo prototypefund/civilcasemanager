@@ -1,6 +1,7 @@
 defmodule Events.Datasources.IMAPSupervisor do
   def event_type, do: "imap"
   def icon_class, do: "hero-envelope-solid"
+  def color, do: "blue"
 
   use Supervisor
 

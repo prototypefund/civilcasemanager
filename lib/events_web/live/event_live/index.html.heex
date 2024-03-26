@@ -32,7 +32,7 @@
           </a>
         </:title>
         <:tag>
-           <.tag_badge>
+           <.tag_badge color={Events.FetchSupervisor.get_color_for(event.type)}>
             <%= event.type %>
            </.tag_badge>
         </:tag>

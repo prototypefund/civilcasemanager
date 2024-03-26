@@ -23,7 +23,10 @@ defmodule Events.FetchSupervisor do
 
       # Create a map of types and icons. Example %{imap: "imap_icon.png", slack: "slack.png"}
       type_registry = Enum.reduce(opts, %{}, fn {worker_module, _}, acc ->
-        Map.put(acc, worker_module.event_type(), worker_module.icon_class())
+        Map.put(acc, worker_module.event_type(), {
+          worker_module.icon_class(),
+          worker_module.color()
+        })
       end)
       Application.put_env(:events, :type_registry, type_registry)
 
@@ -33,7 +36,14 @@ defmodule Events.FetchSupervisor do
 
   def get_icon_for(event_type) do
     type_registry = Application.get_env(:events, :type_registry, %{})
-    Map.get(type_registry, event_type) || "hero-question-mark-circle"
+    {icon_class, _} = Map.get(type_registry, event_type)
+    icon_class || "hero-question-mark-circle"
+  end
+
+  def get_color_for(event_type) do
+    type_registry = Application.get_env(:events, :type_registry, %{})
+    {_, color} = Map.get(type_registry, event_type)
+    color || "gray"
   end
 
 end

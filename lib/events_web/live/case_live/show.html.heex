@@ -24,15 +24,51 @@
   </div>
 
   <div class="w-1/2">
+      <.live_component
+      module={EventsWeb.EventLive.FormSmall}
+      id={:new}
+      title={@page_title}
+      action={@live_action}
+      case={@case}
+      event={Enum.at(@case.events, 0)}
+      current_user={@current_user}
+      patch={~p"/events"}
+    />
+
     <h2 class="text-lg font-semibold leading-8 text-zinc-800">Associated Events</h2>
-    <ul>
       <%= for event <- @case.events do %>
-        <.link patch={~p"/events/#{event}"}>
-          Event <%= event.id %>
-        </.link>
-        <br>
+        <.card id={Integer.to_string(event.id)}>
+          <:icon>
+            <.icon name={Events.FetchSupervisor.get_icon_for(event.type)} class="h-4 w-4" />
+          </:icon>
+          <:title>
+            <a href={~p"/events/#{event}"} class="">
+              <%= event.title %>
+            </a>
+          </:title>
+          <:tag>
+            <.tag_badge color={Events.FetchSupervisor.get_color_for(event.type)}>
+              <%= event.type %>
+            </.tag_badge>
+          </:tag>
+          <:timestamp>
+            <%= EventsWeb.LiveUtils.render_timestamp(event.received_at) %>
+          </:timestamp>
+          <:actions>
+            <.link patch={~p"/events/#{event}/edit"}>
+              <%= gettext("Edit Event") %>
+            </.link>
+            <.link
+            class="block"
+              phx-click={JS.push("delete", value: %{id: event.id}) |> hide("##{event.id}")}
+              data-confirm="Are you sure?"
+            >
+              <%= gettext("Delete Event") %>
+            </.link>
+          </:actions>
+            <%= raw(Earmark.as_html!(event.body)) %>
+        </.card>
       <% end %>
-    </ul>
   </div>
 </div>
 

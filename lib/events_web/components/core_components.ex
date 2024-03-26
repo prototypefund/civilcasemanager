@@ -611,16 +611,40 @@ defmodule EventsWeb.CoreComponents do
 
 
   @doc """
-  Renders a card component with a title, an icon, a tag, a body, and a timestamp
+  Renders a card component with a title,
+  an icon, a tag, a body, a timestamp, and interactive actions.
+  The actions are displayed in a dropdown menu .
 
   ## Examples
 
-      <.card title="Card Title" icon="hero-annotation" tag="New" tag_class="bg-emerald-50 text-emerald-800" timestamp="4 hours ago" >
-        <p>Card body</p>
-      </.card>
+    <.card>
+      <p>Inner Content</p>
+      <:icon>
+        <svg class="hero-annotation" ...></svg> <!-- Insert your SVG or icon component here -->
+      </:icon>
+      <:title>
+        Card Title
+      </:title>
+      <:tag>
+        <span class="bg-emerald-50 text-emerald-800">New</span>
+      </:tag>
+      <:inner_block>
+        <p>Card body content here...</p>
+      </:inner_block>
+      <:timestamp>
+        4 hours ago
+      </:timestamp>
+      <:actions>
+        <div class="dropdown-menu shadow-lg bg-white rounded-md p-2" style="display: none;"> <!-- Adjust styling as needed -->
+          <!-- Action items go here -->
+          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Action 1</a>
+          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Action 2</a>
+        </div>
+      </:actions>
+    </.card>
   """
-
-
+  # Investigate solution without requiring id
+  attr :id, :string, required: true
   slot :inner_block, required: true
   slot :icon, required: true
   slot :title, required: true
@@ -630,10 +654,9 @@ defmodule EventsWeb.CoreComponents do
 
   def card(assigns) do
     ~H"""
-
-    <div class="flex gap-x-3 flex-row items-center shadow rounded-lg p-3 space-x-4 border-2 border-calypso-50 hover:bg-gray-50">
+    <div class="flex gap-x-3 flex-row items-center shadow rounded-lg p-3 space-x-4 border-2 border-calypso-50 hover:bg-gray-50" >
       <div class="grow">
-        <p class="row-1 text-gray-900 leading-snug text-base flex items-center gap-x-2 mb-1">
+        <div class="row-1 text-gray-900 leading-snug text-base flex items-center gap-x-2 mb-1">
           <%= render_slot(@icon) %>
           <strong class="text-base !leading-tight font-semibold">
             <%= render_slot(@title) %>
@@ -641,7 +664,18 @@ defmodule EventsWeb.CoreComponents do
           <span class="ml-auto flex gap-2">
             <%= render_slot(@tag) %>
           </span>
-        </p>
+          <div class="actions relative">
+            <button class="hero-ellipsis-vertical-solid text-gray-700 h-5 -mr-2" phx-click={
+                JS.toggle(to: "##{@id}-menu",
+                in: {"ease-out duration-100", "opacity-0 scale-95", "opacity-100 scale-100"},
+                out: {"ease-out duration-75", "opacity-100 scale-100", "opacity-0 scale-95"})
+              }
+            />
+            <div id={@id <> "-menu"} class="absolute hidden z-10 shadow rounded-md bg-gray-50 p-2 text-sm w-28">
+              <%= render_slot(@actions) %>
+            </div>
+          </div>
+        </div>
         <p class="text-gray-700">
           <div class="prevent-long-lines text-sm mb-1">
             <%= render_slot(@inner_block) %>
@@ -649,12 +683,10 @@ defmodule EventsWeb.CoreComponents do
           <%= render_slot(@timestamp) %>
         </p>
       </div>
-      <div class="flex-none">
-        <%= render_slot(@actions) %>
-      </div>
     </div>
     """
   end
+
 
 
   @doc """

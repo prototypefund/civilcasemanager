@@ -14,7 +14,7 @@
 
 </.header>
 
-<div phx-hook="ParentMount" id="events"  class="space-y-4 flex flex-wrap -mx-4" phx-update="stream">
+<div phx-hook="ParentMount" id="events"  class="flex flex-wrap -mx-4" phx-update="stream">
   <%= for {id, event} <- @streams.events do %>
     <div
       id={id}
@@ -22,7 +22,7 @@
       phx-hook="FadeIn"
       class="p-3 w-full sm:w-1/2 md:w-1/2 lg:w-1/3 xl:w-1/3"
     >
-      <.card>
+      <.card id={id}>
         <:icon>
           <.icon name={Events.FetchSupervisor.get_icon_for(event.type)} class="h-4 w-4" />
         </:icon>
@@ -41,13 +41,14 @@
         </:timestamp>
         <:actions>
           <.link patch={~p"/events/#{event}/edit"}>
-            <.icon name="hero-pencil-square" class="text-teal-500" />
+            <%= gettext("Edit Event") %>
           </.link>
           <.link
+          class="block"
             phx-click={JS.push("delete", value: %{id: event.id}) |> hide("##{id}")}
             data-confirm="Are you sure?"
           >
-            <.icon name="hero-trash" class="text-chestnut-500"/>
+            <%= gettext("Delete Event") %>
           </.link>
         </:actions>
           <%= raw(Earmark.as_html!(event.body)) %>

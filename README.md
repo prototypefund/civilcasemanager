@@ -3,8 +3,8 @@ Receives incoming information (currently IMAP Idle, and Slack, (VOIP, SMS planne
 user interface to assign them to various cases. 
 
 # Next Steps
-* Subscribe to changed events in case view. 
-* IDE: Fix syntax hightlight of heex
+* Filter changed events in case view.
+* Parse Thuraya 
 * Flop bugs
 * Finish yugo PR
   

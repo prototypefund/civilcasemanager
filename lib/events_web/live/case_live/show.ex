@@ -22,11 +22,13 @@ defmodule EventsWeb.CaseLive.Show do
   end
 
   def handle_info({:event_created, event}, socket) do
+    #TODO Filter correctly here
     {:noreply, stream_insert(socket, :assoc_events, event, at: 0)}
   end
 
   @impl true
   def handle_info({:event_updated, event}, socket) do
+    #TODO Filter correctly here
     {:noreply, stream_insert(socket, :assoc_events, event, at: 0)}
   end
 

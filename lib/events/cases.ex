@@ -181,6 +181,26 @@ defmodule Events.Cases do
     Case.changeset(case, attrs)
   end
 
+  def get_combined_identifier(case_data) do
+    year = DateTime.to_date(case_data[:created_at]).year |> Integer.to_string()
+    case_data[:identifier] <> "-" <> year
+  end
+
+  def get_pretty_identifier(case) do
+    # Get first part of identifier
+    case.identifier
+    |> String.split("-")
+    |> hd()
+  end
+
+  def get_year_from_id(case) do
+    # Get second part of identifier or nothing if it doesn't exist
+    case.identifier
+    |> String.split("-")
+    |> tl()
+    |> Enum.at(0)
+  end
+
   @doc """
   Subscribes to changes to the case.
   """

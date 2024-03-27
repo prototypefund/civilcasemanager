@@ -1,5 +1,10 @@
 defmodule Events.FetchManager do
   import Events.Eventlog, only: [broadcast: 2]
+  import Events.Cases, only: [
+    create_case: 1,
+    get_case_by_identifier: 1,
+    get_combined_identifier: 1
+  ]
 
   use GenServer
   alias Events.Eventlog.Event
@@ -26,6 +31,7 @@ defmodule Events.FetchManager do
 
     # If we have a case_data field, create the necessary case
     event_map = event_map
+      |> Map.put(:case_data, normalize_case_data(event_map[:case_data]))
       |> create_case_on_the_fly()
 
 
@@ -41,28 +47,33 @@ defmodule Events.FetchManager do
   end
 
   defp create_case_on_the_fly(event_map) do
-    case_data = event_map[:case_data]
-    existing_case = Events.Cases.get_case_by_identifier(case_data[:identifier])
+    case_data = normalize_case_data(event_map[:case_data])
+    existing_case = get_case_by_identifier(case_data[:identifier])
 
     case existing_case do
       nil ->
-        Map.put(event_map, :case_id, create_case(case_data).id)
+        Map.put(event_map, :case_id, create_case_from_case_data(case_data).id)
       _ ->
         event_map
     end
-
   end
 
-  defp create_case(case_data) do
+  def normalize_case_data(case_data) do
+    case String.split(case_data[:identifier],"-") do
+      [_, _] -> case_data
+      _ -> Map.put(case_data, :identifier, get_combined_identifier(case_data))
+    end
+  end
+
+  defp create_case_from_case_data(case_data) do
     # TODO: Potential race condition
-    {:ok, case} = Events.Cases.create_case(
+    {:ok, case} = create_case(
       %{
         identifier: case_data[:identifier],
         created_at: case_data[:created_at],
         title: case_data[:additional]
       }
     )
-    IO.inspect(case)
     case
   end
 

@@ -78,23 +78,8 @@ defmodule EventsWeb.CaseLive.Index do
     {:noreply, stream_delete(socket, :cases, case)}
   end
 
-  defp get_pretty_identifier(case) do
-    # Get first part of identifier
-    case.identifier
-    |> String.split("-")
-    |> hd()
-  end
-
-  defp get_year_from_id(case) do
-    # Get second part of identifier or nothing if it doesn't exist
-    case.identifier
-    |> String.split("-")
-    |> tl()
-    |> Enum.at(0)
-  end
-
   defp get_color_for_year_tag(case) do
-    year = get_year_from_id(case)
+    year = Cases.get_year_from_id(case)
     if (year) do
       if year == Integer.to_string(Date.utc_today().year) do
         "emerald"

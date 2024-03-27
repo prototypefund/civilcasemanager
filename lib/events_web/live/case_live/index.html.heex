@@ -49,13 +49,13 @@
         </:icon>
         <:title>
           <a href={~p"/cases/#{case}"} class="">
-            <%= get_pretty_identifier(case) %>
+            <%= Cases.get_pretty_identifier(case) %>
           </a>
         </:title>
         <:tag>
-          <%= if get_year_from_id(case) do %>
+          <%= if Cases.get_year_from_id(case) do %>
            <.tag_badge color={get_color_for_year_tag(case)}>
-            <%= get_year_from_id(case) %>
+            <%= Cases.get_year_from_id(case) %>
            </.tag_badge>
           <% end %>
         </:tag>

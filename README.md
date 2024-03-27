@@ -3,7 +3,8 @@ Receives incoming information (currently IMAP Idle, and Slack, (VOIP, SMS planne
 user interface to assign them to various cases. 
 
 # Next Steps
-* Filter changed events in case view.
+* Filter changed events in case view
+* Improve dropdowns (autoclosing, in embedded)
 * Parse Thuraya 
 * Flop bugs
 * Finish yugo PR

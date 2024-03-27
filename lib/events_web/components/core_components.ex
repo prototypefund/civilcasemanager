@@ -650,7 +650,7 @@ defmodule EventsWeb.CoreComponents do
   slot :title, required: true
   slot :tag, default: nil
   slot :timestamp, default: nil
-  slot :actions, default: nil
+  slot :actions
 
   def card(assigns) do
     ~H"""
@@ -664,7 +664,7 @@ defmodule EventsWeb.CoreComponents do
           <span class="ml-auto flex gap-2">
             <%= render_slot(@tag) %>
           </span>
-          <div class="actions relative">
+          <div class={[@actions == [] && "hidden", "actions relative"]}>
             <button class="hero-ellipsis-vertical-solid text-gray-700 h-5 -mr-2" phx-click={
                 JS.toggle(to: "##{@id}-menu",
                 in: {"ease-out duration-100", "opacity-0 scale-95", "opacity-100 scale-100"},

@@ -63,18 +63,6 @@
           <:timestamp>
             <%= EventsWeb.LiveUtils.render_timestamp(event.received_at) %>
           </:timestamp>
-          <:actions>
-            <.link patch={~p"/events/#{event}/edit"}>
-              <%= gettext("Edit Event") %>
-            </.link>
-            <.link
-            class="block"
-              phx-click={JS.push("delete", value: %{id: event.id}) |> hide("##{event.id}")}
-              data-confirm="Are you sure?"
-            >
-              <%= gettext("Delete Event") %>
-            </.link>
-          </:actions>
             <%= raw(Earmark.as_html!(event.body)) %>
         </.card>
         </div>

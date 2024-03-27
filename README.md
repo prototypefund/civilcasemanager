@@ -3,11 +3,13 @@ Receives incoming information (currently IMAP Idle, and Slack, (VOIP, SMS planne
 user interface to assign them to various cases. 
 
 # Next Steps
-* Sketch Side by side view
+* Subscribe to changed events in case view. 
+* IDE: Fix syntax hightlight of heex
+* Flop bugs
+* Finish yugo PR
   
 # TODO
 * Prettify case selection a little
-* Also, should maybe id be binary id and equal identifier??
 
 # Minor
 * New cases are streamed unfiltered
@@ -17,8 +19,8 @@ user interface to assign them to various cases.
 * Markdown Editor: https://www.wysimark.com/docs/js
 
 # Later
+* Also, should maybe id be binary id and use unique identifier??
 * https://fly.io/phoenix-files/liveview-multi-select/
-* Open issue report: Documentation of corecomponent lacking.
 * https://dev.to/seojeek/phoenix-deploys-with-elixir-1-9-with-systemd-no-docker-1od0
 
 ## Maybe

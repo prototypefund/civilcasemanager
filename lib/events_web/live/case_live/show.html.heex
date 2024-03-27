@@ -37,10 +37,16 @@
       patch={~p"/events"}
     />
 
-    <h2 class="mt-10 text-lg font-semibold leading-8 text-zinc-800">Associated Events</h2>
-
-      <%= for event <- @case.events do %>
-        <.card id={Integer.to_string(event.id)}>
+    <h2 class="mt-10 text-lg font-semibold leading-8 text-zinc-800" >Associated Events</h2>
+    <div phx-update="stream" id="assoc_events">
+      <%= for {id, event} <- @streams.assoc_events do %>
+          <div
+            id={id}
+            phx-click={JS.navigate(~p"/events/#{event}")}
+            phx-hook="FadeIn"
+            class="py-3"
+          >
+        <.card id={id}>
           <:icon>
             <.icon name={Events.FetchSupervisor.get_icon_for(event.type)} class="h-4 w-4" />
           </:icon>
@@ -71,7 +77,9 @@
           </:actions>
             <%= raw(Earmark.as_html!(event.body)) %>
         </.card>
+        </div>
       <% end %>
+      </div>
   </div>
 </div>
 

@@ -4,6 +4,8 @@ defmodule EventsWeb.EventLive.FormSmall do
   alias Events.Eventlog
 
   @impl true
+
+  # TODO Remove margin-top
   def render(assigns) do
     ~H"""
     <div>
@@ -14,7 +16,7 @@ defmodule EventsWeb.EventLive.FormSmall do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:type]} type="hidden" value="manual" />
+        <.input class="!mt-0" field={@form[:type]} type="hidden" value="manual" />
         <.input field={@form[:title]} type="hidden" value={@case.identifier} />
         <.input field={@form[:body]} type="textarea" placeholder={gettext("Enter some notes here")} />
         <.input field={@form[:from]} type="hidden" value={@current_user.email} />

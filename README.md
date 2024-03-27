@@ -6,6 +6,7 @@ user interface to assign them to various cases.
 * Filter changed events in case view
 * Improve dropdowns (autoclosing, in embedded)
 * Parse Thuraya 
+* PR for https://github.com/phoenixframework/phoenix_live_view/issues/3195
 * Flop bugs
 * Finish yugo PR
   

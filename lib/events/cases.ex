@@ -201,6 +201,16 @@ defmodule Events.Cases do
     |> Enum.at(0)
   end
 
+  def fill_template_with_case(case) do
+    """
+    Dear Officer,
+
+    This is to alert you of a rescue case #{case.identifier} that was created on #{DateTime.to_string(case.created_at)}.
+
+    Regards,
+    """
+  end
+
   @doc """
   Subscribes to changes to the case.
   """

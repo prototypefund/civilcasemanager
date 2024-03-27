@@ -8,6 +8,9 @@
     <.link patch={~p"/cases/#{@case}/show/edit"} phx-click={JS.push_focus()}>
       <.button>Edit case</.button>
     </.link>
+    <a class="mx-1" href={get_mailto_link(@case)}>
+      <.button>Send email</.button>
+    </a>
   </:actions>
 </.header>
 
@@ -38,6 +41,7 @@
     />
 
     <h2 class="mt-10 text-lg font-semibold leading-8 text-zinc-800" >Associated Events</h2>
+
     <div phx-update="stream" id="assoc_events">
       <%= for {id, event} <- @streams.assoc_events do %>
           <div

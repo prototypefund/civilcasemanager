@@ -39,4 +39,10 @@ defmodule EventsWeb.CaseLive.Show do
 
   defp page_title(:show), do: "Show Case"
   defp page_title(:edit), do: "Edit Case"
+
+  # Get a mailto link with the body using fill_template_with_case()
+  defp get_mailto_link(case) do
+    "mailto: ?subject=#{URI.encode("Case: #{case.identifier} - #{case.title}")}
+    &body=#{URI.encode(Cases.fill_template_with_case(case))}"
+  end
 end

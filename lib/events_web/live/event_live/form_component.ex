@@ -19,9 +19,8 @@ defmodule EventsWeb.EventLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:type]} type="text" label="Type" />
+        <.input field={@form[:type]} type="hidden" value="manual" />
         <.input field={@form[:received_at]} type="datetime-local" label="Zulu time received" />
-
 
         <%!-- <.inputs_for :let={n_case} field={@form[:cases]}>
           <.input type="text" field={n_case[:id]} />

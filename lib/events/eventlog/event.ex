@@ -16,7 +16,6 @@ defmodule Events.Eventlog.Event do
     field :received_at, :utc_datetime
     field :title, :string
     field :type, :string
-    field :manual, :boolean, default: true
     field :metadata, :string
     field :deleted_at, :utc_datetime
     field :edited_at, :utc_datetime
@@ -31,7 +30,7 @@ defmodule Events.Eventlog.Event do
     new = event
     ## Here are the fields than be updated through user interaction
     ## Check if complete
-    |> cast(attrs, [:type, :received_at, :body, :title, :manual, :from, :metadata])
+    |> cast(attrs, [:type, :received_at, :body, :title, :from, :metadata])
     |> validate_required([:type, :body])
     |> truncate_field(:body, 65_535)
     |> truncate_field(:metadata, 65_535)

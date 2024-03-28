@@ -28,9 +28,7 @@ defmodule Events.Datasources.IMAPWorker do
   end
 
   defp publish_email(message, state) do
-    IO.puts("Received an email with subject `#{message.subject}`:")
-    IO.inspect(message)
-    IO.inspect(state[:manager_pid])
+    IO.inspect(message, label: "Received an email with subject `#{message.subject}`:")
 
     event = %Events.FetchEvent{
       type: "imap",
@@ -41,8 +39,11 @@ defmodule Events.Datasources.IMAPWorker do
       metadata: String.replace(message.rfc822_header, "\r\n", "\n")
     }
 
+    # TODO: Store the PID in context instead of looking it up every time
+    manager_pid = Process.whereis(:fetch_manager)
+
     ## Cast messages don't expect a reply, call messages do.
-    GenServer.cast(state[:manager_pid], {:new_event, event})
+    GenServer.cast(manager_pid, {:new_event, event})
   end
 
   defp extract_body({"text/plain", _opts, actual_body}), do: actual_body

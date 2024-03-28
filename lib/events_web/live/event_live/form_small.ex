@@ -17,10 +17,10 @@ defmodule EventsWeb.EventLive.FormSmall do
         phx-submit="save"
         rest={%{class: "-mt-7"}}
       >
-        <.input class="!mt-0" field={@form[:type]} type="hidden" value="manual" />
+        <.input field={@form[:type]} type="hidden" value="manual" />
         <.input field={@form[:title]} type="hidden" value={@case.identifier} />
         <.input field={@form[:body]} type="textarea" placeholder={gettext("Enter some notes here")} />
-        <.input field={@form[:from]} type="hidden" value={@current_user.email} />
+        <.input field={@form[:from]} type="hidden" value={@current_user.name} />
         <.input field={@form[:cases]} type="hidden" value={@case.id} />
         <:actions>
             <.button phx-disable-with="Saving..." class="-mt-5 text-white !bg-indigo-600 rounded-md !hover:bg-indigo-500 ml-auto">Submit</.button>

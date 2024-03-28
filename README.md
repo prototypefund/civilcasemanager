@@ -4,6 +4,8 @@ user interface to assign them to various cases.
 
 # Next Steps
 * Filter changed events in case view
+* Bug in POST
+* Email is not working
 * Improve dropdowns (autoclosing, in embedded)
 * Parse Thuraya 
 * PR for https://github.com/phoenixframework/phoenix_live_view/issues/3195

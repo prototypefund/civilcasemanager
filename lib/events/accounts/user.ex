@@ -4,6 +4,7 @@ defmodule Events.Accounts.User do
 
   schema "users" do
     field :email, :string
+    field :name, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
@@ -88,13 +89,24 @@ defmodule Events.Accounts.User do
   end
 
   @doc """
+  A user changeset for any generic attribute
+  """
+  def generic_changeset(user, attrs, _opts \\ []) do
+    IO.inspect(attrs, label: "PASSED ATTRS")
+    user
+    |> cast(attrs, [:name])
+    |> IO.inspect()
+  end
+
+
+  @doc """
   A user changeset for changing the email.
 
   It requires the email to change otherwise an error is added.
   """
   def email_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email])
+    |> cast(attrs, [:email, :name])
     |> validate_email(opts)
     |> case do
       %{changes: %{email: _}} = changeset -> changeset

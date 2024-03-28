@@ -109,6 +109,38 @@ defmodule Events.Accounts do
   end
 
   @doc """
+  Returns an `%Ecto.Changeset{}` for changing the user email.
+
+  ## Examples
+
+      iex> change_user_email(user)
+      %Ecto.Changeset{data: %User{}}
+
+  """
+  def change_generic_attrs(user, attrs \\ %{}) do
+    User.generic_changeset(user, attrs)
+  end
+
+  @doc """
+  Updates the generic settings of the user like name or
+  in the future settings
+
+  ## Examples
+
+      iex> update_user_generic_attrs(user, %{name: "John Doe"})
+      {:ok, %User{}}
+
+      iex> update_user_generic_attrs(user, %{name: ""})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_user_generic_attrs(user, attrs) do
+    user
+    |> User.generic_changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
   Emulates that the email will change without actually changing
   it in the database.
 

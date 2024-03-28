@@ -7,10 +7,23 @@ defmodule EventsWeb.UserSettingsLive do
     ~H"""
     <.header class="text-center">
       Account Settings
-      <:subtitle>Manage your account email address and password settings</:subtitle>
+      <:subtitle>Manage your account settings</:subtitle>
     </.header>
 
     <div class="space-y-12 divide-y">
+       <div>
+        <.simple_form
+          for={@generic_form}
+          id="generic_form"
+          phx-submit="update_generic"
+          phx-change="validate_generic"
+        >
+          <.input field={@email_form[:name]} type="text" label="Name" required />
+          <:actions>
+            <.button phx-disable-with="Changing...">Save Changes</.button>
+          </:actions>
+        </.simple_form>
+      </div>
       <div>
         <.simple_form
           for={@email_form}
@@ -90,6 +103,7 @@ defmodule EventsWeb.UserSettingsLive do
     user = socket.assigns.current_user
     email_changeset = Accounts.change_user_email(user)
     password_changeset = Accounts.change_user_password(user)
+    generic_changeset = Accounts.change_generic_attrs(user)
 
     socket =
       socket
@@ -98,6 +112,7 @@ defmodule EventsWeb.UserSettingsLive do
       |> assign(:current_email, user.email)
       |> assign(:email_form, to_form(email_changeset))
       |> assign(:password_form, to_form(password_changeset))
+      |> assign(:generic_form, to_form(generic_changeset))
       |> assign(:trigger_submit, false)
 
     {:ok, socket}
@@ -162,6 +177,33 @@ defmodule EventsWeb.UserSettingsLive do
 
       {:error, changeset} ->
         {:noreply, assign(socket, password_form: to_form(changeset))}
+    end
+  end
+
+  def handle_event("validate_generic", params, socket) do
+    generic_form =
+      socket.assigns.current_user
+      |> Accounts.change_generic_attrs(params["user"])
+      |> Map.put(:action, :validate)
+      |> to_form()
+
+    {:noreply, assign(socket, generic_form: generic_form)}
+  end
+
+  def handle_event("update_generic", params, socket) do
+    user = socket.assigns.current_user
+
+    case Accounts.update_user_generic_attrs(user, params["user"]) do
+      {:ok, user} ->
+        generic_form =
+          user
+          |> Accounts.change_generic_attrs(params["user"])
+          |> to_form()
+
+        {:noreply, assign(socket, generic_form: generic_form)}
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, generic_form: to_form(changeset))}
     end
   end
 end

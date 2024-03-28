@@ -26,7 +26,6 @@ defmodule Events.FetchManager do
     # Convert the struct to a map before insertion
     event_map = event
       |> Map.from_struct()
-      |> Map.put(:manual, false)
 
 
     # If we have a case_data field, create the necessary case
@@ -47,7 +46,7 @@ defmodule Events.FetchManager do
   end
 
   defp create_case_on_the_fly(event_map) do
-    case_data = normalize_case_data(event_map[:case_data])
+    case_data = event_map[:case_data]
     existing_case = get_case_by_identifier(case_data[:identifier])
 
     case existing_case do
@@ -58,12 +57,17 @@ defmodule Events.FetchManager do
     end
   end
 
+  def normalize_case_data(nil) do
+    nil
+  end
+
   def normalize_case_data(case_data) do
     case String.split(case_data[:identifier],"-") do
       [_, _] -> case_data
       _ -> Map.put(case_data, :identifier, get_combined_identifier(case_data))
     end
   end
+
 
   defp create_case_from_case_data(case_data) do
     # TODO: Potential race condition

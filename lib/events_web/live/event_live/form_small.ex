@@ -15,7 +15,6 @@ defmodule EventsWeb.EventLive.FormSmall do
         phx-target={@myself}
         phx-change="validate"
         phx-submit="save"
-        rest={%{class: "-mt-7"}}
       >
         <.input field={@form[:type]} type="hidden" value="manual" />
         <.input field={@form[:title]} type="hidden" value={@case.identifier} />

@@ -27,7 +27,7 @@ defmodule Events.Datasources.IMAPWorker do
     {:noreply, state}
   end
 
-  defp publish_email(message, state) do
+  defp publish_email(message, _state) do
     IO.inspect(message, label: "Received an email with subject `#{message.subject}`:")
 
     event = %Events.FetchEvent{

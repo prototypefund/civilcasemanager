@@ -21,26 +21,21 @@ defmodule EventsWeb.EventLive.FormComponent do
       >
         <.input field={@form[:type]} type="hidden" value="manual" />
         <.input field={@form[:received_at]} type="datetime-local" label="Zulu time received" />
-
-        <%!-- <.inputs_for :let={n_case} field={@form[:cases]}>
-          <.input type="text" field={n_case[:id]} />
-        </.inputs_for> --%>
-
         <.input field={@form[:title]} type="text" label="Title" />
         <.input field={@form[:body]} type="textarea" label="Body" />
         <.input field={@form[:metadata]} type="textarea" label="Metadata" />
         <.input field={@form[:from]} type="text" label="From" />
-        <label class="block text-sm font-semibold leading-6 text-zinc-800" >
-          Associated cases
-        </label>
-         <%=
-          Events.Helpers.CheckboxHelper.multiselect_checkboxes(
-            @form,
-            :cases,
-            Enum.map(Events.Cases.list_open_cases(), fn case -> {case.identifier, case.id} end),
-            selected: (if is_list(@form.data.cases), do: Enum.map(@form.data.cases, &(&1.id)), else: [])
-          )
-        %>
+
+        <.input
+          field={@form[:cases]}
+          type="select"
+          label="Associated cases"
+          multiple
+          autocomplete="on"
+          options={Enum.map(Events.Cases.list_open_cases(), &{&1.identifier, &1.id})}
+          value={if is_list(@form.data.cases), do: Enum.map(@form.data.cases, &(&1.id)), else: []}
+        />
+
         <:actions>
           <.button phx-disable-with="Saving...">Save Event</.button>
         </:actions>

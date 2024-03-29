@@ -26,7 +26,7 @@ defmodule Events.Datasources.SlackImporter do
     {status, result} = extract_data_from_title(thread_title)
 
     if status == :ok do
-      publish_event(result, text, user)
+      publish_event(result, text, user, Events.Cases.get_case_by_identifier(result[:identifier]) || result)
       send_message(channel, "New REPLY for #{result[:identifier]}")
     else
       send_message(channel, "Error parsing the title: #{result}")
@@ -41,7 +41,7 @@ defmodule Events.Datasources.SlackImporter do
     {status, result} = extract_data_from_title(text)
 
     if status == :ok do
-      publish_event(result, "Case created through Slack: \n" <> text, user)
+      publish_event(result, "Case created through Slack: \n" <> text, user, result)
       send_message(channel, "New THREAD for #{result[:identifier]}")
     else
       send_message(channel, "Error parsing the title: #{result}")
@@ -53,7 +53,7 @@ defmodule Events.Datasources.SlackImporter do
     :ok
   end
 
-  defp publish_event(case_data, text, user) do
+  defp publish_event(case_data, text, user, case) do
      # TODO: Store the PID in context instead of looking it up every time
      manager_pid = Process.whereis(:fetch_manager)
 
@@ -64,7 +64,7 @@ defmodule Events.Datasources.SlackImporter do
        title: case_data[:identifier],
        received_at: DateTime.utc_now(),
        metadata: case_data[:title] || "",
-       cases: [case_data]
+       case: case
      }
 
      GenServer.cast(manager_pid, {:new_event, event})
@@ -90,23 +90,27 @@ defmodule Events.Datasources.SlackImporter do
   end
 
   defp case_data_to_map([case_id, created_at, additional]) do
+    date = created_at |> split_date() |> fix_date()
     %{
-      identifier: case_id,
-      created_at: created_at |> split_date() |> fix_date(),
+      identifier: Events.Cases.Case.get_compound_identifier(case_id, date),
+      created_at: date,
       title: additional
     }
   end
 
   defp case_data_to_map([case_id, created_at]) do
+    date = created_at |> split_date() |> fix_date()
     %{
-      identifier: case_id,
-      created_at: created_at |> split_date() |> fix_date()
+      identifier: Events.Cases.Case.get_compound_identifier(case_id, date),
+      created_at: date,
     }
   end
 
   defp case_data_to_map([case_id]) do
+    date = DateTime.utc_now() |> DateTime.truncate(:second)
     %{
-      identifier: case_id
+      identifier: Events.Cases.Case.get_compound_identifier(case_id, date),
+      created_at: date,
     }
   end
 

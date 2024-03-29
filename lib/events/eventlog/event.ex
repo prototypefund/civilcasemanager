@@ -33,6 +33,7 @@ defmodule Events.Eventlog.Event do
     ## Here are the fields than be updated through user interaction
     ## Check if complete
     |> cast(attrs, [:type, :received_at, :body, :title, :from, :metadata])
+    |> assign_case(attrs[:case])
     |> assign_cases(attrs["cases"])
     |> validate_required([:type, :body])
     |> truncate_field(:body, 65_535)
@@ -40,23 +41,28 @@ defmodule Events.Eventlog.Event do
     |> put_timestamp_if_nil(:received_at)
   end
 
-  # These function can be called either when cases is a list of maps
-  # (such as when originating in FetchManager)
-  # or when cases is a list of integers (Such as when originating in the form)
-  defp assign_cases(changeset, []), do: changeset
-
-  defp assign_cases(changeset, nil) do
+  defp assign_case(changeset, nil) do
     changeset
-    |> cast_assoc(:cases, with: &Events.Cases.Case.changeset/2)
+  end
+  defp assign_case(changeset, case = %Events.Cases.Case{}) do
+    Ecto.Changeset.put_assoc(changeset, :cases,
+      [case]
+    )
+  end
+  defp assign_case(changeset, case) when is_binary(case) do
+    Ecto.Changeset.put_assoc(changeset, :cases,
+      Events.Cases.get_cases([case])
+    )
   end
 
+  defp assign_cases(changeset, []), do: changeset
+  defp assign_cases(changeset, nil), do: changeset
   defp assign_cases(changeset, cases) when is_binary(cases) do
     { id, _ } = Integer.parse(cases)
     Ecto.Changeset.put_assoc(changeset, :cases,
       Events.Cases.get_cases([id])
     )
   end
-
   defp assign_cases(changeset, cases) when is_list(cases) do
     Ecto.Changeset.put_assoc(changeset, :cases, Events.Cases.get_cases(cases))
   end

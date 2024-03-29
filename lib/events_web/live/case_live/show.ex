@@ -22,8 +22,15 @@ defmodule EventsWeb.CaseLive.Show do
   end
 
   def handle_info({:event_created, event}, socket) do
-    #TODO Filter correctly here
-    {:noreply, stream_insert(socket, :assoc_events, event, at: 0)}
+    # We only call stream_insert if the received event has a case in cases with the same case_id as the case we are showing
+    case = socket.assigns.case
+    # Event.cases is a list of cases that the event is associated with
+    if Enum.any?(event.cases, fn case_id -> case_id == case.id end) do
+      {:noreply, stream_insert(socket, :assoc_events, event, at: 0)}
+    else
+      IO.puts("Dropping an event")
+      {:noreply, socket}
+    end
   end
 
   @impl true

@@ -28,7 +28,7 @@ defmodule Events.Datasources.IMAPWorker do
   end
 
   defp publish_email(message, _state) do
-    IO.inspect(message, label: "Received an email with subject `#{message.subject}`:")
+    IO.inspect(message.subject, label: "Received an email with subject:")
 
     event = %Events.FetchEvent{
       type: "imap",

@@ -4,20 +4,16 @@ user interface to assign them to various cases.
 
 # Next Steps
 * Filter changed events in case view
-* Bug in POST
-* Email is not working
 * Improve dropdowns (autoclosing, in embedded)
 * Parse Thuraya 
-* PR for https://github.com/phoenixframework/phoenix_live_view/issues/3195
 * Flop bugs
 * Finish yugo PR
   
 # TODO
-* Prettify case selection a little
+* Use https://github.com/orchidjs/tom-select to prettify case selection a little
 
 # Minor
 * New cases are streamed unfiltered
-* Revisit automatic case creation
 
 # Nice to have
 * Markdown Editor: https://www.wysimark.com/docs/js
@@ -29,8 +25,6 @@ user interface to assign them to various cases.
 
 ## Maybe
 * DB: many_to_many :groups
-* Make the modules export their "type" (eg. "imap")
-* Make manual (boolean) a type.
 
 ## Ideas
 if more advanced Access Control is needed:
@@ -38,7 +32,6 @@ https://github.com/woylie/let_me
 
 
 # To use
-
 To start the server:
 
   * Copy EXAMPLEworkers.exs to workers.exs and configure as needed.

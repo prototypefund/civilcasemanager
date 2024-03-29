@@ -6,7 +6,7 @@ defmodule Events.Datasources.SlackImporter do
   @impl true
 
   # Define allowed prefixes
-  @allowed_prefixes ["EB", "DC", "3SC", "AP"]
+  @prefixes_to_import ["EB", "DC", "3SC", "AP"]
 
   # Use this to debug messages
   # def handle_event(type, payload) do
@@ -63,8 +63,8 @@ defmodule Events.Datasources.SlackImporter do
        from: user,
        title: case_data[:identifier],
        received_at: DateTime.utc_now(),
-       metadata: case_data[:additional] || "",
-       case_data: case_data
+       metadata: case_data[:title] || "",
+       cases: [case_data]
      }
 
      GenServer.cast(manager_pid, {:new_event, event})
@@ -75,7 +75,7 @@ defmodule Events.Datasources.SlackImporter do
     string = String.replace(string, "*", "")
 
     # Check if the string starts with any of the legal prefixes
-    found_prefix = Enum.find(@allowed_prefixes, fn prefix -> String.starts_with?(string, prefix) end)
+    found_prefix = Enum.find(@prefixes_to_import, fn prefix -> String.starts_with?(string, prefix) end)
 
     case found_prefix do
       nil -> {:error, string}
@@ -90,15 +90,24 @@ defmodule Events.Datasources.SlackImporter do
   end
 
   defp case_data_to_map([case_id, created_at, additional]) do
-    %{identifier: case_id, created_at: created_at |> split_date() |> fix_date(), additional: additional}
+    %{
+      identifier: case_id,
+      created_at: created_at |> split_date() |> fix_date(),
+      title: additional
+    }
   end
 
   defp case_data_to_map([case_id, created_at]) do
-    %{identifier: case_id, created_at: created_at |> split_date() |> fix_date()}
+    %{
+      identifier: case_id,
+      created_at: created_at |> split_date() |> fix_date()
+    }
   end
 
   defp case_data_to_map([case_id]) do
-    %{identifier: case_id}
+    %{
+      identifier: case_id
+    }
   end
 
   defp split_date(date_string) do

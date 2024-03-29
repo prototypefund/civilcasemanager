@@ -7,7 +7,11 @@ defmodule Events.Cases.Case do
   @derive {
     Flop.Schema,
     filterable: [:status, :identifier],
-    sortable: [:identifier, :created_at]
+    sortable: [:identifier, :created_at],
+    default_order: %{
+      order_by: [:created_at],
+      order_directions: [:desc, :asc]
+    }
   }
 
   schema "cases" do

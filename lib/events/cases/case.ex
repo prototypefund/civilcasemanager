@@ -67,6 +67,11 @@ defmodule Events.Cases.Case do
     |> IO.inspect(label: "Changeset")
     |> validate_required([:identifier, :status])
     |> validate_number(:course_over_ground, greater_than_or_equal_to: 0, less_than_or_equal_to: 360)
+    |> validate_format(
+      :identifier,
+     ~r/^[a-zA-Z0-9\-]+$/,
+      message: "ID must be only contain letters, numbers and a dash. If you want to add multiple identifiers, please add them below"
+    )
     |> put_timestamp_if_nil(:created_at)
     |> put_timestamp_if_nil(:opened_at)
     |> ensure_identifier_format(:identifier, :created_at)
@@ -93,6 +98,7 @@ defmodule Events.Cases.Case do
       [num] ->
         year = DateTime.to_date(fallback_time).year
         "#{num}-#{year}"
+      [_num, _year | _tail] -> id
     end
   end
 end

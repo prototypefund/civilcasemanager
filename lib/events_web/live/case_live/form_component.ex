@@ -31,7 +31,6 @@ defmodule EventsWeb.CaseLive.FormComponent do
           label="Status"
           options={Ecto.Enum.values(Events.Cases.Case, :status)}
         />
-        <.input field={@form[:status_note]} type="text" label="Status note" />
         <.input
           field={@form[:boat_type]}
           type="select"

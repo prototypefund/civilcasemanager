@@ -664,14 +664,14 @@ defmodule EventsWeb.CoreComponents do
           <span class="ml-auto flex gap-2">
             <%= render_slot(@tag) %>
           </span>
-          <div class={[@actions == [] && "hidden", "actions relative"]}>
+          <div phx-click-away={JS.hide(to: "##{@id}-menu")} class={[@actions == [] && "hidden", "actions relative"]}>
             <button class="hero-ellipsis-vertical-solid text-gray-700 h-5 -mr-2" phx-click={
                 JS.toggle(to: "##{@id}-menu",
                 in: {"ease-out duration-100", "opacity-0 scale-95", "opacity-100 scale-100"},
                 out: {"ease-out duration-75", "opacity-100 scale-100", "opacity-0 scale-95"})
               }
             />
-            <div id={@id <> "-menu"} class="absolute hidden z-10 shadow rounded-md bg-gray-50 p-2 text-sm w-28">
+            <div id={@id <> "-menu"} class="dropdown absolute hidden right-0 z-10 shadow rounded-md bg-gray-50 p-2 text-sm w-28">
               <%= render_slot(@actions) %>
             </div>
           </div>

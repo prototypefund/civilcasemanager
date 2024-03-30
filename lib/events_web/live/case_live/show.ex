@@ -13,11 +13,12 @@ defmodule EventsWeb.CaseLive.Show do
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
     case = Cases.get_case!(id)
+    events = case.events |> Enum.sort_by(& &1.received_at) |> Enum.reverse()
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
      |> assign(:case, Cases.get_case!(id))
-     |> stream(:assoc_events, case.events)
+     |> stream(:assoc_events, events)
     }
   end
 
@@ -25,10 +26,9 @@ defmodule EventsWeb.CaseLive.Show do
     # We only call stream_insert if the received event has a case in cases with the same case_id as the case we are showing
     case = socket.assigns.case
     # Event.cases is a list of cases that the event is associated with
-    if Enum.any?(event.cases, fn case_id -> case_id == case.id end) do
+    if Enum.any?(event.cases, fn assoc_case -> assoc_case.id == case.id end) do
       {:noreply, stream_insert(socket, :assoc_events, event, at: 0)}
     else
-      IO.puts("Dropping an event")
       {:noreply, socket}
     end
   end
@@ -42,6 +42,14 @@ defmodule EventsWeb.CaseLive.Show do
   @impl true
   def handle_info({EventsWeb.EventLive.FormSmall, {:saved, event}}, socket) do
     {:noreply, stream_insert(socket, :assoc_events, event)}
+  end
+
+  @impl true
+  def handle_info({EventsWeb.CaseLive.FormComponent, {:saved, case}}, socket) do
+    {:noreply,
+      socket
+      |> assign(:case, case)
+    }
   end
 
   defp page_title(:show), do: "Show Case"

@@ -57,7 +57,7 @@ defmodule EventsWeb.CaseLive.Show do
 
   # Get a mailto link with the body using fill_template_with_case()
   defp get_mailto_link(case) do
-    "mailto: ?subject=#{URI.encode("Case: #{case.identifier} - #{case.title}")}
+    "mailto: ?subject=#{URI.encode("Distress Case #{case.identifier} in SRR")}
     &body=#{URI.encode(Cases.fill_template_with_case(case))}"
   end
 end

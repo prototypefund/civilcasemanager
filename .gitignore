@@ -27,6 +27,10 @@ events-*.tar
 
 # Ignore assets that are produced by build tools.
 /priv/static/assets/
+/priv/static/*.gz
+/priv/static/*.txt
+/priv/static/*.svg
+/priv/static/*.ico
 
 # Ignore digested assets cache.
 /priv/static/cache_manifest.json

@@ -15,7 +15,7 @@ defmodule Events.Eventlog.Event do
     field :from, :string
     field :received_at, :utc_datetime
     field :title, :string
-    field :type, :string
+    field :type, :string, default: "manual"
     field :metadata, :string
     field :deleted_at, :utc_datetime
     field :edited_at, :utc_datetime
@@ -33,6 +33,7 @@ defmodule Events.Eventlog.Event do
     ## Here are the fields than be updated through user interaction
     ## Check if complete
     |> cast(attrs, [:type, :received_at, :body, :title, :from, :metadata])
+    |> IO.inspect()
     |> assign_case(attrs[:case])
     |> assign_cases(attrs["cases"])
     |> validate_required([:type, :body])

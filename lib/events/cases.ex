@@ -203,11 +203,21 @@ defmodule Events.Cases do
 
   def fill_template_with_case(case) do
     """
-    Dear Officer,
+    Dear officer on duty,
 
-    This is to alert you of a rescue case #{case.identifier} that was created on #{DateTime.to_string(case.created_at)}.
+    Our hotline was alarmed at by a distress call from a boat at sea,
+    which we assigned the number #{case.identifier} at #{DateTime.to_string(case.created_at)} .
+    This is the information we have received so far:
+
+    Number of People: #{case.pob_man} Men, #{case.pob_woman} Women, #{case.pob_child} Children.
+
+    Type of Boat: #{case.boat_type}
+    COG: #{case.course_over_ground}°
+    SOG: #{case.speed_over_ground} kt
+    Last position: TODO
 
     Regards,
+    Air Liaison Officer Seabird 2
     """
   end
 

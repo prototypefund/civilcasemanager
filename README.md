@@ -16,6 +16,16 @@ user interface to assign them to various cases.
 * When cases are created trough casts, there is no event emitted.
 * Add dropdowns (in embedded)
 * Remove html-helpers
+* Rename "imap" to "email"
+
+# v1.0
+* Quick Compose: Titel, Timestamp
+* 
+* Markdown editor
+* Thuraya
+* Positions?
+* Attachments
+
 
 # Platform issues to report
 * get_options_for_cases breaks with default value coming from DB

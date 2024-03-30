@@ -20,6 +20,7 @@ defmodule EventsWeb.CaseLive.FormComponent do
         phx-submit="save"
       >
         <.input field={@form[:identifier]} type="text" label="Identifier" />
+        <.input field={@form[:additional_identifiers]} type="text" label="Additional identifiers" />
         <.input field={@form[:title]} type="text" label="Title" />
         <.input field={@form[:description]} type="text" label="Description" />
         <.input field={@form[:created_at]} type="datetime-local" label="Created at" />
@@ -31,6 +32,18 @@ defmodule EventsWeb.CaseLive.FormComponent do
           options={Ecto.Enum.values(Events.Cases.Case, :status)}
         />
         <.input field={@form[:status_note]} type="text" label="Status note" />
+        <.input
+          field={@form[:boat_type]}
+          type="select"
+          label="Boat Type"
+          options={Ecto.Enum.values(Events.Cases.Case, :boat_type)}
+        />
+        <.label>People on Board</.label>
+        <.input field={@form[:pob_man]} type="number" label="Men" />
+        <.input field={@form[:pob_woman]} type="number" label="Woman" />
+        <.input field={@form[:pob_child]} type="number" label="Children" />
+        <.input field={@form[:course_over_ground]} type="number" label="Course over ground (deg)" />
+        <.input field={@form[:speed_over_ground]} type="number" label="Speed over ground (knots)" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Case</.button>
         </:actions>

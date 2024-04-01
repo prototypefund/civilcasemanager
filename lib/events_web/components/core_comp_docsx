@@ -1,4 +1,4 @@
-defmodule EventsWeb.CoreComponents do
+defmodule <%= @web_namespace %>.CoreComponents do
   @moduledoc """
   Provides core UI components.
 
@@ -16,8 +16,8 @@ defmodule EventsWeb.CoreComponents do
   """
   use Phoenix.Component
 
-  alias Phoenix.LiveView.JS
-  import EventsWeb.Gettext
+  alias Phoenix.LiveView.JS<%= if @gettext do %>
+  import <%= @web_namespace %>.Gettext<% end %>
 
   @doc """
   Renders a modal.
@@ -73,13 +73,13 @@ defmodule EventsWeb.CoreComponents do
                   phx-click={JS.exec("data-cancel", to: "##{@id}")}
                   type="button"
                   class="-m-3 flex-none p-3 opacity-20 hover:opacity-40"
-                  aria-label={gettext("close")}
+                  aria-label=<%= maybe_heex_attr_gettext.("close", @gettext) %>
                 >
                   <.icon name="hero-x-mark-solid" class="h-5 w-5" />
                 </button>
               </div>
               <div id={"#{@id}-content"}>
-                <%= render_slot(@inner_block) %>
+                <%%= render_slot(@inner_block) %>
               </div>
             </.focus_wrap>
           </div>
@@ -124,10 +124,10 @@ defmodule EventsWeb.CoreComponents do
       <p :if={@title} class="flex items-center gap-1.5 text-sm font-semibold leading-6">
         <.icon :if={@kind == :info} name="hero-information-circle-mini" class="h-4 w-4" />
         <.icon :if={@kind == :error} name="hero-exclamation-circle-mini" class="h-4 w-4" />
-        <%= @title %>
+        <%%= @title %>
       </p>
-      <p class="mt-2 text-sm leading-5"><%= msg %></p>
-      <button type="button" class="group absolute top-1 right-1 p-2" aria-label={gettext("close")}>
+      <p class="mt-2 text-sm leading-5"><%%= msg %></p>
+      <button type="button" class="group absolute top-1 right-1 p-2" aria-label=<%= maybe_heex_attr_gettext.("close", @gettext) %>>
         <.icon name="hero-x-mark-solid" class="h-5 w-5 opacity-40 group-hover:opacity-70" />
       </button>
     </div>
@@ -147,29 +147,29 @@ defmodule EventsWeb.CoreComponents do
   def flash_group(assigns) do
     ~H"""
     <div id={@id}>
-      <.flash kind={:info} title={gettext("Success!")} flash={@flash} />
-      <.flash kind={:error} title={gettext("Error!")} flash={@flash} />
+      <.flash kind={:info} title=<%= maybe_heex_attr_gettext.("Success!", @gettext) %> flash={@flash} />
+      <.flash kind={:error} title=<%= maybe_heex_attr_gettext.("Error!", @gettext) %> flash={@flash} />
       <.flash
         id="client-error"
         kind={:error}
-        title={gettext("We can't find the internet")}
+        title=<%= maybe_heex_attr_gettext.("We can't find the internet", @gettext) %>
         phx-disconnected={show(".phx-client-error #client-error")}
         phx-connected={hide("#client-error")}
         hidden
       >
-        <%= gettext("Attempting to reconnect") %>
+        <%= maybe_eex_gettext.("Attempting to reconnect", @gettext) %>
         <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
       </.flash>
 
       <.flash
         id="server-error"
         kind={:error}
-        title={gettext("Something went wrong!")}
+        title=<%= maybe_heex_attr_gettext.("Something went wrong!", @gettext) %>
         phx-disconnected={show(".phx-server-error #server-error")}
         phx-connected={hide("#server-error")}
         hidden
       >
-        <%= gettext("Hang in there while we get back on track") %>
+        <%= maybe_eex_gettext.("Hang in there while we get back on track", @gettext) %>
         <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
       </.flash>
     </div>
@@ -202,10 +202,10 @@ defmodule EventsWeb.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="space-y-8 bg-white dark:bg-zinc-900">
-        <%= render_slot(@inner_block, f) %>
+      <div class="mt-10 space-y-8 bg-white">
+        <%%= render_slot(@inner_block, f) %>
         <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
-          <%= render_slot(action, f) %>
+          <%%= render_slot(action, f) %>
         </div>
       </div>
     </.form>
@@ -231,13 +231,13 @@ defmodule EventsWeb.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 dark:bg-zinc-600 hover:bg-zinc-700 py-2 px-3",
+        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
         "text-sm font-semibold leading-6 text-white active:text-white/80",
         @class
       ]}
       {@rest}
     >
-      <%= render_slot(@inner_block) %>
+      <%%= render_slot(@inner_block) %>
     </button>
     """
   end
@@ -253,19 +253,85 @@ defmodule EventsWeb.CoreComponents do
 
   This function accepts all HTML input types, considering that:
 
-    * You may also set `type="select"` to render a `<select>` tag
+    * You may also set `type="select"` to render a `<select>` tag.
 
     * `type="checkbox"` is used exclusively to render boolean values
 
     * For live file uploads, see `Phoenix.Component.live_file_input/1`
 
   See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input
-  for more information.
+  for more information. Unsupported types, such as hidden and radio,
+  are best written directly in your templates.
 
-  ## Examples
+  ## Basic Examples
 
-      <.input field={@form[:email]} type="email" />
-      <.input name="my-input" errors={["oh no!"]} />
+    <.input field={@form[:email]} type="email" />
+    <.input name="my-input" errors={["oh no!"]} />
+
+  ## Select type
+
+  When using `type="select"`, you must pass the `options` and optionally
+  a `value` to mark which option should be preselected.
+
+  `options` are expected to be an enumerable which will be used to
+  generate each respective `option`. The enumerable may have:
+
+    * keyword lists - each keyword list is expected to have the keys
+      `:key` and `:value`. Additional keys such as `:disabled` may
+      be given to customize the option.
+
+    * two-item tuples - where the first element is an atom, string or
+      integer to be used as the option label and the second element is
+      an atom, string or integer to be used as the option value
+
+    * atom, string or integer - which will be used as both label and value
+      for the generated select
+
+  ### Optgroups
+
+  If `options` is map or keyword list where the first element is a string,
+  atom or integer and the second element is a list or a map, it is assumed
+  the key will be wrapped in an `<optgroup>` and the value will be used to
+  generate `<options>` nested under the group.
+
+  ### Examples
+
+    # Assuming form contains a User schema
+    <.input field={@form[:age]} type="select" options={1..120} />
+
+    <.input field={@form[:role]} type="select" options={["Admin": "admin", "User": "user"]} />
+
+    <.input field={@form[:role]} type="select" options={[[key: "Admin", value: "admin", disabled: true],
+                                                        [key: "User", value: "user"]]} />
+
+  You can also pass a prompt:
+
+      <.input field={@form[:role]} type="select" options={["Admin": "admin", "User": "user"]} prompt="Select a role" />
+
+
+  ### Multiple selections
+
+  When working with structs, associations, and embeds, you will need to tell
+  Phoenix how to extract the value out of the collection. For example,
+  imagine `user.roles` is a list of `%Role{}` structs. You must call it as:
+
+      <.input field={@form[:roles]} type="select" options={["Admin": "admin", "User": "user"]}
+      value={Enum.map(@roles, &{&1.name, &1.id})} multiple />
+
+  The `:value` option will mark the given IDs as selected unless the form
+  is being resubmitted. When resubmitted, it uses the form params as values.
+
+  If you pass an empty list to value, nothing will be preselected:
+
+      <.input field={@form[:roles]} type="select" options={["Admin": "admin", "User": "user"]}
+      value={[]} multiple />
+
+  When used with Ecto, you will typically do a query to retrieve the IDs from
+  the database:
+
+      from r in Role, where: r.id in ^(params["roles"] || [])
+
+  And then use `Ecto.Changeset.put_assoc/2` to insert the new roles into the user.
   """
   attr :id, :any, default: nil
   attr :name, :any
@@ -274,8 +340,8 @@ defmodule EventsWeb.CoreComponents do
 
   attr :type, :string,
     default: "text",
-    values: ~w(checkbox color date datetime-local email file hidden month number password
-               range radio search select tel text textarea time url week)
+    values: ~w(checkbox color date datetime-local email file month number password
+               range search select tel text textarea time url week)
 
   attr :field, Phoenix.HTML.FormField,
     doc: "a form field struct retrieved from the form, for example: @form[:email]"
@@ -285,8 +351,6 @@ defmodule EventsWeb.CoreComponents do
   attr :prompt, :string, default: nil, doc: "the prompt for select inputs"
   attr :options, :list, doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
   attr :multiple, :boolean, default: false, doc: "the multiple flag for select inputs"
-  attr :class, :string, default: ""
-  attr :label_class, :string, default: ""
 
   attr :rest, :global,
     include: ~w(accept autocomplete capture cols disabled form list max maxlength min minlength
@@ -311,7 +375,7 @@ defmodule EventsWeb.CoreComponents do
 
     ~H"""
     <div phx-feedback-for={@name}>
-      <label class={"flex items-center gap-4 text-sm leading-6 text-zinc-600 #{@label_class}"}>
+      <label class="flex items-center gap-4 text-sm leading-6 text-zinc-600">
         <input type="hidden" name={@name} value="false" />
         <input
           type="checkbox"
@@ -319,15 +383,12 @@ defmodule EventsWeb.CoreComponents do
           name={@name}
           value="true"
           checked={@checked}
-          class={[
-            "rounded border-zinc-300 text-zinc-900 focus:ring-0",
-            @class
-          ]}
+          class="rounded border-zinc-300 text-zinc-900 focus:ring-0"
           {@rest}
         />
-        <%= @label %>
+        <%%= @label %>
       </label>
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}><%%= msg %></.error>
     </div>
     """
   end
@@ -335,21 +396,18 @@ defmodule EventsWeb.CoreComponents do
   def input(%{type: "select"} = assigns) do
     ~H"""
     <div phx-feedback-for={@name}>
-      <.label for={@id} class={@label_class}><%= @label %></.label>
+      <.label for={@id}><%%= @label %></.label>
       <select
         id={@id}
         name={@name}
-        class={[
-          "mt-2 rounded-md border border-gray-300 bg-white dark:bg-zinc-900 shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm",
-          @class
-        ]}
+        class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
         multiple={@multiple}
         {@rest}
       >
-        <option :if={@prompt} value=""><%= @prompt %></option>
-        <%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
+        <option :if={@prompt} value=""><%%= @prompt %></option>
+        <%%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
       </select>
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}><%%= msg %></.error>
     </div>
     """
   end
@@ -357,7 +415,7 @@ defmodule EventsWeb.CoreComponents do
   def input(%{type: "textarea"} = assigns) do
     ~H"""
     <div phx-feedback-for={@name}>
-      <.label for={@id} class={@label_class}><%= @label %></.label>
+      <.label for={@id}><%%= @label %></.label>
       <textarea
         id={@id}
         name={@name}
@@ -365,12 +423,11 @@ defmodule EventsWeb.CoreComponents do
           "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
           "min-h-[6rem] phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
           @errors == [] && "border-zinc-300 focus:border-zinc-400",
-          @errors != [] && "border-rose-400 focus:border-rose-400",
-          @class
+          @errors != [] && "border-rose-400 focus:border-rose-400"
         ]}
         {@rest}
-      ><%= Phoenix.HTML.Form.normalize_value("textarea", @value) %></textarea>
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      ><%%= Phoenix.HTML.Form.normalize_value("textarea", @value) %></textarea>
+      <.error :for={msg <- @errors}><%%= msg %></.error>
     </div>
     """
   end
@@ -379,9 +436,7 @@ defmodule EventsWeb.CoreComponents do
   def input(assigns) do
     ~H"""
     <div phx-feedback-for={@name}>
-      <%= if (is_binary(@label) && String.trim(@label) != "") do %>
-        <.label for={@id} class={@label_class}><%= @label %></.label>
-      <% end %>
+      <.label for={@id}><%%= @label %></.label>
       <input
         type={@type}
         name={@name}
@@ -390,14 +445,12 @@ defmodule EventsWeb.CoreComponents do
         class={[
           "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
           "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
-          "dark:bg-zinc-900 dark:text-zinc-100",
           @errors == [] && "border-zinc-300 focus:border-zinc-400",
-          @errors != [] && "border-rose-400 focus:border-rose-400",
-          @class
+          @errors != [] && "border-rose-400 focus:border-rose-400"
         ]}
         {@rest}
       />
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}><%%= msg %></.error>
     </div>
     """
   end
@@ -406,13 +459,12 @@ defmodule EventsWeb.CoreComponents do
   Renders a label.
   """
   attr :for, :string, default: nil
-  attr :class, :string, default: ""
   slot :inner_block, required: true
 
   def label(assigns) do
     ~H"""
-    <label for={@for} class={["block text-sm font-semibold leading-6 text-zinc-800 dark:text-zinc-200", @class]}>
-      <%= render_slot(@inner_block) %>
+    <label for={@for} class="block text-sm font-semibold leading-6 text-zinc-800">
+      <%%= render_slot(@inner_block) %>
     </label>
     """
   end
@@ -426,7 +478,7 @@ defmodule EventsWeb.CoreComponents do
     ~H"""
     <p class="mt-3 flex gap-3 text-sm leading-6 text-rose-600 phx-no-feedback:hidden">
       <.icon name="hero-exclamation-circle-mini" class="mt-0.5 h-5 w-5 flex-none" />
-      <%= render_slot(@inner_block) %>
+      <%%= render_slot(@inner_block) %>
     </p>
     """
   end
@@ -435,7 +487,6 @@ defmodule EventsWeb.CoreComponents do
   Renders a header with title.
   """
   attr :class, :string, default: nil
-  attr :action_class, :string, default: nil
 
   slot :inner_block, required: true
   slot :subtitle
@@ -445,28 +496,17 @@ defmodule EventsWeb.CoreComponents do
     ~H"""
     <header class={[@actions != [] && "flex items-center justify-between gap-6", @class]}>
       <div>
-        <.h1>
-          <%= render_slot(@inner_block) %>
-        </.h1>
+        <h1 class="text-lg font-semibold leading-8 text-zinc-800">
+          <%%= render_slot(@inner_block) %>
+        </h1>
         <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-zinc-600">
-          <%= render_slot(@subtitle) %>
+          <%%= render_slot(@subtitle) %>
         </p>
       </div>
-      <div class={["flex-none flex items-center", @action_class]}><%= render_slot(@actions) %></div>
+      <div class="flex-none"><%%= render_slot(@actions) %></div>
     </header>
     """
   end
-
-  @doc """
-  Renders a h1
-  """
-  def h1(assigns) do
-    ~H"""
-    <h1 class="text-lg font-semibold leading-8 text-zinc-800 dark:text-zinc-200">
-      <%= render_slot(@inner_block) %>
-    </h1>
-    """
-  end>
 
   @doc ~S"""
   Renders a table with generic styling.
@@ -474,8 +514,8 @@ defmodule EventsWeb.CoreComponents do
   ## Examples
 
       <.table id="users" rows={@users}>
-        <:col :let={user} label="id"><%= user.id %></:col>
-        <:col :let={user} label="username"><%= user.username %></:col>
+        <:col :let={user} label="id"><%%= user.id %></:col>
+        <:col :let={user} label="username"><%%= user.username %></:col>
       </.table>
   """
   attr :id, :string, required: true
@@ -504,16 +544,16 @@ defmodule EventsWeb.CoreComponents do
       <table class="w-[40rem] mt-11 sm:w-full">
         <thead class="text-sm text-left leading-6 text-zinc-500">
           <tr>
-            <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal"><%= col[:label] %></th>
+            <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal"><%%= col[:label] %></th>
             <th :if={@action != []} class="relative p-0 pb-4">
-              <span class="sr-only"><%= gettext("Actions") %></span>
+              <span class="sr-only"><%= maybe_eex_gettext.("Actions", @gettext) %></span>
             </th>
           </tr>
         </thead>
         <tbody
           id={@id}
           phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
-          class="relative divide-y divide-zinc-100 dark:divide-zinc-800 border-t border-zinc-200 text-sm leading-6 text-zinc-700"
+          class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-700"
         >
           <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-zinc-50">
             <td
@@ -524,7 +564,7 @@ defmodule EventsWeb.CoreComponents do
               <div class="block py-4 pr-6">
                 <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
                 <span class={["relative", i == 0 && "font-semibold text-zinc-900"]}>
-                  <%= render_slot(col, @row_item.(row)) %>
+                  <%%= render_slot(col, @row_item.(row)) %>
                 </span>
               </div>
             </td>
@@ -535,7 +575,7 @@ defmodule EventsWeb.CoreComponents do
                   :for={action <- @action}
                   class="relative ml-4 font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
                 >
-                  <%= render_slot(action, @row_item.(row)) %>
+                  <%%= render_slot(action, @row_item.(row)) %>
                 </span>
               </div>
             </td>
@@ -552,8 +592,8 @@ defmodule EventsWeb.CoreComponents do
   ## Examples
 
       <.list>
-        <:item title="Title"><%= @post.title %></:item>
-        <:item title="Views"><%= @post.views %></:item>
+        <:item title="Title"><%%= @post.title %></:item>
+        <:item title="Views"><%%= @post.views %></:item>
       </.list>
   """
   slot :item, required: true do
@@ -563,10 +603,10 @@ defmodule EventsWeb.CoreComponents do
   def list(assigns) do
     ~H"""
     <div class="mt-14">
-      <dl class="-my-4 divide-y divide-zinc-100 dark:divide-zinc-800">
+      <dl class="-my-4 divide-y divide-zinc-100">
         <div :for={item <- @item} class="flex gap-4 py-4 text-sm leading-6 sm:gap-8">
-          <dt class="w-1/4 flex-none text-zinc-500"><%= item.title %></dt>
-          <dd class="text-zinc-700 dark:text-zinc-300"><%= render_slot(item) %></dd>
+          <dt class="w-1/4 flex-none text-zinc-500"><%%= item.title %></dt>
+          <dd class="text-zinc-700"><%%= render_slot(item) %></dd>
         </div>
       </dl>
     </div>
@@ -591,7 +631,7 @@ defmodule EventsWeb.CoreComponents do
         class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
       >
         <.icon name="hero-arrow-left-solid" class="h-3 w-3" />
-        <%= render_slot(@inner_block) %>
+        <%%= render_slot(@inner_block) %>
       </.link>
     </div>
     """
@@ -623,148 +663,6 @@ defmodule EventsWeb.CoreComponents do
     <span class={[@name, @class]} />
     """
   end
-
-
-  @doc """
-  Renders a card component with a title,
-  an icon, a tag, a body, a timestamp, and interactive actions.
-  The actions are displayed in a dropdown menu .
-
-  ## Examples
-
-    <.card>
-      <p>Inner Content</p>
-      <:icon>
-        <svg class="hero-annotation" ...></svg> <!-- Insert your SVG or icon component here -->
-      </:icon>
-      <:title>
-        Card Title
-      </:title>
-      <:tag>
-        <span class="bg-emerald-50 text-emerald-800">New</span>
-      </:tag>
-      <:inner_block>
-        <p>Card body content here...</p>
-      </:inner_block>
-      <:timestamp>
-        4 hours ago
-      </:timestamp>
-      <:actions>
-        <div class="dropdown-menu shadow-lg bg-white rounded-md p-2" style="display: none;"> <!-- Adjust styling as needed -->
-          <!-- Action items go here -->
-          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Action 1</a>
-          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Action 2</a>
-        </div>
-      </:actions>
-    </.card>
-  """
-  # Investigate solution without requiring id
-  attr :id, :string, required: true
-  attr :class, :string, default: nil
-  slot :inner_block, required: true
-  slot :icon, required: true
-  slot :title, required: true
-  slot :tag, default: nil
-  slot :timestamp, default: nil
-  slot :actions
-
-  def card(assigns) do
-    ~H"""
-    <div class={["flex gap-x-3 flex-row items-center shadow rounded-lg p-3 space-x-4 border-2 border-calypso-50 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-950", @class]} >
-      <div class="grow">
-        <div class="row-1 text-gray-900 dark:text-gray-200 leading-snug text-base flex items-center gap-x-2 mb-1">
-          <%= render_slot(@icon) %>
-          <strong class="text-base !leading-tight font-semibold">
-            <%= render_slot(@title) %>
-          </strong>
-          <span class="ml-auto flex gap-2">
-            <%= render_slot(@tag) %>
-          </span>
-          <div phx-click-away={JS.hide(to: "##{@id}-menu")} class={[@actions == [] && "hidden", "actions relative"]}>
-            <button class="hero-ellipsis-vertical-solid text-gray-700 h-5 -mr-2" phx-click={
-                JS.toggle(to: "##{@id}-menu",
-                in: {"ease-out duration-100", "opacity-0 scale-95", "opacity-100 scale-100"},
-                out: {"ease-out duration-75", "opacity-100 scale-100", "opacity-0 scale-95"})
-              }
-            />
-            <div id={@id <> "-menu"} class="dropdown absolute hidden right-0 z-10 shadow rounded-md bg-gray-50 p-2 text-sm w-28">
-              <%= render_slot(@actions) %>
-            </div>
-          </div>
-        </div>
-        <p class="text-gray-700">
-          <div class="text-wrap break-words text-sm mb-1">
-            <%= render_slot(@inner_block) %>
-          </div>
-          <%= render_slot(@timestamp) %>
-        </p>
-      </div>
-    </div>
-    """
-  end
-
-
-
-  @doc """
-  Renders a small tag with customizable class
-
-  ## Examples
-
-      <.tag class="bg-emerald-50 text-emerald-800">New</.tag>
-  """
-  attr :class, :string, default: nil
-  attr :color, :string, default: "gray"
-  slot :inner_block, required: true
-
-  def tag_badge(assigns) do
-
-    # Allow tweaking of scheme
-    colors = case assigns.color do
-      "gray" -> ["bg-gray-100", "border-gray-300", "text-gray-700"]
-      "emerald" -> ["bg-emerald-100", "border-emerald-300", "text-emerald-700"]
-      "red" -> ["bg-red-100", "border-red-300", "text-red-700"]
-      "blue" -> ["bg-blue-100", "border-blue-300", "text-blue-700"]
-      _ -> ["bg-#{assigns.color}-100", "border-#{assigns.color}-300", "text-#{assigns.color}-700"]
-    end
-
-    assigns = assign(assigns, :colors, colors)
-
-    ~H"""
-    <span class={[
-      "border rounded-md px-1 text-xs",
-      @colors,
-      @class]}>
-      <%= render_slot(@inner_block) %>
-    </span>
-    """
-  end
-
-
-  attr :status, :atom, required: true
-  attr :class, :string, default: ""
-  def timestamp(%{timestamp: timestamp} = assigns) do
-    now = DateTime.utc_now()
-    diff = DateTime.diff(now, timestamp)
-
-    timestring = cond do
-      diff < 60 ->
-        "#{diff} seconds ago"
-      diff < 3600 ->
-        "#{div(diff, 60)} minutes ago"
-      diff < 86400 ->
-        "#{div(diff, 3600)} hours ago"
-      true ->
-        "#{Date.to_string(timestamp)}"
-    end
-    assigns = assign(assigns, :timestring, timestring)
-    ~H"""
-    <span class={["flex items-center gap-1 text-xs", @class]}>
-      <i class="hero-clock text-gray-700 dark:text-gray-300  h-3 w-3"></i>
-      <%= @timestring %>
-    </span>
-    """
-  end
-
 
   ## JS Commands
 
@@ -815,7 +713,7 @@ defmodule EventsWeb.CoreComponents do
 
   @doc """
   Translates an error message using gettext.
-  """
+  """<%= if @gettext do %>
   def translate_error({msg, opts}) do
     # When using gettext, we typically pass the strings we want
     # to translate as a static argument:
@@ -828,11 +726,25 @@ defmodule EventsWeb.CoreComponents do
     # with our gettext backend as first argument. Translations are
     # available in the errors.po file (as we use the "errors" domain).
     if count = opts[:count] do
-      Gettext.dngettext(EventsWeb.Gettext, "errors", msg, msg, count, opts)
+      Gettext.dngettext(<%= @web_namespace %>.Gettext, "errors", msg, msg, count, opts)
     else
-      Gettext.dgettext(EventsWeb.Gettext, "errors", msg, opts)
+      Gettext.dgettext(<%= @web_namespace %>.Gettext, "errors", msg, opts)
     end
-  end
+  end<% else %>
+  def translate_error({msg, opts}) do
+    # You can make use of gettext to translate error messages by
+    # uncommenting and adjusting the following code:
+
+    # if count = opts[:count] do
+    #   Gettext.dngettext(<%= @web_namespace %>.Gettext, "errors", msg, msg, count, opts)
+    # else
+    #   Gettext.dgettext(<%= @web_namespace %>.Gettext, "errors", msg, opts)
+    # end
+
+    Enum.reduce(opts, msg, fn {key, value}, acc ->
+      String.replace(acc, "%{#{key}}", fn _ -> to_string(value) end)
+    end)
+  end<% end %>
 
   @doc """
   Translates the errors for a field from a keyword list of errors.
@@ -840,7 +752,4 @@ defmodule EventsWeb.CoreComponents do
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
   end
-
-
-
 end

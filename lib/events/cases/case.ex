@@ -87,6 +87,7 @@ defmodule Events.Cases.Case do
       nil -> changeset
       _ ->
         fixed_id = get_compound_identifier(current_value, get_field(changeset, fallback_time))
+        IO.inspect(fixed_id, label: "Fixed ID")
         put_change(changeset, field, fixed_id)
     end
 

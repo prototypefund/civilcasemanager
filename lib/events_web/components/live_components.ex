@@ -20,7 +20,7 @@ defmodule EventsWeb.LiveComponents do
       phx-target={@target}
       phx-change={@on_change}
       phx-submit={@on_change}
-      class="flex space-x-4"
+      class="flex flex-wrap gap-x-4"
     >
       <.filter_fields :let={i} form={@form} fields={@fields}>
         <.input
@@ -28,8 +28,8 @@ defmodule EventsWeb.LiveComponents do
           label={i.label}
           type={i.type}
           phx-debounce={150}
-          class="inline w-auto mr-2"
-          label_class="inline"
+          class="inline w-auto mr-4"
+          label_class="mr-2 inline"
           {i.rest}
         />
       </.filter_fields>

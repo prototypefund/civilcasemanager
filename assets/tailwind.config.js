@@ -6,6 +6,7 @@ const fs = require("fs")
 const path = require("path")
 
 module.exports = {
+  darkMode: 'selector',
   content: [
     "./js/**/*.js",
     "../lib/events_web.ex",

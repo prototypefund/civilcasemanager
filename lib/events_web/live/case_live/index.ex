@@ -89,18 +89,17 @@ defmodule EventsWeb.CaseLive.Index do
     end
   end
 
-  ## Render an icon based on the case status
-  defp render_status_icon(case, classes) do
-    icon_name = case case.status do
+  attr :status, :atom, required: true
+  attr :class, :string, default: ""
+  def status_icon(%{status: status} = assigns) do
+    icon_name = case status do
       :open -> "hero-inbox-solid text-emerald-500"
       :closed -> "hero-lock-closed text-gray-500"
       :archived -> "hero-archive-box text-gray-500"
       _ -> "hero-question-mark-circle text-blue-500"
     end
-
-    content_tag(:span, class: "#{icon_name} #{classes}") do
-
-    end
-
+    assigns = assign(assigns, :icon_name, icon_name)
+    ~H"<span class={[@icon_name, @class]} />"
   end
+
 end

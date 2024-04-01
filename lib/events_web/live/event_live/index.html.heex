@@ -13,9 +13,9 @@
       id={id}
       phx-click={JS.navigate(~p"/events/#{event}")}
       phx-hook="FadeIn"
-      class="p-3 w-full sm:w-1/2 md:w-1/2 lg:w-1/3 xl:w-1/3"
+      class="p-3 w-full"
     >
-      <.card id={id}>
+      <.card id={id} >
         <:icon>
           <.icon name={Events.FetchSupervisor.get_icon_for(event.type)} class="h-4 w-4" />
         </:icon>
@@ -30,7 +30,7 @@
            </.tag_badge>
         </:tag>
         <:timestamp>
-          <%= EventsWeb.LiveUtils.render_timestamp(event.received_at) %>
+          <.timestamp timestamp={event.received_at} />
         </:timestamp>
         <:actions>
           <.link patch={~p"/events/#{event}/edit"}>

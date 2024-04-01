@@ -566,7 +566,7 @@ defmodule EventsWeb.CoreComponents do
       <dl class="-my-4 divide-y divide-zinc-100 dark:divide-zinc-800">
         <div :for={item <- @item} class="flex gap-4 py-4 text-sm leading-6 sm:gap-8">
           <dt class="w-1/4 flex-none text-zinc-500"><%= item.title %></dt>
-          <dd class="text-zinc-700 dark:text-zinc-300"><%= render_slot(item) %></dd>
+          <dd class="text-zinc-700 dark:text-zinc-300 break-words"><%= render_slot(item) %></dd>
         </div>
       </dl>
     </div>

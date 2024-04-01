@@ -1,6 +1,6 @@
 
 <div class="flex gap-4 flex-wrap items-start">
-  <div class="grow shrink-0 basis-1/1 sm:basis-3/12">
+  <div class="grow shrink-1 basis-1/1 sm:basis-3/12">
     <.header>
       <%= @case.identifier %>
       <:subtitle><%= @case.title %></:subtitle>
@@ -30,7 +30,7 @@
     </.list>
   </div>
 
-  <div class="grow shrink-0 basis-1/1 sm:basis-3/12">
+  <div class="grow shrink-1 basis-1/1 sm:basis-3/12">
     <.live_component
       module={EventsWeb.EventLive.FormSmall}
       id={:new}

@@ -64,7 +64,6 @@ defmodule Events.Cases.Case do
   def changeset(case, attrs) do
     case
     |> cast(attrs, [:identifier, :additional_identifiers, :title, :description, :created_at, :deleted_at, :opened_at, :closed_at, :archived_at, :status, :status_note, :freetext, :boat_type, :course_over_ground, :speed_over_ground, :pob_man, :pob_woman, :pob_child])
-    |> IO.inspect(label: "Changeset")
     |> validate_required([:identifier, :status])
     |> validate_number(:course_over_ground, greater_than_or_equal_to: 0, less_than_or_equal_to: 360)
     |> validate_format(
@@ -87,7 +86,6 @@ defmodule Events.Cases.Case do
       nil -> changeset
       _ ->
         fixed_id = get_compound_identifier(current_value, get_field(changeset, fallback_time))
-        IO.inspect(fixed_id, label: "Fixed ID")
         put_change(changeset, field, fixed_id)
     end
 

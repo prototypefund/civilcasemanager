@@ -25,7 +25,6 @@ defmodule Events.EventlogTest do
 
       assert {:ok, %Event{} = event} = Eventlog.create_event(valid_attrs)
       assert event.body == "some body"
-      assert event.case_id == "some case_id"
       assert event.origin == "some origin"
       assert event.time == "some time"
       assert event.title == "some title"

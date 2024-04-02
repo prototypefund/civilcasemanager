@@ -740,7 +740,7 @@ defmodule EventsWeb.CoreComponents do
   end
 
 
-  attr :status, :atom, required: true
+  attr :timestamp, :any, required: true
   attr :class, :string, default: ""
   def timestamp(%{timestamp: timestamp} = assigns) do
     now = DateTime.utc_now()

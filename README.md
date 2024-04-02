@@ -7,6 +7,7 @@ user interface to assign them to various cases.
 - [ ] Parse Thuraya 
 - [ ] Flop bugs
 - [x] Finish yugo PR
+- [ ] Add possibility only specify POB total
   
 # TODO
 - [ ] Prettify case selection a little

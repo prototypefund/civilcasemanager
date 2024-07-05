@@ -53,6 +53,7 @@ defmodule Events.Cases.Case do
       ## TODO Remove dupes
       :fiberglas,
       :wood,
+      :fishing_vessel
     ]
     field :boat_notes, :string
     field :boat_color, :string

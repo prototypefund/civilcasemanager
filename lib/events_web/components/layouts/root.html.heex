@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="[scrollbar-gutter:stable]">
+<html lang="en" >
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -12,47 +12,58 @@
     </script>
   </head>
   <body class="bg-white dark:bg-zinc-900 dark:text-white antialiased">
-    <ul class="relative z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end">
-      <%= if @current_user do %>
-        <li class="text-[0.8125rem] leading-6 text-zinc-900">
-          <%= @current_user.name %>
-        </li>
-        <li>
-          <.link
-            href={~p"/users/settings"}
-            class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
-          >
-            Settings
-          </.link>
-        </li>
-        <li>
-          <.link
-            href={~p"/users/log_out"}
-            method="delete"
-            class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
-          >
-            Log out
-          </.link>
-        </li>
-      <% else %>
-        <li>
-          <.link
-            href={~p"/users/register"}
-            class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
-          >
-            Register
-          </.link>
-        </li>
-        <li>
-          <.link
-            href={~p"/users/log_in"}
-            class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
-          >
-            Log in
-          </.link>
-        </li>
-      <% end %>
-    </ul>
+    <header class="shadow-lg px-4 sm:px-6 lg:px-8 fixed bg-indigo-600 text-white w-full z-10">
+      <div class="flex items-baseline justify-between py-3 text-sm">
+        <div class="flex items-baseline gap-4">
+          <h1 class="text-base font-bold"><a href="/">Civil Case Manager</a></h1>
+          <div class="font-bold text-small">
+            <a href="/events" class="mx-2 hover:text-zinc-300" >Events</a>
+            <a href="/cases" class="mx-2 hover:text-zinc-300" >Cases</a>
+          </div>
+        </div>
+        <ul class="relative z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end">
+          <%= if @current_user do %>
+            <li class="text-[0.8125rem] leading-6">
+              <%= @current_user.name %>
+            </li>
+            <li>
+              <.link
+                href={~p"/users/settings"}
+                class="text-[0.8125rem] leading-6 font-semibold hover:text-zinc-300"
+              >
+                Settings
+              </.link>
+            </li>
+            <li>
+              <.link
+                href={~p"/users/log_out"}
+                method="delete"
+                class="text-[0.8125rem] leading-6 font-semibold hover:text-zinc-300"
+              >
+                Log out
+              </.link>
+            </li>
+          <% else %>
+            <li>
+              <.link
+                href={~p"/users/register"}
+                class="text-[0.8125rem] leading-6 font-semibold hover:text-zinc-300"
+              >
+                Register
+              </.link>
+            </li>
+            <li>
+              <.link
+                href={~p"/users/log_in"}
+                class="text-[0.8125rem] leading-6 font-semibold hover:text-zinc-300"
+              >
+                Log in
+              </.link>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </header>
     <%= @inner_content %>
   </body>
 </html>

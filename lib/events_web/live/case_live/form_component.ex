@@ -6,7 +6,7 @@ defmodule EventsWeb.CaseLive.FormComponent do
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
+    <div class="flex flex-col h-full">
       <.header>
         <%= @title %>
       </.header>
@@ -17,6 +17,7 @@ defmodule EventsWeb.CaseLive.FormComponent do
         phx-target={@myself}
         phx-change="validate"
         phx-submit="save"
+        class="h-full overflow-y-scroll pb-4 pr-4"
       >
 
         <h1 class="text-indigo-600 pt-8 font-semibold">Base data</h1>

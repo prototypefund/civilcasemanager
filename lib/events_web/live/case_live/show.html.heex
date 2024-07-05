@@ -1,20 +1,20 @@
 
-<div class="flex gap-4 flex-wrap items-start">
-  <div class="grow shrink-1 basis-1/1 sm:basis-3/12 overflow-scroll h-screen">
+<div class="flex gap-4 flex-wrap items-start h-full">
+  <div class="grow shrink-1 basis-1/1 sm:basis-3/12 h-full">
 
-    <div :if={@live_action == :edit} id="case-modal" show on_cancel={JS.patch(~p"/cases/#{@case}")}>
-      <.live_component
-        module={EventsWeb.CaseLive.FormComponent}
-        id={@case.id}
-        title={@page_title}
-        action={@live_action}
-        case={@case}
-        patch={~p"/cases/#{@case}"}
-      />
-    </div>
+    <!-- Either render the edit form-->
+    <.live_component :if={@live_action == :edit}
+      module={EventsWeb.CaseLive.FormComponent}
+      id={@case.id}
+      title={@page_title}
+      action={@live_action}
+      case={@case}
+      patch={~p"/cases/#{@case}"}
+    />
 
-    <div :if={@live_action == :show}>
-      <.header>
+    <!-- ..or the details view -->
+    <div :if={@live_action == :show} class="flex flex-col h-full">
+      <.header class="mb-4">
         <%= @case.name %>
         <:actions>
           <.link patch={~p"/cases/#{@case}/show/edit"} phx-click={JS.push_focus()}>
@@ -25,7 +25,7 @@
           </a>-->
         </:actions>
       </.header>
-
+      <div class="h-full overflow-y-scroll pb-8 pr-4">
       <.list>
         <:item title="Notes"><%= @case.notes %></:item>
         <:item title="Created at"><%= @case.created_at %></:item>
@@ -86,11 +86,13 @@
         <:item title="Url"><%= @case.url %></:item>
         <:item title="Cloud file links"><%= @case.cloud_file_links %></:item>
       </.list>
+      </div>
     </div>
 
   </div>
 
   <div class="grow shrink-1 basis-1/1 sm:basis-3/12">
+    <.h1>Associated Events</.h1>
     <.live_component
       module={EventsWeb.EventLive.FormSmall}
       id={:new}
@@ -101,8 +103,6 @@
       current_user={@current_user}
       patch={~p"/events"}
     />
-
-    <.h1>Associated Events</.h1>
 
     <div phx-update="stream" id="assoc_events">
       <%= for {id, event} <- @streams.assoc_events do %>
@@ -135,7 +135,7 @@
       <% end %>
       </div>
   </div>
-  <div class="w-full">
-    <.back navigate={~p"/cases"}>Return to overview</.back>
-  </div>
+</div>
+<div class="shadow-lg z-10 fixed bottom-0 right-0 left-0 bg-indigo-100">
+  <.back class="!mt-0 p-2 w-screen" navigate={~p"/cases"}>Return to overview</.back>
 </div>

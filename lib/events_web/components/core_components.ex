@@ -335,13 +335,13 @@ defmodule EventsWeb.CoreComponents do
 
   def input(%{type: "select"} = assigns) do
     ~H"""
-    <div phx-feedback-for={@name}  class={["flex items-center gap-4", @wrapper_class]}>
+    <div phx-feedback-for={@name} class={["flex items-center gap-4", @wrapper_class]}>
       <.label for={@id} class={@label_class}><%= @label %></.label>
       <select
         id={@id}
         name={@name}
         class={[
-          "mt-2 rounded-md border border-gray-300 bg-white dark:bg-zinc-900 shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm",
+          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-5 phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400 dark:bg-zinc-900 dark:text-zinc-100 border-zinc-300 focus:border-zinc-400 ",
           @class
         ]}
         multiple={@multiple}

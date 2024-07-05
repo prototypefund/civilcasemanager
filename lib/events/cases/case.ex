@@ -14,13 +14,17 @@ defmodule Events.Cases.Case do
     }
   }
 
-  ## TODO Investigate id generation
+  ## FIXME Investigate id generation
   @primary_key {:id, :string, autogenerate: false}
   schema "cases" do
     ## Base data
     field :name, :string
     field :notes, :string
-    field :status, :string
+    field :status, Ecto.Enum, values: [
+      :open,
+      :ready_for_documentation,
+      :closed
+    ]
     field :occurred_at, :utc_datetime
 
     ## Depature
@@ -38,7 +42,18 @@ defmodule Events.Cases.Case do
     field :authorities_details , :string
 
     ## The boat
-    field :boat_type, :string
+    field :boat_type, Ecto.Enum, values: [
+      :unknown,
+      :other,
+      :rubber,
+      :wodden,
+      :iron,
+      :fiberglass,
+      :fishing,
+      ## TODO Remove dupes
+      :fiberglas,
+      :wood,
+    ]
     field :boat_notes, :string
     field :boat_color, :string
     field :boat_engine_status, :string

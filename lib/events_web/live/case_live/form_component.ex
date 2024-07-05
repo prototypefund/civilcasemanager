@@ -27,11 +27,7 @@ defmodule EventsWeb.CaseLive.FormComponent do
           field={@form[:status]}
           type="select"
           label="Status"
-          options={[
-            {"Open", "open"},
-            {"Ready for documentation", "ready_for_documentation"},
-            {"Closed", "closed"}
-          ]}
+          options={Ecto.Enum.values(Events.Cases.Case, :status)}
         />
 
         <.input field={@form[:created_at]} type="datetime-local" label="Created at" />
@@ -54,7 +50,12 @@ defmodule EventsWeb.CaseLive.FormComponent do
         <.input field={@form[:authorities_details]} type="text" label="Authorities details" />
 
         <h1 class="text-indigo-600 pt-8 font-semibold">The boat</h1>
-        <.input field={@form[:boat_type]} type="text" label="Boat Type" />
+        <.input
+          field={@form[:boat_type]}
+          type="select"
+          label="Boat Type"
+          options={Ecto.Enum.values(Events.Cases.Case, :boat_type)}
+        />
         <.input field={@form[:boat_notes]} type="text" label="Boat Notes" />
         <.input field={@form[:boat_color]} type="text" label="Boat Color" />
         <.input field={@form[:boat_engine_status]} type="text" label="Boat Engine Status" />

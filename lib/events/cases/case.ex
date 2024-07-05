@@ -21,7 +21,6 @@ defmodule Events.Cases.Case do
     field :name, :string
     field :notes, :string
     field :status, :string
-    field :created_at, :utc_datetime
     field :occurred_at, :utc_datetime
 
     ## Depature
@@ -74,7 +73,8 @@ defmodule Events.Cases.Case do
 
     many_to_many :events, Events.Eventlog.Event, join_through: Events.CasesEvents
 
-    timestamps(type: :utc_datetime)
+    # Use created_at as timestamp key
+    timestamps(inserted_at: :created_at, type: :utc_datetime)
   end
 
   @spec changeset(

@@ -6,46 +6,71 @@ defmodule Events.Cases.Case do
 
   @derive {
     Flop.Schema,
-    filterable: [:status, :identifier],
-    sortable: [:identifier, :created_at],
+    filterable: [:status, :name],
+    sortable: [:name, :created_at],
     default_order: %{
       order_by: [:created_at],
       order_directions: [:desc, :asc]
     }
   }
 
+  ## TODO Investigate id generation
+  @primary_key {:id, :string, autogenerate: false}
   schema "cases" do
-    field :archived_at, :utc_datetime
-    field :closed_at, :utc_datetime
+    ## Base data
+    field :name, :string
+    field :notes, :string
+    field :status, :string
     field :created_at, :utc_datetime
-    field :deleted_at, :utc_datetime
-    field :description, :string
-    field :identifier, :string
-    field :additional_identifiers, :string
-    field :opened_at, :utc_datetime
-    field :status, Ecto.Enum, values: [
-      draft: 0,
-      open: 1,
-      closed: 2,
-      archived: 3
-    ], default: :open
-    field :status_note, :string
-    field :title, :string
-    field :freetext, :string
-    field :pob_man, :integer
-    field :pob_woman, :integer
-    field :pob_child, :integer
-    field :boat_type, Ecto.Enum, values: [
-      unknown: 0,
-      other: 1,
-      rubber: 2,
-      wodden: 3,
-      iron: 4,
-      fiberglass: 5,
-      fishing: 6,
-    ]
-    field :course_over_ground, :integer
-    field :speed_over_ground, :integer
+    field :occurred_at, :utc_datetime
+
+    ## Depature
+    field :departure_region, :string
+    field :place_of_departure, :string
+    field :time_of_departure, :utc_datetime
+    field :sar_region, :string
+
+    ## Involved parties
+    field :phonenumber, :string
+    field :alarmphone_contact , :string
+    field :confirmation_by, :string
+    field :actors_involved, :string
+    field :authorities_alerted, :boolean
+    field :authorities_details , :string
+
+    ## The boat
+    field :boat_type, :string
+    field :boat_notes, :string
+    field :boat_color, :string
+    field :boat_engine_status, :string
+    field :boat_engine_working, :string
+    field :boat_number_of_engines, :integer
+
+    ## People on Board
+    field :pob_total, :integer
+    field :pob_men, :integer
+    field :pob_women, :integer
+    field :pob_minors, :integer
+    field :pob_gender_ambiguous, :integer
+    field :pob_medical_cases, :integer
+    field :people_dead, :integer
+    field :people_missing, :integer
+    field :pob_per_nationality, :string
+
+    ## Outcome
+    field :outcome, :string
+    field :time_of_disembarkation, :utc_datetime
+    field :place_of_disembarkation , :string
+    field :disembarked_by, :string
+    field :outcome_actors, :string
+    field :frontext_involvement, :string
+    field :followup_needed, :boolean
+
+    ## Meta
+    field :template, :string
+    field :url, :string
+    field :cloud_file_links, :string
+    field :imported_from, :string
 
     many_to_many :events, Events.Eventlog.Event, join_through: Events.CasesEvents
 
@@ -63,19 +88,21 @@ defmodule Events.Cases.Case do
   @doc false
   def changeset(case, attrs) do
     case
-    |> cast(attrs, [:identifier, :additional_identifiers, :title, :description, :created_at, :deleted_at, :opened_at, :closed_at, :archived_at, :status, :status_note, :freetext, :boat_type, :course_over_ground, :speed_over_ground, :pob_man, :pob_woman, :pob_child])
-    |> validate_required([:identifier, :status])
-    |> validate_number(:course_over_ground, greater_than_or_equal_to: 0, less_than_or_equal_to: 360)
+    |> cast(attrs, [
+      :notes, :name, :status, :created_at, :occurred_at, :departure_region, :place_of_departure, :time_of_departure, :sar_region, :phonenumber, :alarmphone_contact, :confirmation_by, :actors_involved, :authorities_alerted, :authorities_details, :boat_type, :boat_notes, :boat_color, :boat_engine_status, :boat_engine_working, :boat_number_of_engines, :pob_total, :pob_men, :pob_women, :pob_minors, :pob_gender_ambiguous, :pob_medical_cases, :people_dead, :people_missing, :pob_per_nationality, :outcome, :time_of_disembarkation, :place_of_disembarkation, :disembarked_by, :outcome_actors, :frontext_involvement, :followup_needed, :url, :cloud_file_links,
+      ])
+    |> validate_required([:name, :status])
+    #|> validate_number(:course_over_ground, greater_than_or_equal_to: 0, less_than_or_equal_to: 360)
     |> validate_format(
-      :identifier,
+      :name,
      ~r/^[a-zA-Z0-9\-]+$/,
-      message: "ID must be only contain letters, numbers and a dash. If you want to add multiple identifiers, please add them below"
+      message: "ID must be only contain letters, numbers and a dash."
     )
     |> put_timestamp_if_nil(:created_at)
-    |> put_timestamp_if_nil(:opened_at)
-    |> ensure_identifier_format(:identifier, :created_at)
-    |> truncate_field(:freetext, 65_535)
-    |> unique_constraint(:identifier)
+    #|> put_timestamp_if_nil(:opened_at)
+    #|> ensure_identifier_format(:identifier, :created_at)
+    #|> truncate_field(:freetext, 65_535)
+    #|> unique_constraint(:identifier)
   end
 
   # Check the ID for year suffix

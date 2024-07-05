@@ -121,7 +121,7 @@ defmodule EventsWeb.CoreComponents do
       ]}
       {@rest}
     >
-      <p :if={@title} class="flex items-center gap-1.5 text-sm font-semibold leading-6">
+      <p :if={@title} class="flex items-center gap-1.5 text-sm font-semibold leading-5">
         <.icon :if={@kind == :info} name="hero-information-circle-mini" class="h-4 w-4" />
         <.icon :if={@kind == :error} name="hero-exclamation-circle-mini" class="h-4 w-4" />
         <%= @title %>
@@ -202,7 +202,7 @@ defmodule EventsWeb.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="space-y-8 bg-white dark:bg-zinc-900">
+      <div class="space-y-4 bg-white dark:bg-zinc-900">
         <%= render_slot(@inner_block, f) %>
         <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
           <%= render_slot(action, f) %>
@@ -232,7 +232,7 @@ defmodule EventsWeb.CoreComponents do
       type={@type}
       class={[
         "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 dark:bg-zinc-600 hover:bg-zinc-700 py-2 px-3",
-        "text-sm font-semibold leading-6 text-white active:text-white/80",
+        "text-sm font-semibold leading-5 text-white active:text-white/80",
         @class
       ]}
       {@rest}
@@ -286,6 +286,7 @@ defmodule EventsWeb.CoreComponents do
   attr :options, :list, doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
   attr :multiple, :boolean, default: false, doc: "the multiple flag for select inputs"
   attr :class, :string, default: ""
+  attr :wrapper_class, :string, default: ""
   attr :label_class, :string, default: ""
 
   attr :rest, :global,
@@ -310,8 +311,8 @@ defmodule EventsWeb.CoreComponents do
       end)
 
     ~H"""
-    <div phx-feedback-for={@name}>
-      <label class={"flex items-center gap-4 text-sm leading-6 text-zinc-600 #{@label_class}"}>
+    <div phx-feedback-for={@name} class={["flex items-center gap-4", @wrapper_class]}>
+      <label class={"flex items-center gap-4 text-sm leading-5 text-zinc-600 #{@label_class}"}>
         <input type="hidden" name={@name} value="false" />
         <input
           type="checkbox"
@@ -334,7 +335,7 @@ defmodule EventsWeb.CoreComponents do
 
   def input(%{type: "select"} = assigns) do
     ~H"""
-    <div phx-feedback-for={@name}>
+    <div phx-feedback-for={@name}  class={["flex items-center gap-4", @wrapper_class]}>
       <.label for={@id} class={@label_class}><%= @label %></.label>
       <select
         id={@id}
@@ -356,13 +357,13 @@ defmodule EventsWeb.CoreComponents do
 
   def input(%{type: "textarea"} = assigns) do
     ~H"""
-    <div phx-feedback-for={@name}>
+    <div phx-feedback-for={@name} >
       <.label for={@id} class={@label_class}><%= @label %></.label>
       <textarea
         id={@id}
         name={@name}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
+          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-5",
           "min-h-[6rem] phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
           @errors == [] && "border-zinc-300 focus:border-zinc-400",
           @errors != [] && "border-rose-400 focus:border-rose-400",
@@ -378,7 +379,7 @@ defmodule EventsWeb.CoreComponents do
   # All other inputs text, datetime-local, url, password, etc. are handled here...
   def input(assigns) do
     ~H"""
-    <div phx-feedback-for={@name}>
+    <div phx-feedback-for={@name}  class={["flex items-center gap-4", @wrapper_class]}>
       <%= if (is_binary(@label) && String.trim(@label) != "") do %>
         <.label for={@id} class={@label_class}><%= @label %></.label>
       <% end %>
@@ -388,7 +389,7 @@ defmodule EventsWeb.CoreComponents do
         id={@id}
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
+          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-5",
           "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
           "dark:bg-zinc-900 dark:text-zinc-100",
           @errors == [] && "border-zinc-300 focus:border-zinc-400",
@@ -411,7 +412,7 @@ defmodule EventsWeb.CoreComponents do
 
   def label(assigns) do
     ~H"""
-    <label for={@for} class={["block text-sm font-semibold leading-6 text-zinc-800 dark:text-zinc-200", @class]}>
+    <label for={@for} class={["block text-sm font-semibold leading-5 text-zinc-800 dark:text-zinc-200 w-32", @class]}>
       <%= render_slot(@inner_block) %>
     </label>
     """
@@ -424,7 +425,7 @@ defmodule EventsWeb.CoreComponents do
 
   def error(assigns) do
     ~H"""
-    <p class="mt-3 flex gap-3 text-sm leading-6 text-rose-600 phx-no-feedback:hidden">
+    <p class="mt-3 flex gap-3 text-sm leading-5 text-rose-600 phx-no-feedback:hidden">
       <.icon name="hero-exclamation-circle-mini" class="mt-0.5 h-5 w-5 flex-none" />
       <%= render_slot(@inner_block) %>
     </p>
@@ -448,7 +449,7 @@ defmodule EventsWeb.CoreComponents do
         <.h1>
           <%= render_slot(@inner_block) %>
         </.h1>
-        <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-zinc-600">
+        <p :if={@subtitle != []} class="mt-2 text-sm leading-5 text-zinc-600">
           <%= render_slot(@subtitle) %>
         </p>
       </div>
@@ -460,9 +461,10 @@ defmodule EventsWeb.CoreComponents do
   @doc """
   Renders a h1
   """
+  attr :class, :string, default: nil
   def h1(assigns) do
     ~H"""
-    <h1 class="text-lg font-semibold leading-8 text-zinc-800 dark:text-zinc-200">
+    <h1 class={["text-lg font-semibold leading-8 text-zinc-800 dark:text-zinc-200", @class]}>
       <%= render_slot(@inner_block) %>
     </h1>
     """
@@ -502,7 +504,7 @@ defmodule EventsWeb.CoreComponents do
     ~H"""
     <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
       <table class="w-[40rem] mt-11 sm:w-full">
-        <thead class="text-sm text-left leading-6 text-zinc-500">
+        <thead class="text-sm text-left leading-5 text-zinc-500">
           <tr>
             <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal"><%= col[:label] %></th>
             <th :if={@action != []} class="relative p-0 pb-4">
@@ -513,7 +515,7 @@ defmodule EventsWeb.CoreComponents do
         <tbody
           id={@id}
           phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
-          class="relative divide-y divide-zinc-100 dark:divide-zinc-800 border-t border-zinc-200 text-sm leading-6 text-zinc-700"
+          class="relative divide-y divide-zinc-100 dark:divide-zinc-800 border-t border-zinc-200 text-sm leading-5 text-zinc-700"
         >
           <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-zinc-50">
             <td
@@ -533,7 +535,7 @@ defmodule EventsWeb.CoreComponents do
                 <span class="absolute -inset-y-px -right-4 left-0 group-hover:bg-zinc-50 sm:rounded-r-xl" />
                 <span
                   :for={action <- @action}
-                  class="relative ml-4 font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+                  class="relative ml-4 font-semibold leading-5 text-zinc-900 hover:text-zinc-700"
                 >
                   <%= render_slot(action, @row_item.(row)) %>
                 </span>
@@ -562,9 +564,9 @@ defmodule EventsWeb.CoreComponents do
 
   def list(assigns) do
     ~H"""
-    <div class="mt-14">
+    <div class="mt-4">
       <dl class="-my-4 divide-y divide-zinc-100 dark:divide-zinc-800">
-        <div :for={item <- @item} class="flex gap-4 py-4 text-sm leading-6 sm:gap-8">
+        <div :for={item <- @item} class="flex gap-4 py-2 text-sm leading-5 sm:gap-8">
           <dt class="w-1/4 flex-none text-zinc-500"><%= item.title %></dt>
           <dd class="text-zinc-700 dark:text-zinc-300 break-words"><%= render_slot(item) %></dd>
         </div>
@@ -588,7 +590,7 @@ defmodule EventsWeb.CoreComponents do
     <div class="mt-16">
       <.link
         navigate={@navigate}
-        class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+        class="text-sm font-semibold leading-5 text-zinc-900 hover:text-zinc-700"
       >
         <.icon name="hero-arrow-left-solid" class="h-3 w-3" />
         <%= render_slot(@inner_block) %>

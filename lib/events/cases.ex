@@ -111,7 +111,7 @@ defmodule Events.Cases do
 
   """
   def get_case_by_identifier(identifier) do
-    Repo.get_by(Case, identifier: identifier)
+    Repo.get_by(Case, name: identifier)
   end
 
   @doc """
@@ -183,19 +183,19 @@ defmodule Events.Cases do
 
   def get_combined_identifier(case_data) do
     year = DateTime.to_date(case_data[:created_at]).year |> Integer.to_string()
-    case_data[:identifier] <> "-" <> year
+    case_data[:name] <> "-" <> year
   end
 
   def get_pretty_identifier(case) do
     # Get first part of identifier
-    case.identifier
+    case.name
     |> String.split("-")
     |> hd()
   end
 
   def get_year_from_id(case) do
     # Get second part of identifier or nothing if it doesn't exist
-    case.identifier
+    case.name
     |> String.split("-")
     |> tl()
     |> Enum.at(0)
@@ -206,15 +206,15 @@ defmodule Events.Cases do
     Dear officer on duty,
 
     Our hotline was alarmed at by a distress call from a boat at sea,
-    which we assigned the number #{case.identifier} at #{DateTime.to_string(case.created_at)} .
+    which we assigned the number #{case.name} at #{DateTime.to_string(case.created_at)} .
     This is the information we have received so far:
 
-    Number of People: #{case.pob_man} Men, #{case.pob_woman} Women, #{case.pob_child} Children.
+    Number of People: #{case.pob_men} Men, #{case.pob_women} Women, #{case.pob_minors} Minors.
 
     Type of Boat: #{case.boat_type}
-    COG: #{case.course_over_ground}°
-    SOG: #{case.speed_over_ground} kt
-    Last position: TODO
+    COG: !!FILL_ME!! °
+    SOG: !!FILL_ME!! kt
+    Last position: !!FILL_ME!!
 
     Regards,
     Air Liaison Officer Seabird 2

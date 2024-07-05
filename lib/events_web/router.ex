@@ -41,6 +41,8 @@ defmodule EventsWeb.Router do
 
       ## FIXME Make permission to create new accounts more granular
       live "/users", UserLive.Index, :index
+      live "/users/new", UserLive.Index, :new
+      live "/users/:id/edit", UserLive.Index, :edit
       live "/users/settings", UserLive.Settings, :edit
       live "/users/settings/confirm_email/:token", UserLive.Settings, :confirm_email
     end

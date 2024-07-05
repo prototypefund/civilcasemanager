@@ -3,6 +3,10 @@ defmodule Events.Accounts do
   The Accounts context.
   """
 
+  ## FIXME
+  # 1. Check roles before editing users
+  # 2. Don't require password in edit form
+
   import Ecto.Query, warn: false
   alias Events.Repo
 
@@ -81,6 +85,20 @@ defmodule Events.Accounts do
   end
 
   @doc """
+  Returns a list of users.
+
+  ## Examples
+
+      iex> list_users()
+      [%User{}, ...]
+
+  """
+  def list_users do
+    Repo.all(User)
+  end
+
+
+  @doc """
   Returns an `%Ecto.Changeset{}` for tracking user changes.
 
   ## Examples
@@ -134,7 +152,7 @@ defmodule Events.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_user_generic_attrs(user, attrs) do
+  def update_user_generic_attrs(%User{} = user, attrs) do
     user
     |> User.generic_changeset(attrs)
     |> Repo.update()

@@ -9,6 +9,7 @@ defmodule Events.Accounts.User do
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
+    field :role, Ecto.Enum, values: [:user, :admin]
 
     timestamps(type: :utc_datetime)
   end
@@ -38,7 +39,7 @@ defmodule Events.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:email, :password, :name])
     |> validate_email(opts)
     |> validate_password(opts)
   end
@@ -93,10 +94,8 @@ defmodule Events.Accounts.User do
   A user changeset for any generic attribute
   """
   def generic_changeset(user, attrs, _opts \\ []) do
-    IO.inspect(attrs, label: "PASSED ATTRS")
     user
-    |> cast(attrs, [:name])
-    |> IO.inspect()
+    |> cast(attrs, [:name, :role, :email])
   end
 
 

@@ -2,6 +2,7 @@ defmodule Events.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @schema_prefix "private"
   schema "users" do
     field :email, :string
     field :name, :string

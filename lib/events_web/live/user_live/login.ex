@@ -1,4 +1,4 @@
-defmodule EventsWeb.UserLoginLive do
+defmodule EventsWeb.UserLive.Login do
   use EventsWeb, :live_view
 
   def render(assigns) do

@@ -1,4 +1,4 @@
-defmodule EventsWeb.UserSettingsLiveTest do
+defmodule EventsWeb.UserLive.SettingsTest do
   use EventsWeb.ConnCase
 
   alias Events.Accounts

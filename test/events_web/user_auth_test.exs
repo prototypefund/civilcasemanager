@@ -1,9 +1,9 @@
-defmodule EventsWeb.UserAuthTest do
+defmodule EventsWeb.UserLive.AuthTest do
   use EventsWeb.ConnCase
 
   alias Phoenix.LiveView
   alias Events.Accounts
-  alias EventsWeb.UserAuth
+  alias EventsWeb.UserLive.Auth
   import Events.AccountsFixtures
 
   @remember_me_cookie "_events_web_user_remember_me"

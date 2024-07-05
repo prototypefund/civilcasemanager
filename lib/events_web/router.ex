@@ -1,7 +1,7 @@
 defmodule EventsWeb.Router do
   use EventsWeb, :router
 
-  import EventsWeb.UserAuth
+  import EventsWeb.UserLive.Auth
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -22,7 +22,7 @@ defmodule EventsWeb.Router do
     pipe_through [:browser, :require_authenticated_user]
 
     live_session :require_authenticated_user,
-      on_mount: [{EventsWeb.UserAuth, :ensure_authenticated}] do
+      on_mount: [{EventsWeb.UserLive.Auth, :ensure_authenticated}] do
 
       live "/events", EventLive.Index, :index
       live "/events/new", EventLive.Index, :new
@@ -39,9 +39,10 @@ defmodule EventsWeb.Router do
       live "/cases/:id", CaseLive.Show, :show
       live "/cases/:id/show/edit", CaseLive.Show, :edit
 
-      ## MAYBE Make permission to create new accounts more granular
-      live "/users/settings", UserSettingsLive, :edit
-      live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+      ## FIXME Make permission to create new accounts more granular
+      live "/users", UserLive.Index, :index
+      live "/users/settings", UserLive.Settings, :edit
+      live "/users/settings/confirm_email/:token", UserLive.Settings, :confirm_email
     end
   end
 
@@ -50,15 +51,15 @@ defmodule EventsWeb.Router do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
 
     live_session :redirect_if_user_is_authenticated,
-      on_mount: [{EventsWeb.UserAuth, :redirect_if_user_is_authenticated}] do
-      live "/users/register", UserRegistrationLive, :new
+      on_mount: [{EventsWeb.UserLive.Auth, :redirect_if_user_is_authenticated}] do
+      live "/users/register", UserLive.Registration, :new
 
-      live "/users/log_in", UserLoginLive, :new
-      live "/users/reset_password", UserForgotPasswordLive, :new
-      live "/users/reset_password/:token", UserResetPasswordLive, :edit
+      live "/users/log_in", UserLive.Login, :new
+      live "/users/reset_password", UserLive.ForgotPassword, :new
+      live "/users/reset_password/:token", UserLive.ResetPassword, :edit
     end
 
-    post "/users/log_in", UserSessionController, :create
+    post "/users/log_in", UserLive.SessionController, :create
   end
 
 
@@ -69,7 +70,7 @@ defmodule EventsWeb.Router do
     delete "/users/log_out", UserSessionController, :delete
 
     live_session :current_user,
-      on_mount: [{EventsWeb.UserAuth, :mount_current_user}] do
+      on_mount: [{EventsWeb.UserLive.Auth, :mount_current_user}] do
       live "/users/confirm/:token", UserConfirmationLive, :edit
       live "/users/confirm", UserConfirmationInstructionsLive, :new
     end

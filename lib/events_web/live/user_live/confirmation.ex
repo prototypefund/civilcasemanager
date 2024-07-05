@@ -1,4 +1,4 @@
-defmodule EventsWeb.UserConfirmationLive do
+defmodule EventsWeb.UserLive.Confirmation do
   use EventsWeb, :live_view
 
   alias Events.Accounts

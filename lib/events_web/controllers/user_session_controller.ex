@@ -1,8 +1,8 @@
-defmodule EventsWeb.UserSessionController do
+defmodule EventsWeb.UserLive.SessionController do
   use EventsWeb, :controller
 
   alias Events.Accounts
-  alias EventsWeb.UserAuth
+  alias EventsWeb.UserLive.Auth
 
   def create(conn, %{"_action" => "registered"} = params) do
     create(conn, params, "Account created successfully!")

@@ -1,4 +1,4 @@
-defmodule EventsWeb.UserRegistrationLiveTest do
+defmodule EventsWeb.UserLive.RegistrationTest do
   use EventsWeb.ConnCase
 
   import Phoenix.LiveViewTest

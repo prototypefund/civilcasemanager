@@ -1,4 +1,4 @@
-defmodule EventsWeb.UserForgotPasswordLiveTest do
+defmodule EventsWeb.UserLive.ForgotPasswordTest do
   use EventsWeb.ConnCase
 
   import Phoenix.LiveViewTest

@@ -1,4 +1,4 @@
-defmodule EventsWeb.UserSessionControllerTest do
+defmodule EventsWeb.UserLive.SessionControllerTest do
   use EventsWeb.ConnCase
 
   import Events.AccountsFixtures

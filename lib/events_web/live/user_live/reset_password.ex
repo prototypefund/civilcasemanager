@@ -1,4 +1,4 @@
-defmodule EventsWeb.UserResetPasswordLive do
+defmodule EventsWeb.UserLive.ResetPassword do
   use EventsWeb, :live_view
 
   alias Events.Accounts

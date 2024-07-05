@@ -5,7 +5,7 @@
       <.filter_form
         fields={[
 
-          identifier: [
+          name: [
             label: "",
             op: :ilike_and,
             type: "text",
@@ -18,11 +18,7 @@
             label: "Status",
             type: "select",
             prompt: "",
-            options: [
-              {gettext("Open"), :open},
-              {gettext("Closed"), :closed},
-              {gettext("Archived"), :archived}
-            ]
+            options: Ecto.Enum.values(Events.Cases.Case, :status)
           ]
         ]}
         meta={@meta}

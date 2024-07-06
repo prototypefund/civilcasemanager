@@ -58,8 +58,7 @@ defmodule CaseManager.Eventlog.Event do
   defp assign_cases(changeset, nil), do: changeset
 
   defp assign_cases(changeset, cases) when is_binary(cases) do
-    {id, _} = Integer.parse(cases)
-    Ecto.Changeset.put_assoc(changeset, :cases, CaseManager.Cases.get_cases([id]))
+    Ecto.Changeset.put_assoc(changeset, :cases, CaseManager.Cases.get_cases([cases]))
   end
 
   defp assign_cases(changeset, cases) when is_list(cases) do

@@ -463,6 +463,7 @@ defmodule EventsWeb.CoreComponents do
   Renders a h1
   """
   attr :class, :string, default: nil
+  slot :inner_block
 
   def h1(assigns) do
     ~H"""

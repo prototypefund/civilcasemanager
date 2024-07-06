@@ -65,7 +65,6 @@ defmodule CaseManager.Cases.Case do
         :unknown,
         :currently_unknown,
         ## TODO Remove dupes
-        :fiberglas,
         :fishing
       ]
 
@@ -83,7 +82,10 @@ defmodule CaseManager.Cases.Case do
         :brown,
         :other,
         :unknown,
-        :currently_unknown
+        :currently_unknown,
+        ## TODO Remove these?
+        :purple,
+        :pink
       ]
 
     field :boat_engine_status, :string
@@ -118,7 +120,9 @@ defmodule CaseManager.Cases.Case do
         :unknown,
         :empty_boat,
         :shipwreck,
-        :unclear
+        :unclear,
+        ## TODO Remove these?
+        :not_filled
       ]
 
     field :time_of_disembarkation, :utc_datetime

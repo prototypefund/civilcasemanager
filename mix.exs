@@ -64,7 +64,8 @@ defmodule Events.MixProject do
       {:yugo, git: "https://gitlab.com/dev-sw-1/yugo.git"},
       {:slack_elixir, "~> 1.2.0"},
       {:flop_phoenix, "~> 0.22.7"},
-      {:earmark, "~> 1.1"}
+      {:earmark, "~> 1.1"},
+      {:geo_postgis, "~> 3.6"}
     ]
   end
 

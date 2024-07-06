@@ -23,11 +23,17 @@ defmodule EventsWeb.Router do
 
     live_session :require_authenticated_user,
       on_mount: [{EventsWeb.UserLive.Auth, :ensure_authenticated}] do
-      live "/events", EventLive.Index, :index
-      live "/events/:id", EventLive.Show, :show
       live "/", CaseLive.Index, :index
+
       live "/cases", CaseLive.Index, :index
       live "/cases/:id", CaseLive.Show, :show
+
+      live "/events", EventLive.Index, :index
+      live "/events/:id", EventLive.Show, :show
+
+      live "/positions", PositionLive.Index, :index
+      live "/positions/:id", PositionLive.Show, :show
+
       live "/users/settings", UserLive.Settings, :edit
       live "/users/settings/confirm_email/:token", UserLive.Settings, :confirm_email
     end
@@ -42,9 +48,14 @@ defmodule EventsWeb.Router do
       live "/cases/new", CaseLive.Index, :new
       live "/cases/:id/edit", CaseLive.Index, :edit
       live "/cases/:id/show/edit", CaseLive.Show, :edit
+
       live "/events/:id/show/edit", EventLive.Show, :edit
       live "/events/new", EventLive.Index, :new
       live "/events/:id/edit", EventLive.Index, :edit
+
+      live "/positions/new", PositionLive.Index, :new
+      live "/positions/:id/edit", PositionLive.Index, :edit
+      live "/positions/:id/show/edit", PositionLive.Show, :edit
     end
   end
 
@@ -67,7 +78,6 @@ defmodule EventsWeb.Router do
     live_session :redirect_if_user_is_authenticated,
       on_mount: [{EventsWeb.UserLive.Auth, :redirect_if_user_is_authenticated}] do
       live "/users/register", UserLive.Registration, :new
-
       live "/users/log_in", UserLive.Login, :new
       live "/users/reset_password", UserLive.ForgotPassword, :new
       live "/users/reset_password/:token", UserLive.ResetPassword, :edit

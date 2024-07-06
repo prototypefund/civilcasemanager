@@ -13,7 +13,7 @@ defmodule Events.Positions.Position do
     field :lat, :decimal
     field :lon, :decimal
     field :imported_from, :string
-    field :geo_pos, Geo.PostGIS.Geometry
+    field :pos_geo, Geo.PostGIS.Geometry
     field :soft_deleted, :boolean, default: false
     field :item_id, :string
   end

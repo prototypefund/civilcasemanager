@@ -18,33 +18,48 @@ defmodule EventsWeb.Router do
   end
 
   ## Routes that require logged-in
-    scope "/", EventsWeb do
+  scope "/", EventsWeb do
     pipe_through [:browser, :require_authenticated_user]
 
     live_session :require_authenticated_user,
-      on_mount: [{EventsWeb.UserLive.Auth, :ensure_authenticated}] do
+    on_mount: [{EventsWeb.UserLive.Auth, :ensure_authenticated}] do
 
       live "/events", EventLive.Index, :index
-      live "/events/new", EventLive.Index, :new
-      live "/events/:id/edit", EventLive.Index, :edit
-
       live "/events/:id", EventLive.Show, :show
-      live "/events/:id/show/edit", EventLive.Show, :edit
-
       live "/", CaseLive.Index, :index
       live "/cases", CaseLive.Index, :index
+      live "/cases/:id", CaseLive.Show, :show
+      live "/users/settings", UserLive.Settings, :edit
+      live "/users/settings/confirm_email/:token", UserLive.Settings, :confirm_email
+
+    end
+  end
+
+  ## Routes that require write permission
+  scope "/", EventsWeb do
+    pipe_through [:browser, :require_write_user]
+
+    live_session :require_write_user,
+    on_mount: [{EventsWeb.UserLive.Auth, :ensure_authenticated}] do
       live "/cases/new", CaseLive.Index, :new
       live "/cases/:id/edit", CaseLive.Index, :edit
-
-      live "/cases/:id", CaseLive.Show, :show
       live "/cases/:id/show/edit", CaseLive.Show, :edit
+      live "/events/:id/show/edit", EventLive.Show, :edit
+      live "/events/new", EventLive.Index, :new
+      live "/events/:id/edit", EventLive.Index, :edit
+    end
+  end
 
-      ## FIXME Make permission to create new accounts more granular
+  ## Routes that require admin users
+  scope "/", EventsWeb do
+    pipe_through [:browser, :require_admin_user]
+
+    live_session :require_admin_user,
+    on_mount: [{EventsWeb.UserLive.Auth, :ensure_authenticated}] do
+
       live "/users", UserLive.Index, :index
       live "/users/new", UserLive.Index, :new
       live "/users/:id/edit", UserLive.Index, :edit
-      live "/users/settings", UserLive.Settings, :edit
-      live "/users/settings/confirm_email/:token", UserLive.Settings, :confirm_email
     end
   end
 
@@ -69,12 +84,12 @@ defmodule EventsWeb.Router do
   scope "/", EventsWeb do
     pipe_through [:browser]
 
-    delete "/users/log_out", UserSessionController, :delete
+    delete "/users/log_out", UserLive.SessionController, :delete
 
     live_session :current_user,
       on_mount: [{EventsWeb.UserLive.Auth, :mount_current_user}] do
-      live "/users/confirm/:token", UserConfirmationLive, :edit
-      live "/users/confirm", UserConfirmationInstructionsLive, :new
+      live "/users/confirm/:token", UserLive.ConfirmationInstructions, :edit
+      live "/users/confirm", UserLive.ConfirmationInstructions, :new
     end
   end
 

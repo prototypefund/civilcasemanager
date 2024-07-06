@@ -9,7 +9,7 @@ defmodule Events.Accounts.User do
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
-    field :role, Ecto.Enum, values: [:user, :admin]
+    field :role, Ecto.Enum, values: [:user, :readonly, :admin]
 
     timestamps(type: :utc_datetime)
   end

@@ -14,6 +14,8 @@ defmodule CaseManager.Cases.Case do
   }
 
   ## FIXME Investigate id generation
+  ## Refer to https://gitlab.com/civilmrcc/onefleet/-/blob/develop/src/constants/templates/case.ts
+  ## for possible values
   @primary_key {:id, :string, autogenerate: false}
   schema "cases" do
     ## Base data
@@ -33,7 +35,15 @@ defmodule CaseManager.Cases.Case do
     field :departure_region, :string
     field :place_of_departure, :string
     field :time_of_departure, :utc_datetime
-    field :sar_region, :string
+
+    field :sar_region, Ecto.Enum,
+      values: [
+        :sar1,
+        :sar2,
+        :sar3,
+        :currently_unknown,
+        :unknown
+      ]
 
     ## Involved parties
     field :phonenumber, :string
@@ -46,21 +56,36 @@ defmodule CaseManager.Cases.Case do
     ## The boat
     field :boat_type, Ecto.Enum,
       values: [
-        :unknown,
-        :other,
         :rubber,
-        :wodden,
+        :wood,
         :iron,
         :fiberglass,
-        :fishing,
+        :fishing_vessel,
+        :other,
+        :unknown,
+        :currently_unknown,
         ## TODO Remove dupes
         :fiberglas,
-        :wood,
-        :fishing_vessel
+        :fishing
       ]
 
     field :boat_notes, :string
-    field :boat_color, :string
+
+    field :boat_color, Ecto.Enum,
+      values: [
+        :red,
+        :green,
+        :blue,
+        :yellow,
+        :white,
+        :black,
+        :gray,
+        :brown,
+        :other,
+        :unknown,
+        :currently_unknown
+      ]
+
     field :boat_engine_status, :string
     field :boat_engine_working, :string
     field :boat_number_of_engines, :integer
@@ -77,7 +102,25 @@ defmodule CaseManager.Cases.Case do
     field :pob_per_nationality, :string
 
     ## Outcome
-    field :outcome, :string
+
+    field :outcome, Ecto.Enum,
+      values: [
+        :currently_unknown,
+        :interception_libya,
+        :interception_tn,
+        :ngo_rescue,
+        :afm_rescue,
+        :italy_rescue,
+        :merv_interception,
+        :merv_rescue,
+        :returned,
+        :autonomous,
+        :unknown,
+        :empty_boat,
+        :shipwreck,
+        :unclear
+      ]
+
     field :time_of_disembarkation, :utc_datetime
     field :place_of_disembarkation, :string
     field :disembarked_by, :string

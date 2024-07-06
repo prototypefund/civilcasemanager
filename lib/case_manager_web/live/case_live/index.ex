@@ -69,10 +69,12 @@ defmodule CaseManagerWeb.CaseLive.Index do
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    case = Cases.get_case!(id)
-    {:ok, _} = Cases.delete_case(case)
+    if socket.assigns.current_user.role != :readonly do
+      case = Cases.get_case!(id)
+      {:ok, _} = Cases.delete_case(case)
 
-    {:noreply, stream_delete(socket, :cases, case)}
+      {:noreply, stream_delete(socket, :cases, case)}
+    end
   end
 
   defp get_color_for_year_tag(case) do

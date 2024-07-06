@@ -39,9 +39,11 @@ defmodule CaseManagerWeb.PositionLive.Index do
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    position = Positions.get_position!(id)
-    {:ok, _} = Positions.delete_position(position)
+    if socket.assigns.current_user.role != :readonly do
+      position = Positions.get_position!(id)
+      {:ok, _} = Positions.delete_position(position)
 
-    {:noreply, stream_delete(socket, :positions, position)}
+      {:noreply, stream_delete(socket, :positions, position)}
+    end
   end
 end

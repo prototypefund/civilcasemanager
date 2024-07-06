@@ -165,18 +165,18 @@ defmodule Events.Cases.Case do
   end
 
   # Check the ID for year suffix
-  defp ensure_identifier_format(changeset, field, fallback_time) do
-    current_value = get_field(changeset, field)
+  # defp ensure_identifier_format(changeset, field, fallback_time) do
+  #   current_value = get_field(changeset, field)
 
-    case current_value do
-      nil ->
-        changeset
+  #   case current_value do
+  #     nil ->
+  #       changeset
 
-      _ ->
-        fixed_id = get_compound_identifier(current_value, get_field(changeset, fallback_time))
-        put_change(changeset, field, fixed_id)
-    end
-  end
+  #     _ ->
+  #       fixed_id = get_compound_identifier(current_value, get_field(changeset, fallback_time))
+  #       put_change(changeset, field, fixed_id)
+  #   end
+  # end
 
   def get_compound_identifier(id, fallback_time) when is_binary(id) do
     case String.split(id, "-") do

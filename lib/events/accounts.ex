@@ -291,6 +291,13 @@ defmodule Events.Accounts do
     :ok
   end
 
+  @doc """
+  Deletes a user.
+  """
+  def delete_user(user) do
+    Repo.delete(user)
+  end
+
   ## Confirmation
 
   @doc ~S"""

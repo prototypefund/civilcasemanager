@@ -32,7 +32,7 @@ defmodule CaseManagerWeb.EventLive.FormComponent do
           label="Associated cases"
           multiple
           autocomplete="on"
-          options={Enum.map(CaseManager.Cases.list_open_cases(), &{&1.identifier, &1.id})}
+          options={Enum.map(CaseManager.Cases.list_open_cases(), &{&1.name, &1.id})}
           value={if is_list(@form.data.cases), do: Enum.map(@form.data.cases, & &1.id), else: []}
         />
 

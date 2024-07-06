@@ -44,7 +44,7 @@ defmodule CaseManagerWeb.Router do
     pipe_through [:browser, :require_write_user]
 
     live_session :require_write_user,
-      on_mount: [{CaseManagerWeb.UserLive.Auth, :ensure_authenticated}] do
+      on_mount: [{CaseManagerWeb.UserLive.Auth, :ensure_write_user}] do
       live "/cases/new", CaseLive.Index, :new
       live "/cases/:id/edit", CaseLive.Index, :edit
       live "/cases/:id/show/edit", CaseLive.Show, :edit

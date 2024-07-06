@@ -19,7 +19,7 @@
   <:item title="Cases">
     <%= for case <- @event.cases do %>
       <div class={"#{if case.status == :open, do: 'bg-emerald-200 border-emerald-300', else: 'bg-gray-200 border-gray-300' } border   rounded-md px-2 py-1"}>
-        <a href={~p"/cases/#{case}"}><%= case.identifier %></a>
+        <a href={~p"/cases/#{case}"}><%= case.name %></a>
       </div>
     <% end %>
   </:item>

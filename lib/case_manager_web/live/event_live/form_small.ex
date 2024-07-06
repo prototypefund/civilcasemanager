@@ -55,19 +55,21 @@ defmodule CaseManagerWeb.EventLive.FormSmall do
   end
 
   def handle_event("save", %{"event" => event_params}, socket) do
-    case Eventlog.create_event(event_params) do
-      {:ok, event} ->
-        notify_parent({:saved, event})
+    if socket.assigns.current_user.role != :readonly do
+      case Eventlog.create_event(event_params) do
+        {:ok, event} ->
+          notify_parent({:saved, event})
 
-        {
-          :noreply,
-          socket
-          |> put_flash(:info, "Event created successfully")
-          # put_patch...
-        }
+          {
+            :noreply,
+            socket
+            |> put_flash(:info, "Event created successfully")
+            # put_patch...
+          }
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign_form(socket, changeset)}
+        {:error, %Ecto.Changeset{} = changeset} ->
+          {:noreply, assign_form(socket, changeset)}
+      end
     end
   end
 

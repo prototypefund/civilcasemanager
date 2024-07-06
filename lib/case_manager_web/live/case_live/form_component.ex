@@ -161,7 +161,10 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
   end
 
   def handle_event("save", %{"case" => case_params}, socket) do
-    save_case(socket, socket.assigns.action, case_params)
+    # Check user is not readonly
+    if socket.assigns.current_user.role != :readonly do
+      save_case(socket, socket.assigns.action, case_params)
+    end
   end
 
   defp save_case(socket, :edit, case_params) do

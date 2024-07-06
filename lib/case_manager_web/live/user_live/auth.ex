@@ -147,6 +147,36 @@ defmodule CaseManagerWeb.UserLive.Auth do
     {:cont, mount_current_user(socket, session)}
   end
 
+  def on_mount(:ensure_write_user, _params, session, socket) do
+    socket = mount_current_user(socket, session)
+
+    if socket.assigns.current_user && socket.assigns.current_user.role != :readonly do
+      {:cont, socket}
+    else
+      socket =
+        socket
+        |> Phoenix.LiveView.put_flash(:error, "You must log in to access this page.")
+        |> Phoenix.LiveView.redirect(to: ~p"/users/log_in")
+
+      {:halt, socket}
+    end
+  end
+
+  def on_mount(:ensure_admin, _params, session, socket) do
+    socket = mount_current_user(socket, session)
+
+    if socket.assigns.current_user && socket.assigns.current_user.role == :admin do
+      {:cont, socket}
+    else
+      socket =
+        socket
+        |> Phoenix.LiveView.put_flash(:error, "You must log in to access this page.")
+        |> Phoenix.LiveView.redirect(to: ~p"/users/log_in")
+
+      {:halt, socket}
+    end
+  end
+
   def on_mount(:ensure_authenticated, _params, session, socket) do
     socket = mount_current_user(socket, session)
 
@@ -200,7 +230,7 @@ defmodule CaseManagerWeb.UserLive.Auth do
   they use the application at all, here would be a good place.
   """
   def require_authenticated_user(conn, _opts) do
-    IO.puts("HERE2")
+    IO.puts("require_authenticated_user")
 
     if conn.assigns[:current_user] do
       conn

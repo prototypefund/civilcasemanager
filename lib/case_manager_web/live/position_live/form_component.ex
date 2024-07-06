@@ -55,7 +55,9 @@ defmodule CaseManagerWeb.PositionLive.FormComponent do
   end
 
   def handle_event("save", %{"position" => position_params}, socket) do
-    save_position(socket, socket.assigns.action, position_params)
+    if socket.assigns.current_user.role != :readonly do
+      save_position(socket, socket.assigns.action, position_params)
+    end
   end
 
   defp save_position(socket, :edit, position_params) do

@@ -16,7 +16,7 @@ defmodule Events.Repo.Migrations.CreatePositions do
   #     add :timestamp, :utc_datetime
   #     add :imported_from, :text
   #     add :soft_deleted, :boolean, default: false, null: false
-  #     add :pos_geo, Geo.PostGIS.Geometry
+  #     add :pos_geo, :geometry
   #     add :item_id, references(:cases, on_delete: :nothing)
   #     timestamps(type: :utc_datetime)
   #   end

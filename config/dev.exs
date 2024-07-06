@@ -8,7 +8,8 @@ config :events, Events.Repo,
   database: "sarchive",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
-  pool_size: 10
+  pool_size: 10,
+  types: OnefleetApi.PostgresTypes
   # migration_timestamps: [type: :timestamptz]
 
 # For development, we disable any cache and enable

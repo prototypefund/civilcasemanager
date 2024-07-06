@@ -1,4 +1,4 @@
-defmodule CaseManager.Repo.Migrations.ImapToEmail do
+defmodule CaseManager.Repo.Migrations.CreatePrivateSchema do
   use Ecto.Migration
 
   def up do

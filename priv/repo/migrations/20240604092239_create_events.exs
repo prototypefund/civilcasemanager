@@ -2,7 +2,7 @@ defmodule CaseManager.Repo.Migrations.CreateEvents do
   use Ecto.Migration
 
   def change do
-    create table(:case_manager) do
+    create table(:events) do
       add :type, :string
       add :time, :string
       add :case_id, :string

@@ -4,7 +4,7 @@ defmodule CaseManager.Repo.Migrations.CreateCasesEvents do
   def change do
     create table(:cases_events, primary_key: false) do
       add :case_id, references(:cases, on_delete: :delete_all, type: :string), null: false
-      add :event_id, references(:case_manager, on_delete: :delete_all), null: false
+      add :event_id, references(:events, on_delete: :delete_all), null: false
 
       timestamps()
     end

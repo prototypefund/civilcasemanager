@@ -14,11 +14,13 @@ defmodule EventsWeb.CaseLive.Show do
   def handle_params(%{"id" => id}, _, socket) do
     case = Cases.get_case!(id)
     events = case.events |> Enum.sort_by(& &1.received_at) |> Enum.reverse()
+    positions = Events.Positions.list_positions_for_case(id)
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
      |> assign(:case, Cases.get_case!(id))
      |> stream(:assoc_events, events)
+     |> stream(:assoc_positions, positions)
     }
   end
 

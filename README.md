@@ -4,29 +4,28 @@ user interface to assign them to various cases.
 
 # Next Steps
 - [ ] Filter changed events in case view
-- [ ] Parse Thuraya 
-- [ ] Flop bugs
-- [x] Finish yugo PR
-- [ ] Add possibility only specify POB total
-  
+- [ ] Fix readonly permissions
+- [ ] Allow to edit user without setting a new password
+
+
 # TODO
 - [ ] Prettify case selection a little
+- [ ] Gettext for dropdown
+- [ ] Move Yugo
 
 # Minor
 - [ ] New cases are streamed unfiltered
 - [ ] When cases are created trough casts, there is no event emitted.
 - [ ] Add dropdowns (in embedded)
-- [ ] Turn types into :atoms or ints
-- [x] Remove html-helpers
-- [x] Rename "imap" to "email"
 
 # v1.0
 * Quick Compose: Titel, Timestamp
 * Markdown editor: Prosemirror?
-* Thuraya
-* Positions?
+* Thuraya?
 * Attachments: Native support avaliable.
 
+# v2.0
+* Maps: https://medium.com/@thomas.poumarede/from-scratch-to-map-my-mapbox-integration-experience-with-phoenix-liveview-using-elixir-aa84fca2b979
 
 # Platform issues to report
 - [ ] get_options_for_cases breaks with default value coming from DB

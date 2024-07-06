@@ -1,4 +1,4 @@
-defmodule Events.Repo.Migrations.AddRoleToUsers do
+defmodule CaseManager.Repo.Migrations.AddRoleToUsers do
   use Ecto.Migration
 
   def change do

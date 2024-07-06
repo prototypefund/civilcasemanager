@@ -1,12 +1,12 @@
-defmodule Events.CasesTest do
-  use Events.DataCase
+defmodule CaseManager.CasesTest do
+  use CaseManager.DataCase
 
-  alias Events.Cases
+  alias CaseManager.Cases
 
   describe "cases" do
-    alias Events.Cases.Case
+    alias CaseManager.Cases.Case
 
-    import Events.CasesFixtures
+    import CaseManager.CasesFixtures
 
     @invalid_attrs %{
       archived_at: nil,

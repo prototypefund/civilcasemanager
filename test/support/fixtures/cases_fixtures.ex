@@ -1,7 +1,7 @@
-defmodule Events.CasesFixtures do
+defmodule CaseManager.CasesFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `Events.Cases` context.
+  entities via the `CaseManager.Cases` context.
   """
 
   @doc """
@@ -24,7 +24,7 @@ defmodule Events.CasesFixtures do
         title: "some title",
         updated_at: ~U[2024-03-07 08:58:00Z]
       })
-      |> Events.Cases.create_case()
+      |> CaseManager.Cases.create_case()
 
     case
   end

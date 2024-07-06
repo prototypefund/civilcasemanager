@@ -1,0 +1,56 @@
+<.header>
+  Listing Positions
+  <:actions>
+    <.link patch={~p"/positions/new"}>
+      <.button>New Position</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="positions"
+  rows={@streams.positions}
+  row_click={fn {_id, position} -> JS.navigate(~p"/positions/#{position}") end}
+>
+  <:col :let={{_id, position}} label="Id"><%= position.id %></:col>
+  <:col :let={{_id, position}} label="Altitude"><%= position.altitude %></:col>
+  <:col :let={{_id, position}} label="Course"><%= position.course %></:col>
+  <:col :let={{_id, position}} label="Heading"><%= position.heading %></:col>
+  <:col :let={{_id, position}} label="Lat"><%= position.lat %></:col>
+  <:col :let={{_id, position}} label="Lon"><%= position.lon %></:col>
+  <:col :let={{_id, position}} label="Source"><%= position.source %></:col>
+  <:col :let={{_id, position}} label="Speed"><%= position.speed %></:col>
+  <:col :let={{_id, position}} label="Timestamp"><%= position.timestamp %></:col>
+  <:col :let={{_id, position}} label="Imported from"><%= position.imported_from %></:col>
+  <:col :let={{_id, position}} label="Soft deleted"><%= position.soft_deleted %></:col>
+  <:action :let={{_id, position}}>
+    <div class="sr-only">
+      <.link navigate={~p"/positions/#{position}"}>Show</.link>
+    </div>
+    <.link patch={~p"/positions/#{position}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, position}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: position.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="position-modal"
+  show
+  on_cancel={JS.patch(~p"/positions")}
+>
+  <.live_component
+    module={CaseManagerWeb.PositionLive.FormComponent}
+    id={@position.id || :new}
+    title={@page_title}
+    action={@live_action}
+    position={@position}
+    patch={~p"/positions"}
+  />
+</.modal>

@@ -1,12 +1,12 @@
-defmodule Events.EventlogTest do
-  use Events.DataCase
+defmodule CaseManager.EventlogTest do
+  use CaseManager.DataCase
 
-  alias Events.Eventlog
+  alias CaseManager.Eventlog
 
   describe "events" do
-    alias Events.Eventlog.Event
+    alias CaseManager.Eventlog.Event
 
-    import Events.EventlogFixtures
+    import CaseManager.EventlogFixtures
 
     @invalid_attrs %{body: nil, case_id: nil, origin: nil, time: nil, title: nil, type: nil}
 

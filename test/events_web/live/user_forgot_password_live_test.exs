@@ -1,11 +1,11 @@
-defmodule EventsWeb.UserLive.ForgotPasswordTest do
-  use EventsWeb.ConnCase
+defmodule CaseManagerWeb.UserLive.ForgotPasswordTest do
+  use CaseManagerWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import Events.AccountsFixtures
+  import CaseManager.AccountsFixtures
 
-  alias Events.Accounts
-  alias Events.Repo
+  alias CaseManager.Accounts
+  alias CaseManager.Repo
 
   describe "Forgot password page" do
     test "renders email page", %{conn: conn} do

@@ -1,0 +1,44 @@
+<.header>
+  Event <%= @event.id %>
+  <:subtitle>This is a event record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/events/#{@event}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit event</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Type"><%= @event.type %></:item>
+  <:item title="Time"><%= @event.received_at %></:item>
+  <:item title="Title"><%= @event.title %></:item>
+  <:item title="Body">
+    <%= raw(Earmark.as_html!(@event.body)) %>
+  </:item>
+  <:item title="From"><%= @event.from %></:item>
+  <:item title="Cases">
+    <%= for case <- @event.cases do %>
+      <div class={"#{if case.status == :open, do: 'bg-emerald-200 border-emerald-300', else: 'bg-gray-200 border-gray-300' } border   rounded-md px-2 py-1"}>
+        <a href={~p"/cases/#{case}"}><%= case.identifier %></a>
+      </div>
+    <% end %>
+  </:item>
+</.list>
+
+<.back navigate={~p"/events"}>Back to events</.back>
+
+<.modal
+  :if={@live_action == :edit}
+  id="event-modal"
+  show
+  on_cancel={JS.patch(~p"/events/#{@event}")}
+>
+  <.live_component
+    module={CaseManagerWeb.EventLive.FormComponent}
+    id={@event.id}
+    title={@page_title}
+    action={@live_action}
+    event={@event}
+    patch={~p"/events/#{@event}"}
+  />
+</.modal>

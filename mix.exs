@@ -1,9 +1,9 @@
-defmodule Events.MixProject do
+defmodule CaseManager.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :events,
+      app: :case_manager,
       version: "0.1.0",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -18,7 +18,7 @@ defmodule Events.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {Events.Application, []},
+      mod: {CaseManager.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -82,10 +82,10 @@ defmodule Events.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["tailwind events", "esbuild events"],
+      "assets.build": ["tailwind case_manager", "esbuild case_manager"],
       "assets.deploy": [
-        "tailwind events --minify",
-        "esbuild events --minify",
+        "tailwind case_manager --minify",
+        "esbuild case_manager --minify",
         "phx.digest"
       ]
     ]

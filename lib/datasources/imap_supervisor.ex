@@ -1,4 +1,4 @@
-defmodule Events.Datasources.IMAPSupervisor do
+defmodule CaseManager.Datasources.IMAPSupervisor do
   def event_type, do: "email"
   def icon_class, do: "hero-envelope-solid"
   def color, do: "blue"
@@ -20,7 +20,7 @@ defmodule Events.Datasources.IMAPSupervisor do
       },
       %{
         id: get_unique_id(args[:name], "_IMAPWORKER"),
-        start: {Events.Datasources.IMAPWorker, :start_link, [args]},
+        start: {CaseManager.Datasources.IMAPWorker, :start_link, [args]},
         restart: :permanent,
         type: :worker
       }

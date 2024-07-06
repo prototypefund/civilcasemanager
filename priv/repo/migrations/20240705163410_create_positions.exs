@@ -1,4 +1,4 @@
-defmodule Events.Repo.Migrations.CreatePositions do
+defmodule CaseManager.Repo.Migrations.CreatePositions do
   use Ecto.Migration
 
   def change do

@@ -1,8 +1,8 @@
-defmodule EventsWeb.UserLive.RegistrationTest do
-  use EventsWeb.ConnCase
+defmodule CaseManagerWeb.UserLive.RegistrationTest do
+  use CaseManagerWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import Events.AccountsFixtures
+  import CaseManager.AccountsFixtures
 
   describe "Registration page" do
     test "renders registration page", %{conn: conn} do

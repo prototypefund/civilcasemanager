@@ -1,8 +1,8 @@
-defmodule EventsWeb.EventLiveTest do
-  use EventsWeb.ConnCase
+defmodule CaseManagerWeb.EventLiveTest do
+  use CaseManagerWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import Events.EventlogFixtures
+  import CaseManager.EventlogFixtures
 
   @create_attrs %{
     body: "some body",
@@ -33,7 +33,7 @@ defmodule EventsWeb.EventLiveTest do
     test "lists all events", %{conn: conn, event: event} do
       {:ok, _index_live, html} = live(conn, ~p"/events")
 
-      assert html =~ "Listing Events"
+      assert html =~ "Listing CaseManager"
       assert html =~ event.body
     end
 

@@ -1,8 +1,8 @@
-defmodule Events.Repo.Migrations.LargerText do
+defmodule CaseManager.Repo.Migrations.LargerText do
   use Ecto.Migration
 
   def change do
-    alter table(:events) do
+    alter table(:case_manager) do
       modify :body, :text
     end
   end

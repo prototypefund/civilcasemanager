@@ -1,12 +1,12 @@
-defmodule Events.PositionsTest do
-  use Events.DataCase
+defmodule CaseManager.PositionsTest do
+  use CaseManager.DataCase
 
-  alias Events.Positions
+  alias CaseManager.Positions
 
   describe "positions" do
-    alias Events.Positions.Position
+    alias CaseManager.Positions.Position
 
-    import Events.PositionsFixtures
+    import CaseManager.PositionsFixtures
 
     @invalid_attrs %{
       id: nil,

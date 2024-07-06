@@ -1,7 +1,7 @@
-defmodule Events.PositionsFixtures do
+defmodule CaseManager.PositionsFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `Events.Positions` context.
+  entities via the `CaseManager.Positions` context.
   """
 
   @doc """
@@ -23,7 +23,7 @@ defmodule Events.PositionsFixtures do
         speed: "120.5",
         timestamp: ~U[2024-07-04 16:34:00Z]
       })
-      |> Events.Positions.create_position()
+      |> CaseManager.Positions.create_position()
 
     position
   end

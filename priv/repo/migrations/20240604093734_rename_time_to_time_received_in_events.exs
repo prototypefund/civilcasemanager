@@ -1,8 +1,8 @@
-defmodule Events.Repo.Migrations.RenameTimeToTimeReceivedInEvents do
+defmodule CaseManager.Repo.Migrations.RenameTimeToTimeReceivedInEvents do
   use Ecto.Migration
 
   def change do
-    alter table(:events) do
+    alter table(:case_manager) do
       remove :time
       add :time_received, :utc_datetime
     end

@@ -1,8 +1,8 @@
-defmodule EventsWeb.PositionLiveTest do
-  use EventsWeb.ConnCase
+defmodule CaseManagerWeb.PositionLiveTest do
+  use CaseManagerWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import Events.PositionsFixtures
+  import CaseManager.PositionsFixtures
 
   @create_attrs %{
     id: "some id",

@@ -1,9 +1,9 @@
-defmodule EventsWeb.UserLive.SettingsTest do
-  use EventsWeb.ConnCase
+defmodule CaseManagerWeb.UserLive.SettingsTest do
+  use CaseManagerWeb.ConnCase
 
-  alias Events.Accounts
+  alias CaseManager.Accounts
   import Phoenix.LiveViewTest
-  import Events.AccountsFixtures
+  import CaseManager.AccountsFixtures
 
   describe "Settings page" do
     test "renders settings page", %{conn: conn} do

@@ -7,19 +7,19 @@
 # General application configuration
 import Config
 
-config :events,
-  ecto_repos: [Events.Repo],
+config :case_manager,
+  ecto_repos: [CaseManager.Repo],
   generators: [timestamp_type: :utc_datetime]
 
 # Configures the endpoint
-config :events, EventsWeb.Endpoint,
+config :case_manager, CaseManagerWeb.Endpoint,
   url: [host: "localhost"],
   adapter: Bandit.PhoenixAdapter,
   render_errors: [
-    formats: [html: EventsWeb.ErrorHTML, json: EventsWeb.ErrorJSON],
+    formats: [html: CaseManagerWeb.ErrorHTML, json: CaseManagerWeb.ErrorJSON],
     layout: false
   ],
-  pubsub_server: Events.PubSub,
+  pubsub_server: CaseManager.PubSub,
   live_view: [signing_salt: "JMFVodia"]
 
 # Configures the mailer
@@ -29,12 +29,12 @@ config :events, EventsWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :events, Events.Mailer, adapter: Swoosh.Adapters.Local
+config :case_manager, CaseManager.Mailer, adapter: Swoosh.Adapters.Local
 
 # Configure esbuild (the version is required)
 config :esbuild,
   version: "0.17.11",
-  events: [
+  case_manager: [
     args:
       ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
     cd: Path.expand("../assets", __DIR__),
@@ -44,7 +44,7 @@ config :esbuild,
 # Configure tailwind (the version is required)
 config :tailwind,
   version: "3.4.0",
-  events: [
+  case_manager: [
     args: ~w(
       --config=tailwind.config.js
       --input=css/app.css
@@ -61,7 +61,7 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-config :flop, repo: Events.Repo
+config :flop, repo: CaseManager.Repo
 
 # Import workers config
 import_config "workers.exs"

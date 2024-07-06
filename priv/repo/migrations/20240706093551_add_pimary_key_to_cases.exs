@@ -1,4 +1,4 @@
-defmodule Events.Repo.Migrations.AddPimaryKeyToCases do
+defmodule CaseManager.Repo.Migrations.AddPimaryKeyToCases do
   use Ecto.Migration
 
   def change do

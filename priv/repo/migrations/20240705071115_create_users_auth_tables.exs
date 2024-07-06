@@ -1,4 +1,4 @@
-defmodule Events.Repo.Migrations.CreateUsersAuthTables do
+defmodule CaseManager.Repo.Migrations.CreateUsersAuthTables do
   use Ecto.Migration
 
   def change do

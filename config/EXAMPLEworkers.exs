@@ -1,7 +1,7 @@
 import Config
-alias Events.Datasources
+alias CaseManager.Datasources
 
-config :events, :worker_configs, [
+config :case_manager, :worker_configs, [
   {
     Datasources.IMAPSupervisor,
     [

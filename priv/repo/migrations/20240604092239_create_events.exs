@@ -1,8 +1,8 @@
-defmodule Events.Repo.Migrations.CreateEvents do
+defmodule CaseManager.Repo.Migrations.CreateEvents do
   use Ecto.Migration
 
   def change do
-    create table(:events) do
+    create table(:case_manager) do
       add :type, :string
       add :time, :string
       add :case_id, :string

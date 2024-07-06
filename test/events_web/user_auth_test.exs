@@ -1,17 +1,17 @@
-defmodule EventsWeb.UserLive.AuthTest do
-  use EventsWeb.ConnCase
+defmodule CaseManagerWeb.UserLive.AuthTest do
+  use CaseManagerWeb.ConnCase
 
   alias Phoenix.LiveView
-  alias Events.Accounts
-  alias EventsWeb.UserLive.Auth
-  import Events.AccountsFixtures
+  alias CaseManager.Accounts
+  alias CaseManagerWeb.UserLive.Auth
+  import CaseManager.AccountsFixtures
 
   @remember_me_cookie "_events_web_user_remember_me"
 
   setup %{conn: conn} do
     conn =
       conn
-      |> Map.replace!(:secret_key_base, EventsWeb.Endpoint.config(:secret_key_base))
+      |> Map.replace!(:secret_key_base, CaseManagerWeb.Endpoint.config(:secret_key_base))
       |> init_test_session(%{})
 
     %{user: user_fixture(), conn: conn}
@@ -66,7 +66,7 @@ defmodule EventsWeb.UserLive.AuthTest do
 
     test "broadcasts to the given live_socket_id", %{conn: conn} do
       live_socket_id = "users_sessions:abcdef-token"
-      EventsWeb.Endpoint.subscribe(live_socket_id)
+      CaseManagerWeb.Endpoint.subscribe(live_socket_id)
 
       conn
       |> put_session(:live_socket_id, live_socket_id)
@@ -164,7 +164,7 @@ defmodule EventsWeb.UserLive.AuthTest do
       session = conn |> put_session(:user_token, user_token) |> get_session()
 
       socket = %LiveView.Socket{
-        endpoint: EventsWeb.Endpoint,
+        endpoint: CaseManagerWeb.Endpoint,
         assigns: %{__changed__: %{}, flash: %{}}
       }
 
@@ -176,7 +176,7 @@ defmodule EventsWeb.UserLive.AuthTest do
       session = conn |> get_session()
 
       socket = %LiveView.Socket{
-        endpoint: EventsWeb.Endpoint,
+        endpoint: CaseManagerWeb.Endpoint,
         assigns: %{__changed__: %{}, flash: %{}}
       }
 

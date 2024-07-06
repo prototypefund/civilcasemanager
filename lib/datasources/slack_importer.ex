@@ -1,5 +1,5 @@
-defmodule Events.Datasources.SlackImporter do
-  alias Events.Datasources.SlackSupervisor
+defmodule CaseManager.Datasources.SlackImporter do
+  alias CaseManager.Datasources.SlackSupervisor
   use Slack.Bot
 
   require Logger
@@ -34,7 +34,7 @@ defmodule Events.Datasources.SlackImporter do
         result,
         text,
         user,
-        Events.Cases.get_case_by_identifier(result[:identifier]) || result
+        CaseManager.Cases.get_case_by_identifier(result[:identifier]) || result
       )
 
       send_message(channel, "New REPLY for #{result[:identifier]}")
@@ -65,7 +65,7 @@ defmodule Events.Datasources.SlackImporter do
     # TODO: Store the PID in context instead of looking it up every time
     manager_pid = Process.whereis(:fetch_manager)
 
-    event = %Events.FetchEvent{
+    event = %CaseManager.FetchEvent{
       type: SlackSupervisor.event_type(),
       body: text,
       from: user,
@@ -101,7 +101,7 @@ defmodule Events.Datasources.SlackImporter do
     date = created_at |> split_date() |> fix_date()
 
     %{
-      identifier: Events.Cases.Case.get_compound_identifier(case_id, date),
+      identifier: CaseManager.Cases.Case.get_compound_identifier(case_id, date),
       created_at: date,
       title: additional
     }
@@ -111,7 +111,7 @@ defmodule Events.Datasources.SlackImporter do
     date = created_at |> split_date() |> fix_date()
 
     %{
-      identifier: Events.Cases.Case.get_compound_identifier(case_id, date),
+      identifier: CaseManager.Cases.Case.get_compound_identifier(case_id, date),
       created_at: date
     }
   end
@@ -120,7 +120,7 @@ defmodule Events.Datasources.SlackImporter do
     date = DateTime.utc_now() |> DateTime.truncate(:second)
 
     %{
-      identifier: Events.Cases.Case.get_compound_identifier(case_id, date),
+      identifier: CaseManager.Cases.Case.get_compound_identifier(case_id, date),
       created_at: date
     }
   end

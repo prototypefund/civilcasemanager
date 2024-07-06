@@ -1,11 +1,11 @@
-defmodule EventsWeb.UserLive.ConfirmationTest do
-  use EventsWeb.ConnCase
+defmodule CaseManagerWeb.UserLive.ConfirmationTest do
+  use CaseManagerWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import Events.AccountsFixtures
+  import CaseManager.AccountsFixtures
 
-  alias Events.Accounts
-  alias Events.Repo
+  alias CaseManager.Accounts
+  alias CaseManager.Repo
 
   setup do
     %{user: user_fixture()}

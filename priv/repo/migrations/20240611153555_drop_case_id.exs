@@ -1,8 +1,8 @@
-defmodule Events.Repo.Migrations.DropCaseId do
+defmodule CaseManager.Repo.Migrations.DropCaseId do
   use Ecto.Migration
 
   def change do
-    alter table(:events) do
+    alter table(:case_manager) do
       remove :case_id
     end
   end

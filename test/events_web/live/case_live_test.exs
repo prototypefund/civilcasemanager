@@ -1,8 +1,8 @@
-defmodule EventsWeb.CaseLiveTest do
-  use EventsWeb.ConnCase
+defmodule CaseManagerWeb.CaseLiveTest do
+  use CaseManagerWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import Events.CasesFixtures
+  import CaseManager.CasesFixtures
 
   @create_attrs %{
     archived_at: "2024-03-07T08:58:00Z",

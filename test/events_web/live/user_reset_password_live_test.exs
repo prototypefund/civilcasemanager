@@ -1,10 +1,10 @@
-defmodule EventsWeb.UserLive.ResetPasswordTest do
-  use EventsWeb.ConnCase
+defmodule CaseManagerWeb.UserLive.ResetPasswordTest do
+  use CaseManagerWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import Events.AccountsFixtures
+  import CaseManager.AccountsFixtures
 
-  alias Events.Accounts
+  alias CaseManager.Accounts
 
   setup do
     user = user_fixture()

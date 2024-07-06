@@ -1,5 +1,5 @@
-defmodule Events.Datasources.IMAPWorker do
-  alias Events.Datasources.IMAPSupervisor
+defmodule CaseManager.Datasources.IMAPWorker do
+  alias CaseManager.Datasources.IMAPSupervisor
   import Phoenix.HTML
 
   use GenServer
@@ -30,7 +30,7 @@ defmodule Events.Datasources.IMAPWorker do
   defp publish_email(message, _state) do
     IO.inspect(message.subject, label: "Received an email with subject:")
 
-    event = %Events.FetchEvent{
+    event = %CaseManager.FetchEvent{
       type: IMAPSupervisor.event_type(),
       body: extract_body(message.body),
       from: extract_email_address(message.from),

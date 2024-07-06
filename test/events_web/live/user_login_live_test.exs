@@ -1,8 +1,8 @@
-defmodule EventsWeb.UserLive.LoginTest do
-  use EventsWeb.ConnCase
+defmodule CaseManagerWeb.UserLive.LoginTest do
+  use CaseManagerWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import Events.AccountsFixtures
+  import CaseManager.AccountsFixtures
 
   describe "Log in page" do
     test "renders log in page", %{conn: conn} do

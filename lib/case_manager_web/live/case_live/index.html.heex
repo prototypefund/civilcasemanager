@@ -1,0 +1,87 @@
+<.header class=" flex-wrap" action_class="!flex-initial flex-wrap">
+  All Cases
+  <:actions>
+    <%= if assigns[:meta] do %>
+      <.filter_form
+        fields={[
+          name: [
+            label: "",
+            op: :ilike_and,
+            type: "text",
+            rest: [
+              placeholder: gettext("Search")
+            ]
+          ],
+          status: [
+            label: "Status",
+            type: "select",
+            prompt: "",
+            options: Ecto.Enum.values(CaseManager.Cases.Case, :status)
+          ]
+        ]}
+        meta={@meta}
+        id="user-filter-form"
+      />
+    <% end %>
+    <.link class="mt-2" patch={~p"/cases/new"}>
+      <.button>Open New Case</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<div phx-hook="ParentMount" id="cases" class="flex flex-wrap -mx-4" phx-update="stream">
+  <%= for {id, case} <- @streams.cases do %>
+    <div
+      id={id}
+      phx-click={JS.navigate(~p"/cases/#{case}")}
+      class="p-3 w-full sm:w-1/2 md:w-1/2 lg:w-1/3 xl:w-1/3"
+    >
+      <.card id={id}>
+        <:icon>
+          <.status_icon status={case.status} class="w-4 h-4" />
+        </:icon>
+        <:title>
+          <a href={~p"/cases/#{case}"} class="">
+            <%= Cases.get_pretty_identifier(case) %>
+          </a>
+        </:title>
+        <:tag>
+          <%= if Cases.get_year_from_id(case) do %>
+            <.tag_badge color={get_color_for_year_tag(case)}>
+              <%= Cases.get_year_from_id(case) %>
+            </.tag_badge>
+          <% end %>
+        </:tag>
+        <:timestamp>
+          <.timestamp timestamp={case.created_at} />
+        </:timestamp>
+        <:actions>
+          <.link patch={~p"/cases/#{case}/edit"}>
+            <%= gettext("Edit Case") %>
+          </.link>
+          <.link
+            class="block"
+            phx-click={JS.push("delete", value: %{id: case.id}) |> hide("##{id}")}
+            data-confirm="Are you sure?"
+          >
+            <%= gettext("Delete Case") %>
+          </.link>
+        </:actions>
+        <%= case.notes %>
+      </.card>
+    </div>
+  <% end %>
+</div>
+
+<Flop.Phoenix.pagination opts={pagination_opts()} meta={@meta} path={~p"/cases"} />
+
+<.modal :if={@live_action in [:new, :edit]} id="case-modal" show on_cancel={JS.patch(~p"/cases")}>
+  <.live_component
+    module={CaseManagerWeb.CaseLive.FormComponent}
+    id={@case.id || :new}
+    title={@page_title}
+    action={@live_action}
+    case={@case}
+    patch={~p"/cases"}
+  />
+</.modal>

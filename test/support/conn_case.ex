@@ -1,4 +1,4 @@
-defmodule EventsWeb.ConnCase do
+defmodule CaseManagerWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -11,7 +11,7 @@ defmodule EventsWeb.ConnCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use EventsWeb.ConnCase, async: true`, although
+  by setting `use CaseManagerWeb.ConnCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -20,19 +20,19 @@ defmodule EventsWeb.ConnCase do
   using do
     quote do
       # The default endpoint for testing
-      @endpoint EventsWeb.Endpoint
+      @endpoint CaseManagerWeb.Endpoint
 
-      use EventsWeb, :verified_routes
+      use CaseManagerWeb, :verified_routes
 
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
-      import EventsWeb.ConnCase
+      import CaseManagerWeb.ConnCase
     end
   end
 
   setup tags do
-    Events.DataCase.setup_sandbox(tags)
+    CaseManager.DataCase.setup_sandbox(tags)
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 
@@ -45,7 +45,7 @@ defmodule EventsWeb.ConnCase do
   test context.
   """
   def register_and_log_in_user(%{conn: conn}) do
-    user = Events.AccountsFixtures.user_fixture()
+    user = CaseManager.AccountsFixtures.user_fixture()
     %{conn: log_in_user(conn, user), user: user}
   end
 
@@ -55,7 +55,7 @@ defmodule EventsWeb.ConnCase do
   It returns an updated `conn`.
   """
   def log_in_user(conn, user) do
-    token = Events.Accounts.generate_user_session_token(user)
+    token = CaseManager.Accounts.generate_user_session_token(user)
 
     conn
     |> Phoenix.ConnTest.init_test_session(%{})

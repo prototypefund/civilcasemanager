@@ -1,0 +1,145 @@
+<div class="flex gap-4 flex-wrap items-start h-full">
+  <div class="grow shrink-1 basis-1/1 sm:basis-3/12 h-full">
+    <!-- Either render the edit form-->
+    <.live_component
+      :if={@live_action == :edit}
+      module={CaseManagerWeb.CaseLive.FormComponent}
+      id={@case.id}
+      title={@page_title}
+      action={@live_action}
+      case={@case}
+      patch={~p"/cases/#{@case}"}
+    />
+    <!-- ..or the details view -->
+    <div :if={@live_action == :show} class="flex flex-col h-full">
+      <.header class="mb-4">
+        <%= @case.name %>
+        <:actions>
+          <.link patch={~p"/cases/#{@case}/show/edit"} phx-click={JS.push_focus()}>
+            <.button>Edit case</.button>
+          </.link>
+          <!--<a class="mx-1" href={get_mailto_link(@case)}>
+            <.button>Send email</.button>
+          </a>-->
+        </:actions>
+      </.header>
+      <div class="h-full overflow-y-scroll pb-8 pr-4">
+        <.list>
+          <:item title="Notes"><%= @case.notes %></:item>
+          <:item title="Created at"><%= @case.created_at %></:item>
+          <:item title="Status"><%= @case.status %></:item>
+          <:item title="Occured at"><%= @case.occurred_at %></:item>
+        </.list>
+        <.h1 class="text-indigo-600 pt-8">Departure</.h1>
+        <.list>
+          <:item title="Departure region"><%= @case.departure_region %></:item>
+          <:item title="Place of departure"><%= @case.place_of_departure %></:item>
+          <:item title="Time of departure"><%= @case.time_of_departure %></:item>
+          <:item title="SAR region"><%= @case.sar_region %></:item>
+        </.list>
+        <.h1 class="text-indigo-600 pt-8">Involved parties</.h1>
+        <.list>
+          <:item title="Phone number"><%= @case.phonenumber %></:item>
+          <:item title="Alarmphone contact"><%= @case.alarmphone_contact %></:item>
+          <:item title="Confirmation by"><%= @case.confirmation_by %></:item>
+          <:item title="Actors involved"><%= @case.actors_involved %></:item>
+          <:item title="Authorities alerted"><%= @case.authorities_alerted %></:item>
+          <:item title="Authorities details"><%= @case.authorities_details %></:item>
+        </.list>
+        <.h1 class="text-indigo-600 pt-8">The boat</.h1>
+        <.list>
+          <:item title="Boat type"><%= @case.boat_type %></:item>
+          <:item title="Boat notes"><%= @case.boat_notes %></:item>
+          <:item title="Boat color"><%= @case.boat_color %></:item>
+          <:item title="Boat engine status"><%= @case.boat_engine_status %></:item>
+          <:item title="Boat engine working"><%= @case.boat_engine_working %></:item>
+          <:item title="Boat number of engines"><%= @case.boat_number_of_engines %></:item>
+        </.list>
+        <.h1 class="text-indigo-600 pt-8">People on Board</.h1>
+        <.list>
+          <:item title="Total"><%= @case.pob_total %></:item>
+          <:item title="Men"><%= @case.pob_men %></:item>
+          <:item title="Women"><%= @case.pob_women %></:item>
+          <:item title="Minors"><%= @case.pob_minors %></:item>
+          <:item title="Gender ambiguous"><%= @case.pob_gender_ambiguous %></:item>
+          <:item title="Medical cases"><%= @case.pob_medical_cases %></:item>
+          <:item title="People dead"><%= @case.people_dead %></:item>
+          <:item title="People missing"><%= @case.people_missing %></:item>
+          <:item title="Per nationality"><%= @case.pob_per_nationality %></:item>
+        </.list>
+        <.h1 class="text-indigo-600 pt-8">Outcome</.h1>
+        <.list>
+          <:item title="Time of disembarkation"><%= @case.time_of_disembarkation %></:item>
+          <:item title="Place of disembarkation"><%= @case.place_of_disembarkation %></:item>
+          <:item title="Disembarked by"><%= @case.disembarked_by %></:item>
+          <:item title="Outcome actors"><%= @case.outcome_actors %></:item>
+          <:item title="Outcome"><%= @case.outcome %></:item>
+          <:item title="Frontext involvement"><%= @case.frontext_involvement %></:item>
+          <:item title="Followup needed"><%= @case.followup_needed %></:item>
+        </.list>
+        <.h1 class="text-indigo-600 pt-8">Meta</.h1>
+        <.list>
+          <:item title="Imported from"><%= @case.imported_from %></:item>
+          <:item title="Template"><%= @case.template %></:item>
+          <:item title="Url"><%= @case.url %></:item>
+          <:item title="Cloud file links"><%= @case.cloud_file_links %></:item>
+        </.list>
+      </div>
+    </div>
+  </div>
+
+  <div class="grow shrink-1 basis-1/1 sm:basis-3/12">
+    <.h1>Associated Positions</.h1>
+
+    <div phx-update="stream" id="assoc_positions">
+      <ul>
+        <%= for {id, position} <- @streams.assoc_positions do %>
+          <li id={id} phx-click={JS.navigate(~p"/positions/#{position}")} class="text-sm">
+            <%= position.timestamp %>, <%= position.lat %>, <%= position.lon %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+
+    <.h1>Associated CaseManager</.h1>
+    <.live_component
+      module={CaseManagerWeb.EventLive.FormSmall}
+      id={:new}
+      title={@page_title}
+      action={@live_action}
+      case={@case}
+      event={%Event{}}
+      current_user={@current_user}
+      patch={~p"/events"}
+    />
+
+    <div phx-update="stream" id="assoc_events">
+      <%= for {id, event} <- @streams.assoc_events do %>
+        <div id={id} phx-click={JS.navigate(~p"/events/#{event}")} phx-hook="FadeIn" class="py-3">
+          <.card id={id}>
+            <:icon>
+              <.icon name={CaseManager.FetchSupervisor.get_icon_for(event.type)} class="h-4 w-4" />
+            </:icon>
+            <:title>
+              <a href={~p"/events/#{event}"} class="">
+                <%= event.title %>
+              </a>
+            </:title>
+            <:tag>
+              <.tag_badge color={CaseManager.FetchSupervisor.get_color_for(event.type)}>
+                <%= event.type %>
+              </.tag_badge>
+            </:tag>
+            <:timestamp>
+              <.timestamp timestamp={event.received_at} />
+            </:timestamp>
+            <%= raw(Earmark.as_html!(event.body)) %>
+          </.card>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<div class="shadow-lg z-10 fixed bottom-0 right-0 left-0 bg-indigo-100">
+  <.back class="!mt-0 p-2 w-screen" navigate={~p"/cases"}>Return to overview</.back>
+</div>

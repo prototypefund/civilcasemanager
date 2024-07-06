@@ -9,8 +9,8 @@ module.exports = {
   darkMode: 'selector',
   content: [
     "./js/**/*.js",
-    "../lib/events_web.ex",
-    "../lib/events_web/**/*.*ex",
+    "../lib/case_manager_web.ex",
+    "../lib/case_manager_web/**/*.*ex",
     "../lib/datasources/*.ex",
   ],
   theme: {

@@ -1,8 +1,8 @@
-defmodule Events.Repo.Migrations.ManualDefaultsToTrue do
+defmodule CaseManager.Repo.Migrations.ManualDefaultsToTrue do
   use Ecto.Migration
 
   def change do
-    alter table(:events) do
+    alter table(:case_manager) do
       modify :manual, :boolean, default: true, null: false
     end
   end

@@ -1,4 +1,4 @@
-defmodule Events.Repo.Migrations.AddUpdatedAtToCases do
+defmodule CaseManager.Repo.Migrations.AddUpdatedAtToCases do
   use Ecto.Migration
 
   def change do

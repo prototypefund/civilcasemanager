@@ -1,7 +1,7 @@
-defmodule Events.AccountsFixtures do
+defmodule CaseManager.AccountsFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `Events.Accounts` context.
+  entities via the `CaseManager.Accounts` context.
   """
 
   def unique_user_email, do: "user#{System.unique_integer()}@example.com"
@@ -18,7 +18,7 @@ defmodule Events.AccountsFixtures do
     {:ok, user} =
       attrs
       |> valid_user_attributes()
-      |> Events.Accounts.register_user()
+      |> CaseManager.Accounts.register_user()
 
     user
   end

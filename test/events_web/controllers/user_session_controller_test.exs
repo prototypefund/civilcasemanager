@@ -1,7 +1,7 @@
-defmodule EventsWeb.UserLive.SessionControllerTest do
-  use EventsWeb.ConnCase
+defmodule CaseManagerWeb.UserLive.SessionControllerTest do
+  use CaseManagerWeb.ConnCase
 
-  import Events.AccountsFixtures
+  import CaseManager.AccountsFixtures
 
   setup do
     %{user: user_fixture()}

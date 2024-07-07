@@ -2,7 +2,7 @@ defmodule CaseManager.Positions.Position do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @primary_key {:id, :string, autogenerate: false}
+  @primary_key {:id, CaseManager.StringId, autogenerate: true}
   schema "positions" do
     field :timestamp, :utc_datetime
     field :speed, :decimal
@@ -13,7 +13,8 @@ defmodule CaseManager.Positions.Position do
     field :lat, :decimal
     field :lon, :decimal
     field :imported_from, :string
-    field :pos_geo, Geo.PostGIS.Geometry
+    ## FIXME
+    # field :pos_geo, Geo.PostGIS.Geometry
     field :soft_deleted, :boolean, default: false
     field :item_id, :string
   end
@@ -22,6 +23,7 @@ defmodule CaseManager.Positions.Position do
   def changeset(position, attrs) do
     position
     |> cast(attrs, [
+      :id,
       :altitude,
       :course,
       :heading,

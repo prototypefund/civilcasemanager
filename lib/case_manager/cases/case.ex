@@ -156,6 +156,8 @@ defmodule CaseManager.Cases.Case do
   def changeset(case, attrs) do
     case
     |> cast(attrs, [
+      ## FIXME Need to generate id
+      :id,
       :notes,
       :name,
       :status,

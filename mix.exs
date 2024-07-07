@@ -66,7 +66,7 @@ defmodule CaseManager.MixProject do
       {:flop_phoenix, "~> 0.22.7"},
       {:earmark, "~> 1.1"},
       {:geo_postgis, "~> 3.6"},
-      {:credo, "~> 1.1.0", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.7.7", only: [:dev, :test], runtime: false}
     ]
   end
 

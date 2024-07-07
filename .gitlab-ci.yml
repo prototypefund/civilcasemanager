@@ -6,8 +6,63 @@
 # Note that environment variables can be set in several places
 # See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
 stages:
+- build
 - test
+
 sast:
   stage: test
 include:
 - template: Security/SAST.gitlab-ci.yml
+
+compile:
+  stage: build
+  image: elixir:1.17-alpine
+  # use cache to speed up subsequent builds
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - _build
+      - deps
+  script:
+    - mix local.hex --force
+    - mix local.rebar --force
+    - mix deps.get
+    - mix compile --warnings-as-errors
+
+unittest:
+  stage: test
+  image: elixir:1.17-alpine
+  services:
+    - postgres:16-alpine
+  variables:
+    POSTGRES_DB: phx_gitlab_ci_cd_test
+    POSTGRES_HOST: postgres
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: "postgres"
+    MIX_ENV: "test"
+  # use cache
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - _build
+      - deps
+  script:
+    - mix local.hex --force
+    - mix local.rebar --force
+    - mix ecto.setup
+    - mix test
+
+lint:
+  stage: test
+  image: elixir:1.17-alpine
+  # use cache
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - _build
+      - deps
+  script:
+    - mix local.hex --force
+    - mix local.rebar --force
+    - mix format --check-formatted     
+    - mix credo --all   

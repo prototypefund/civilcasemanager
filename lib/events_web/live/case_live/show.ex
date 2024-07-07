@@ -26,7 +26,7 @@ defmodule EventsWeb.CaseLive.Show do
     # We only call stream_insert if the received event has a case in cases with the same case_id as the case we are showing
     case = socket.assigns.case
     # Event.cases is a list of cases that the event is associated with
-    if Enum.any?(event.cases, fn assoc_case -> assoc_case.id == case.id end) do
+    if is_list(event.cases) && Enum.any?(event.cases, fn assoc_case -> assoc_case.id == case.id end) do
       {:noreply, stream_insert(socket, :assoc_events, event, at: 0)}
     else
       {:noreply, socket}

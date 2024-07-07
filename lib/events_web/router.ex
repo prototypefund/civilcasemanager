@@ -23,7 +23,6 @@ defmodule EventsWeb.Router do
 
     live_session :require_authenticated_user,
       on_mount: [{EventsWeb.UserAuth, :ensure_authenticated}] do
-      get "/", PageController, :home
 
       live "/events", EventLive.Index, :index
       live "/events/new", EventLive.Index, :new
@@ -32,6 +31,7 @@ defmodule EventsWeb.Router do
       live "/events/:id", EventLive.Show, :show
       live "/events/:id/show/edit", EventLive.Show, :edit
 
+      live "/", CaseLive.Index, :index
       live "/cases", CaseLive.Index, :index
       live "/cases/new", CaseLive.Index, :new
       live "/cases/:id/edit", CaseLive.Index, :edit

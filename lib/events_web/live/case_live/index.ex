@@ -4,8 +4,6 @@ defmodule EventsWeb.CaseLive.Index do
   alias Events.Cases
   alias Events.Cases.Case
 
-  use PhoenixHTMLHelpers
-
   import EventsWeb.LiveComponents
 
   @impl true

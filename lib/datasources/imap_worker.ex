@@ -36,7 +36,7 @@ defmodule Events.Datasources.IMAPWorker do
       from: extract_email_address(message.from),
       title: message.subject,
       received_at: DateTime.utc_now(),
-      metadata: String.replace(message.rfc822_header, "\r\n", "\n")
+      metadata: Enum.map_join(message.headers, "\n", &(Enum.join(&1, ": ")))
     }
 
     # TODO: Store the PID in context instead of looking it up every time

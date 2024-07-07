@@ -1,4 +1,5 @@
 defmodule Events.Datasources.SlackImporter do
+  alias Events.Datasources.SlackSupervisor
   use Slack.Bot
 
   require Logger
@@ -58,7 +59,7 @@ defmodule Events.Datasources.SlackImporter do
      manager_pid = Process.whereis(:fetch_manager)
 
      event = %Events.FetchEvent{
-       type: "slack",
+       type: SlackSupervisor.event_type,
        body: text,
        from: user,
        title: case_data[:identifier],

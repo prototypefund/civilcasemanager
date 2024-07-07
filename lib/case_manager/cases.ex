@@ -79,10 +79,18 @@ defmodule CaseManager.Cases do
 
   """
   def get_case!(id) do
-    Repo.one(
+    Repo.one!(
       from c in Case,
         where: c.id == ^id,
         preload: [:events]
+    )
+  end
+
+  # Disable preload
+  def get_case!(id, _preload = false) do
+    Repo.one!(
+      from c in Case,
+        where: c.id == ^id
     )
   end
 

@@ -33,7 +33,6 @@ defmodule CaseManager.Eventlog.Event do
     ## Here are the fields than be updated through user interaction
     ## Check if complete
     |> cast(attrs, [:type, :received_at, :body, :title, :from, :metadata])
-    |> IO.inspect()
     |> assign_case(attrs[:case])
     |> assign_cases(attrs["cases"])
     |> validate_required([:type, :body])

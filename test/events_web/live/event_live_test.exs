@@ -6,18 +6,20 @@ defmodule CaseManagerWeb.EventLiveTest do
 
   @create_attrs %{
     body: "some body",
-    time: "some time",
     title: "some title",
     type: "some type"
   }
   @update_attrs %{
     body: "some updated body",
-    origin: "some updated origin",
-    time: "some updated time",
     title: "some updated title",
     type: "some updated type"
   }
-  @invalid_attrs %{body: nil, case_id: nil, origin: nil, time: nil, title: nil, type: nil}
+  @invalid_attrs %{
+    body: nil,
+    case_id: nil,
+    title: nil,
+    type: nil
+  }
 
   defp create_event(_) do
     event = event_fixture()

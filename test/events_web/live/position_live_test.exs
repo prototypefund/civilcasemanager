@@ -85,7 +85,7 @@ defmodule CaseManagerWeb.PositionLiveTest do
       assert html =~ position.id
     end
 
-    test "saves new position", %{conn: conn} do
+    test "saves new position", %{conn: conn, user: user} do
       {:ok, index_live, _html} = live(conn, ~p"/positions")
 
       assert index_live |> element("a", "New Position") |> render_click() =~

@@ -36,10 +36,18 @@ defmodule CaseManager.Eventlog do
 
   """
   def get_event!(id) do
-    Repo.one(
+    Repo.one!(
       from e in Event,
         where: e.id == ^id,
         preload: [:cases]
+    )
+  end
+
+  # TODO come with a better solution for tests
+  def get_event!(id, _preload = false) do
+    Repo.one!(
+      from e in Event,
+        where: e.id == ^id
     )
   end
 

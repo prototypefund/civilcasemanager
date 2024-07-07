@@ -30,38 +30,92 @@ defmodule CaseManager.CasesTest do
 
     test "get_case!/1 returns the case with given id" do
       case = case_fixture()
-      assert Cases.get_case!(case.id) == case
+      assert Cases.get_case!(case.id, false) == case
     end
 
     test "create_case/1 with valid data creates a case" do
       valid_attrs = %{
-        archived_at: ~U[2024-03-07 08:58:00Z],
-        closed_at: ~U[2024-03-07 08:58:00Z],
-        created_at: ~U[2024-03-07 08:58:00Z],
-        deleted_at: ~U[2024-03-07 08:58:00Z],
-        description: "some description",
-        identifier: "some identifier",
-        is_archived: true,
-        opened_at: ~U[2024-03-07 08:58:00Z],
-        status: "some status",
-        status_note: "some status_note",
-        title: "some title",
-        updated_at: ~U[2024-03-07 08:58:00Z]
+        ## FIXME should autogenerate these
+        id: "some id",
+        name: "TC0012",
+        notes: "some notes",
+        status: :open,
+        occurred_at: ~U[2024-03-08 08:58:00Z],
+        departure_region: "some departure_region",
+        place_of_departure: "some place_of_departure",
+        time_of_departure: ~U[2024-03-08 08:58:00Z],
+        sar_region: :sar1,
+        phonenumber: "some phonenumber",
+        alarmphone_contact: "some alarmphone_contact",
+        confirmation_by: "some confirmation_by",
+        actors_involved: "some actors_involved",
+        authorities_alerted: true,
+        authorities_details: "some authorities_details",
+        boat_type: :rubber,
+        boat_notes: "some boat_notes",
+        boat_color: :red,
+        boat_engine_status: "some boat_engine_status",
+        boat_engine_working: "some boat_engine_working",
+        boat_number_of_engines: 42,
+        pob_total: 42,
+        pob_men: 42,
+        pob_women: 42,
+        pob_minors: 42,
+        pob_gender_ambiguous: 42,
+        pob_medical_cases: 42,
+        people_dead: 42,
+        people_missing: 42,
+        pob_per_nationality: "some pob_per_nationality",
+        outcome: :interception_libya,
+        time_of_disembarkation: ~U[2024-03-08 08:58:00Z],
+        place_of_disembarkation: "some place_of_disembarkation",
+        disembarked_by: "some disembarked_by",
+        outcome_actors: "some outcome_actors",
+        frontext_involvement: "some frontext_involvement",
+        followup_needed: true,
+        url: "some url",
+        cloud_file_links: "some cloud_file_links"
       }
 
       assert {:ok, %Case{} = case} = Cases.create_case(valid_attrs)
-      assert case.archived_at == ~U[2024-03-07 08:58:00Z]
-      assert case.closed_at == ~U[2024-03-07 08:58:00Z]
-      assert case.created_at == ~U[2024-03-07 08:58:00Z]
-      assert case.deleted_at == ~U[2024-03-07 08:58:00Z]
-      assert case.description == "some description"
-      assert case.identifier == "some identifier"
-      assert case.is_archived == true
-      assert case.opened_at == ~U[2024-03-07 08:58:00Z]
-      assert case.status == "some status"
-      assert case.status_note == "some status_note"
-      assert case.title == "some title"
-      assert case.updated_at == ~U[2024-03-07 08:58:00Z]
+      assert case.name == "TC0012"
+      assert case.notes == "some notes"
+      assert case.status == :open
+      assert case.occurred_at == ~U[2024-03-08 08:58:00Z]
+      assert case.departure_region == "some departure_region"
+      assert case.place_of_departure == "some place_of_departure"
+      assert case.time_of_departure == ~U[2024-03-08 08:58:00Z]
+      assert case.sar_region == :sar1
+      assert case.phonenumber == "some phonenumber"
+      assert case.alarmphone_contact == "some alarmphone_contact"
+      assert case.confirmation_by == "some confirmation_by"
+      assert case.actors_involved == "some actors_involved"
+      assert case.authorities_alerted == true
+      assert case.authorities_details == "some authorities_details"
+      assert case.boat_type == :rubber
+      assert case.boat_notes == "some boat_notes"
+      assert case.boat_color == :red
+      assert case.boat_engine_status == "some boat_engine_status"
+      assert case.boat_engine_working == "some boat_engine_working"
+      assert case.boat_number_of_engines == 42
+      assert case.pob_total == 42
+      assert case.pob_men == 42
+      assert case.pob_women == 42
+      assert case.pob_minors == 42
+      assert case.pob_gender_ambiguous == 42
+      assert case.pob_medical_cases == 42
+      assert case.people_dead == 42
+      assert case.people_missing == 42
+      assert case.pob_per_nationality == "some pob_per_nationality"
+      assert case.outcome == :interception_libya
+      assert case.time_of_disembarkation == ~U[2024-03-08 08:58:00Z]
+      assert case.place_of_disembarkation == "some place_of_disembarkation"
+      assert case.disembarked_by == "some disembarked_by"
+      assert case.outcome_actors == "some outcome_actors"
+      assert case.frontext_involvement == "some frontext_involvement"
+      assert case.followup_needed == true
+      assert case.url == "some url"
+      assert case.cloud_file_links == "some cloud_file_links"
     end
 
     test "create_case/1 with invalid data returns error changeset" do
@@ -72,39 +126,92 @@ defmodule CaseManager.CasesTest do
       case = case_fixture()
 
       update_attrs = %{
-        archived_at: ~U[2024-03-08 08:58:00Z],
-        closed_at: ~U[2024-03-08 08:58:00Z],
-        created_at: ~U[2024-03-08 08:58:00Z],
-        deleted_at: ~U[2024-03-08 08:58:00Z],
-        description: "some updated description",
-        identifier: "some updated identifier",
-        is_archived: false,
-        opened_at: ~U[2024-03-08 08:58:00Z],
-        status: "some updated status",
-        status_note: "some updated status_note",
-        title: "some updated title",
-        updated_at: ~U[2024-03-08 08:58:00Z]
+        name: "DC0011",
+        notes: "some updated notes",
+        status: :closed,
+        occurred_at: ~U[2024-03-08 08:58:00Z],
+        departure_region: "some updated departure_region",
+        place_of_departure: "some updated place_of_departure",
+        time_of_departure: ~U[2024-03-08 08:58:00Z],
+        sar_region: :sar1,
+        phonenumber: "some updated phonenumber",
+        alarmphone_contact: "some updated alarmphone_contact",
+        confirmation_by: "some updated confirmation_by",
+        actors_involved: "some updated actors_involved",
+        authorities_alerted: true,
+        authorities_details: "some updated authorities_details",
+        boat_type: :rubber,
+        boat_notes: "some updated boat_notes",
+        boat_color: :red,
+        boat_engine_status: "some updated boat_engine_status",
+        boat_engine_working: "some updated boat_engine_working",
+        boat_number_of_engines: 42,
+        pob_total: 42,
+        pob_men: 42,
+        pob_women: 42,
+        pob_minors: 42,
+        pob_gender_ambiguous: 42,
+        pob_medical_cases: 42,
+        people_dead: 42,
+        people_missing: 42,
+        pob_per_nationality: "some updated pob_per_nationality",
+        outcome: :interception_libya,
+        time_of_disembarkation: ~U[2024-03-08 08:58:00Z],
+        place_of_disembarkation: "some updated place_of_disembarkation",
+        disembarked_by: "some updated disembarked_by",
+        outcome_actors: "some updated outcome_actors",
+        frontext_involvement: "some updated frontext_involvement",
+        followup_needed: true,
+        url: "some updated url",
+        cloud_file_links: "some updated cloud_file_links"
       }
 
       assert {:ok, %Case{} = case} = Cases.update_case(case, update_attrs)
-      assert case.archived_at == ~U[2024-03-08 08:58:00Z]
-      assert case.closed_at == ~U[2024-03-08 08:58:00Z]
-      assert case.created_at == ~U[2024-03-08 08:58:00Z]
-      assert case.deleted_at == ~U[2024-03-08 08:58:00Z]
-      assert case.description == "some updated description"
-      assert case.identifier == "some updated identifier"
-      assert case.is_archived == false
-      assert case.opened_at == ~U[2024-03-08 08:58:00Z]
-      assert case.status == "some updated status"
-      assert case.status_note == "some updated status_note"
-      assert case.title == "some updated title"
-      assert case.updated_at == ~U[2024-03-08 08:58:00Z]
+
+      assert case.name == "DC0011"
+      assert case.notes == "some updated notes"
+      assert case.status == :closed
+      assert case.occurred_at == ~U[2024-03-08 08:58:00Z]
+      assert case.departure_region == "some updated departure_region"
+      assert case.place_of_departure == "some updated place_of_departure"
+      assert case.time_of_departure == ~U[2024-03-08 08:58:00Z]
+      assert case.sar_region == :sar1
+      assert case.phonenumber == "some updated phonenumber"
+      assert case.alarmphone_contact == "some updated alarmphone_contact"
+      assert case.confirmation_by == "some updated confirmation_by"
+      assert case.actors_involved == "some updated actors_involved"
+      assert case.authorities_alerted == true
+      assert case.authorities_details == "some updated authorities_details"
+      assert case.boat_type == :rubber
+      assert case.boat_notes == "some updated boat_notes"
+      assert case.boat_color == :red
+      assert case.boat_engine_status == "some updated boat_engine_status"
+      assert case.boat_engine_working == "some updated boat_engine_working"
+      assert case.boat_number_of_engines == 42
+      assert case.pob_total == 42
+      assert case.pob_men == 42
+      assert case.pob_women == 42
+      assert case.pob_minors == 42
+      assert case.pob_gender_ambiguous == 42
+      assert case.pob_medical_cases == 42
+      assert case.people_dead == 42
+      assert case.people_missing == 42
+      assert case.pob_per_nationality == "some updated pob_per_nationality"
+      assert case.outcome == :interception_libya
+      assert case.time_of_disembarkation == ~U[2024-03-08 08:58:00Z]
+      assert case.place_of_disembarkation == "some updated place_of_disembarkation"
+      assert case.disembarked_by == "some updated disembarked_by"
+      assert case.outcome_actors == "some updated outcome_actors"
+      assert case.frontext_involvement == "some updated frontext_involvement"
+      assert case.followup_needed == true
+      assert case.url == "some updated url"
+      assert case.cloud_file_links == "some updated cloud_file_links"
     end
 
     test "update_case/2 with invalid data returns error changeset" do
       case = case_fixture()
       assert {:error, %Ecto.Changeset{}} = Cases.update_case(case, @invalid_attrs)
-      assert case == Cases.get_case!(case.id)
+      assert case == Cases.get_case!(case.id, false)
     end
 
     test "delete_case/1 deletes the case" do

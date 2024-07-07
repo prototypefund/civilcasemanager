@@ -12,8 +12,6 @@ defmodule CaseManager.EventlogFixtures do
       attrs
       |> Enum.into(%{
         body: "some body",
-        case_id: "some case_id",
-        time: "some time",
         title: "some title",
         type: "some type"
       })

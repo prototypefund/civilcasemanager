@@ -3,11 +3,9 @@ defmodule Events.Eventlog.Event do
   import Ecto.Changeset
   import Events.ChangesetValidators
 
-
   @derive {
     Flop.Schema,
-    filterable: [:type, :title],
-    sortable: [:received_at]
+    filterable: [:type, :title], sortable: [:received_at]
   }
 
   schema "events" do
@@ -45,27 +43,24 @@ defmodule Events.Eventlog.Event do
   defp assign_case(changeset, nil) do
     changeset
   end
+
   defp assign_case(changeset, case = %Events.Cases.Case{}) do
-    Ecto.Changeset.put_assoc(changeset, :cases,
-      [case]
-    )
+    Ecto.Changeset.put_assoc(changeset, :cases, [case])
   end
+
   defp assign_case(changeset, case) when is_binary(case) do
-    Ecto.Changeset.put_assoc(changeset, :cases,
-      Events.Cases.get_cases([case])
-    )
+    Ecto.Changeset.put_assoc(changeset, :cases, Events.Cases.get_cases([case]))
   end
 
   defp assign_cases(changeset, []), do: changeset
   defp assign_cases(changeset, nil), do: changeset
+
   defp assign_cases(changeset, cases) when is_binary(cases) do
-    { id, _ } = Integer.parse(cases)
-    Ecto.Changeset.put_assoc(changeset, :cases,
-      Events.Cases.get_cases([id])
-    )
+    {id, _} = Integer.parse(cases)
+    Ecto.Changeset.put_assoc(changeset, :cases, Events.Cases.get_cases([id]))
   end
+
   defp assign_cases(changeset, cases) when is_list(cases) do
     Ecto.Changeset.put_assoc(changeset, :cases, Events.Cases.get_cases(cases))
   end
-
 end

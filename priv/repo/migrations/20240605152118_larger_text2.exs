@@ -3,6 +3,7 @@ defmodule Events.Repo.Migrations.LargerText2 do
 
   def change do
     rename table(:events), :origin, to: :from
+
     alter table(:events) do
       modify :body, :text
       modify :metadata, :text

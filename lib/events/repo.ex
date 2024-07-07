@@ -1,5 +1,4 @@
 defmodule Events.Repo do
-
   Postgrex.Types.define(
     OnefleetApi.PostgresTypes,
     [Geo.PostGIS.Extension] ++ Ecto.Adapters.Postgres.extensions()

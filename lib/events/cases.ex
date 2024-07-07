@@ -21,7 +21,6 @@ defmodule Events.Cases do
     Repo.all(from c in Case, order_by: [desc: c.created_at])
   end
 
-
   @doc """
   Returns the list of cases using Flop
 
@@ -65,7 +64,6 @@ defmodule Events.Cases do
     Repo.all(from c in Case, where: c.status == :open, order_by: [desc: c.created_at])
   end
 
-
   @doc """
   Gets a single case.
 
@@ -83,8 +81,8 @@ defmodule Events.Cases do
   def get_case!(id) do
     Repo.one(
       from c in Case,
-      where: c.id == ^id,
-      preload: [:events]
+        where: c.id == ^id,
+        preload: [:events]
     )
   end
 
@@ -232,9 +230,9 @@ defmodule Events.Cases do
   Broadcasts changes to the case.
   """
   def broadcast({:error, changeset}, _change_type), do: {:error, changeset}
+
   def broadcast({:ok, case}, change_type) do
     Phoenix.PubSub.broadcast(Events.PubSub, "cases", {change_type, case})
     {:ok, case}
   end
-
 end

@@ -33,10 +33,8 @@ defmodule EventsWeb.LiveComponents do
           {i.rest}
         />
       </.filter_fields>
-
       <!--<button class="button hero-x-circle-solid" name="reset">reset</button>-->
     </.form>
     """
   end
-
 end

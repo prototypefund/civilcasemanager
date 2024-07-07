@@ -97,7 +97,6 @@ defmodule Events.Accounts do
     Repo.all(User)
   end
 
-
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking user changes.
 

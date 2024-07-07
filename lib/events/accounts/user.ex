@@ -98,7 +98,6 @@ defmodule Events.Accounts.User do
     |> cast(attrs, [:name, :role, :email])
   end
 
-
   @doc """
   A user changeset for changing the email.
 

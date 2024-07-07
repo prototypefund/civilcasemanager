@@ -201,6 +201,7 @@ defmodule EventsWeb.UserLive.Auth do
   """
   def require_authenticated_user(conn, _opts) do
     IO.puts("HERE2")
+
     if conn.assigns[:current_user] do
       conn
     else

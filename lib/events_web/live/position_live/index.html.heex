@@ -39,7 +39,12 @@
   </:action>
 </.table>
 
-<.modal :if={@live_action in [:new, :edit]} id="position-modal" show on_cancel={JS.patch(~p"/positions")}>
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="position-modal"
+  show
+  on_cancel={JS.patch(~p"/positions")}
+>
   <.live_component
     module={EventsWeb.PositionLive.FormComponent}
     id={@position.id || :new}

@@ -38,8 +38,8 @@ defmodule Events.Eventlog do
   def get_event!(id) do
     Repo.one(
       from e in Event,
-      where: e.id == ^id,
-      preload: [:cases]
+        where: e.id == ^id,
+        preload: [:cases]
     )
   end
 
@@ -81,7 +81,6 @@ defmodule Events.Eventlog do
     |> broadcast(:event_updated)
   end
 
-
   @doc """
   Deletes a event.
 
@@ -116,9 +115,9 @@ defmodule Events.Eventlog do
   end
 
   def broadcast({:error, changeset}, _change_type), do: {:error, changeset}
+
   def broadcast({:ok, event}, change_type) do
     Phoenix.PubSub.broadcast(Events.PubSub, "events", {change_type, event})
     {:ok, event}
   end
-
 end

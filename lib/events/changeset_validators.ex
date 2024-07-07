@@ -1,5 +1,4 @@
 defmodule Events.ChangesetValidators do
-
   import Ecto.Changeset
 
   @doc """
@@ -12,7 +11,6 @@ defmodule Events.ChangesetValidators do
     end
   end
 
-
   @doc """
   Truncate a field to a maximum length.
   """
@@ -20,13 +18,13 @@ defmodule Events.ChangesetValidators do
     current_value = get_field(changeset, field)
 
     # Ensure current_value is not nil before slicing
-    truncated_value = if !is_nil(current_value) and String.length(current_value) > max_length do
-      String.slice(current_value, 0, max_length) <> "…"
-    else
-      current_value
-    end
+    truncated_value =
+      if !is_nil(current_value) and String.length(current_value) > max_length do
+        String.slice(current_value, 0, max_length) <> "…"
+      else
+        current_value
+      end
 
     put_change(changeset, field, truncated_value)
   end
-
 end

@@ -33,7 +33,7 @@ defmodule EventsWeb.EventLive.FormComponent do
           multiple
           autocomplete="on"
           options={Enum.map(Events.Cases.list_open_cases(), &{&1.identifier, &1.id})}
-          value={if is_list(@form.data.cases), do: Enum.map(@form.data.cases, &(&1.id)), else: []}
+          value={if is_list(@form.data.cases), do: Enum.map(@form.data.cases, & &1.id), else: []}
         />
 
         <:actions>

@@ -7,7 +7,7 @@
   </:actions>
 </.header>
 
-<div phx-hook="ParentMount" id="events"  class="flex flex-wrap -mx-4" phx-update="stream">
+<div phx-hook="ParentMount" id="events" class="flex flex-wrap -mx-4" phx-update="stream">
   <%= for {id, event} <- @streams.events do %>
     <div
       id={id}
@@ -15,7 +15,7 @@
       phx-hook="FadeIn"
       class="p-3 w-full"
     >
-      <.card id={id} >
+      <.card id={id}>
         <:icon>
           <.icon name={Events.FetchSupervisor.get_icon_for(event.type)} class="h-4 w-4" />
         </:icon>
@@ -25,9 +25,9 @@
           </a>
         </:title>
         <:tag>
-           <.tag_badge color={Events.FetchSupervisor.get_color_for(event.type)}>
+          <.tag_badge color={Events.FetchSupervisor.get_color_for(event.type)}>
             <%= event.type %>
-           </.tag_badge>
+          </.tag_badge>
         </:tag>
         <:timestamp>
           <.timestamp timestamp={event.received_at} />
@@ -37,21 +37,25 @@
             <%= gettext("Edit Event") %>
           </.link>
           <.link
-          class="block"
+            class="block"
             phx-click={JS.push("delete", value: %{id: event.id}) |> hide("##{id}")}
             data-confirm="Are you sure?"
           >
             <%= gettext("Delete Event") %>
           </.link>
         </:actions>
-          <%= raw(Earmark.as_html!(event.body)) %>
+        <%= raw(Earmark.as_html!(event.body)) %>
       </.card>
     </div>
   <% end %>
 </div>
 
-
-<.modal :if={@live_action in [:new, :edit]} id="event-modal" show on_cancel={JS.patch(~p"/events")}>
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="event-modal"
+  show
+  on_cancel={JS.patch(~p"/events")}
+>
   <.live_component
     module={EventsWeb.EventLive.FormComponent}
     id={@event.id || :new}

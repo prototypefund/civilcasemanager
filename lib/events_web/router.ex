@@ -22,8 +22,7 @@ defmodule EventsWeb.Router do
     pipe_through [:browser, :require_authenticated_user]
 
     live_session :require_authenticated_user,
-    on_mount: [{EventsWeb.UserLive.Auth, :ensure_authenticated}] do
-
+      on_mount: [{EventsWeb.UserLive.Auth, :ensure_authenticated}] do
       live "/events", EventLive.Index, :index
       live "/events/:id", EventLive.Show, :show
       live "/", CaseLive.Index, :index
@@ -31,7 +30,6 @@ defmodule EventsWeb.Router do
       live "/cases/:id", CaseLive.Show, :show
       live "/users/settings", UserLive.Settings, :edit
       live "/users/settings/confirm_email/:token", UserLive.Settings, :confirm_email
-
     end
   end
 
@@ -40,7 +38,7 @@ defmodule EventsWeb.Router do
     pipe_through [:browser, :require_write_user]
 
     live_session :require_write_user,
-    on_mount: [{EventsWeb.UserLive.Auth, :ensure_authenticated}] do
+      on_mount: [{EventsWeb.UserLive.Auth, :ensure_authenticated}] do
       live "/cases/new", CaseLive.Index, :new
       live "/cases/:id/edit", CaseLive.Index, :edit
       live "/cases/:id/show/edit", CaseLive.Show, :edit
@@ -55,8 +53,7 @@ defmodule EventsWeb.Router do
     pipe_through [:browser, :require_admin_user]
 
     live_session :require_admin_user,
-    on_mount: [{EventsWeb.UserLive.Auth, :ensure_authenticated}] do
-
+      on_mount: [{EventsWeb.UserLive.Auth, :ensure_authenticated}] do
       live "/users", UserLive.Index, :index
       live "/users/new", UserLive.Index, :new
       live "/users/:id/edit", UserLive.Index, :edit
@@ -79,8 +76,6 @@ defmodule EventsWeb.Router do
     post "/users/log_in", UserLive.SessionController, :create
   end
 
-
-
   scope "/", EventsWeb do
     pipe_through [:browser]
 
@@ -92,7 +87,6 @@ defmodule EventsWeb.Router do
       live "/users/confirm", UserLive.ConfirmationInstructions, :new
     end
   end
-
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:events, :dev_routes) do

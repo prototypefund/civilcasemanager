@@ -19,16 +19,20 @@
   <:item title="Cases">
     <%= for case <- @event.cases do %>
       <div class={"#{if case.status == :open, do: 'bg-emerald-200 border-emerald-300', else: 'bg-gray-200 border-gray-300' } border   rounded-md px-2 py-1"}>
-        <a href={~p"/cases/#{case}"}> <%= case.identifier %> </a>
+        <a href={~p"/cases/#{case}"}><%= case.identifier %></a>
       </div>
     <% end %>
   </:item>
 </.list>
 
-
 <.back navigate={~p"/events"}>Back to events</.back>
 
-<.modal :if={@live_action == :edit} id="event-modal" show on_cancel={JS.patch(~p"/events/#{@event}")}>
+<.modal
+  :if={@live_action == :edit}
+  id="event-modal"
+  show
+  on_cancel={JS.patch(~p"/events/#{@event}")}
+>
   <.live_component
     module={EventsWeb.EventLive.FormComponent}
     id={@event.id}

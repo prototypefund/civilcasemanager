@@ -19,13 +19,15 @@ defmodule Events.FetchManager do
     IO.inspect(event, label: "Manager received a new event")
 
     # Convert the struct to a map before insertion
-    event_map = event
+    event_map =
+      event
       |> Map.from_struct()
 
     # Use Event.changeset/2 for insertion as before
     case %Event{} |> Event.changeset(event_map) |> Repo.insert() |> broadcast(:event_created) do
       {:ok, _event_inserted} ->
         IO.puts("Event successfully inserted into the database")
+
       {:error, changeset} ->
         IO.inspect(changeset.errors, label: "Failed to insert event")
     end

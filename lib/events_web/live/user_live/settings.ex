@@ -11,7 +11,7 @@ defmodule EventsWeb.UserLive.Settings do
     </.header>
 
     <div class="space-y-12 divide-y">
-       <div>
+      <div>
         <.simple_form
           for={@generic_form}
           id="generic_form"

@@ -22,7 +22,12 @@ defmodule EventsWeb.EventLive.FormSmall do
         <.input field={@form[:from]} type="hidden" value={@current_user.name} />
         <.input field={@form[:cases]} type="hidden" value={@case.id} />
         <:actions>
-            <.button phx-disable-with="Saving..." class="-mt-5 text-white !bg-indigo-600 rounded-md !hover:bg-indigo-500 ml-auto">Submit</.button>
+          <.button
+            phx-disable-with="Saving..."
+            class="-mt-5 text-white !bg-indigo-600 rounded-md !hover:bg-indigo-500 ml-auto"
+          >
+            Submit
+          </.button>
         </:actions>
       </.simple_form>
     </div>
@@ -54,10 +59,11 @@ defmodule EventsWeb.EventLive.FormSmall do
       {:ok, event} ->
         notify_parent({:saved, event})
 
-        {:noreply,
-         socket
-         |> put_flash(:info, "Event created successfully")
-         #put_patch...
+        {
+          :noreply,
+          socket
+          |> put_flash(:info, "Event created successfully")
+          # put_patch...
         }
 
       {:error, %Ecto.Changeset{} = changeset} ->

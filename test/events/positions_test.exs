@@ -8,7 +8,19 @@ defmodule Events.PositionsTest do
 
     import Events.PositionsFixtures
 
-    @invalid_attrs %{id: nil, timestamp: nil, speed: nil, source: nil, altitude: nil, course: nil, heading: nil, lat: nil, lon: nil, imported_from: nil, soft_deleted: nil}
+    @invalid_attrs %{
+      id: nil,
+      timestamp: nil,
+      speed: nil,
+      source: nil,
+      altitude: nil,
+      course: nil,
+      heading: nil,
+      lat: nil,
+      lon: nil,
+      imported_from: nil,
+      soft_deleted: nil
+    }
 
     test "list_positions/0 returns all positions" do
       position = position_fixture()
@@ -21,7 +33,19 @@ defmodule Events.PositionsTest do
     end
 
     test "create_position/1 with valid data creates a position" do
-      valid_attrs = %{id: "some id", timestamp: ~U[2024-07-04 16:34:00Z], speed: "120.5", source: "some source", altitude: "120.5", course: "120.5", heading: "120.5", lat: "120.5", lon: "120.5", imported_from: "some imported_from", soft_deleted: true}
+      valid_attrs = %{
+        id: "some id",
+        timestamp: ~U[2024-07-04 16:34:00Z],
+        speed: "120.5",
+        source: "some source",
+        altitude: "120.5",
+        course: "120.5",
+        heading: "120.5",
+        lat: "120.5",
+        lon: "120.5",
+        imported_from: "some imported_from",
+        soft_deleted: true
+      }
 
       assert {:ok, %Position{} = position} = Positions.create_position(valid_attrs)
       assert position.id == "some id"
@@ -43,7 +67,20 @@ defmodule Events.PositionsTest do
 
     test "update_position/2 with valid data updates the position" do
       position = position_fixture()
-      update_attrs = %{id: "some updated id", timestamp: ~U[2024-07-05 16:34:00Z], speed: "456.7", source: "some updated source", altitude: "456.7", course: "456.7", heading: "456.7", lat: "456.7", lon: "456.7", imported_from: "some updated imported_from", soft_deleted: false}
+
+      update_attrs = %{
+        id: "some updated id",
+        timestamp: ~U[2024-07-05 16:34:00Z],
+        speed: "456.7",
+        source: "some updated source",
+        altitude: "456.7",
+        course: "456.7",
+        heading: "456.7",
+        lat: "456.7",
+        lon: "456.7",
+        imported_from: "some updated imported_from",
+        soft_deleted: false
+      }
 
       assert {:ok, %Position{} = position} = Positions.update_position(position, update_attrs)
       assert position.id == "some updated id"

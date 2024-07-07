@@ -29,6 +29,7 @@ defmodule Events.Application do
       max_restarts: 5,
       max_seconds: 10
     ]
+
     Supervisor.start_link(children, opts)
   end
 

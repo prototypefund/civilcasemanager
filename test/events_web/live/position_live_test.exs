@@ -4,9 +4,45 @@ defmodule EventsWeb.PositionLiveTest do
   import Phoenix.LiveViewTest
   import Events.PositionsFixtures
 
-  @create_attrs %{id: "some id", timestamp: "2024-07-04T16:34:00Z", speed: "120.5", source: "some source", altitude: "120.5", course: "120.5", heading: "120.5", lat: "120.5", lon: "120.5", imported_from: "some imported_from", soft_deleted: true}
-  @update_attrs %{id: "some updated id", timestamp: "2024-07-05T16:34:00Z", speed: "456.7", source: "some updated source", altitude: "456.7", course: "456.7", heading: "456.7", lat: "456.7", lon: "456.7", imported_from: "some updated imported_from", soft_deleted: false}
-  @invalid_attrs %{id: nil, timestamp: nil, speed: nil, source: nil, altitude: nil, course: nil, heading: nil, lat: nil, lon: nil, imported_from: nil, soft_deleted: false}
+  @create_attrs %{
+    id: "some id",
+    timestamp: "2024-07-04T16:34:00Z",
+    speed: "120.5",
+    source: "some source",
+    altitude: "120.5",
+    course: "120.5",
+    heading: "120.5",
+    lat: "120.5",
+    lon: "120.5",
+    imported_from: "some imported_from",
+    soft_deleted: true
+  }
+  @update_attrs %{
+    id: "some updated id",
+    timestamp: "2024-07-05T16:34:00Z",
+    speed: "456.7",
+    source: "some updated source",
+    altitude: "456.7",
+    course: "456.7",
+    heading: "456.7",
+    lat: "456.7",
+    lon: "456.7",
+    imported_from: "some updated imported_from",
+    soft_deleted: false
+  }
+  @invalid_attrs %{
+    id: nil,
+    timestamp: nil,
+    speed: nil,
+    source: nil,
+    altitude: nil,
+    course: nil,
+    heading: nil,
+    lat: nil,
+    lon: nil,
+    imported_from: nil,
+    soft_deleted: false
+  }
 
   defp create_position(_) do
     position = position_fixture()

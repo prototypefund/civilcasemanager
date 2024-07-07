@@ -10,7 +10,8 @@ config :events, Events.Repo,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10,
   types: OnefleetApi.PostgresTypes
-  # migration_timestamps: [type: :timestamptz]
+
+# migration_timestamps: [type: :timestamptz]
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
@@ -60,7 +61,7 @@ config :events, EventsWeb.Endpoint,
     patterns: [
       ~r"priv/static/(?!uploads/).*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/.*(ex|heex)$",
+      ~r"lib/.*(ex|heex)$"
     ]
   ]
 

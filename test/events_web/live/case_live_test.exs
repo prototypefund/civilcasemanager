@@ -4,9 +4,48 @@ defmodule EventsWeb.CaseLiveTest do
   import Phoenix.LiveViewTest
   import Events.CasesFixtures
 
-  @create_attrs %{archived_at: "2024-03-07T08:58:00Z", closed_at: "2024-03-07T08:58:00Z", created_at: "2024-03-07T08:58:00Z", deleted_at: "2024-03-07T08:58:00Z", description: "some description", identifier: "some identifier", is_archived: true, opened_at: "2024-03-07T08:58:00Z", status: "some status", status_note: "some status_note", title: "some title", updated_at: "2024-03-07T08:58:00Z"}
-  @update_attrs %{archived_at: "2024-03-08T08:58:00Z", closed_at: "2024-03-08T08:58:00Z", created_at: "2024-03-08T08:58:00Z", deleted_at: "2024-03-08T08:58:00Z", description: "some updated description", identifier: "some updated identifier", is_archived: false, opened_at: "2024-03-08T08:58:00Z", status: "some updated status", status_note: "some updated status_note", title: "some updated title", updated_at: "2024-03-08T08:58:00Z"}
-  @invalid_attrs %{archived_at: nil, closed_at: nil, created_at: nil, deleted_at: nil, description: nil, identifier: nil, is_archived: false, opened_at: nil, status: nil, status_note: nil, title: nil, updated_at: nil}
+  @create_attrs %{
+    archived_at: "2024-03-07T08:58:00Z",
+    closed_at: "2024-03-07T08:58:00Z",
+    created_at: "2024-03-07T08:58:00Z",
+    deleted_at: "2024-03-07T08:58:00Z",
+    description: "some description",
+    identifier: "some identifier",
+    is_archived: true,
+    opened_at: "2024-03-07T08:58:00Z",
+    status: "some status",
+    status_note: "some status_note",
+    title: "some title",
+    updated_at: "2024-03-07T08:58:00Z"
+  }
+  @update_attrs %{
+    archived_at: "2024-03-08T08:58:00Z",
+    closed_at: "2024-03-08T08:58:00Z",
+    created_at: "2024-03-08T08:58:00Z",
+    deleted_at: "2024-03-08T08:58:00Z",
+    description: "some updated description",
+    identifier: "some updated identifier",
+    is_archived: false,
+    opened_at: "2024-03-08T08:58:00Z",
+    status: "some updated status",
+    status_note: "some updated status_note",
+    title: "some updated title",
+    updated_at: "2024-03-08T08:58:00Z"
+  }
+  @invalid_attrs %{
+    archived_at: nil,
+    closed_at: nil,
+    created_at: nil,
+    deleted_at: nil,
+    description: nil,
+    identifier: nil,
+    is_archived: false,
+    opened_at: nil,
+    status: nil,
+    status_note: nil,
+    title: nil,
+    updated_at: nil
+  }
 
   defp create_case(_) do
     case = case_fixture()

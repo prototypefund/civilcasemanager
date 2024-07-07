@@ -21,7 +21,14 @@ defmodule Events.EventlogTest do
     end
 
     test "create_event/1 with valid data creates a event" do
-      valid_attrs = %{body: "some body", case_id: "some case_id", origin: "some origin", time: "some time", title: "some title", type: "some type"}
+      valid_attrs = %{
+        body: "some body",
+        case_id: "some case_id",
+        origin: "some origin",
+        time: "some time",
+        title: "some title",
+        type: "some type"
+      }
 
       assert {:ok, %Event{} = event} = Eventlog.create_event(valid_attrs)
       assert event.body == "some body"
@@ -37,7 +44,15 @@ defmodule Events.EventlogTest do
 
     test "update_event/2 with valid data updates the event" do
       event = event_fixture()
-      update_attrs = %{body: "some updated body", case_id: "some updated case_id", origin: "some updated origin", time: "some updated time", title: "some updated title", type: "some updated type"}
+
+      update_attrs = %{
+        body: "some updated body",
+        case_id: "some updated case_id",
+        origin: "some updated origin",
+        time: "some updated time",
+        title: "some updated title",
+        type: "some updated type"
+      }
 
       assert {:ok, %Event{} = event} = Eventlog.update_event(event, update_attrs)
       assert event.body == "some updated body"

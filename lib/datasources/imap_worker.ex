@@ -21,7 +21,6 @@ defmodule Events.Datasources.IMAPWorker do
     {:ok, %{manager_pid: opts[:manager_pid]}}
   end
 
-
   @impl true
   def handle_info({:email, _client, message}, state) do
     publish_email(message, state)
@@ -37,7 +36,7 @@ defmodule Events.Datasources.IMAPWorker do
       from: extract_email_address(message.from),
       title: message.subject,
       received_at: DateTime.utc_now(),
-      metadata: Enum.map_join(message.headers, "\n", &(Enum.join(&1, ": ")))
+      metadata: Enum.map_join(message.headers, "\n", &Enum.join(&1, ": "))
     }
 
     # TODO: Store the PID in context instead of looking it up every time
@@ -48,7 +47,9 @@ defmodule Events.Datasources.IMAPWorker do
   end
 
   defp extract_body({"text/plain", _opts, actual_body}), do: actual_body
-  defp extract_body({"text/html", _opts, actual_body}), do: actual_body |> html_escape() |> safe_to_string()
+
+  defp extract_body({"text/html", _opts, actual_body}),
+    do: actual_body |> html_escape() |> safe_to_string()
 
   ## A message can contain both
   defp extract_body(body) when is_list(body) do
@@ -70,5 +71,4 @@ defmodule Events.Datasources.IMAPWorker do
     end)
     |> Enum.join(", ")
   end
-
 end

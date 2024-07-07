@@ -15,8 +15,11 @@ defmodule Events.Datasources.SlackImporter do
   # end
 
   ## Handles replys in threads (thread_ts is set)
-  def handle_event("message", %{"channel" => channel, "text" => text, "user" => user, "thread_ts" => thread_ts}, bot) do
-
+  def handle_event(
+        "message",
+        %{"channel" => channel, "text" => text, "user" => user, "thread_ts" => thread_ts},
+        bot
+      ) do
     # Use Slack API to fetch the parent thread using thread_ts
     {:ok, %{"messages" => thread_parent}} = get_thread(bot, channel, thread_ts)
 
@@ -27,17 +30,21 @@ defmodule Events.Datasources.SlackImporter do
     {status, result} = extract_data_from_title(thread_title)
 
     if status == :ok do
-      publish_event(result, text, user, Events.Cases.get_case_by_identifier(result[:identifier]) || result)
+      publish_event(
+        result,
+        text,
+        user,
+        Events.Cases.get_case_by_identifier(result[:identifier]) || result
+      )
+
       send_message(channel, "New REPLY for #{result[:identifier]}")
     else
       send_message(channel, "Error parsing the title: #{result}")
     end
   end
 
-
   ## Handles new threads (thread_ts is not set)
   def handle_event("message", %{"channel" => channel, "text" => text, "user" => user}, _bot) do
-
     # Extract the ID from the Title
     {status, result} = extract_data_from_title(text)
 
@@ -55,20 +62,20 @@ defmodule Events.Datasources.SlackImporter do
   end
 
   defp publish_event(case_data, text, user, case) do
-     # TODO: Store the PID in context instead of looking it up every time
-     manager_pid = Process.whereis(:fetch_manager)
+    # TODO: Store the PID in context instead of looking it up every time
+    manager_pid = Process.whereis(:fetch_manager)
 
-     event = %Events.FetchEvent{
-       type: SlackSupervisor.event_type,
-       body: text,
-       from: user,
-       title: case_data[:identifier],
-       received_at: DateTime.utc_now(),
-       metadata: case_data[:title] || "",
-       case: case
-     }
+    event = %Events.FetchEvent{
+      type: SlackSupervisor.event_type(),
+      body: text,
+      from: user,
+      title: case_data[:identifier],
+      received_at: DateTime.utc_now(),
+      metadata: case_data[:title] || "",
+      case: case
+    }
 
-     GenServer.cast(manager_pid, {:new_event, event})
+    GenServer.cast(manager_pid, {:new_event, event})
   end
 
   defp extract_data_from_title(string) do
@@ -76,22 +83,23 @@ defmodule Events.Datasources.SlackImporter do
     string = String.replace(string, "*", "")
 
     # Check if the string starts with any of the legal prefixes
-    found_prefix = Enum.find(@prefixes_to_import, fn prefix -> String.starts_with?(string, prefix) end)
+    found_prefix =
+      Enum.find(@prefixes_to_import, fn prefix -> String.starts_with?(string, prefix) end)
 
     case found_prefix do
       nil -> {:error, string}
-      prefix -> {:ok, String.replace(string, prefix <> " ", prefix) |> case_data_to_map() }
+      prefix -> {:ok, String.replace(string, prefix <> " ", prefix) |> case_data_to_map()}
     end
   end
 
-
-  defp case_data_to_map(title) when (is_binary(title)) do
+  defp case_data_to_map(title) when is_binary(title) do
     # Split title by " - "
     case_data_to_map(String.split(title, " - "))
   end
 
   defp case_data_to_map([case_id, created_at, additional]) do
     date = created_at |> split_date() |> fix_date()
+
     %{
       identifier: Events.Cases.Case.get_compound_identifier(case_id, date),
       created_at: date,
@@ -101,17 +109,19 @@ defmodule Events.Datasources.SlackImporter do
 
   defp case_data_to_map([case_id, created_at]) do
     date = created_at |> split_date() |> fix_date()
+
     %{
       identifier: Events.Cases.Case.get_compound_identifier(case_id, date),
-      created_at: date,
+      created_at: date
     }
   end
 
   defp case_data_to_map([case_id]) do
     date = DateTime.utc_now() |> DateTime.truncate(:second)
+
     %{
       identifier: Events.Cases.Case.get_compound_identifier(case_id, date),
-      created_at: date,
+      created_at: date
     }
   end
 
@@ -122,7 +132,6 @@ defmodule Events.Datasources.SlackImporter do
   # Parse the given date string. If it is todays date,
   # replace it by a current UTC Timestamp
   defp fix_date([day, month, year]) do
-
     # Rearrange parts to ISO 8601 format
     date_string = "#{year}-#{month}-#{day}"
 
@@ -136,7 +145,9 @@ defmodule Events.Datasources.SlackImporter do
             _ -> date_string
           end
         end
-      _ -> date_string
+
+      _ ->
+        date_string
     end
   end
 
@@ -145,16 +156,12 @@ defmodule Events.Datasources.SlackImporter do
     date_string
   end
 
-
   # Use Slack API to fetch the parent thread using thread_ts
   defp get_thread(bot, channel, ts) do
-
-    Slack.API.get("conversations.history",
+    Slack.API.get(
+      "conversations.history",
       bot.token,
-      %{channel: channel,
-      latest: ts,
-      limit: 1,
-      inclusive: true}
+      %{channel: channel, latest: ts, limit: 1, inclusive: true}
     )
   end
 end

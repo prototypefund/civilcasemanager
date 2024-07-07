@@ -33,10 +33,10 @@ defmodule EventsWeb.CaseLive.Index do
     case Cases.list_cases(params) do
       {:ok, {cases, meta}} ->
         socket
-          |> assign(:meta, meta)
-          |> stream(:cases, cases, reset: true)
-          |> assign(:page_title, "Listing Cases")
-          |> assign(:case, nil)
+        |> assign(:meta, meta)
+        |> stream(:cases, cases, reset: true)
+        |> assign(:page_title, "Listing Cases")
+        |> assign(:case, nil)
 
       {:error, _meta} ->
         # This will reset invalid parameters. Alternatively, you can assign
@@ -45,7 +45,6 @@ defmodule EventsWeb.CaseLive.Index do
         push_navigate(socket, to: ~p"/cases")
     end
   end
-
 
   @impl true
   def handle_info({:case_created, case}, socket) do
@@ -78,7 +77,8 @@ defmodule EventsWeb.CaseLive.Index do
 
   defp get_color_for_year_tag(case) do
     year = Cases.get_year_from_id(case)
-    if (year) do
+
+    if year do
       if year == Integer.to_string(Date.utc_today().year) do
         "emerald"
       else
@@ -88,8 +88,8 @@ defmodule EventsWeb.CaseLive.Index do
   end
 
   def pagination_opts() do
-
-    base = "shadow rounded-lg space-x-4 bg-indigo-600 text-white hover:bg-indigo-500 dark:hover:bg-gray-950 "
+    base =
+      "shadow rounded-lg space-x-4 bg-indigo-600 text-white hover:bg-indigo-500 dark:hover:bg-gray-950 "
 
     [
       wrapper_attrs: [class: "flex justify-center gap-2 mt-4"],
@@ -97,21 +97,23 @@ defmodule EventsWeb.CaseLive.Index do
       previous_link_attrs: [class: "order-1 py-2 px-3 " <> base],
       next_link_attrs: [class: "order-3 py-2 px-3 " <> base],
       pagination_link_attrs: [class: "py-2 px-3 " <> base],
-      current_link_attrs: [ class: "py-2 px-3 " <> base <> "bg-indigo-400"],
+      current_link_attrs: [class: "py-2 px-3 " <> base <> "bg-indigo-400"]
     ]
   end
 
   attr :status, :atom, required: true
   attr :class, :string, default: ""
+
   def status_icon(%{status: status} = assigns) do
-    icon_name = case status do
-      :open -> "hero-inbox-solid text-emerald-500"
-      :closed -> "hero-lock-closed text-gray-500"
-      :archived -> "hero-archive-box text-gray-500"
-      _ -> "hero-question-mark-circle text-blue-500"
-    end
+    icon_name =
+      case status do
+        :open -> "hero-inbox-solid text-emerald-500"
+        :closed -> "hero-lock-closed text-gray-500"
+        :archived -> "hero-archive-box text-gray-500"
+        _ -> "hero-question-mark-circle text-blue-500"
+      end
+
     assigns = assign(assigns, :icon_name, icon_name)
     ~H"<span class={[@icon_name, @class]} />"
   end
-
 end

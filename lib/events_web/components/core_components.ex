@@ -293,7 +293,6 @@ defmodule EventsWeb.CoreComponents do
     include: ~w(accept autocomplete capture cols disabled form list max maxlength min minlength
                 multiple pattern placeholder readonly required rows size step)
 
-
   def input(%{field: %Phoenix.HTML.FormField{} = field} = assigns) do
     assigns
     |> assign(field: nil, id: assigns.id || field.id)
@@ -356,7 +355,7 @@ defmodule EventsWeb.CoreComponents do
 
   def input(%{type: "textarea"} = assigns) do
     ~H"""
-    <div phx-feedback-for={@name} >
+    <div phx-feedback-for={@name}>
       <.label for={@id} class={@label_class}><%= @label %></.label>
       <textarea
         id={@id}
@@ -378,7 +377,7 @@ defmodule EventsWeb.CoreComponents do
   # All other inputs text, datetime-local, url, password, etc. are handled here...
   def input(assigns) do
     ~H"""
-    <div phx-feedback-for={@name}  class={["flex items-center gap-4", @wrapper_class]}>
+    <div phx-feedback-for={@name} class={["flex items-center gap-4", @wrapper_class]}>
       <%= if (is_binary(@label) && String.trim(@label) != "") do %>
         <.label for={@id} class={@label_class}><%= @label %></.label>
       <% end %>
@@ -411,7 +410,10 @@ defmodule EventsWeb.CoreComponents do
 
   def label(assigns) do
     ~H"""
-    <label for={@for} class={["block text-sm font-semibold leading-5 text-zinc-800 dark:text-zinc-200 w-32", @class]}>
+    <label
+      for={@for}
+      class={["block text-sm font-semibold leading-5 text-zinc-800 dark:text-zinc-200 w-32", @class]}
+    >
       <%= render_slot(@inner_block) %>
     </label>
     """
@@ -461,24 +463,25 @@ defmodule EventsWeb.CoreComponents do
   Renders a h1
   """
   attr :class, :string, default: nil
+
   def h1(assigns) do
     ~H"""
     <h1 class={["text-lg font-semibold leading-8 text-zinc-800 dark:text-zinc-200", @class]}>
       <%= render_slot(@inner_block) %>
     </h1>
     """
-  end>
+  end >
+    @doc ~S"""
+    Renders a table with generic styling.
 
-  @doc ~S"""
-  Renders a table with generic styling.
+    ## Examples
 
-  ## Examples
+        <.table id="users" rows={@users}>
+          <:col :let={user} label="id"><%= user.id %></:col>
+          <:col :let={user} label="username"><%= user.username %></:col>
+        </.table>
+    """
 
-      <.table id="users" rows={@users}>
-        <:col :let={user} label="id"><%= user.id %></:col>
-        <:col :let={user} label="username"><%= user.username %></:col>
-      </.table>
-  """
   attr :id, :string, required: true
   attr :rows, :list, required: true
   attr :row_id, :any, default: nil, doc: "the function for generating the row id"
@@ -626,7 +629,6 @@ defmodule EventsWeb.CoreComponents do
     """
   end
 
-
   @doc """
   Renders a card component with a title,
   an icon, a tag, a body, a timestamp, and interactive actions.
@@ -672,7 +674,10 @@ defmodule EventsWeb.CoreComponents do
 
   def card(assigns) do
     ~H"""
-    <div class={["flex gap-x-3 flex-row items-center shadow rounded-lg p-3 space-x-4 border-2 border-calypso-50 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-950", @class]} >
+    <div class={[
+      "flex gap-x-3 flex-row items-center shadow rounded-lg p-3 space-x-4 border-2 border-calypso-50 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-950",
+      @class
+    ]}>
       <div class="grow">
         <div class="row-1 text-gray-900 dark:text-gray-200 leading-snug text-base flex items-center gap-x-2 mb-1">
           <%= render_slot(@icon) %>
@@ -682,14 +687,24 @@ defmodule EventsWeb.CoreComponents do
           <span class="ml-auto flex gap-2">
             <%= render_slot(@tag) %>
           </span>
-          <div phx-click-away={JS.hide(to: "##{@id}-menu")} class={[@actions == [] && "hidden", "actions relative"]}>
-            <button class="hero-ellipsis-vertical-solid text-gray-700 h-5 -mr-2" phx-click={
-                JS.toggle(to: "##{@id}-menu",
-                in: {"ease-out duration-100", "opacity-0 scale-95", "opacity-100 scale-100"},
-                out: {"ease-out duration-75", "opacity-100 scale-100", "opacity-0 scale-95"})
+          <div
+            phx-click-away={JS.hide(to: "##{@id}-menu")}
+            class={[@actions == [] && "hidden", "actions relative"]}
+          >
+            <button
+              class="hero-ellipsis-vertical-solid text-gray-700 h-5 -mr-2"
+              phx-click={
+                JS.toggle(
+                  to: "##{@id}-menu",
+                  in: {"ease-out duration-100", "opacity-0 scale-95", "opacity-100 scale-100"},
+                  out: {"ease-out duration-75", "opacity-100 scale-100", "opacity-0 scale-95"}
+                )
               }
             />
-            <div id={@id <> "-menu"} class="dropdown absolute hidden right-0 z-10 shadow rounded-md bg-gray-50 p-2 text-sm w-28">
+            <div
+              id={@id <> "-menu"}
+              class="dropdown absolute hidden right-0 z-10 shadow rounded-md bg-gray-50 p-2 text-sm w-28"
+            >
               <%= render_slot(@actions) %>
             </div>
           </div>
@@ -705,8 +720,6 @@ defmodule EventsWeb.CoreComponents do
     """
   end
 
-
-
   @doc """
   Renders a small tag with customizable class
 
@@ -719,15 +732,24 @@ defmodule EventsWeb.CoreComponents do
   slot :inner_block, required: true
 
   def tag_badge(assigns) do
-
     # Allow tweaking of scheme
-    colors = case assigns.color do
-      "gray" -> ["bg-gray-100", "border-gray-300", "text-gray-700"]
-      "emerald" -> ["bg-emerald-100", "border-emerald-300", "text-emerald-700"]
-      "red" -> ["bg-red-100", "border-red-300", "text-red-700"]
-      "blue" -> ["bg-blue-100", "border-blue-300", "text-blue-700"]
-      _ -> ["bg-#{assigns.color}-100", "border-#{assigns.color}-300", "text-#{assigns.color}-700"]
-    end
+    colors =
+      case assigns.color do
+        "gray" ->
+          ["bg-gray-100", "border-gray-300", "text-gray-700"]
+
+        "emerald" ->
+          ["bg-emerald-100", "border-emerald-300", "text-emerald-700"]
+
+        "red" ->
+          ["bg-red-100", "border-red-300", "text-red-700"]
+
+        "blue" ->
+          ["bg-blue-100", "border-blue-300", "text-blue-700"]
+
+        _ ->
+          ["bg-#{assigns.color}-100", "border-#{assigns.color}-300", "text-#{assigns.color}-700"]
+      end
 
     assigns = assign(assigns, :colors, colors)
 
@@ -735,30 +757,37 @@ defmodule EventsWeb.CoreComponents do
     <span class={[
       "border rounded-md px-1 text-xs",
       @colors,
-      @class]}>
+      @class
+    ]}>
       <%= render_slot(@inner_block) %>
     </span>
     """
   end
 
-
   attr :timestamp, :any, required: true
   attr :class, :string, default: ""
+
   def timestamp(%{timestamp: timestamp} = assigns) do
     now = DateTime.utc_now()
     diff = DateTime.diff(now, timestamp)
 
-    timestring = cond do
-      diff < 60 ->
-        "#{diff} seconds ago"
-      diff < 3600 ->
-        "#{div(diff, 60)} minutes ago"
-      diff < 86400 ->
-        "#{div(diff, 3600)} hours ago"
-      true ->
-        "#{Date.to_string(timestamp)}"
-    end
+    timestring =
+      cond do
+        diff < 60 ->
+          "#{diff} seconds ago"
+
+        diff < 3600 ->
+          "#{div(diff, 60)} minutes ago"
+
+        diff < 86400 ->
+          "#{div(diff, 3600)} hours ago"
+
+        true ->
+          "#{Date.to_string(timestamp)}"
+      end
+
     assigns = assign(assigns, :timestring, timestring)
+
     ~H"""
     <span class={["flex items-center gap-1 text-xs", @class]}>
       <i class="hero-clock text-gray-700 dark:text-gray-300  h-3 w-3"></i>
@@ -766,7 +795,6 @@ defmodule EventsWeb.CoreComponents do
     </span>
     """
   end
-
 
   ## JS Commands
 
@@ -842,7 +870,4 @@ defmodule EventsWeb.CoreComponents do
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
   end
-
-
-
 end

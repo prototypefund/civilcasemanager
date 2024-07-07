@@ -21,7 +21,18 @@ defmodule Events.Positions.Position do
   @doc false
   def changeset(position, attrs) do
     position
-    |> cast(attrs, [:altitude, :course, :heading, :lat, :lon, :source, :speed, :timestamp, :imported_from, :soft_deleted])
+    |> cast(attrs, [
+      :altitude,
+      :course,
+      :heading,
+      :lat,
+      :lon,
+      :source,
+      :speed,
+      :timestamp,
+      :imported_from,
+      :soft_deleted
+    ])
     |> validate_required([:id, :lat, :lon, :timestamp])
   end
 end

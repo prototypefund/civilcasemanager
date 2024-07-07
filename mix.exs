@@ -65,7 +65,8 @@ defmodule CaseManager.MixProject do
       {:slack_elixir, "~> 1.2.0"},
       {:flop_phoenix, "~> 0.22.7"},
       {:earmark, "~> 1.1"},
-      {:geo_postgis, "~> 3.6"}
+      {:geo_postgis, "~> 3.6"},
+      {:credo, "~> 1.1.0", only: [:dev, :test], runtime: false}
     ]
   end
 

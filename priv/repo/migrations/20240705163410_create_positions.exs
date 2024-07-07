@@ -9,7 +9,7 @@ defmodule CaseManager.Repo.Migrations.CreatePositions do
     execute """
     CREATE TABLE IF NOT EXISTS public.positions (
       id text NULL,
-      item_id text NULL
+      item_id text NULL,
       altitude decimal NULL,
       course decimal NULL,
       heading decimal NULL,
@@ -20,7 +20,7 @@ defmodule CaseManager.Repo.Migrations.CreatePositions do
       timestamp timestamptz NULL,
       imported_from text NULL,
       soft_deleted boolean DEFAULT false NOT NULL,
-      pos_geo geometry(Point,4326) NULL,
+      pos_geo geometry(Point,4326) NULL
     );
     """
 

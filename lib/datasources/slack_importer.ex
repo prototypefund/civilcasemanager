@@ -14,10 +14,10 @@ defmodule Events.Datasources.SlackImporter do
   # end
 
   ## Handles replys in threads (thread_ts is set)
-  def handle_event("message", %{"channel" => channel, "text" => text, "user" => user, "thread_ts" => thread_ts}) do
+  def handle_event("message", %{"channel" => channel, "text" => text, "user" => user, "thread_ts" => thread_ts}, bot) do
 
     # Use Slack API to fetch the parent thread using thread_ts
-    {:ok, %{"messages" => thread_parent}} = get_thread(channel, thread_ts)
+    {:ok, %{"messages" => thread_parent}} = get_thread(bot, channel, thread_ts)
 
     # Take the text field from the first message
     [%{"text" => thread_title} | _] = thread_parent
@@ -35,7 +35,7 @@ defmodule Events.Datasources.SlackImporter do
 
 
   ## Handles new threads (thread_ts is not set)
-  def handle_event("message", %{"channel" => channel, "text" => text, "user" => user}) do
+  def handle_event("message", %{"channel" => channel, "text" => text, "user" => user}, bot) do
 
     # Extract the ID from the Title
     {status, result} = extract_data_from_title(text)
@@ -133,15 +133,10 @@ defmodule Events.Datasources.SlackImporter do
 
 
   # Use Slack API to fetch the parent thread using thread_ts
-  defp get_thread(channel, ts) do
-
-    # TODO: The bot token is defined in config :events, :worker_configs
-    # retrieve it here
-    # See open issue on github
-    bot_token = Application.get_env(:events, :bot_token)
+  defp get_thread(bot, channel, ts) do
 
     Slack.API.get("conversations.history",
-      bot_token,
+      bot.token,
       %{channel: channel,
       latest: ts,
       limit: 1,

@@ -48,7 +48,7 @@ defmodule Events.Datasources.IMAPWorker do
       metadata: String.replace(message.rfc822_header, "\r\n", "\n")
     }
 
-    ## Cast messages dont expect a reply, call messages do.
+    ## Cast messages don't expect a reply, call messages do.
     GenServer.cast(state[:manager_pid], {:new_event, event})
   end
 

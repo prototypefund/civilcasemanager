@@ -65,6 +65,19 @@ defmodule Events.Cases do
   end
 
   @doc """
+  Get a case by the specified identifier
+
+  ## Examples
+
+      iex> get_case_by_identifier("EB123")
+      %Case{}
+
+  """
+  def get_case_by_identifier(identifier) do
+    Repo.get_by(Case, identifier: identifier)
+  end
+
+  @doc """
   Creates a case.
 
   ## Examples

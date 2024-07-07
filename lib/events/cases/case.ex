@@ -11,7 +11,7 @@ defmodule Events.Cases.Case do
     field :identifier, :string
     field :is_archived, :boolean, default: false
     field :opened_at, :utc_datetime
-    field :status, Ecto.Enum, values: [draft: 0, open: 1, closed: 2]
+    field :status, Ecto.Enum, values: [draft: 0, open: 1, closed: 2], default: :open
     field :status_note, :string
     field :title, :string
     field :freetext, :string
@@ -25,7 +25,7 @@ defmodule Events.Cases.Case do
   def changeset(case, attrs) do
     case
     |> cast(attrs, [:identifier, :title, :description, :created_at, :deleted_at, :opened_at, :closed_at, :archived_at, :is_archived, :status, :status_note])
-    |> validate_required([:identifier,  :status])
+    |> validate_required([:identifier, :status])
     |> truncate_field(:freetext, 65_535)
   end
 

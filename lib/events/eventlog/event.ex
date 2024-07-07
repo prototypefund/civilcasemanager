@@ -1,6 +1,8 @@
 defmodule Events.Eventlog.Event do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Events.Repo
+  import Ecto.Query, only: [from: 2]
 
   schema "events" do
     field :body, :string
@@ -28,13 +30,23 @@ defmodule Events.Eventlog.Event do
     |> truncate_field(:body, 65_535)
     |> truncate_field(:metadata, 65_535)
     |> put_received_at_if_nil()
-    |> assign_cases(attrs["cases"])
+    |> assign_cases_by_id(attrs["cases"])
+    |> assign_cases_by_identifier(attrs[:case_identifier])
   end
 
-  defp assign_cases(changeset, []), do: changeset
-  defp assign_cases(changeset, nil), do: changeset
-  defp assign_cases(changeset, cases) do
+  defp assign_cases_by_id(changeset, []), do: changeset
+  defp assign_cases_by_id(changeset, nil), do: changeset
+  defp assign_cases_by_id(changeset, cases) do
+    IO.inspect(cases, label: "Cases")
     Ecto.Changeset.put_assoc(changeset, :cases, Events.Cases.get_cases(cases))
+  end
+
+  ## TODO: Create case if not existing
+  defp assign_cases_by_identifier(changeset, []), do: changeset
+  defp assign_cases_by_identifier(changeset, nil), do: changeset
+  defp assign_cases_by_identifier(changeset, case_identifier) do
+    IO.inspect(case_identifier, label: "Cases Identifier")
+    Ecto.Changeset.put_assoc(changeset, :cases, [Events.Cases.get_case_by_identifier(case_identifier)])
   end
 
   defp put_received_at_if_nil(changeset) do

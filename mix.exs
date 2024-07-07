@@ -61,7 +61,8 @@ defmodule Events.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.2"},
       {:yugo, git: "https://gitlab.com/dev-sw-1/yugo.git"},
-      {:phoenix_html_helpers, "~> 1.0"}
+      {:phoenix_html_helpers, "~> 1.0"},
+      {:slack_elixir, "~> 1.1.0"}
     ]
   end
 

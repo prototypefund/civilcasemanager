@@ -14,7 +14,7 @@ defmodule CaseManager.PositionsFixtures do
         altitude: "120.5",
         course: "120.5",
         heading: "120.5",
-        id: "some id",
+        id: Ecto.UUID.generate(),
         imported_from: "some imported_from",
         lat: "120.5",
         lon: "120.5",

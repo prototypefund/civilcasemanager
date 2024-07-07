@@ -1,8 +1,8 @@
 defmodule CaseManagerWeb.PageControllerTest do
   use CaseManagerWeb.ConnCase
 
-  test "GET /", %{conn: conn} do
+  test "Unauthorized GET / redirects to login", %{conn: conn} do
     conn = get(conn, ~p"/")
-    assert html_response(conn, 200) =~ "Peace of mind from prototype to production"
+    assert html_response(conn, 302) =~ "redirected"
   end
 end

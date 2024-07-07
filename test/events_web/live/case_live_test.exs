@@ -5,6 +5,8 @@ defmodule CaseManagerWeb.CaseLiveTest do
   import CaseManager.CasesFixtures
 
   @create_attrs %{
+    id: "CASE_DC0013",
+    name: "DC-0013",
     archived_at: "2024-03-07T08:58:00Z",
     closed_at: "2024-03-07T08:58:00Z",
     created_at: "2024-03-07T08:58:00Z",
@@ -19,12 +21,13 @@ defmodule CaseManagerWeb.CaseLiveTest do
     updated_at: "2024-03-07T08:58:00Z"
   }
   @update_attrs %{
+    id: "CASE_DC0014",
+    name: "DC-0014",
     archived_at: "2024-03-08T08:58:00Z",
     closed_at: "2024-03-08T08:58:00Z",
     created_at: "2024-03-08T08:58:00Z",
     deleted_at: "2024-03-08T08:58:00Z",
     description: "some updated description",
-    identifier: "some updated identifier",
     is_archived: false,
     opened_at: "2024-03-08T08:58:00Z",
     status: "some updated status",
@@ -33,12 +36,13 @@ defmodule CaseManagerWeb.CaseLiveTest do
     updated_at: "2024-03-08T08:58:00Z"
   }
   @invalid_attrs %{
+    id: nil,
     archived_at: nil,
     closed_at: nil,
     created_at: nil,
     deleted_at: nil,
     description: nil,
-    identifier: nil,
+    identifier: "01991   DC",
     is_archived: false,
     opened_at: nil,
     status: nil,
@@ -83,6 +87,12 @@ defmodule CaseManagerWeb.CaseLiveTest do
       html = render(index_live)
       assert html =~ "Case created successfully"
       assert html =~ "some description"
+    end
+
+    test "readonly user cannot save case", %{conn: conn} do
+      {:ok, index_live, _html} = live(conn, ~p"/cases")
+
+      assert index_live |> element("a", "New Case") |> has_element?() == false
     end
 
     test "updates case in listing", %{conn: conn, case: case} do

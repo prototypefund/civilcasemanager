@@ -11,16 +11,16 @@ defmodule CaseManager.CasesFixtures do
     {:ok, case} =
       attrs
       |> Enum.into(%{
+        id: "CASE_DC0010",
         archived_at: ~U[2024-03-07 08:58:00Z],
         closed_at: ~U[2024-03-07 08:58:00Z],
         created_at: ~U[2024-03-07 08:58:00Z],
         deleted_at: ~U[2024-03-07 08:58:00Z],
         description: "some description",
-        identifier: "some identifier",
+        name: "DC0010",
         is_archived: true,
         opened_at: ~U[2024-03-07 08:58:00Z],
-        status: "some status",
-        status_note: "some status_note",
+        status: "open",
         title: "some title",
         updated_at: ~U[2024-03-07 08:58:00Z]
       })

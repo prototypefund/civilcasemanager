@@ -3,9 +3,13 @@ defmodule CaseManagerWeb.PositionLiveTest do
 
   import Phoenix.LiveViewTest
   import CaseManager.PositionsFixtures
+  alias CaseManagerWeb.UserLive.Auth
+  import CaseManager.AccountsFixtures
+
+  @remember_me_cookie "_events_web_user_remember_me"
 
   @create_attrs %{
-    id: "some id",
+    id: Ecto.UUID.generate(),
     timestamp: "2024-07-04T16:34:00Z",
     speed: "120.5",
     source: "some source",
@@ -18,7 +22,7 @@ defmodule CaseManagerWeb.PositionLiveTest do
     soft_deleted: true
   }
   @update_attrs %{
-    id: "some updated id",
+    id: Ecto.UUID.generate(),
     timestamp: "2024-07-05T16:34:00Z",
     speed: "456.7",
     source: "some updated source",
@@ -31,7 +35,7 @@ defmodule CaseManagerWeb.PositionLiveTest do
     soft_deleted: false
   }
   @invalid_attrs %{
-    id: nil,
+    id: "nil",
     timestamp: nil,
     speed: nil,
     source: nil,
@@ -49,10 +53,32 @@ defmodule CaseManagerWeb.PositionLiveTest do
     %{position: position}
   end
 
-  describe "Index" do
-    setup [:create_position]
+  defp login(%{conn: conn}) do
+    user = user_fixture()
 
-    test "lists all positions", %{conn: conn, position: position} do
+    conn =
+      conn
+      |> Map.replace!(:secret_key_base, CaseManagerWeb.Endpoint.config(:secret_key_base))
+      |> init_test_session(%{})
+
+    logged_in_conn =
+      conn |> fetch_cookies() |> Auth.log_in_user(user, %{"remember_me" => "true"})
+
+    %{value: signed_token} = logged_in_conn.resp_cookies[@remember_me_cookie]
+    conn = conn |> put_req_cookie(@remember_me_cookie, signed_token)
+
+    %{user: user, conn: conn}
+  end
+
+  describe "Index" do
+    setup [:create_position, :login]
+
+    test "lists all positions", %{conn: conn, position: position, user: user} do
+      # logged_in_conn =
+      #   conn |> fetch_cookies() |> Auth.log_in_user(user, %{"remember_me" => "true"})
+      # %{value: signed_token} = logged_in_conn.resp_cookies[@remember_me_cookie]
+      # conn = conn |> put_req_cookie(@remember_me_cookie, signed_token)
+
       {:ok, _index_live, html} = live(conn, ~p"/positions")
 
       assert html =~ "Listing Positions"

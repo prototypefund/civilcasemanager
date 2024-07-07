@@ -6,15 +6,12 @@ defmodule CaseManagerWeb.EventLiveTest do
 
   @create_attrs %{
     body: "some body",
-    case_id: "some case_id",
-    origin: "some origin",
     time: "some time",
     title: "some title",
     type: "some type"
   }
   @update_attrs %{
     body: "some updated body",
-    case_id: "some updated case_id",
     origin: "some updated origin",
     time: "some updated time",
     title: "some updated title",

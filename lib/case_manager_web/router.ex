@@ -17,28 +17,6 @@ defmodule CaseManagerWeb.Router do
     plug :accepts, ["json"]
   end
 
-  ## Routes that require logged-in
-  scope "/", CaseManagerWeb do
-    pipe_through [:browser, :require_authenticated_user]
-
-    live_session :require_authenticated_user,
-      on_mount: [{CaseManagerWeb.UserLive.Auth, :ensure_authenticated}] do
-      live "/", CaseLive.Index, :index
-
-      live "/cases", CaseLive.Index, :index
-      live "/cases/:id", CaseLive.Show, :show
-
-      live "/events", EventLive.Index, :index
-      live "/events/:id", EventLive.Show, :show
-
-      live "/positions", PositionLive.Index, :index
-      live "/positions/:id", PositionLive.Show, :show
-
-      live "/users/settings", UserLive.Settings, :edit
-      live "/users/settings/confirm_email/:token", UserLive.Settings, :confirm_email
-    end
-  end
-
   ## Routes that require write permission
   scope "/", CaseManagerWeb do
     pipe_through [:browser, :require_write_user]
@@ -68,6 +46,28 @@ defmodule CaseManagerWeb.Router do
       live "/users", UserLive.Index, :index
       live "/users/new", UserLive.Index, :new
       live "/users/:id/edit", UserLive.Index, :edit
+    end
+  end
+
+  ## Routes that require logged-in
+  scope "/", CaseManagerWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
+    live_session :require_authenticated_user,
+      on_mount: [{CaseManagerWeb.UserLive.Auth, :ensure_authenticated}] do
+      live "/", CaseLive.Index, :index
+
+      live "/cases", CaseLive.Index, :index
+      live "/cases/:id", CaseLive.Show, :show
+
+      live "/events", EventLive.Index, :index
+      live "/events/:id", EventLive.Show, :show
+
+      live "/positions", PositionLive.Index, :index
+      live "/positions/:id", PositionLive.Show, :show
+
+      live "/users/settings", UserLive.Settings, :edit
+      live "/users/settings/confirm_email/:token", UserLive.Settings, :confirm_email
     end
   end
 

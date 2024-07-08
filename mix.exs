@@ -61,7 +61,7 @@ defmodule CaseManager.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.2"},
-      {:yugo, git: "https://gitlab.com/dev-sw-1/yugo.git"},
+      {:yugo, git: "https://gitlab.com/civilmrcc/yugo.git"},
       {:slack_elixir, "~> 1.2.0"},
       {:flop_phoenix, "~> 0.22.7"},
       {:earmark, "~> 1.1"},

@@ -34,7 +34,6 @@ defmodule CaseManager.PositionsTest do
 
     test "create_position/1 with valid data creates a position" do
       valid_attrs = %{
-        id: "some id",
         timestamp: ~U[2024-07-04 16:34:00Z],
         speed: "120.5",
         source: "some source",
@@ -48,7 +47,6 @@ defmodule CaseManager.PositionsTest do
       }
 
       assert {:ok, %Position{} = position} = Positions.create_position(valid_attrs)
-      assert position.id == "some id"
       assert position.timestamp == ~U[2024-07-04 16:34:00Z]
       assert position.speed == Decimal.new("120.5")
       assert position.source == "some source"
@@ -69,7 +67,6 @@ defmodule CaseManager.PositionsTest do
       position = position_fixture()
 
       update_attrs = %{
-        id: "some updated id",
         timestamp: ~U[2024-07-05 16:34:00Z],
         speed: "456.7",
         source: "some updated source",
@@ -83,7 +80,6 @@ defmodule CaseManager.PositionsTest do
       }
 
       assert {:ok, %Position{} = position} = Positions.update_position(position, update_attrs)
-      assert position.id == "some updated id"
       assert position.timestamp == ~U[2024-07-05 16:34:00Z]
       assert position.speed == Decimal.new("456.7")
       assert position.source == "some updated source"

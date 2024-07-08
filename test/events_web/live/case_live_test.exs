@@ -10,7 +10,7 @@ defmodule CaseManagerWeb.CaseLiveTest do
   @remember_me_cookie "_events_web_user_remember_me"
 
   @create_attrs %{
-    name: "some name",
+    name: "AP9001",
     notes: "some notes",
     status: :open,
     occurred_at: ~U[2024-03-07 08:58:00Z],
@@ -50,7 +50,7 @@ defmodule CaseManagerWeb.CaseLiveTest do
     cloud_file_links: "some cloud_file_links"
   }
   @update_attrs %{
-    name: "some updated name",
+    name: "DC1001",
     notes: "some updated notes",
     status: :ready_for_documentation,
     occurred_at: ~U[2024-03-08 08:58:00Z],
@@ -94,6 +94,14 @@ defmodule CaseManagerWeb.CaseLiveTest do
     name: nil
   }
 
+  @invalid_name %{
+    name: "DC100 AC2300"
+  }
+
+  @invalid_status %{
+    status: :random
+  }
+
   defp create_case(_) do
     case = case_fixture()
     %{caseStruct: case}
@@ -134,10 +142,9 @@ defmodule CaseManagerWeb.CaseLiveTest do
 
       assert_patch(index_live, ~p"/cases/new")
 
-      # FIXME
-      # assert index_live
-      #        |> form("#case-form", case: @invalid_attrs)
-      #        |> render_change() =~ "can&#39;t be blank"
+      assert index_live
+             |> form("#case-form", case: @invalid_attrs)
+             |> render_change() =~ "can&#39;t be blank"
 
       assert index_live
              |> form("#case-form", case: @create_attrs)
@@ -147,7 +154,7 @@ defmodule CaseManagerWeb.CaseLiveTest do
 
       html = render(index_live)
       assert html =~ "Case created successfully"
-      assert html =~ "some description"
+      assert html =~ "some notes"
     end
 
     ## FIXME
@@ -171,6 +178,16 @@ defmodule CaseManagerWeb.CaseLiveTest do
              |> render_change() =~ "can&#39;t be blank"
 
       assert index_live
+             |> form("#case-form", case: @invalid_name)
+             |> render_change() =~ "ID must only contain letters, numbers and a dash"
+
+      assert_raise ArgumentError, fn ->
+        index_live
+        |> form("#case-form", case: @invalid_status)
+        |> render_change() =~ "must be one of"
+      end
+
+      assert index_live
              |> form("#case-form", case: @update_attrs)
              |> render_submit()
 
@@ -178,7 +195,7 @@ defmodule CaseManagerWeb.CaseLiveTest do
 
       html = render(index_live)
       assert html =~ "Case updated successfully"
-      assert html =~ "some updated description"
+      assert html =~ "some updated notes"
     end
 
     test "deletes case in listing", %{conn: conn, caseStruct: case} do
@@ -219,7 +236,7 @@ defmodule CaseManagerWeb.CaseLiveTest do
 
       html = render(show_live)
       assert html =~ "Case updated successfully"
-      assert html =~ "some updated description"
+      assert html =~ "some updated notes"
     end
   end
 end

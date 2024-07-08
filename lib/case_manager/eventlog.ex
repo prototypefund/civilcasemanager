@@ -18,7 +18,7 @@ defmodule CaseManager.Eventlog do
 
   """
   def list_events() do
-    Repo.all(from e in Event, order_by: [desc: e.created_at])
+    Repo.all(from e in Event, order_by: [desc: e.received_at])
   end
 
   @doc """

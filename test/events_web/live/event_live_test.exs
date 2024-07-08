@@ -19,7 +19,6 @@ defmodule CaseManagerWeb.EventLiveTest do
   }
   @invalid_attrs %{
     body: nil,
-    case_id: nil,
     title: nil
     ## TODO test invalid type
   }
@@ -59,8 +58,8 @@ defmodule CaseManagerWeb.EventLiveTest do
     test "saves new event", %{conn: conn} do
       {:ok, index_live, _html} = live(conn, ~p"/events")
 
-      assert index_live |> element("a", "New Event") |> render_click() =~
-               "New Event"
+      assert index_live |> element("a", "New manual Event") |> render_click() =~
+               "New manual Event"
 
       assert_patch(index_live, ~p"/events/new")
 

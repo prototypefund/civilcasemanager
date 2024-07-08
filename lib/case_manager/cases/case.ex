@@ -200,7 +200,7 @@ defmodule CaseManager.Cases.Case do
     |> validate_format(
       :name,
       ~r/^[a-zA-Z0-9\-]+$/,
-      message: "ID must be only contain letters, numbers and a dash."
+      message: "ID must only contain letters, numbers and a dash."
     )
     |> put_timestamp_if_nil(:created_at)
 

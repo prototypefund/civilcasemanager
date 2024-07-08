@@ -3,11 +3,12 @@ defmodule CaseManagerWeb.EventLive.Index do
 
   alias CaseManager.Eventlog
   alias CaseManager.Eventlog.Event
+  import CaseManagerWeb.LiveUtils
 
   @impl true
   def mount(_params, _session, socket) do
     if connected?(socket), do: Eventlog.subscribe()
-    {:ok, stream(socket, :events, Eventlog.list_events())}
+    {:ok, stream(socket, :events, [])}
   end
 
   @impl true
@@ -27,10 +28,21 @@ defmodule CaseManagerWeb.EventLive.Index do
     |> assign(:event, %Event{})
   end
 
-  defp apply_action(socket, :index, _params) do
-    socket
-    |> assign(:page_title, "Listing CaseManager")
-    |> assign(:event, nil)
+  defp apply_action(socket, :index, params) do
+    case Eventlog.list_events(params) do
+      {:ok, {events, meta}} ->
+        socket
+        |> assign(:meta, meta)
+        |> stream(:events, events, reset: true)
+        |> assign(:page_title, "Listing Events")
+        |> assign(:event, nil)
+
+      {:error, _meta} ->
+        # This will reset invalid parameters. Alternatively, you can assign
+        # only the meta and render the errors, or you can ignore the error
+        # case entirely.
+        push_navigate(socket, to: ~p"/events")
+    end
   end
 
   @impl true

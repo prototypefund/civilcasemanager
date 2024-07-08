@@ -2,6 +2,16 @@ defmodule CaseManager.Positions.Position do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @derive {
+    Flop.Schema,
+    filterable: [:id],
+    sortable: [:timestamp],
+    default_order: %{
+      order_by: [:timestamp],
+      order_directions: [:desc, :asc]
+    }
+  }
+
   @primary_key {:id, CaseManager.StringId, autogenerate: true}
   schema "positions" do
     field :timestamp, :utc_datetime
@@ -23,7 +33,6 @@ defmodule CaseManager.Positions.Position do
   def changeset(position, attrs) do
     position
     |> cast(attrs, [
-      :id,
       :altitude,
       :course,
       :heading,

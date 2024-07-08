@@ -3,6 +3,8 @@ defmodule CaseManagerWeb.PositionLive.Index do
 
   alias CaseManager.Positions
   alias CaseManager.Positions.Position
+  import CaseManagerWeb.LiveUtils
+
 
   @impl true
   def mount(_params, _session, socket) do
@@ -26,10 +28,21 @@ defmodule CaseManagerWeb.PositionLive.Index do
     |> assign(:position, %Position{})
   end
 
-  defp apply_action(socket, :index, _params) do
-    socket
-    |> assign(:page_title, "Listing Positions")
-    |> assign(:position, nil)
+  defp apply_action(socket, :index, params) do
+    case Positions.list_positions(params) do
+      {:ok, {positions, meta}} ->
+        socket
+        |> assign(:meta, meta)
+        |> stream(:positions, positions, reset: true)
+        |> assign(:page_title, "Listing Positions")
+        |> assign(:position, nil)
+
+      {:error, _meta} ->
+        # This will reset invalid parameters. Alternatively, you can assign
+        # only the meta and render the errors, or you can ignore the error
+        # case entirely.
+        push_navigate(socket, to: ~p"/positions")
+    end
   end
 
   @impl true

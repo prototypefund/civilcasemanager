@@ -35,8 +35,6 @@ defmodule CaseManager.CasesTest do
 
     test "create_case/1 with valid data creates a case" do
       valid_attrs = %{
-        ## FIXME should autogenerate these
-        id: "some id",
         name: "TC0012",
         notes: "some notes",
         status: :open,

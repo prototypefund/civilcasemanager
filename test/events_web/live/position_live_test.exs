@@ -140,7 +140,7 @@ defmodule CaseManagerWeb.PositionLiveTest do
   end
 
   describe "Show" do
-    setup [:create_position]
+    setup [:create_position, :login]
 
     test "displays position", %{conn: conn, position: position} do
       {:ok, _show_live, html} = live(conn, ~p"/positions/#{position}")

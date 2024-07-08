@@ -13,10 +13,9 @@ defmodule CaseManager.Cases.Case do
     }
   }
 
-  ## FIXME Investigate id generation
   ## Refer to https://gitlab.com/civilmrcc/onefleet/-/blob/develop/src/constants/templates/case.ts
   ## for possible values
-  @primary_key {:id, :string, autogenerate: false}
+  @primary_key {:id, CaseManager.StringId, autogenerate: true}
   schema "cases" do
     ## Base data
     field :name, :string
@@ -56,13 +55,13 @@ defmodule CaseManager.Cases.Case do
     ## The boat
     field :boat_type, Ecto.Enum,
       values: [
+        :unknown,
         :rubber,
         :wood,
         :iron,
         :fiberglass,
         :fishing_vessel,
         :other,
-        :unknown,
         :currently_unknown,
         ## TODO Remove dupes
         :fishing
@@ -72,6 +71,7 @@ defmodule CaseManager.Cases.Case do
 
     field :boat_color, Ecto.Enum,
       values: [
+        :unknown,
         :red,
         :green,
         :blue,
@@ -81,7 +81,6 @@ defmodule CaseManager.Cases.Case do
         :gray,
         :brown,
         :other,
-        :unknown,
         :currently_unknown,
         ## TODO Remove these?
         :purple,
@@ -156,8 +155,6 @@ defmodule CaseManager.Cases.Case do
   def changeset(case, attrs) do
     case
     |> cast(attrs, [
-      ## FIXME Need to generate id
-      :id,
       :notes,
       :name,
       :status,

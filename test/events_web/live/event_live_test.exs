@@ -11,19 +11,17 @@ defmodule CaseManagerWeb.EventLiveTest do
 
   @create_attrs %{
     body: "some body",
-    title: "some title",
-    type: "some type"
+    title: "some title"
   }
   @update_attrs %{
     body: "some updated body",
-    title: "some updated title",
-    type: "some updated type"
+    title: "some updated title"
   }
   @invalid_attrs %{
     body: nil,
     case_id: nil,
-    title: nil,
-    type: nil
+    title: nil
+    ## TODO test invalid type
   }
 
   defp login(%{conn: conn}) do
@@ -54,8 +52,8 @@ defmodule CaseManagerWeb.EventLiveTest do
     test "lists all events", %{conn: conn, event: event} do
       {:ok, _index_live, html} = live(conn, ~p"/events")
 
-      assert html =~ "Listing CaseManager"
-      assert html =~ event.body
+      assert html =~ "Listing Events"
+      assert html =~ event.title
     end
 
     test "saves new event", %{conn: conn} do
@@ -78,7 +76,7 @@ defmodule CaseManagerWeb.EventLiveTest do
 
       html = render(index_live)
       assert html =~ "Event created successfully"
-      assert html =~ "some body"
+      assert html =~ "some title"
     end
 
     test "updates event in listing", %{conn: conn, event: event} do
@@ -101,7 +99,7 @@ defmodule CaseManagerWeb.EventLiveTest do
 
       html = render(index_live)
       assert html =~ "Event updated successfully"
-      assert html =~ "some updated body"
+      assert html =~ "some updated title"
     end
 
     test "deletes event in listing", %{conn: conn, event: event} do

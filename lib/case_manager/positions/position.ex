@@ -44,6 +44,6 @@ defmodule CaseManager.Positions.Position do
       :imported_from,
       :soft_deleted
     ])
-    |> validate_required([:id, :lat, :lon, :timestamp])
+    |> validate_required([:lat, :lon, :timestamp])
   end
 end

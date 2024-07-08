@@ -9,7 +9,6 @@ defmodule CaseManagerWeb.PositionLiveTest do
   @remember_me_cookie "_events_web_user_remember_me"
 
   @create_attrs %{
-    id: Ecto.UUID.generate(),
     timestamp: "2024-07-04T16:34:00Z",
     speed: "120.5",
     source: "some source",
@@ -22,7 +21,6 @@ defmodule CaseManagerWeb.PositionLiveTest do
     soft_deleted: true
   }
   @update_attrs %{
-    id: Ecto.UUID.generate(),
     timestamp: "2024-07-05T16:34:00Z",
     speed: "456.7",
     source: "some updated source",
@@ -35,7 +33,6 @@ defmodule CaseManagerWeb.PositionLiveTest do
     soft_deleted: false
   }
   @invalid_attrs %{
-    id: "nil",
     timestamp: nil,
     speed: nil,
     source: nil,
@@ -73,19 +70,14 @@ defmodule CaseManagerWeb.PositionLiveTest do
   describe "Index" do
     setup [:create_position, :login]
 
-    test "lists all positions", %{conn: conn, position: position, user: user} do
-      # logged_in_conn =
-      #   conn |> fetch_cookies() |> Auth.log_in_user(user, %{"remember_me" => "true"})
-      # %{value: signed_token} = logged_in_conn.resp_cookies[@remember_me_cookie]
-      # conn = conn |> put_req_cookie(@remember_me_cookie, signed_token)
-
+    test "lists all positions", %{conn: conn, position: position} do
       {:ok, _index_live, html} = live(conn, ~p"/positions")
 
       assert html =~ "Listing Positions"
       assert html =~ position.id
     end
 
-    test "saves new position", %{conn: conn, user: user} do
+    test "saves new position", %{conn: conn} do
       {:ok, index_live, _html} = live(conn, ~p"/positions")
 
       assert index_live |> element("a", "New Position") |> render_click() =~
@@ -105,7 +97,7 @@ defmodule CaseManagerWeb.PositionLiveTest do
 
       html = render(index_live)
       assert html =~ "Position created successfully"
-      assert html =~ "some id"
+      assert html =~ "120.5"
     end
 
     test "updates position in listing", %{conn: conn, position: position} do
@@ -128,7 +120,7 @@ defmodule CaseManagerWeb.PositionLiveTest do
 
       html = render(index_live)
       assert html =~ "Position updated successfully"
-      assert html =~ "some updated id"
+      assert html =~ "456.7"
     end
 
     test "deletes position in listing", %{conn: conn, position: position} do
@@ -169,7 +161,7 @@ defmodule CaseManagerWeb.PositionLiveTest do
 
       html = render(show_live)
       assert html =~ "Position updated successfully"
-      assert html =~ "some updated id"
+      assert html =~ "456.7"
     end
   end
 end

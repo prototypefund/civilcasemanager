@@ -1,6 +1,8 @@
 defmodule CaseManagerWeb.CaseLive.Index do
   use CaseManagerWeb, :live_view
 
+  require Logger
+
   alias CaseManager.Cases
   alias CaseManager.Cases.Case
   import CaseManagerWeb.LiveUtils

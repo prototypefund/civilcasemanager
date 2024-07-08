@@ -8,7 +8,7 @@ defmodule CaseManagerWeb.PositionLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, stream(socket, :positions, Positions.list_positions())}
+    {:ok, stream(socket, :positions, [])}
   end
 
   @impl true

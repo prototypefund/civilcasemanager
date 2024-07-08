@@ -5,6 +5,7 @@ defmodule CaseManagerWeb.PositionLive.Index do
   alias CaseManager.Positions.Position
   import CaseManagerWeb.LiveUtils
 
+  require Logger
 
   @impl true
   def mount(_params, _session, socket) do
@@ -57,6 +58,10 @@ defmodule CaseManagerWeb.PositionLive.Index do
       {:ok, _} = Positions.delete_position(position)
 
       {:noreply, stream_delete(socket, :positions, position)}
+    else
+      Logger.info(
+        "User #{socket.assigns.current_user.email} tried to delete positions, but is a read-only user."
+      )
     end
   end
 end

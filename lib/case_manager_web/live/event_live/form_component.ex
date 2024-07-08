@@ -1,6 +1,6 @@
 defmodule CaseManagerWeb.EventLive.FormComponent do
   use CaseManagerWeb, :live_component
-
+  require Logger
   alias CaseManager.Eventlog
 
   @impl true
@@ -65,7 +65,13 @@ defmodule CaseManagerWeb.EventLive.FormComponent do
   end
 
   def handle_event("save", %{"event" => event_params}, socket) do
-    save_event(socket, socket.assigns.action, event_params)
+    if socket.assigns.current_user.role != :readonly do
+      save_event(socket, socket.assigns.action, event_params)
+    else
+      Logger.info(
+        "User #{socket.assigns.current_user.email} tried to save event, but is a read-only user."
+      )
+    end
   end
 
   defp save_event(socket, :edit, event_params) do

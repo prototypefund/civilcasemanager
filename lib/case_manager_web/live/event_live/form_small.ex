@@ -2,6 +2,7 @@ defmodule CaseManagerWeb.EventLive.FormSmall do
   use CaseManagerWeb, :live_component
 
   alias CaseManager.Eventlog
+  require Logger
 
   @impl true
 
@@ -70,6 +71,10 @@ defmodule CaseManagerWeb.EventLive.FormSmall do
         {:error, %Ecto.Changeset{} = changeset} ->
           {:noreply, assign_form(socket, changeset)}
       end
+    else
+      Logger.info(
+        "User #{socket.assigns.current_user.email} tried to save event, but is a read-only user."
+      )
     end
   end
 

@@ -1,6 +1,6 @@
 defmodule CaseManagerWeb.PositionLive.FormComponent do
   use CaseManagerWeb, :live_component
-
+  require Logger
   alias CaseManager.Positions
 
   @impl true
@@ -57,6 +57,10 @@ defmodule CaseManagerWeb.PositionLive.FormComponent do
   def handle_event("save", %{"position" => position_params}, socket) do
     if socket.assigns.current_user.role != :readonly do
       save_position(socket, socket.assigns.action, position_params)
+    else
+      Logger.info(
+        "User #{socket.assigns.current_user.email} tried to save positions, but is a read-only user."
+      )
     end
   end
 

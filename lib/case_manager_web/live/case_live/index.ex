@@ -75,6 +75,10 @@ defmodule CaseManagerWeb.CaseLive.Index do
       {:ok, _} = Cases.delete_case(case)
 
       {:noreply, stream_delete(socket, :cases, case)}
+    else
+      Logger.info(
+        "User #{socket.assigns.current_user.email} tried to delete case, but is a read-only user."
+      )
     end
   end
 

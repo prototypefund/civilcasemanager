@@ -2,6 +2,7 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
   use CaseManagerWeb, :live_component
 
   alias CaseManager.Cases
+  require Logger
 
   @impl true
   def render(assigns) do
@@ -164,6 +165,10 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
     # Check user is not readonly
     if socket.assigns.current_user.role != :readonly do
       save_case(socket, socket.assigns.action, case_params)
+    else
+      Logger.info(
+        "User #{socket.assigns.current_user.email} tried to save case, but is a read-only user."
+      )
     end
   end
 

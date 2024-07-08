@@ -24,7 +24,7 @@ compile:
       - _build
       - deps
   script:
-    - cp config/TESTworkers.exs config/workers.ex
+    - cp config/TESTworkers.exs config/workers.exs
     - mix local.hex --force
     - mix local.rebar --force
     - mix deps.get
@@ -48,7 +48,7 @@ unittest:
       - _build
       - deps
   script:
-    - cp config/TESTworkers.exs config/workers.ex
+    - cp config/TESTworkers.exs config/workers.exs
     - mix local.hex --force
     - mix local.rebar --force
     - mix ecto.setup
@@ -64,7 +64,7 @@ lint:
       - _build
       - deps
   script:
-    - cp config/TESTworkers.exs config/workers.ex
+    - cp config/TESTworkers.exs config/workers.exs
     - mix local.hex --force
     - mix local.rebar --force
     - mix format --check-formatted     

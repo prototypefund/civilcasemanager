@@ -19,7 +19,6 @@ defmodule CaseManagerWeb.PositionLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:id]} type="text" label="Id" />
         <.input field={@form[:altitude]} type="number" label="Altitude" step="any" />
         <.input field={@form[:course]} type="number" label="Course" step="any" />
         <.input field={@form[:heading]} type="number" label="Heading" step="any" />

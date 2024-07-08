@@ -8,6 +8,7 @@
       title={@page_title}
       action={@live_action}
       case={@case}
+      current_user={@current_user}
       patch={~p"/cases/#{@case}"}
     />
     <!-- ..or the details view -->
@@ -91,17 +92,15 @@
   <div class="grow shrink-1 basis-1/1 sm:basis-3/12">
     <.h1>Associated Positions</.h1>
 
-    <div phx-update="stream" id="assoc_positions">
-      <ul>
-        <%= for {id, position} <- @streams.assoc_positions do %>
-          <li id={id} phx-click={JS.navigate(~p"/positions/#{position}")} class="text-sm">
-            <%= position.timestamp %>, <%= position.lat %>, <%= position.lon %>
-          </li>
-        <% end %>
-      </ul>
-    </div>
+    <ul phx-update="stream" id="assoc_positions">
+      <%= for {id, position} <- @streams.assoc_positions do %>
+        <li id={id} phx-click={JS.navigate(~p"/positions/#{position}")} class="text-sm">
+          <%= position.timestamp %>, <%= position.lat %>, <%= position.lon %>
+        </li>
+      <% end %>
+    </ul>
 
-    <.h1>Associated CaseManager</.h1>
+    <.h1>Associated Events</.h1>
     <.live_component
       module={CaseManagerWeb.EventLive.FormSmall}
       id={:new}

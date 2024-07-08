@@ -36,7 +36,8 @@ unittest:
   stage: test
   image: elixir:1.17
   services:
-    - postgis/postgis:16-3.4-alpine
+    - name: postgis/postgis:16-3.4-alpine
+      alias: postgres
   variables:
     POSTGRES_DB: phx_gitlab_ci_cd_test
     POSTGRES_HOST: postgres

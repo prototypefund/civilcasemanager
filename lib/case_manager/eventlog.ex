@@ -9,6 +9,19 @@ defmodule CaseManager.Eventlog do
   alias CaseManager.Eventlog.Event
 
   @doc """
+  Returns the list of events.
+
+  ## Examples
+
+      iex> list_events()
+      [%Event{}, ...]
+
+  """
+  def list_events() do
+    Repo.all(from e in Event, order_by: [desc: e.created_at])
+  end
+
+  @doc """
   Returns the list of events using Flop.
 
   ## Examples

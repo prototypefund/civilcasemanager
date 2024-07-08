@@ -13,6 +13,19 @@ defmodule CaseManager.Positions do
 
   ## Examples
 
+      iex> list_positions()
+      [%Position{}, ...]
+
+  """
+  def list_positions() do
+    Repo.all(Positions)
+  end
+
+  @doc """
+  Returns the list of positions using Flop.
+
+  ## Examples
+
       iex> list_positions(params)
       [%Position{}, ...]
 

@@ -2,11 +2,10 @@ defmodule CaseManagerWeb.UserLive.RegistrationTest do
   use CaseManagerWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import CaseManager.AccountsFixtures
 
   describe "Registration page" do
     test "is not activated", %{conn: conn} do
-      {:error, reason} = live(conn, ~p"/users/register")
+      {:error, _reason} = live(conn, ~p"/users/register")
     end
 
     # test "renders registration page", %{conn: conn} do

@@ -9,9 +9,6 @@ stages:
 - build
 - test
 
-variables:
-  SECURE_LOG_LEVEL: "debug"
-
 sast:
   stage: test
 include:
@@ -39,7 +36,7 @@ unittest:
   stage: test
   image: elixir:1.17
   services:
-    - postgis:16-3.4-alpine
+    - postgis/postgis:16-3.4-alpine
   variables:
     POSTGRES_DB: phx_gitlab_ci_cd_test
     POSTGRES_HOST: postgres

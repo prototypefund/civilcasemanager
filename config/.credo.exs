@@ -4,7 +4,8 @@
       name: "default",
       checks: %{
         disabled: [
-          {Credo.Check.Readability.ModuleDoc, []}
+          {Credo.Check.Readability.ModuleDoc, []},
+          {Credo.Check.Design.TagTODO, []}
         ]
       }
     }

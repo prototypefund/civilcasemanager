@@ -105,10 +105,10 @@ defmodule CaseManager.AccountsTest do
     end
   end
 
-  describe "change_user_registration/2" do
+  describe "user_registration_changeset/2" do
     test "returns a changeset" do
-      assert %Ecto.Changeset{} = changeset = Accounts.change_user_registration(%User{})
-      assert changeset.required == [:password, :email]
+      assert %Ecto.Changeset{} = changeset = Accounts.user_registration_changeset(%User{})
+      assert changeset.required == [:password, :email, :role]
     end
 
     test "allows fields to be set" do
@@ -116,7 +116,7 @@ defmodule CaseManager.AccountsTest do
       password = valid_user_password()
 
       changeset =
-        Accounts.change_user_registration(
+        Accounts.user_registration_changeset(
           %User{},
           valid_user_attributes(email: email, password: password)
         )
@@ -125,6 +125,21 @@ defmodule CaseManager.AccountsTest do
       assert get_change(changeset, :email) == email
       assert get_change(changeset, :password) == password
       assert is_nil(get_change(changeset, :hashed_password))
+    end
+
+    test "role is always readonly" do
+      email = unique_user_email()
+      password = valid_user_password()
+      role = :admin
+
+      changeset =
+        Accounts.user_registration_changeset(
+          %User{},
+          valid_user_attributes(email: email, password: password, role: role)
+        )
+
+      assert changeset.valid?
+      assert get_change(changeset, :role) == :readonly
     end
   end
 

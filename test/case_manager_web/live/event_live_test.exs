@@ -28,8 +28,31 @@ defmodule CaseManagerWeb.EventLiveTest do
   describe "Anonymous user" do
     setup [:create_event]
 
-    test "cannot lists events", %{conn: conn, event: event} do
+    test "cannot lists events", %{conn: conn} do
       {:error, _} = live(conn, ~p"/events")
+    end
+  end
+
+  describe "Readonly user" do
+    setup [:create_event, :login_readonly]
+
+    test "can list all events", %{conn: conn, event: event} do
+      {:ok, _index_live, html} = live(conn, ~p"/events")
+
+      assert html =~ "Listing Events"
+      assert html =~ event.title
+    end
+
+    test "cannot saves new event", %{conn: conn} do
+      {:ok, index_live, _html} = live(conn, ~p"/events")
+
+      refute has_element?(index_live, "a", "New Event")
+    end
+
+    test "cannot delete event in listing", %{conn: conn, event: event} do
+      {:ok, index_live, _html} = live(conn, ~p"/events")
+
+      refute has_element?(index_live, "#events-#{event.id} a", "Delete")
     end
   end
 

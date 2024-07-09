@@ -16,7 +16,11 @@
       <.header class="mb-4">
         <%= @case.name %>
         <:actions>
-          <.link patch={~p"/cases/#{@case}/show/edit"} phx-click={JS.push_focus()}>
+          <.link
+            :if={@current_user.role != :readonly}
+            patch={~p"/cases/#{@case}/show/edit"}
+            phx-click={JS.push_focus()}
+          >
             <.button>Edit case</.button>
           </.link>
           <!--<a class="mx-1" href={get_mailto_link(@case)}>
@@ -102,6 +106,7 @@
 
     <.h1>Associated Events</.h1>
     <.live_component
+      :if={@current_user.role != :readonly}
       module={CaseManagerWeb.EventLive.FormSmall}
       id={:new}
       title={@page_title}

@@ -2,7 +2,11 @@
   Event <%= @event.id %>
   <:subtitle>This is a event record from your database.</:subtitle>
   <:actions>
-    <.link patch={~p"/events/#{@event}/show/edit"} phx-click={JS.push_focus()}>
+    <.link
+      :if={@current_user.role != :readonly}
+      patch={~p"/events/#{@event}/show/edit"}
+      phx-click={JS.push_focus()}
+    >
       <.button>Edit event</.button>
     </.link>
   </:actions>

@@ -166,9 +166,13 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
     if socket.assigns.current_user.role != :readonly do
       save_case(socket, socket.assigns.action, case_params)
     else
-      Logger.info(
+      Logger.warning(
         "User #{socket.assigns.current_user.email} tried to save case, but is a read-only user."
       )
+
+      {:noreply,
+       socket
+       |> put_flash(:error, "Method not allowed")}
     end
   end
 

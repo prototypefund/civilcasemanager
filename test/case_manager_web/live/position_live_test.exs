@@ -54,6 +54,29 @@ defmodule CaseManagerWeb.PositionLiveTest do
     end
   end
 
+  describe "Readonly user" do
+    setup [:create_position, :login_readonly]
+
+    test "can list all positions", %{conn: conn, position: position} do
+      {:ok, _index_live, html} = live(conn, ~p"/positions")
+
+      assert html =~ "Listing Positions"
+      assert html =~ position.id
+    end
+
+    test "cannot saves new position", %{conn: conn} do
+      {:ok, index_live, _html} = live(conn, ~p"/positions")
+
+      refute has_element?(index_live, "a", "New Position")
+    end
+
+    test "cannot delete position in listing", %{conn: conn, position: position} do
+      {:ok, index_live, _html} = live(conn, ~p"/positions")
+
+      refute has_element?(index_live, "#positions-#{position.id} a", "Delete")
+    end
+  end
+
   describe "Index" do
     setup [:create_position, :login]
 

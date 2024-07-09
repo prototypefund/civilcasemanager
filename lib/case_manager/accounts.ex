@@ -120,11 +120,11 @@ defmodule CaseManager.Accounts do
 
   ## Examples
 
-      iex> change_user_registration(user)
+      iex> user_registration_changeset(user)
       %Ecto.Changeset{data: %User{}}
 
   """
-  def change_user_registration(%User{} = user, attrs \\ %{}) do
+  def user_registration_changeset(%User{} = user, attrs \\ %{}) do
     User.registration_changeset(user, attrs, hash_password: false, validate_email: false)
   end
 

@@ -59,9 +59,13 @@ defmodule CaseManagerWeb.PositionLive.Index do
 
       {:noreply, stream_delete(socket, :positions, position)}
     else
-      Logger.info(
+      Logger.warning(
         "User #{socket.assigns.current_user.email} tried to delete positions, but is a read-only user."
       )
+
+      {:noreply,
+       socket
+       |> put_flash(:error, "Method not allowed")}
     end
   end
 end

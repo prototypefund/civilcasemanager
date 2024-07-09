@@ -1,7 +1,7 @@
 <.header>
   Listing Positions
   <:actions>
-    <.link patch={~p"/positions/new"}>
+    <.link :if={@current_user.role != :readonly} patch={~p"/positions/new"}>
       <.button>New Position</.button>
     </.link>
   </:actions>
@@ -27,10 +27,13 @@
     <div class="sr-only">
       <.link navigate={~p"/positions/#{position}"}>Show</.link>
     </div>
-    <.link patch={~p"/positions/#{position}/edit"}>Edit</.link>
+    <.link :if={@current_user.role != :readonly} patch={~p"/positions/#{position}/edit"}>
+      Edit
+    </.link>
   </:action>
   <:action :let={{id, position}}>
     <.link
+      :if={@current_user.role != :readonly}
       phx-click={JS.push("delete", value: %{id: position.id}) |> hide("##{id}")}
       data-confirm="Are you sure?"
     >

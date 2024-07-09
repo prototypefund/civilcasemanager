@@ -23,7 +23,7 @@
         id="user-filter-form"
       />
     <% end %>
-    <.link class="mt-2" patch={~p"/cases/new"}>
+    <.link :if={@current_user.role != :readonly} class="mt-2" patch={~p"/cases/new"}>
       <.button>Open New Case</.button>
     </.link>
   </:actions>
@@ -56,10 +56,11 @@
           <.timestamp timestamp={case.created_at} />
         </:timestamp>
         <:actions>
-          <.link patch={~p"/cases/#{case}/edit"}>
+          <.link :if={@current_user.role != :readonly} patch={~p"/cases/#{case}/edit"}>
             <%= gettext("Edit Case") %>
           </.link>
           <.link
+            :if={@current_user.role != :readonly}
             class="block"
             phx-click={JS.push("delete", value: %{id: case.id}) |> hide("##{id}")}
             data-confirm="Are you sure?"

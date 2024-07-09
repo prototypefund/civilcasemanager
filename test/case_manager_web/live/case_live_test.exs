@@ -109,6 +109,29 @@ defmodule CaseManagerWeb.CaseLiveTest do
     end
   end
 
+  describe "Readonly user" do
+    setup [:create_case, :login_readonly]
+
+    test "can list all cases", %{conn: conn, caseStruct: case} do
+      {:ok, _index_live, html} = live(conn, ~p"/cases")
+
+      assert html =~ "Listing Cases"
+      assert html =~ case.name
+    end
+
+    test "cannot saves new case", %{conn: conn} do
+      {:ok, index_live, _html} = live(conn, ~p"/cases")
+
+      refute has_element?(index_live, "a", "New Case")
+    end
+
+    test "cannot delete case in listing", %{conn: conn, caseStruct: case} do
+      {:ok, index_live, _html} = live(conn, ~p"/cases")
+
+      refute has_element?(index_live, "#cases-#{case.id} a", "Delete")
+    end
+  end
+
   describe "Index" do
     setup [:create_case, :login]
 

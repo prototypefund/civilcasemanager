@@ -1,7 +1,7 @@
 <.header class="py-5">
   All CaseManager
   <:actions>
-    <.link patch={~p"/events/new"}>
+    <.link :if={@current_user.role != :readonly} patch={~p"/events/new"}>
       <.button class="bg-calypso-700">New manual Event</.button>
     </.link>
   </:actions>
@@ -33,10 +33,11 @@
           <.timestamp timestamp={event.received_at} />
         </:timestamp>
         <:actions>
-          <.link patch={~p"/events/#{event}/edit"}>
+          <.link :if={@current_user.role != :readonly} patch={~p"/events/#{event}/edit"}>
             <%= gettext("Edit Event") %>
           </.link>
           <.link
+            :if={@current_user.role != :readonly}
             class="block"
             phx-click={JS.push("delete", value: %{id: event.id}) |> hide("##{id}")}
             data-confirm="Are you sure?"

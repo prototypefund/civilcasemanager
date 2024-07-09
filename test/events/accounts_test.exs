@@ -63,7 +63,7 @@ defmodule CaseManager.AccountsTest do
 
       assert %{
                email: ["must have the @ sign and no spaces"],
-               password: ["should be at least 12 character(s)"]
+               password: ["should be at least 14 character(s)"]
              } = errors_on(changeset)
     end
 
@@ -76,11 +76,22 @@ defmodule CaseManager.AccountsTest do
 
     test "validates email uniqueness" do
       %{email: email} = user_fixture()
-      {:error, changeset} = Accounts.register_user(%{email: email})
+
+      {:error, changeset} =
+        Accounts.register_user(%{
+          email: email,
+          password: valid_user_password()
+        })
+
       assert "has already been taken" in errors_on(changeset).email
 
       # Now try with the upper cased email too, to check that email case is ignored.
-      {:error, changeset} = Accounts.register_user(%{email: String.upcase(email)})
+      {:error, changeset} =
+        Accounts.register_user(%{
+          email: String.upcase(email),
+          password: valid_user_password()
+        })
+
       assert "has already been taken" in errors_on(changeset).email
     end
 
@@ -267,7 +278,7 @@ defmodule CaseManager.AccountsTest do
         })
 
       assert %{
-               password: ["should be at least 12 character(s)"],
+               password: ["should be at least 14 character(s)"],
                password_confirmation: ["does not match password"]
              } = errors_on(changeset)
     end
@@ -476,7 +487,7 @@ defmodule CaseManager.AccountsTest do
         })
 
       assert %{
-               password: ["should be at least 12 character(s)"],
+               password: ["should be at least 14 character(s)"],
                password_confirmation: ["does not match password"]
              } = errors_on(changeset)
     end

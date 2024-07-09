@@ -42,7 +42,12 @@
   </:action>
 </.table>
 
-<Flop.Phoenix.pagination opts={pagination_opts()} meta={@meta} path={~p"/positions"} />
+<Flop.Phoenix.pagination
+  :if={@live_action in [:index]}
+  opts={pagination_opts()}
+  meta={@meta}
+  path={~p"/positions"}
+/>
 
 <.modal
   :if={@live_action in [:new, :edit]}

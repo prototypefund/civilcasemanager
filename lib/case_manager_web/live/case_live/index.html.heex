@@ -74,7 +74,12 @@
   <% end %>
 </div>
 
-<Flop.Phoenix.pagination opts={pagination_opts()} meta={@meta} path={~p"/cases"} />
+<Flop.Phoenix.pagination
+  :if={@live_action in [:index]}
+  opts={pagination_opts()}
+  meta={@meta}
+  path={~p"/cases"}
+/>
 
 <.modal :if={@live_action in [:new, :edit]} id="case-modal" show on_cancel={JS.patch(~p"/cases")}>
   <.live_component

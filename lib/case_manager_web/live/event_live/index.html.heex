@@ -51,7 +51,12 @@
   <% end %>
 </div>
 
-<Flop.Phoenix.pagination opts={pagination_opts()} meta={@meta} path={~p"/events"} />
+<Flop.Phoenix.pagination
+  :if={@live_action in [:index]}
+  opts={pagination_opts()}
+  meta={@meta}
+  path={~p"/events"}
+/>
 
 <.modal
   :if={@live_action in [:new, :edit]}

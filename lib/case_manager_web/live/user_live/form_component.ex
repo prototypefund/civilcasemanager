@@ -63,7 +63,6 @@ defmodule CaseManagerWeb.UserLive.FormComponent do
   end
 
   defp save_user(socket, :edit, user_params) do
-    ## FIXME Does this always saves to the current user?
     case Accounts.update_user_generic_attrs(socket.assigns.user, user_params) do
       {:ok, user} ->
         notify_parent({:saved, user})

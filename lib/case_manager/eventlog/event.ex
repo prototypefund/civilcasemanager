@@ -43,7 +43,7 @@ defmodule CaseManager.Eventlog.Event do
     changeset
   end
 
-  defp assign_case(changeset, case = %CaseManager.Cases.Case{}) do
+  defp assign_case(changeset, %CaseManager.Cases.Case{} = case) do
     Ecto.Changeset.put_assoc(changeset, :cases, [case])
   end
 

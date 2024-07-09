@@ -9,11 +9,6 @@ defmodule CaseManager.Datasources.SlackImporter do
   # Define allowed prefixes
   @prefixes_to_import ["EB", "DC", "3SC", "AP"]
 
-  # Use this to debug messages
-  # def handle_event(type, payload) do
-  #   IO.inspect(payload)
-  # end
-
   ## Handles replys in threads (thread_ts is set)
   def handle_event(
         "message",
@@ -137,14 +132,7 @@ defmodule CaseManager.Datasources.SlackImporter do
 
     case Date.from_iso8601(date_string) do
       {:ok, date} ->
-        if Date.utc_today() == date do
-          DateTime.utc_now() |> DateTime.truncate(:second)
-        else
-          case DateTime.new(date, ~T[00:00:00]) do
-            {:ok, datetime} -> datetime
-            _ -> date_string
-          end
-        end
+        add_time_if_today(date, date_string)
 
       _ ->
         date_string
@@ -154,6 +142,17 @@ defmodule CaseManager.Datasources.SlackImporter do
   # Fallback when Split doesnt return three parts
   defp fix_date(date_string) do
     date_string
+  end
+
+  defp add_time_if_today(date, fallback) do
+    if Date.utc_today() == date do
+      DateTime.utc_now() |> DateTime.truncate(:second)
+    else
+      case DateTime.new(date, ~T[00:00:00]) do
+        {:ok, datetime} -> datetime
+        _ -> fallback
+      end
+    end
   end
 
   # Use Slack API to fetch the parent thread using thread_ts

@@ -18,7 +18,7 @@ defmodule CaseManager.Positions do
 
   """
   def list_positions() do
-    Repo.all(Positions)
+    Repo.all(Position)
   end
 
   @doc """

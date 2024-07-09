@@ -67,10 +67,9 @@ defmodule CaseManager.Datasources.IMAPWorker do
 
   def extract_email_address(from) do
     from
-    |> Enum.map(fn
+    |> Enum.map_join(", ", fn
       {nil, email} -> email
       {name, email} -> "#{name} <#{email}>"
     end)
-    |> Enum.join(", ")
   end
 end

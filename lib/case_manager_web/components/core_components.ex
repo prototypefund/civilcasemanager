@@ -780,7 +780,7 @@ defmodule CaseManagerWeb.CoreComponents do
         diff < 3600 ->
           "#{div(diff, 60)} minutes ago"
 
-        diff < 86400 ->
+        diff < 86_400 ->
           "#{div(diff, 3600)} hours ago"
 
         true ->

@@ -85,6 +85,24 @@ defmodule CaseManager.Accounts do
   end
 
   @doc """
+  Creates a user.
+
+  ## Examples
+
+      iex> register_user(%{field: value})
+      {:ok, %User{}}
+
+      iex> register_user(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_user(attrs) do
+    %User{}
+    |> User.creation_changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
   Returns a list of users.
 
   ## Examples

@@ -14,7 +14,7 @@ defmodule CaseManager.AccountsFixtures do
       email: unique_user_email(),
       password: valid_user_password(),
       name: unique_user_name(),
-      role: :admin
+      role: :readonly
     })
   end
 
@@ -22,7 +22,7 @@ defmodule CaseManager.AccountsFixtures do
     {:ok, user} =
       attrs
       |> valid_user_attributes()
-      |> CaseManager.Accounts.register_user()
+      |> CaseManager.Accounts.create_user()
 
     user
   end

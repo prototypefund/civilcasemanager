@@ -9,7 +9,7 @@ defmodule CaseManager.Accounts.User do
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
-    field :role, Ecto.Enum, values: [:user, :readonly, :admin]
+    field :role, Ecto.Enum, values: [:readonly, :user, :admin]
 
     timestamps(type: :utc_datetime)
   end
@@ -40,6 +40,18 @@ defmodule CaseManager.Accounts.User do
   def registration_changeset(user, attrs, opts \\ []) do
     user
     |> cast(attrs, [:email, :password, :name])
+    |> validate_required([:email, :role])
+    |> validate_email(opts)
+    |> validate_password(opts)
+  end
+
+  @doc """
+  A user changeset for creating users
+  """
+  def creation_changeset(user, attrs, opts \\ []) do
+    user
+    |> cast(attrs, [:email, :password, :name, :role])
+    |> validate_required([:email, :role])
     |> validate_email(opts)
     |> validate_password(opts)
   end
@@ -96,6 +108,7 @@ defmodule CaseManager.Accounts.User do
   def generic_changeset(user, attrs, _opts \\ []) do
     user
     |> cast(attrs, [:name, :role, :email])
+    |> validate_required([:name, :role, :email])
   end
 
   @doc """

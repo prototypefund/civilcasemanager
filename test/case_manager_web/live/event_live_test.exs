@@ -25,6 +25,14 @@ defmodule CaseManagerWeb.EventLiveTest do
     %{event: event}
   end
 
+  describe "Anonymous user" do
+    setup [:create_event]
+
+    test "cannot lists events", %{conn: conn, event: event} do
+      {:error, _} = live(conn, ~p"/events")
+    end
+  end
+
   describe "Index" do
     setup [:create_event, :login]
 

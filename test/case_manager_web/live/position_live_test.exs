@@ -48,6 +48,12 @@ defmodule CaseManagerWeb.PositionLiveTest do
     %{position: position}
   end
 
+  describe "Anonymous user" do
+    test "cannot lists positions", %{conn: conn} do
+      {:error, _} = live(conn, ~p"/positions")
+    end
+  end
+
   describe "Index" do
     setup [:create_position, :login]
 

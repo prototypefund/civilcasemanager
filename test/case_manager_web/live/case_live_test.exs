@@ -103,6 +103,12 @@ defmodule CaseManagerWeb.CaseLiveTest do
     %{caseStruct: case}
   end
 
+  describe "Anonymous user" do
+    test "cannot list cases", %{conn: conn} do
+      {:error, _} = live(conn, ~p"/cases")
+    end
+  end
+
   describe "Index" do
     setup [:create_case, :login]
 

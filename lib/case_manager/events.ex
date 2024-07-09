@@ -1,12 +1,12 @@
-defmodule CaseManager.Eventlog do
+defmodule CaseManager.Events do
   @moduledoc """
-  The Eventlog context.
+  The Events context.
   """
 
   import Ecto.Query, warn: false
   alias CaseManager.Repo
 
-  alias CaseManager.Eventlog.Event
+  alias CaseManager.Events.Event
 
   @doc """
   Returns the list of events.

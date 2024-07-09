@@ -1,4 +1,4 @@
-defmodule CaseManager.Eventlog.Event do
+defmodule CaseManager.Events.Event do
   use Ecto.Schema
   import Ecto.Changeset
   import CaseManager.ChangesetValidators

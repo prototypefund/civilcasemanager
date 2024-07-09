@@ -2,7 +2,7 @@ defmodule CaseManagerWeb.EventLiveTest do
   use CaseManagerWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import CaseManager.EventlogFixtures
+  import CaseManager.EventsFixtures
 
   ## Login and auth
   alias CaseManagerWeb.UserLive.Auth

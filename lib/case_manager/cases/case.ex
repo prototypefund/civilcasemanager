@@ -137,7 +137,7 @@ defmodule CaseManager.Cases.Case do
     field :cloud_file_links, :string
     field :imported_from, :string
 
-    many_to_many :events, CaseManager.Eventlog.Event, join_through: CaseManager.CasesEvents
+    many_to_many :events, CaseManager.Events.Event, join_through: CaseManager.CasesEvents
 
     # Use created_at as timestamp key
     timestamps(inserted_at: :created_at, type: :utc_datetime)

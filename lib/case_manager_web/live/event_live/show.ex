@@ -1,7 +1,7 @@
 defmodule CaseManagerWeb.EventLive.Show do
   use CaseManagerWeb, :live_view
 
-  alias CaseManager.Eventlog
+  alias CaseManager.Events
 
   @impl true
   def mount(_params, _session, socket) do
@@ -13,7 +13,7 @@ defmodule CaseManagerWeb.EventLive.Show do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:event, Eventlog.get_event!(id))}
+     |> assign(:event, Events.get_event!(id))}
   end
 
   defp page_title(:show), do: "Show Event"

@@ -1,13 +1,13 @@
 defmodule CaseManagerWeb.EventLive.Index do
   use CaseManagerWeb, :live_view
 
-  alias CaseManager.Eventlog
-  alias CaseManager.Eventlog.Event
+  alias CaseManager.Events
+  alias CaseManager.Events.Event
   import CaseManagerWeb.LiveUtils
 
   @impl true
   def mount(_params, _session, socket) do
-    if connected?(socket), do: Eventlog.subscribe()
+    if connected?(socket), do: Events.subscribe()
     {:ok, stream(socket, :events, [])}
   end
 
@@ -19,7 +19,7 @@ defmodule CaseManagerWeb.EventLive.Index do
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit Event")
-    |> assign(:event, Eventlog.get_event!(id))
+    |> assign(:event, Events.get_event!(id))
   end
 
   defp apply_action(socket, :new, _params) do
@@ -29,7 +29,7 @@ defmodule CaseManagerWeb.EventLive.Index do
   end
 
   defp apply_action(socket, :index, params) do
-    case Eventlog.list_events(params) do
+    case Events.list_events(params) do
       {:ok, {events, meta}} ->
         socket
         |> assign(:meta, meta)
@@ -62,8 +62,8 @@ defmodule CaseManagerWeb.EventLive.Index do
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    event = Eventlog.get_event!(id)
-    {:ok, _} = Eventlog.delete_event(event)
+    event = Events.get_event!(id)
+    {:ok, _} = Events.delete_event(event)
 
     {:noreply, stream_delete(socket, :events, event)}
   end

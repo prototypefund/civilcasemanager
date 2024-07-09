@@ -1,8 +1,8 @@
 defmodule CaseManager.FetchManager do
-  import CaseManager.Eventlog, only: [broadcast: 2]
+  import CaseManager.Events, only: [broadcast: 2]
 
   use GenServer
-  alias CaseManager.Eventlog.Event
+  alias CaseManager.Events.Event
   alias CaseManager.Repo
 
   require Logger

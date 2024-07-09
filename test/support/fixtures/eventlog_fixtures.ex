@@ -1,7 +1,7 @@
-defmodule CaseManager.EventlogFixtures do
+defmodule CaseManager.EventsFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `CaseManager.Eventlog` context.
+  entities via the `CaseManager.Events` context.
   """
 
   @doc """
@@ -15,7 +15,7 @@ defmodule CaseManager.EventlogFixtures do
         title: "some title",
         type: "some type"
       })
-      |> CaseManager.Eventlog.create_event()
+      |> CaseManager.Events.create_event()
 
     event
   end

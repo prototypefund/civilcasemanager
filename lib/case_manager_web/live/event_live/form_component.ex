@@ -1,7 +1,7 @@
 defmodule CaseManagerWeb.EventLive.FormComponent do
   use CaseManagerWeb, :live_component
   require Logger
-  alias CaseManager.Eventlog
+  alias CaseManager.Events
 
   @impl true
   def render(assigns) do
@@ -46,7 +46,7 @@ defmodule CaseManagerWeb.EventLive.FormComponent do
 
   @impl true
   def update(%{event: event} = assigns, socket) do
-    changeset = Eventlog.change_event(event)
+    changeset = Events.change_event(event)
 
     {:ok,
      socket
@@ -58,7 +58,7 @@ defmodule CaseManagerWeb.EventLive.FormComponent do
   def handle_event("validate", %{"event" => event_params}, socket) do
     changeset =
       socket.assigns.event
-      |> Eventlog.change_event(event_params)
+      |> Events.change_event(event_params)
       |> Map.put(:action, :validate)
 
     {:noreply, assign_form(socket, changeset)}
@@ -75,7 +75,7 @@ defmodule CaseManagerWeb.EventLive.FormComponent do
   end
 
   defp save_event(socket, :edit, event_params) do
-    case Eventlog.update_event(socket.assigns.event, event_params) do
+    case Events.update_event(socket.assigns.event, event_params) do
       {:ok, event} ->
         notify_parent({:saved, event})
 
@@ -90,7 +90,7 @@ defmodule CaseManagerWeb.EventLive.FormComponent do
   end
 
   defp save_event(socket, :new, event_params) do
-    case Eventlog.create_event(event_params) do
+    case Events.create_event(event_params) do
       {:ok, event} ->
         notify_parent({:saved, event})
 

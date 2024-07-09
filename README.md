@@ -6,7 +6,6 @@ user interface to assign them to various cases.
 - [ ] Filter changed events in case view
 - [ ] Fix readonly permissions
 - [ ] Allow to edit user without setting a new password
-- [ ] Rename Eventlog => Events
 
 
 # TODO

@@ -4,7 +4,7 @@ defmodule CaseManager.CasesEvents do
   @primary_key false
   schema "cases_events" do
     belongs_to :case, CaseManager.Cases.Case, type: :string
-    belongs_to :event, CaseManager.Eventlog.Event, type: :integer
+    belongs_to :event, CaseManager.Events.Event, type: :integer
     timestamps()
   end
 

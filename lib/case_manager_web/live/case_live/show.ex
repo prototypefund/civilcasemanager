@@ -2,11 +2,11 @@ defmodule CaseManagerWeb.CaseLive.Show do
   use CaseManagerWeb, :live_view
 
   alias CaseManager.Cases
-  alias CaseManager.Eventlog.Event
+  alias CaseManager.Events.Event
 
   @impl true
   def mount(_params, _session, socket) do
-    if connected?(socket), do: CaseManager.Eventlog.subscribe()
+    if connected?(socket), do: CaseManager.Events.subscribe()
     {:ok, socket, layout: {CaseManagerWeb.Layouts, :column}}
   end
 

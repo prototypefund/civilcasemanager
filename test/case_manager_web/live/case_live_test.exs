@@ -3,11 +3,7 @@ defmodule CaseManagerWeb.CaseLiveTest do
 
   import Phoenix.LiveViewTest
   import CaseManager.CasesFixtures
-
-  ## Login and auth
-  alias CaseManagerWeb.UserLive.Auth
-  import CaseManager.AccountsFixtures
-  @remember_me_cookie "_events_web_user_remember_me"
+  import CaseManagerWeb.LoginUtils
 
   @create_attrs %{
     name: "AP9001",
@@ -105,23 +101,6 @@ defmodule CaseManagerWeb.CaseLiveTest do
   defp create_case(_) do
     case = case_fixture()
     %{caseStruct: case}
-  end
-
-  defp login(%{conn: conn}) do
-    user = user_fixture()
-
-    conn =
-      conn
-      |> Map.replace!(:secret_key_base, CaseManagerWeb.Endpoint.config(:secret_key_base))
-      |> init_test_session(%{})
-
-    logged_in_conn =
-      conn |> fetch_cookies() |> Auth.log_in_user(user, %{"remember_me" => "true"})
-
-    %{value: signed_token} = logged_in_conn.resp_cookies[@remember_me_cookie]
-    conn = conn |> put_req_cookie(@remember_me_cookie, signed_token)
-
-    %{user: user, conn: conn}
   end
 
   describe "Index" do

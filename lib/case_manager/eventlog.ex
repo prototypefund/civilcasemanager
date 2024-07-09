@@ -38,6 +38,7 @@ defmodule CaseManager.Eventlog do
   Gets a single event.
 
   Raises `Ecto.NoResultsError` if the Event does not exist.
+  By default also preloads the cases relationship.
 
   ## Examples
 
@@ -48,19 +49,11 @@ defmodule CaseManager.Eventlog do
       ** (Ecto.NoResultsError)
 
   """
-  def get_event!(id) do
+  def get_event!(id, preload \\ true) do
     Repo.one!(
-      from e in Event,
-        where: e.id == ^id,
-        preload: [:cases]
-    )
-  end
-
-  # TODO come with a better solution for tests
-  def get_event!(id, _preload = false) do
-    Repo.one!(
-      from e in Event,
-        where: e.id == ^id
+      from c in Event,
+        where: c.id == ^id,
+        preload: ^if(preload, do: [:cases], else: [])
     )
   end
 

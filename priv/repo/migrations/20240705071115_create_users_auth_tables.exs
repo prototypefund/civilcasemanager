@@ -10,7 +10,7 @@ defmodule CaseManager.Repo.Migrations.CreateUsersAuthTables do
       timestamps(type: :utc_datetime)
     end
 
-    create unique_index(:users, [:email], prefix: "private")
+    create unique_index(:users, ["(lower(email))"], name: "users_email_index", prefix: "private")
 
     create table(:users_tokens, prefix: "private") do
       add :user_id, references(:users, on_delete: :delete_all), null: false

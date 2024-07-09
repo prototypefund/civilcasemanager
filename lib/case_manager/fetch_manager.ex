@@ -5,6 +5,8 @@ defmodule CaseManager.FetchManager do
   alias CaseManager.Eventlog.Event
   alias CaseManager.Repo
 
+  require Logger
+
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts, name: Keyword.get(opts, :name, __MODULE__))
   end
@@ -16,7 +18,7 @@ defmodule CaseManager.FetchManager do
 
   @impl true
   def handle_cast({:new_event, event}, state) do
-    IO.inspect(event, label: "Manager received a new event")
+    Logger.info("Manager received a new event", event)
 
     # Convert the struct to a map before insertion
     event_map =
@@ -26,10 +28,10 @@ defmodule CaseManager.FetchManager do
     # Use Event.changeset/2 for insertion as before
     case %Event{} |> Event.changeset(event_map) |> Repo.insert() |> broadcast(:event_created) do
       {:ok, _event_inserted} ->
-        IO.puts("Event successfully inserted into the database")
+        Logger.info("Event successfully inserted into the database")
 
       {:error, changeset} ->
-        IO.inspect(changeset.errors, label: "Failed to insert event")
+        Logger.error("Failed to insert event", changeset.errors)
     end
 
     {:noreply, state}

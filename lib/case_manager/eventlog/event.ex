@@ -27,8 +27,6 @@ defmodule CaseManager.Eventlog.Event do
 
   @doc false
   def changeset(event, attrs) do
-    # IO.inspect(event, label: "Event before Validation")
-    # IO.inspect(attrs, label: "Event Attrs before Validation")
     event
     ## Here are the fields than be updated through user interaction
     ## Check if complete

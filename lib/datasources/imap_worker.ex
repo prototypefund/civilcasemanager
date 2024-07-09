@@ -4,6 +4,8 @@ defmodule CaseManager.Datasources.IMAPWorker do
 
   use GenServer
 
+  require Logger
+
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts)
   end
@@ -28,7 +30,7 @@ defmodule CaseManager.Datasources.IMAPWorker do
   end
 
   defp publish_email(message, _state) do
-    IO.inspect(message.subject, label: "Received an email with subject:")
+    Logger.debug("Received an email with subject: " <> message.subject)
 
     event = %CaseManager.FetchEvent{
       type: IMAPSupervisor.event_type(),

@@ -192,12 +192,51 @@ defmodule CaseManager.Cases do
     |> hd()
   end
 
+  @doc """
+  Extracts the year from the case using different strategies.
+  Returns nil if none found.
+
+  ## Example
+
+  iex> get_year(case)
+      2024
+  """
+  def get_year(case) do
+    get_year_from_id(case) || get_year_from_occurred(case)
+  end
+
+  @doc """
+  Extracts the year from the case identifier.
+  Returns nil if the identifier doesn't contain a year.
+
+  ## Example
+
+      iex> get_year_from_id(case)
+      2024
+
+  """
   def get_year_from_id(case) do
     # Get second part of identifier or nothing if it doesn't exist
     case.name
     |> String.split("-")
     |> tl()
     |> Enum.at(0)
+  end
+
+  @doc """
+  Extracts the year from the occurred_at field.
+
+  ## Example
+
+      iex> get_year_from_occurred(case)
+      2020
+
+  """
+  def get_year_from_occurred(case) do
+    case case.occurred_at do
+      nil -> nil
+      _ -> DateTime.to_date(case.occurred_at).year
+    end
   end
 
   def fill_template_with_case(case) do

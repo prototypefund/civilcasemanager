@@ -46,9 +46,9 @@
           </a>
         </:title>
         <:tag>
-          <%= if Cases.get_year_from_id(case) do %>
+          <%= if Cases.get_year(case) do %>
             <.tag_badge color={get_color_for_year_tag(case)}>
-              <%= Cases.get_year_from_id(case) %>
+              <%= Cases.get_year(case) %>
             </.tag_badge>
           <% end %>
         </:tag>

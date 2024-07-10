@@ -89,7 +89,7 @@ defmodule CaseManagerWeb.CaseLive.Index do
   end
 
   defp get_color_for_year_tag(case) do
-    year = Cases.get_year_from_id(case)
+    year = Cases.get_year(case)
 
     if year do
       if year == Integer.to_string(Date.utc_today().year) do
@@ -109,6 +109,7 @@ defmodule CaseManagerWeb.CaseLive.Index do
         :open -> "hero-inbox-solid text-emerald-500"
         :closed -> "hero-lock-closed text-gray-500"
         :archived -> "hero-archive-box text-gray-500"
+        :ready_for_documentation -> "hero-clipboard-document-list text-blue-500"
         _ -> "hero-question-mark-circle text-blue-500"
       end
 

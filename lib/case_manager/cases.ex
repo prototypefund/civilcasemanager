@@ -239,6 +239,20 @@ defmodule CaseManager.Cases do
     end
   end
 
+  @doc """
+  Get a formatted status string for the case.
+
+  TODO: Replace with gettext
+  """
+  def get_pretty_status(case) do
+    case case.status do
+      :open -> "open"
+      :closed -> "closed"
+      :ready_for_documentation -> "ready for doc"
+      _ -> nil
+    end
+  end
+
   def fill_template_with_case(case) do
     """
     Dear officer on duty,

@@ -100,20 +100,32 @@ defmodule CaseManagerWeb.CaseLive.Index do
     end
   end
 
+  defp get_color_for_status(status) do
+    case status do
+      :open -> "emerald"
+      :closed -> "gray"
+      :archived -> "gray"
+      :ready_for_documentation -> "blue"
+      _ -> "blue"
+    end
+  end
+
   attr :status, :atom, required: true
   attr :class, :string, default: ""
 
   def status_icon(%{status: status} = assigns) do
-    icon_name =
+    classes =
       case status do
-        :open -> "hero-inbox-solid text-emerald-500"
-        :closed -> "hero-lock-closed text-gray-500"
-        :archived -> "hero-archive-box text-gray-500"
-        :ready_for_documentation -> "hero-clipboard-document-list text-blue-500"
-        _ -> "hero-question-mark-circle text-blue-500"
+        :open -> "hero-inbox-solid text-"
+        :closed -> "hero-lock-closed text-"
+        :archived -> "hero-archive-box text-"
+        :ready_for_documentation -> "hero-clipboard-document-list text-0"
+        _ -> "hero-question-mark-circle text-"
       end
 
-    assigns = assign(assigns, :icon_name, icon_name)
+    classes = classes <> get_color_for_status(status) <> "-500"
+
+    assigns = assign(assigns, :icon_name, classes)
     ~H"<span class={[@icon_name, @class]} />"
   end
 end

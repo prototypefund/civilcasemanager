@@ -2,28 +2,19 @@
 Receives incoming information (currently IMAP Idle, and Slack, (VOIP, SMS planned)) and provides a 
 user interface to assign them to various cases. 
 
-# Next Steps
-- [ ] Filter changed events in case view
-- [ ] Fix readonly permissions
-- [ ] Allow to edit user without setting a new password
 
-
-# TODO
-- [ ] Prettify case selection a little
-- [ ] Gettext for dropdown
-
-# Minor
+# v2.0
+- Quick Compose: Titel, Timestamp
 - [ ] New cases are streamed unfiltered
 - [ ] When cases are created trough casts, there is no event emitted.
 - [ ] Add dropdowns (in embedded)
-
-# v1.0
-* Quick Compose: Titel, Timestamp
 * Markdown editor: Prosemirror?
+* Prettify case  selection (in events) a little
 * Thuraya?
 * Attachments: Native support avaliable.
 
-# v2.0
+# v3.0
+* Filter changed events in case view
 * Maps: https://medium.com/@thomas.poumarede/from-scratch-to-map-my-mapbox-integration-experience-with-phoenix-liveview-using-elixir-aa84fca2b979
 
 # Platform issues to report

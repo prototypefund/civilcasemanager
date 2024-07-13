@@ -72,7 +72,7 @@ defmodule CaseManager.ImportedCasesTest do
         boat_engine_working: "some boat_engine_working",
         imported_from: "some imported_from",
         departure_region: "some departure_region",
-        outcome: "some outcome",
+        outcome: "interception_tn",
         boat_number_of_engines: 42,
         pob_gender_ambiguous: 42,
         sar_region: "some sar_region",
@@ -138,7 +138,7 @@ defmodule CaseManager.ImportedCasesTest do
       assert imported_case.sar_region == "some sar_region"
       assert imported_case.pob_gender_ambiguous == 42
       assert imported_case.boat_number_of_engines == 42
-      assert imported_case.outcome == "some outcome"
+      assert imported_case.outcome == "interception_tn"
       assert imported_case.departure_region == "some departure_region"
       assert imported_case.imported_from == "some imported_from"
       assert imported_case.boat_engine_working == "some boat_engine_working"

@@ -31,7 +31,7 @@ defmodule CaseManager.ImportedCasesFixtures do
         name: "some name",
         notes: "some notes",
         occurred_at: ~U[2024-07-09 08:22:00Z],
-        outcome: "some outcome",
+        outcome: "interception_tn",
         outcome_actors: "some outcome_actors",
         people_dead: 42,
         people_missing: 42,

@@ -2,11 +2,13 @@ defmodule CaseManager.CasesTest do
   use CaseManager.DataCase
 
   alias CaseManager.Cases
+  alias CaseManager.ImportedCases
 
   describe "cases" do
     alias CaseManager.Cases.Case
 
     import CaseManager.CasesFixtures
+    import CaseManager.ImportedCasesFixtures
 
     @invalid_attrs %{
       archived_at: nil,
@@ -23,6 +25,47 @@ defmodule CaseManager.CasesTest do
       updated_at: nil
     }
 
+    @valid_attrs %{
+      name: "TC0012",
+      notes: "some notes",
+      status: :open,
+      occurred_at: ~U[2024-03-08 08:58:00Z],
+      departure_region: "some departure_region",
+      place_of_departure: "some place_of_departure",
+      time_of_departure: ~U[2024-03-08 08:58:00Z],
+      sar_region: :sar1,
+      phonenumber: "some phonenumber",
+      alarmphone_contact: "some alarmphone_contact",
+      confirmation_by: "some confirmation_by",
+      actors_involved: "some actors_involved",
+      authorities_alerted: true,
+      authorities_details: "some authorities_details",
+      boat_type: :rubber,
+      boat_notes: "some boat_notes",
+      boat_color: :red,
+      boat_engine_status: "some boat_engine_status",
+      boat_engine_working: "some boat_engine_working",
+      boat_number_of_engines: 42,
+      pob_total: 42,
+      pob_men: 42,
+      pob_women: 42,
+      pob_minors: 42,
+      pob_gender_ambiguous: 42,
+      pob_medical_cases: 42,
+      people_dead: 42,
+      people_missing: 42,
+      pob_per_nationality: "some pob_per_nationality",
+      outcome: :interception_libya,
+      time_of_disembarkation: ~U[2024-03-08 08:58:00Z],
+      place_of_disembarkation: "some place_of_disembarkation",
+      disembarked_by: "some disembarked_by",
+      outcome_actors: "some outcome_actors",
+      frontext_involvement: "some frontext_involvement",
+      followup_needed: true,
+      url: "some url",
+      cloud_file_links: "some cloud_file_links"
+    }
+
     test "list_cases/0 returns all cases" do
       case = case_fixture()
       assert Cases.list_cases() == [case]
@@ -34,48 +77,7 @@ defmodule CaseManager.CasesTest do
     end
 
     test "create_case/1 with valid data creates a case" do
-      valid_attrs = %{
-        name: "TC0012",
-        notes: "some notes",
-        status: :open,
-        occurred_at: ~U[2024-03-08 08:58:00Z],
-        departure_region: "some departure_region",
-        place_of_departure: "some place_of_departure",
-        time_of_departure: ~U[2024-03-08 08:58:00Z],
-        sar_region: :sar1,
-        phonenumber: "some phonenumber",
-        alarmphone_contact: "some alarmphone_contact",
-        confirmation_by: "some confirmation_by",
-        actors_involved: "some actors_involved",
-        authorities_alerted: true,
-        authorities_details: "some authorities_details",
-        boat_type: :rubber,
-        boat_notes: "some boat_notes",
-        boat_color: :red,
-        boat_engine_status: "some boat_engine_status",
-        boat_engine_working: "some boat_engine_working",
-        boat_number_of_engines: 42,
-        pob_total: 42,
-        pob_men: 42,
-        pob_women: 42,
-        pob_minors: 42,
-        pob_gender_ambiguous: 42,
-        pob_medical_cases: 42,
-        people_dead: 42,
-        people_missing: 42,
-        pob_per_nationality: "some pob_per_nationality",
-        outcome: :interception_libya,
-        time_of_disembarkation: ~U[2024-03-08 08:58:00Z],
-        place_of_disembarkation: "some place_of_disembarkation",
-        disembarked_by: "some disembarked_by",
-        outcome_actors: "some outcome_actors",
-        frontext_involvement: "some frontext_involvement",
-        followup_needed: true,
-        url: "some url",
-        cloud_file_links: "some cloud_file_links"
-      }
-
-      assert {:ok, %Case{} = case} = Cases.create_case(valid_attrs)
+      assert {:ok, %Case{} = case} = Cases.create_case(@valid_attrs)
       assert case.name == "TC0012"
       assert case.notes == "some notes"
       assert case.status == :open
@@ -221,6 +223,22 @@ defmodule CaseManager.CasesTest do
     test "change_case/1 returns a case changeset" do
       case = case_fixture()
       assert %Ecto.Changeset{} = Cases.change_case(case)
+    end
+
+    test "create_case_and_delete_imported/2 creates a case and deletes the imported case" do
+      imported = imported_case_fixture()
+      assert {:ok, %Case{}} = Cases.create_case_and_delete_imported(@valid_attrs, imported)
+      assert_raise Ecto.NoResultsError, fn -> ImportedCases.get_imported_case!(imported.id) end
+    end
+
+    test "create_case_and_delete_imported/2 fails if imported case is not in db" do
+      imported = imported_case_fixture()
+      assert {:ok, %Case{}} = Cases.create_case_and_delete_imported(@valid_attrs, imported)
+      assert_raise Ecto.NoResultsError, fn -> ImportedCases.get_imported_case!(imported.id) end
+
+      assert_raise Ecto.StaleEntryError, fn ->
+        Cases.create_case_and_delete_imported(@valid_attrs, imported)
+      end
     end
   end
 end

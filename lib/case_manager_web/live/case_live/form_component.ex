@@ -40,7 +40,13 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
         <%!-- Should be autocomplete --%>
         <.input field={@form[:place_of_departure]} type="text" label="Place of Departure" />
         <.input field={@form[:time_of_departure]} type="datetime-local" label="Time of Departure" />
-        <.input field={@form[:sar_region]} type="text" label="SAR Region" />
+
+        <.input
+          field={@form[:sar_region]}
+          type="select"
+          label="SAR Region"
+          options={Ecto.Enum.values(CaseManager.Cases.Case, :sar_region)}
+        />
 
         <h1 class="text-indigo-600 pt-8 font-semibold">Involved parties</h1>
         <.input field={@form[:phonenumber]} type="text" label="Phone number" />
@@ -117,7 +123,13 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
         </div>
 
         <h1 class="text-indigo-600 pt-8 font-semibold">Outcome</h1>
-        <.input field={@form[:outcome]} type="text" label="Outcome" />
+        <.input
+          field={@form[:outcome]}
+          type="select"
+          label="Outcome"
+          options={Ecto.Enum.values(CaseManager.Cases.Case, :outcome)}
+        />
+
         <.input
           field={@form[:time_of_disembarkation]}
           type="datetime-local"

@@ -227,13 +227,19 @@ defmodule CaseManager.CasesTest do
 
     test "create_case_and_delete_imported/2 creates a case and deletes the imported case" do
       imported = imported_case_fixture()
-      assert {:ok, %Case{}} = Cases.create_case_and_delete_imported(@valid_attrs, imported)
+
+      assert {:ok, %{delete_imported_case: _, insert_case: _}} =
+               Cases.create_case_and_delete_imported(@valid_attrs, imported)
+
       assert_raise Ecto.NoResultsError, fn -> ImportedCases.get_imported_case!(imported.id) end
     end
 
     test "create_case_and_delete_imported/2 fails if imported case is not in db" do
       imported = imported_case_fixture()
-      assert {:ok, %Case{}} = Cases.create_case_and_delete_imported(@valid_attrs, imported)
+
+      assert {:ok, %{delete_imported_case: _, insert_case: _}} =
+               Cases.create_case_and_delete_imported(@valid_attrs, imported)
+
       assert_raise Ecto.NoResultsError, fn -> ImportedCases.get_imported_case!(imported.id) end
 
       assert_raise Ecto.StaleEntryError, fn ->

@@ -276,7 +276,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
          |> push_patch(to: patch_url)
          |> put_flash(:info, "Case added to the main database successfully")}
 
-      {:error, %Ecto.Changeset{} = changeset} ->
+      {:error, :insert_case, %Ecto.Changeset{} = changeset, _} ->
         {:noreply, assign(socket, form: to_form(changeset))}
     end
   end

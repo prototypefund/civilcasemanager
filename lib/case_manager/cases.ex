@@ -137,13 +137,10 @@ defmodule CaseManager.Cases do
   Creates a case and delete the imported case record inside a transaction.
   """
   def create_case_and_delete_imported(attrs, %ImportedCase{} = imported) do
-    Repo.transaction(fn ->
-      Repo.delete!(imported)
-
-      %Case{}
-      |> Case.changeset(attrs)
-      |> Repo.insert!()
-    end)
+    Ecto.Multi.new()
+    |> Ecto.Multi.delete(:delete_imported_case, imported)
+    |> Ecto.Multi.insert(:insert_case, %Case{} |> Case.changeset(attrs))
+    |> Repo.transaction()
   end
 
   @doc """

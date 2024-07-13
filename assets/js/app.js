@@ -44,6 +44,17 @@ Hooks.ParentMount = {
   }
 };
 
+Hooks.FormHelpers = {
+  updated() {
+    // `this.el` references the parent form
+    let firstError = this.el.querySelector(".has-errors");
+    if (firstError) {
+      firstError.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+    }
+  }
+}
+
+
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,

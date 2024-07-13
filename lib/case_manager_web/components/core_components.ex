@@ -290,14 +290,23 @@ defmodule CaseManagerWeb.CoreComponents do
   attr :wrapper_class, :string, default: ""
   attr :label_class, :string, default: ""
 
+  attr :force_validate, :boolean,
+    default: false,
+    doc: "whether to always validate the input even if the firm wasn't changed"
+
   attr :rest, :global,
     include: ~w(accept autocomplete capture cols disabled form list max maxlength min minlength
                 multiple pattern placeholder readonly required rows size step)
 
   def input(%{field: %Phoenix.HTML.FormField{} = field} = assigns) do
+    errors =
+      if assigns.force_validate || Phoenix.Component.used_input?(field),
+        do: field.errors,
+        else: []
+
     assigns
     |> assign(field: nil, id: assigns.id || field.id)
-    |> assign(:errors, Enum.map(field.errors, &translate_error(&1)))
+    |> assign(:errors, Enum.map(errors, &translate_error(&1)))
     |> assign_new(:name, fn -> if assigns.multiple, do: field.name <> "[]", else: field.name end)
     |> assign_new(:value, fn -> field.value end)
     |> input()
@@ -310,7 +319,7 @@ defmodule CaseManagerWeb.CoreComponents do
       end)
 
     ~H"""
-    <div phx-feedback-for={@name} class={["flex items-center gap-4", @wrapper_class]}>
+    <div class={["flex items-center gap-4", @wrapper_class]}>
       <label class={"flex items-center gap-4 text-sm leading-5 text-zinc-600 #{@label_class}"}>
         <input type="hidden" name={@name} value="false" />
         <input
@@ -334,13 +343,15 @@ defmodule CaseManagerWeb.CoreComponents do
 
   def input(%{type: "select"} = assigns) do
     ~H"""
-    <div phx-feedback-for={@name} class={["flex items-center gap-4", @wrapper_class]}>
+    <div class={["flex items-center gap-4", @wrapper_class]}>
       <.label for={@id} class={@label_class}><%= @label %></.label>
       <select
         id={@id}
         name={@name}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-5 phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400 dark:bg-zinc-900 dark:text-zinc-100 border-zinc-300 focus:border-zinc-400 ",
+          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-5   dark:bg-zinc-900 dark:text-zinc-100 border-zinc-300 focus:border-zinc-400 ",
+          @errors == [] && "border-zinc-300 focus:border-zinc-400",
+          @errors != [] && "border-rose-400 focus:border-rose-400 has-errors",
           @class
         ]}
         multiple={@multiple}
@@ -356,16 +367,16 @@ defmodule CaseManagerWeb.CoreComponents do
 
   def input(%{type: "textarea"} = assigns) do
     ~H"""
-    <div phx-feedback-for={@name}>
+    <div>
       <.label for={@id} class={@label_class}><%= @label %></.label>
       <textarea
         id={@id}
         name={@name}
         class={[
           "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-5",
-          "min-h-[6rem] phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
+          "min-h-[6rem]  ",
           @errors == [] && "border-zinc-300 focus:border-zinc-400",
-          @errors != [] && "border-rose-400 focus:border-rose-400",
+          @errors != [] && "border-rose-400 focus:border-rose-400 has-errors",
           @class
         ]}
         {@rest}
@@ -378,7 +389,7 @@ defmodule CaseManagerWeb.CoreComponents do
   # All other inputs text, datetime-local, url, password, etc. are handled here...
   def input(assigns) do
     ~H"""
-    <div phx-feedback-for={@name} class={["flex items-center gap-4", @wrapper_class]}>
+    <div class={["flex items-center gap-4", @wrapper_class]}>
       <%= if (is_binary(@label) && String.trim(@label) != "") do %>
         <.label for={@id} class={@label_class}><%= @label %></.label>
       <% end %>
@@ -389,10 +400,10 @@ defmodule CaseManagerWeb.CoreComponents do
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
           "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-5",
-          "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
+          " ",
           "dark:bg-zinc-900 dark:text-zinc-100",
           @errors == [] && "border-zinc-300 focus:border-zinc-400",
-          @errors != [] && "border-rose-400 focus:border-rose-400",
+          @errors != [] && "border-rose-400 focus:border-rose-400 has-errors",
           @class
         ]}
         {@rest}
@@ -427,7 +438,7 @@ defmodule CaseManagerWeb.CoreComponents do
 
   def error(assigns) do
     ~H"""
-    <p class="mt-3 flex gap-3 text-sm leading-5 text-rose-600 phx-no-feedback:hidden">
+    <p class="mt-3 flex gap-3 text-sm leading-5 text-rose-600 ">
       <.icon name="hero-exclamation-circle-mini" class="mt-0.5 h-5 w-5 flex-none" />
       <%= render_slot(@inner_block) %>
     </p>

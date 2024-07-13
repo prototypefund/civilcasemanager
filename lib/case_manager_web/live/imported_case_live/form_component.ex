@@ -20,17 +20,19 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
         phx-target={@myself}
         phx-change="validate"
         phx-submit="save"
+        phx-hook="FormHelpers"
         class="h-full overflow-y-scroll pb-4 pr-4"
       >
         <h1 class="text-indigo-600 pt-8 font-semibold">Base data</h1>
-        <.input field={@form[:name]} type="text" label="Identifier" />
-        <.input field={@form[:notes]} type="text" label="Notes" />
+        <.input field={@form[:name]} type="text" label="Identifier" force_validate={true} />
+        <.input field={@form[:notes]} type="text" label="Notes" force_validate={true} />
 
         <.input
           field={@form[:status]}
           type="select"
           label="Status"
           options={get_options(CaseManager.Cases.Case, :status, @form[:status], true)}
+          force_validate={true}
         />
 
         <%= if @imported_case.occurred_at_string do %>
@@ -38,38 +40,84 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
             <strong>Occurred at (original):</strong> <%= @imported_case.occurred_at_string %>
           </div>
         <% end %>
-        <.input field={@form[:occurred_at]} type="datetime-local" label="Occurred at" />
+        <.input
+          field={@form[:occurred_at]}
+          type="datetime-local"
+          label="Occurred at"
+          force_validate={true}
+        />
 
         <h1 class="text-indigo-600 pt-8 font-semibold">Departure</h1>
-        <.input field={@form[:departure_region]} type="text" label="Departure Region" />
+        <.input
+          field={@form[:departure_region]}
+          type="text"
+          label="Departure Region"
+          force_validate={true}
+        />
 
         <%!-- Should be autocomplete --%>
-        <.input field={@form[:place_of_departure]} type="text" label="Place of Departure" />
+        <.input
+          field={@form[:place_of_departure]}
+          type="text"
+          label="Place of Departure"
+          force_validate={true}
+        />
         <%= if @imported_case.time_of_departure_string do %>
           <div class="text-rose-600">
             <strong>Time of departure (original):</strong> <%= @imported_case.time_of_departure_string %>
           </div>
         <% end %>
-        <.input field={@form[:time_of_departure]} type="datetime-local" label="Time of Departure" />
+        <.input
+          field={@form[:time_of_departure]}
+          type="datetime-local"
+          label="Time of Departure"
+          force_validate={true}
+        />
         <.input
           field={@form[:sar_region]}
           type="select"
           label="SAR Region"
           options={get_options(CaseManager.Cases.Case, :sar_region, @form[:sar_region], true)}
+          force_validate={true}
         />
 
         <h1 class="text-indigo-600 pt-8 font-semibold">Involved parties</h1>
-        <.input field={@form[:phonenumber]} type="text" label="Phone number" />
-        <.input field={@form[:alarmphone_contact]} type="text" label="Alarmphone contact" />
-        <.input field={@form[:confirmation_by]} type="text" label="Confirmation by" />
-        <.input field={@form[:actors_involved]} type="text" label="Actors involved" />
+        <.input field={@form[:phonenumber]} type="text" label="Phone number" force_validate={true} />
+        <.input
+          field={@form[:alarmphone_contact]}
+          type="text"
+          label="Alarmphone contact"
+          force_validate={true}
+        />
+        <.input
+          field={@form[:confirmation_by]}
+          type="text"
+          label="Confirmation by"
+          force_validate={true}
+        />
+        <.input
+          field={@form[:actors_involved]}
+          type="text"
+          label="Actors involved"
+          force_validate={true}
+        />
         <%= if @imported_case.authorities_alerted_string do %>
           <div class="text-rose-600">
             <strong>Authorities alerted (original):</strong> <%= @imported_case.authorities_alerted_string %>
           </div>
         <% end %>
-        <.input field={@form[:authorities_alerted]} type="checkbox" label="Authorities alerted" />
-        <.input field={@form[:authorities_details]} type="text" label="Authorities details" />
+        <.input
+          field={@form[:authorities_alerted]}
+          type="checkbox"
+          label="Authorities alerted"
+          force_validate={true}
+        />
+        <.input
+          field={@form[:authorities_details]}
+          type="text"
+          label="Authorities details"
+          force_validate={true}
+        />
 
         <h1 class="text-indigo-600 pt-8 font-semibold">The boat</h1>
         <.input
@@ -78,16 +126,31 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
           label="Boat Type"
           options={get_options(CaseManager.Cases.Case, :boat_type, @form[:boat_type], true)}
         />
-        <.input field={@form[:boat_notes]} type="text" label="Boat Notes" />
-        <.input field={@form[:boat_color]} type="text" label="Boat Color" />
-        <.input field={@form[:boat_engine_status]} type="text" label="Boat Engine Status" />
-        <.input field={@form[:boat_engine_working]} type="text" label="Boat Engine Working" />
+        <.input field={@form[:boat_notes]} type="text" label="Boat Notes" force_validate={true} />
+        <.input field={@form[:boat_color]} type="text" label="Boat Color" force_validate={true} />
+        <.input
+          field={@form[:boat_engine_status]}
+          type="text"
+          label="Boat Engine Status"
+          force_validate={true}
+        />
+        <.input
+          field={@form[:boat_engine_working]}
+          type="text"
+          label="Boat Engine Working"
+          force_validate={true}
+        />
         <%= if @imported_case.boat_number_of_engines_string do %>
           <div class="text-rose-600">
             <strong>Boat number of engines (original):</strong> <%= @imported_case.boat_number_of_engines_string %>
           </div>
         <% end %>
-        <.input field={@form[:boat_number_of_engines]} type="number" label="Boat Number of Engines" />
+        <.input
+          field={@form[:boat_number_of_engines]}
+          type="number"
+          label="Boat Number of Engines"
+          force_validate={true}
+        />
 
         <h1 class="text-indigo-600 pt-8 font-semibold">People on Board</h1>
         <div class="flex gap-4 flex-row flex-wrap">
@@ -101,13 +164,20 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
             type="number"
             label="Total"
             wrapper_class="w-2/5 flex-grow"
+            force_validate={true}
           />
           <%= if @imported_case.pob_men_string do %>
             <div class="text-rose-600">
               <strong>Pob men (original):</strong> <%= @imported_case.pob_men_string %>
             </div>
           <% end %>
-          <.input field={@form[:pob_men]} type="number" label="Men" wrapper_class="w-2/5 flex-grow" />
+          <.input
+            field={@form[:pob_men]}
+            type="number"
+            label="Men"
+            wrapper_class="w-2/5 flex-grow"
+            force_validate={true}
+          />
           <%= if @imported_case.pob_women_string do %>
             <div class="text-rose-600">
               <strong>Pob women (original):</strong> <%= @imported_case.pob_women_string %>
@@ -118,6 +188,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
             type="number"
             label="Women"
             wrapper_class="w-2/5 flex-grow"
+            force_validate={true}
           />
           <%= if @imported_case.pob_minors_string do %>
             <div class="text-rose-600">
@@ -129,6 +200,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
             type="number"
             label="Minors"
             wrapper_class="w-2/5 flex-grow"
+            force_validate={true}
           />
           <%= if @imported_case.pob_gender_ambiguous_string do %>
             <div class="text-rose-600">
@@ -140,12 +212,14 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
             type="number"
             label="Gender ambigous"
             wrapper_class="w-2/5 flex-grow"
+            force_validate={true}
           />
           <.input
             field={@form[:pob_medical_cases]}
             type="number"
             label="Medical Cases"
             wrapper_class="w-2/5 flex-grow"
+            force_validate={true}
           />
           <%= if @imported_case.people_dead_string do %>
             <div class="text-rose-600">
@@ -157,6 +231,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
             type="number"
             label="Dead"
             wrapper_class="w-2/5 flex-grow"
+            force_validate={true}
           />
           <%= if @imported_case.people_missing_string do %>
             <div class="text-rose-600">
@@ -168,12 +243,14 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
             type="number"
             label="Missing"
             wrapper_class="w-2/5 flex-grow"
+            force_validate={true}
           />
           <.input
             field={@form[:pob_per_nationality]}
             type="text"
             label="Per nationality"
             wrapper_class="w-2/5 flex-grow"
+            force_validate={true}
           />
         </div>
 
@@ -183,6 +260,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
           type="select"
           label="Outcome"
           options={get_options(CaseManager.Cases.Case, :outcome, @form[:outcome], true)}
+          force_validate={true}
         />
 
         <%= if @imported_case.time_of_disembarkation_string do %>
@@ -195,21 +273,52 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
           field={@form[:time_of_disembarkation]}
           type="datetime-local"
           label="Time of Disembarkation"
+          force_validate={true}
         />
-        <.input field={@form[:place_of_disembarkation]} type="text" label="Place of Disembarkation" />
-        <.input field={@form[:disembarked_by]} type="text" label="Disembarked by" />
-        <.input field={@form[:outcome_actors]} type="text" label="Outcome Actors" />
-        <.input field={@form[:frontext_involvement]} type="text" label="Frontext Involvement" />
+        <.input
+          field={@form[:place_of_disembarkation]}
+          type="text"
+          label="Place of Disembarkation"
+          force_validate={true}
+        />
+        <.input
+          field={@form[:disembarked_by]}
+          type="text"
+          label="Disembarked by"
+          force_validate={true}
+        />
+        <.input
+          field={@form[:outcome_actors]}
+          type="text"
+          label="Outcome Actors"
+          force_validate={true}
+        />
+        <.input
+          field={@form[:frontext_involvement]}
+          type="text"
+          label="Frontext Involvement"
+          force_validate={true}
+        />
         <%= if @imported_case.followup_needed_string do %>
           <div class="text-rose-600">
             <strong>Followup needed (original):</strong> <%= @imported_case.followup_needed_string %>
           </div>
         <% end %>
-        <.input field={@form[:followup_needed]} type="checkbox" label="Followup needed" />
+        <.input
+          field={@form[:followup_needed]}
+          type="checkbox"
+          label="Followup needed"
+          force_validate={true}
+        />
 
         <h1 class="text-indigo-600 pt-8 font-semibold">Meta</h1>
-        <.input field={@form[:url]} type="textarea" label="URL" />
-        <.input field={@form[:cloud_file_links]} type="textarea" label="Cloud file links" />
+        <.input field={@form[:url]} type="textarea" label="URL" force_validate={true} />
+        <.input
+          field={@form[:cloud_file_links]}
+          type="textarea"
+          label="Cloud file links"
+          force_validate={true}
+        />
 
         <:actions>
           <.button phx-disable-with="Saving...">Save Case</.button>

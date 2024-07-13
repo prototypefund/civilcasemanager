@@ -17,7 +17,12 @@ defmodule CaseManager.ImportedCases.Template do
     "missing ppl MAX" => %{key: "people_missing", type: :integer},
     "missing ppl" => %{key: "people_missing", type: :integer},
     "missing ppl CONFIRMED" => %{key: "people_missing", type: :integer},
-    "outcome" => %{key: "outcome", type: :string, default: "unknown", lowercase: true},
+    "outcome" => %{
+      key: "outcome",
+      type: :string,
+      default: "unknown",
+      apply: &CaseManager.ImportedCases.Template.fix_outcome/1
+    },
     "Place . DEP" => %{key: "place_of_departure", type: :string},
     "Place of disembarkation" => %{key: "place_of_disembarkation", type: :string},
     "POB Number MAX" => %{key: "pob_total", type: :integer},
@@ -25,7 +30,7 @@ defmodule CaseManager.ImportedCases.Template do
     "number ppl" => %{key: "pob_total", type: :integer},
     "POB Number CONFIRMED" => %{key: "pob_total", type: :integer},
     "SAR" => %{key: "sar_region", type: :string, default: "unknown", prepend: "sar"},
-    "Source" => %{key: "url", type: :string, regex: ~r/\bhttps?:\/\/\S+\b/},
+    "Source" => %{key: "source", type: :string, regex: ~r/\bhttps?:\/\/\S+\b/},
     "THURAYA" => %{key: "phonenumber", type: :string},
     "1st position" => %{
       key: "first_position",
@@ -86,6 +91,16 @@ defmodule CaseManager.ImportedCases.Template do
     |> IO.inspect()
   end
 
+  def fix_outcome(string) do
+    string
+    |> String.replace("LYCG interception", "interception_libya")
+    |> String.replace("TNCG interception", "interception_tn")
+    |> String.replace("NGO rescue", "ngo_rescue")
+    |> String.replace("IT rescue", "italy_rescue")
+    |> String.replace("Self return", "returned")
+    |> String.downcase()
+  end
+
   # Trys to parse the value using the type specified in the template.
   # If it fails the original value is returned with the key appended
   # with "_string"
@@ -95,6 +110,9 @@ defmodule CaseManager.ImportedCases.Template do
         cond do
           Map.has_key?(template, :regex) ->
             apply_regex(template[:regex], value)
+
+          Map.has_key?(template, :apply) ->
+            apply(template[:apply], [value])
 
           Map.has_key?(template, :lowercase) ->
             String.downcase(value)

@@ -1,0 +1,23 @@
+<.header>
+  Case Importer
+  <:subtitle>Here you can import csv files</:subtitle>
+  <:actions>
+    <.link patch={~p"/imported_cases/"} phx-click={JS.push_focus()}>
+      <.button>View Queue</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<%!-- Setting for to an empty map, because this is not a regular changeset --%>
+<.simple_form
+  for={to_form(%{})}
+  id="upload-form"
+  phx-submit="save"
+  phx-change="validate"
+  class="mt-4"
+>
+  <.live_file_input upload={@uploads.avatar} />
+  <:actions>
+    <.button phx-disable-with="Uploading...">Upload</.button>
+  </:actions>
+</.simple_form>

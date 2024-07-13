@@ -1,0 +1,145 @@
+<.header>
+  Import Queue
+  <:actions>
+    <.link
+      :if={@current_user.role != :readonly}
+      phx-click={JS.push("delete", value: %{all: true})}
+      data-confirm="Are you sure? All unprocessed cases will be deleted."
+    >
+      <.button>Delete queue</.button>
+    </.link>
+    <.link :if={@current_user.role != :readonly} patch={~p"/imported_cases/upload"}>
+      <.button>Upload</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="imported_cases"
+  rows={@streams.imported_cases}
+  row_click={
+    fn {_id, imported_case} -> JS.navigate(~p"/imported_cases/#{imported_case}/validate") end
+  }
+>
+  <:col :let={{_id, imported_case}} label="Name"><%= imported_case.name %></:col>
+  <:col :let={{_id, imported_case}} label="Notes"><%= imported_case.notes %></:col>
+  <:col :let={{_id, imported_case}} label="Status"><%= imported_case.status %></:col>
+  <:col :let={{_id, imported_case}} label="Occurred at"><%= imported_case.occurred_at %></:col>
+  <:col :let={{_id, imported_case}} label="Departure region">
+    <%= imported_case.departure_region %>
+  </:col>
+  <:col :let={{_id, imported_case}} label="Place of departure">
+    <%= imported_case.place_of_departure %>
+  </:col>
+  <%!-- <:col :let={{_id, imported_case}} label="Time of departure">
+    <%= imported_case.time_of_departure %>
+  </:col>
+  <:col :let={{_id, imported_case}} label="Sar region"><%= imported_case.sar_region %></:col>
+  <:col :let={{_id, imported_case}} label="Phonenumber"><%= imported_case.phonenumber %></:col>
+  <:col :let={{_id, imported_case}} label="Alarmphone contact">
+    <%= imported_case.alarmphone_contact %>
+  </:col>
+  <:col :let={{_id, imported_case}} label="Confirmation by">
+    <%= imported_case.confirmation_by %>
+  </:col>
+  <:col :let={{_id, imported_case}} label="Actors involved">
+    <%= imported_case.actors_involved %>
+  </:col>
+  <:col :let={{_id, imported_case}} label="Authorities alerted">
+    <%= imported_case.authorities_alerted %>
+  </:col>
+  <:col :let={{_id, imported_case}} label="Authorities details">
+    <%= imported_case.authorities_details %>
+  </:col>
+  <:col :let={{_id, imported_case}} label="Boat type"><%= imported_case.boat_type %></:col>
+  <:col :let={{_id, imported_case}} label="Boat notes"><%= imported_case.boat_notes %></:col>
+  <:col :let={{_id, imported_case}} label="Boat color"><%= imported_case.boat_color %></:col>
+  <:col :let={{_id, imported_case}} label="Boat engine status">
+    <%= imported_case.boat_engine_status %>
+  </:col>
+  <:col :let={{_id, imported_case}} label="Boat engine working">
+    <%= imported_case.boat_engine_working %>
+  </:col>
+  <:col :let={{_id, imported_case}} label="Boat number of engines">
+    <%= imported_case.boat_number_of_engines %>
+  </:col>
+  <:col :let={{_id, imported_case}} label="Pob total"><%= imported_case.pob_total %></:col>
+  <:col :let={{_id, imported_case}} label="Pob men"><%= imported_case.pob_men %></:col>
+  <:col :let={{_id, imported_case}} label="Pob women"><%= imported_case.pob_women %></:col>
+  <:col :let={{_id, imported_case}} label="Pob minors"><%= imported_case.pob_minors %></:col>
+  <:col :let={{_id, imported_case}} label="Pob gender ambiguous">
+    <%= imported_case.pob_gender_ambiguous %>
+  </:col>
+  <:col :let={{_id, imported_case}} label="Pob medical cases">
+    <%= imported_case.pob_medical_cases %>
+  </:col>
+  <:col :let={{_id, imported_case}} label="People dead"><%= imported_case.people_dead %></:col>
+  <:col :let={{_id, imported_case}} label="People missing">
+    <%= imported_case.people_missing %>
+  </:col>
+  <:col :let={{_id, imported_case}} label="Pob per nationality">
+    <%= imported_case.pob_per_nationality %>
+  </:col>
+  <:col :let={{_id, imported_case}} label="Outcome"><%= imported_case.outcome %></:col>
+  <:col :let={{_id, imported_case}} label="Time of disembarkation">
+    <%= imported_case.time_of_disembarkation %>
+  </:col>
+  <:col :let={{_id, imported_case}} label="Place of disembarkation">
+    <%= imported_case.place_of_disembarkation %>
+  </:col>
+  <:col :let={{_id, imported_case}} label="Disembarked by">
+    <%= imported_case.disembarked_by %>
+  </:col>
+  <:col :let={{_id, imported_case}} label="Outcome actors">
+    <%= imported_case.outcome_actors %>
+  </:col>
+  <:col :let={{_id, imported_case}} label="Frontext involvement">
+    <%= imported_case.frontext_involvement %>
+  </:col>
+  <:col :let={{_id, imported_case}} label="Followup needed">
+    <%= imported_case.followup_needed %>
+  </:col>
+  <:col :let={{_id, imported_case}} label="Template"><%= imported_case.template %></:col>
+  <:col :let={{_id, imported_case}} label="Url"><%= imported_case.url %></:col>
+  <:col :let={{_id, imported_case}} label="Cloud file links">
+    <%= imported_case.cloud_file_links %>
+  </:col>
+  <:col :let={{_id, imported_case}} label="Imported from">
+    <%= imported_case.imported_from %>
+  </:col> --%>
+  <:action :let={{_id, imported_case}} :if={@current_user.role != :readonly}>
+    <.link patch={~p"/imported_cases/#{imported_case}/validate"}>Validate</.link>
+  </:action>
+  <:action :let={{id, imported_case}} :if={@current_user.role != :readonly}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: imported_case.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<Flop.Phoenix.pagination
+  :if={@live_action in [:index]}
+  opts={pagination_opts()}
+  meta={@meta}
+  path={~p"/imported_cases"}
+/>
+
+<.modal
+  :if={@live_action in [:validate]}
+  id="imported_case-modal"
+  show
+  on_cancel={JS.patch(~p"/imported_cases")}
+>
+  <.live_component
+    module={CaseManagerWeb.ImportedCaseLive.FormComponent}
+    id={@imported_case.id || :new}
+    title={@page_title}
+    action={@live_action}
+    imported_case={@imported_case}
+    case={@case}
+    patch={~p"/imported_cases"}
+  />
+</.modal>

@@ -4,6 +4,7 @@ defmodule CaseManager.Cases do
   """
 
   import Ecto.Query, warn: false
+  alias CaseManager.ImportedCases.ImportedCase
   alias CaseManager.Repo
 
   alias CaseManager.Cases.Case
@@ -130,6 +131,19 @@ defmodule CaseManager.Cases do
     |> Case.changeset(attrs)
     |> Repo.insert()
     |> broadcast(:case_created)
+  end
+
+  @doc """
+  Creates a case and delete the imported case record inside a transaction.
+  """
+  def create_case_and_delete_imported(attrs, %ImportedCase{} = imported) do
+    Repo.transaction(fn ->
+      Repo.delete!(imported)
+
+      %Case{}
+      |> Case.changeset(attrs)
+      |> Repo.insert!()
+    end)
   end
 
   @doc """

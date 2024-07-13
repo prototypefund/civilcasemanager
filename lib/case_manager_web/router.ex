@@ -34,6 +34,10 @@ defmodule CaseManagerWeb.Router do
       live "/positions/new", PositionLive.Index, :new
       live "/positions/:id/edit", PositionLive.Index, :edit
       live "/positions/:id/show/edit", PositionLive.Show, :edit
+
+      live "/imported_cases/upload", ImportedCaseLive.Upload, :new
+      live "/imported_cases/:id/edit", ImportedCaseLive.Index, :edit
+      live "/imported_cases/:id/validate", ImportedCaseLive.Index, :validate
     end
   end
 
@@ -65,6 +69,8 @@ defmodule CaseManagerWeb.Router do
 
       live "/positions", PositionLive.Index, :index
       live "/positions/:id", PositionLive.Show, :show
+
+      live "/imported_cases", ImportedCaseLive.Index, :index
 
       live "/users/settings", UserLive.Settings, :edit
       live "/users/settings/confirm_email/:token", UserLive.Settings, :confirm_email

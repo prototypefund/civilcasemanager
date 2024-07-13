@@ -3,6 +3,18 @@ Receives incoming information (currently IMAP Idle, and Slack, (VOIP, SMS planne
 user interface to assign them to various cases. 
 
 
+# v1.0
+- [ ] Add Flash :warning
+- [ ] Fix next import cases navigation
+- [ ] Fix dropdown validation
+- [ ] Replace common outcome strings
+- [ ] Style validation errors
+- [ ] Style fill hints
+- [ ] Add delete button to validation form
+- [ ] Take validation form out of popup
+- [ ] Delete queue red, and richt and padding
+
+
 # v2.0
 - Quick Compose: Titel, Timestamp
 - [ ] New cases are streamed unfiltered

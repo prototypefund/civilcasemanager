@@ -24,6 +24,16 @@ defmodule CaseManagerWeb.CaseLive.Show do
      |> stream(:assoc_positions, positions)}
   end
 
+  @impl true
+
+  def handle_event("keyup", %{"key" => "Escape"}, socket) do
+    {:noreply, socket |> push_navigate(to: ~p"/cases")}
+  end
+
+  def handle_event("keyup", %{"key" => _}, socket) do
+    {:noreply, socket}
+  end
+
   def handle_info({:event_created, event}, socket) do
     # We only call stream_insert if the received event has a case in cases with the same case_id as the case we are showing
     case = socket.assigns.case

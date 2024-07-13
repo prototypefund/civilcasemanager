@@ -21,7 +21,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
         phx-hook="FormHelpers"
-        class="h-full overflow-y-scroll pb-4 pr-4"
+        class="h-full pb-4 pr-4"
       >
         <h1 class="text-indigo-600 pt-8 font-semibold">Base data</h1>
         <.input field={@form[:name]} type="text" label="Identifier" force_validate={true} />
@@ -304,6 +304,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
             <strong>Followup needed (original):</strong> <%= @imported_case.followup_needed_string %>
           </div>
         <% end %>
+
         <.input
           field={@form[:followup_needed]}
           type="checkbox"
@@ -312,6 +313,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
         />
 
         <h1 class="text-indigo-600 pt-8 font-semibold">Meta</h1>
+        <.input field={@form[:source]} label="Source" force_validate={true} />
         <.input field={@form[:url]} type="textarea" label="URL" force_validate={true} />
         <.input
           field={@form[:cloud_file_links]}
@@ -368,9 +370,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
            imported_case_params,
            socket.assigns.imported_case
          ) do
-      {:ok, case} ->
-        notify_parent({:deleted, case})
-
+      {:ok, %{insert_case: case}} ->
         ## FIXME get actually next in list based on current
         next_case =
           ImportedCases.get_next_case_after(socket.assigns.imported_case)
@@ -383,7 +383,8 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
         {:noreply,
          socket
          |> push_patch(to: patch_url)
-         |> put_flash(:info, "Case added to the main database successfully")}
+         |> clear_flash()
+         |> put_flash(:info, "Case #{case.name} added to the main database successfully")}
 
       {:error, :insert_case, %Ecto.Changeset{} = changeset, _} ->
         {:noreply, assign(socket, form: to_form(changeset))}

@@ -37,7 +37,7 @@ defmodule CaseManagerWeb.Router do
 
       live "/imported_cases/upload", ImportedCaseLive.Upload, :new
       live "/imported_cases/:id/edit", ImportedCaseLive.Index, :edit
-      live "/imported_cases/:id/validate", ImportedCaseLive.Index, :validate
+      live "/imported_cases/:id/validate", ImportedCaseLive.Validate, :validate
     end
   end
 

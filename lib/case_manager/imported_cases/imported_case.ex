@@ -69,6 +69,7 @@ defmodule CaseManager.ImportedCases.ImportedCase do
     field :people_dead_string, :string
     field :first_position, :string
     field :last_position, :string
+    field :source, :string
 
     timestamps(type: :utc_datetime)
   end

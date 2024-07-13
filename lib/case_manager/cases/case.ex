@@ -133,6 +133,7 @@ defmodule CaseManager.Cases.Case do
 
     ## Meta
     field :template, :string
+    field :source, :string
     field :url, :string
     field :cloud_file_links, :string
     field :imported_from, :string
@@ -192,6 +193,7 @@ defmodule CaseManager.Cases.Case do
       :outcome_actors,
       :frontext_involvement,
       :followup_needed,
+      :source,
       :url,
       :cloud_file_links
     ])

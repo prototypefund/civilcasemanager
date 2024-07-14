@@ -469,7 +469,9 @@ defmodule CaseManagerWeb.CoreComponents do
           <%= render_slot(@subtitle) %>
         </p>
       </div>
-      <div class={["flex-none flex items-center", @action_class]}><%= render_slot(@actions) %></div>
+      <div class={["flex-none flex items-center gap-2", @action_class]}>
+        <%= render_slot(@actions) %>
+      </div>
     </header>
     """
   end

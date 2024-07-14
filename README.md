@@ -4,7 +4,7 @@ user interface to assign them to various cases.
 
 
 # v1.0
-- [ ] Add Flash :warning
+- [x] Add Flash :warning
 - [x] Fix next import cases navigation
 - [x] Fix dropdown validation
 - [x] Replace common outcome strings
@@ -12,7 +12,7 @@ user interface to assign them to various cases.
 - [ ] Style fill hints
 - [ ] Add delete button to validation form
 - [x] Take validation form out of popup
-- [ ] Delete queue red, and right and padding
+- [x] Delete queue red, and right and padding
 - [ ] Embedded positions in form
 
 # v2.0

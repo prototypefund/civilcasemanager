@@ -26,7 +26,7 @@ defmodule CaseManager.Positions.Position do
     ## FIXME
     # field :pos_geo, Geo.PostGIS.Geometry
     field :soft_deleted, :boolean, default: false
-    field :item_id, :string
+    belongs_to :case, CaseManager.Cases.Case, foreign_key: :item_id, type: CaseManager.StringId
   end
 
   @doc false

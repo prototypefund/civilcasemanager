@@ -138,6 +138,8 @@ defmodule CaseManager.Cases.Case do
     field :cloud_file_links, :string
     field :imported_from, :string
 
+    has_many :positions, CaseManager.Cases.Position
+
     many_to_many :events, CaseManager.Events.Event, join_through: CaseManager.CasesEvents
 
     # Use created_at as timestamp key

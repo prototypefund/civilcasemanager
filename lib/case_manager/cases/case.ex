@@ -203,7 +203,6 @@ defmodule CaseManager.Cases.Case do
     )
     |> put_timestamp_if_nil(:created_at)
     |> cast_assoc(:positions,
-      with: &Positions.Position.changeset/2,
       sort_param: :positions_sort,
       drop_param: :positions_drop
     )

@@ -39,7 +39,6 @@ defmodule CaseManagerWeb.ImportedCaseLive.Upload do
       socket
       |> update(:uploaded_files, &(&1 ++ uploaded_files))
       |> put_flash(result_code, result_string)
-      # |> push_patch(to: socket.assigns.patch)
     }
   end
 
@@ -66,7 +65,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.Upload do
     failed_count = Enum.count(failed_rows)
     success_count = Enum.count(uploaded_files) - failed_count
 
-    result_code = if failed_count > 0, do: :error, else: :info
+    result_code = if failed_count > 0, do: :warning, else: :info
 
     {result_code, success_count, failed_count, failed_rows}
   end

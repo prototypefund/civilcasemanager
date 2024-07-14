@@ -1,4 +1,5 @@
 defmodule CaseManager.Cases.Case do
+  alias CaseManager.Positions
   use Ecto.Schema
   import Ecto.Changeset
   import CaseManager.ChangesetValidators
@@ -138,7 +139,9 @@ defmodule CaseManager.Cases.Case do
     field :cloud_file_links, :string
     field :imported_from, :string
 
-    has_many :positions, CaseManager.Cases.Position
+    has_many :positions, CaseManager.Positions.Position,
+      foreign_key: :item_id,
+      on_replace: :delete
 
     many_to_many :events, CaseManager.Events.Event, join_through: CaseManager.CasesEvents
 
@@ -207,6 +210,11 @@ defmodule CaseManager.Cases.Case do
       message: "ID must only contain letters, numbers and a dash."
     )
     |> put_timestamp_if_nil(:created_at)
+    |> cast_assoc(:positions,
+      with: &Positions.Position.changeset/2,
+      sort_param: :positions_sort,
+      drop_param: :positions_drop
+    )
 
     # |> put_timestamp_if_nil(:opened_at)
     # |> ensure_identifier_format(:identifier, :created_at)

@@ -20,6 +20,31 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
         phx-submit="save"
         class="h-full overflow-y-scroll pb-4 pr-4"
       >
+        <.inputs_for :let={ef} field={@form[:positions]}>
+          <input type="hidden" name="cases[positions_sort][]" value={ef.index} />
+          <.input type="text" field={ef[:lat]} placeholder="Lat" />
+          <.input type="text" field={ef[:lon]} placeholder="Lon" />
+          <button
+            type="button"
+            name="cases[positions_drop][]"
+            value={ef.index}
+            phx-click={JS.dispatch("change")}
+          >
+            <.icon name="hero-x-mark" class="w-6 h-6 relative top-2" />
+          </button>
+        </.inputs_for>
+
+        <input type="hidden" name="cases[positions_drop][]" />
+
+        <button
+          type="button"
+          name="cases[positions_sort][]"
+          value="new"
+          phx-click={JS.dispatch("change")}
+        >
+          add more
+        </button>
+
         <h1 class="text-indigo-600 pt-8 font-semibold">Base data</h1>
         <.input field={@form[:name]} type="text" label="Identifier" />
         <.input field={@form[:notes]} type="text" label="Notes" />

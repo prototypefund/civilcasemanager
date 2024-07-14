@@ -12,8 +12,8 @@ user interface to assign them to various cases.
 - [ ] Style fill hints
 - [ ] Add delete button to validation form
 - [x] Take validation form out of popup
-- [ ] Delete queue red, and richt and padding
-
+- [ ] Delete queue red, and right and padding
+- [ ] Embedded positions in form
 
 # v2.0
 - Quick Compose: Titel, Timestamp

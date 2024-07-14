@@ -84,7 +84,7 @@ defmodule CaseManager.Cases do
     Repo.one!(
       from c in Case,
         where: c.id == ^id,
-        preload: ^if(preload, do: [:events], else: [])
+        preload: ^if(preload, do: [:events, :positions], else: [])
     )
   end
 

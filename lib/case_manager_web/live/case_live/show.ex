@@ -7,7 +7,7 @@ defmodule CaseManagerWeb.CaseLive.Show do
   @impl true
   def mount(_params, _session, socket) do
     if connected?(socket), do: CaseManager.Events.subscribe()
-    {:ok, socket, layout: {CaseManagerWeb.Layouts, :column}}
+    {:ok, socket, layout: {CaseManagerWeb.Layouts, :autocolumn}}
   end
 
   @impl true

@@ -460,11 +460,10 @@ defmodule CaseManagerWeb.CoreComponents do
 
   def parsing_hint(assigns) do
     ~H"""
-    <%= if assigns[:imported_case] && @imported_case.occurred_at_string do %>
-      <.error>
-        <strong>Couldn't parse the value for <%= @field_name %></strong> <%= render_slot(@inner_block) %>
-      </.error>
-    <% end %>
+    <.error>
+      Couldn't process the value for <%= @field_name %>:
+      <strong><%= render_slot(@inner_block) %></strong>
+    </.error>
     """
   end
 

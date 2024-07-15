@@ -14,7 +14,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.Validate do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
-  defp apply_action(socket, :validate, %{"id" => id}) do
+  defp apply_action(socket, :import, %{"id" => id}) do
     imported_case = ImportedCases.get_imported_case!(id)
     title = "Validate Row #{imported_case.row}"
 
@@ -30,11 +30,18 @@ defmodule CaseManagerWeb.ImportedCaseLive.Validate do
     |> assign(:page_title, title)
     |> assign(:imported_case, imported_case)
     |> assign(:case, %Case{})
-    |> assign(:force_validate, true)
     |> assign(:next_url, next_url)
   end
 
   @impl true
+
+  def handle_event("delete", %{"imported_id" => id}, socket) do
+    ImportedCases.get_imported_case!(id)
+    |> ImportedCases.delete_imported_case()
+
+    {:noreply, socket |> push_navigate(to: ~p"/imported_cases")}
+  end
+
   def handle_event("keyup", %{"key" => "Escape"}, socket) do
     {:noreply, socket |> push_navigate(to: ~p"/imported_cases")}
   end

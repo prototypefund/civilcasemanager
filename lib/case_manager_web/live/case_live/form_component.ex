@@ -4,7 +4,6 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
   use CaseManagerWeb, :live_component
 
   alias CaseManager.Cases
-  alias CaseManager.ImportedCases
 
   @impl true
   def render(assigns) do
@@ -13,6 +12,14 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
       <.header>
         <%= @title %>
         <:subtitle :if={assigns[:subtitle]}><%= @subtitle %></:subtitle>
+        <:actions :if={assigns[:imported_case]}>
+          <.link
+            phx-click={JS.push("delete", value: %{imported_id: @imported_case.id})}
+            data-confirm="Are you sure?"
+          >
+            <.button class="bg-red-700 text-white">Delete row</.button>
+          </.link>
+        </:actions>
       </.header>
 
       <.simple_form
@@ -25,8 +32,8 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
         class="pb-4 pr-4"
       >
         <h1 class="text-indigo-600 pt-8 font-semibold">Base data</h1>
-        <.input field={@form[:name]} type="text" label="Identifier" />
-        <.input field={@form[:notes]} type="text" label="Notes" />
+        <.input field={@form[:name]} type="text" label="Identifier" force_validate={@validate_now} />
+        <.input field={@form[:notes]} type="text" label="Notes" force_validate={@validate_now} />
 
         <.input
           field={@form[:status]}
@@ -39,8 +46,18 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
             <strong>Occurred at (original):</strong> <%= @imported_case.occurred_at_string %>
           </div>
         <% end %>
-        <.input field={@form[:created_at]} type="datetime-local" label="Created at" />
-        <.input field={@form[:occurred_at]} type="datetime-local" label="Occurred at" />
+        <.input
+          field={@form[:created_at]}
+          type="datetime-local"
+          label="Created at"
+          force_validate={@validate_now}
+        />
+        <.input
+          field={@form[:occurred_at]}
+          type="datetime-local"
+          label="Occurred at"
+          force_validate={@validate_now}
+        />
 
         <%= if assigns[:imported_case] && @imported_case.time_of_departure_string do %>
           <div class="text-rose-600">
@@ -48,11 +65,26 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
           </div>
         <% end %>
         <h1 class="text-indigo-600 pt-8 font-semibold">Departure</h1>
-        <.input field={@form[:departure_region]} type="text" label="Departure Region" />
+        <.input
+          field={@form[:departure_region]}
+          type="text"
+          label="Departure Region"
+          force_validate={@validate_now}
+        />
 
         <%!-- Should be autocomplete --%>
-        <.input field={@form[:place_of_departure]} type="text" label="Place of Departure" />
-        <.input field={@form[:time_of_departure]} type="datetime-local" label="Time of Departure" />
+        <.input
+          field={@form[:place_of_departure]}
+          type="text"
+          label="Place of Departure"
+          force_validate={@validate_now}
+        />
+        <.input
+          field={@form[:time_of_departure]}
+          type="datetime-local"
+          label="Time of Departure"
+          force_validate={@validate_now}
+        />
 
         <.input
           field={@form[:sar_region]}
@@ -66,9 +98,14 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
         <.inputs_for :let={ef} field={@form[:positions]}>
           <div class="break-inside-avoid-column flex flex-row gap-4">
             <input type="hidden" name="case[positions_sort][]" value={ef.index} />
-            <.input type="text" field={ef[:lat]} placeholder="Lat" />
-            <.input type="text" field={ef[:lon]} placeholder="Lon" />
-            <.input type="datetime-local" field={ef[:timestamp]} placeholder="Lon" />
+            <.input type="text" field={ef[:lat]} placeholder="Lat" force_validate={@validate_now} />
+            <.input type="text" field={ef[:lon]} placeholder="Lon" force_validate={@validate_now} />
+            <.input
+              type="datetime-local"
+              field={ef[:timestamp]}
+              placeholder="Lon"
+              force_validate={@validate_now}
+            />
             <button
               type="button"
               name="case[positions_drop][]"
@@ -92,17 +129,47 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
         </button>
 
         <h1 class="text-indigo-600 pt-8 font-semibold">Involved parties</h1>
-        <.input field={@form[:phonenumber]} type="text" label="Phone number" />
-        <.input field={@form[:alarmphone_contact]} type="text" label="Alarmphone contact" />
-        <.input field={@form[:confirmation_by]} type="text" label="Confirmation by" />
-        <.input field={@form[:actors_involved]} type="text" label="Actors involved" />
+        <.input
+          field={@form[:phonenumber]}
+          type="text"
+          label="Phone number"
+          force_validate={@validate_now}
+        />
+        <.input
+          field={@form[:alarmphone_contact]}
+          type="text"
+          label="Alarmphone contact"
+          force_validate={@validate_now}
+        />
+        <.input
+          field={@form[:confirmation_by]}
+          type="text"
+          label="Confirmation by"
+          force_validate={@validate_now}
+        />
+        <.input
+          field={@form[:actors_involved]}
+          type="text"
+          label="Actors involved"
+          force_validate={@validate_now}
+        />
         <%= if assigns[:imported_case] && @imported_case.authorities_alerted_string do %>
           <div class="text-rose-600">
             <strong>Authorities alerted (original):</strong> <%= @imported_case.authorities_alerted_string %>
           </div>
         <% end %>
-        <.input field={@form[:authorities_alerted]} type="checkbox" label="Authorities alerted" />
-        <.input field={@form[:authorities_details]} type="text" label="Authorities details" />
+        <.input
+          field={@form[:authorities_alerted]}
+          type="checkbox"
+          label="Authorities alerted"
+          force_validate={@validate_now}
+        />
+        <.input
+          field={@form[:authorities_details]}
+          type="text"
+          label="Authorities details"
+          force_validate={@validate_now}
+        />
 
         <h1 class="text-indigo-600 pt-8 font-semibold">The boat</h1>
         <.input
@@ -111,17 +178,42 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
           label="Boat Type"
           options={Ecto.Enum.values(CaseManager.Cases.Case, :boat_type)}
         />
-        <.input field={@form[:boat_notes]} type="text" label="Boat Notes" />
-        <.input field={@form[:boat_color]} type="text" label="Boat Color" />
-        <.input field={@form[:boat_engine_status]} type="text" label="Boat Engine Status" />
-        <.input field={@form[:boat_engine_working]} type="text" label="Boat Engine Working" />
+        <.input
+          field={@form[:boat_notes]}
+          type="text"
+          label="Boat Notes"
+          force_validate={@validate_now}
+        />
+        <.input
+          field={@form[:boat_color]}
+          type="text"
+          label="Boat Color"
+          force_validate={@validate_now}
+        />
+        <.input
+          field={@form[:boat_engine_status]}
+          type="text"
+          label="Boat Engine Status"
+          force_validate={@validate_now}
+        />
+        <.input
+          field={@form[:boat_engine_working]}
+          type="text"
+          label="Boat Engine Working"
+          force_validate={@validate_now}
+        />
 
         <%= if assigns[:imported_case] && @imported_case.boat_number_of_engines_string do %>
           <div class="text-rose-600">
             <strong>Boat number of engines (original):</strong> <%= @imported_case.boat_number_of_engines_string %>
           </div>
         <% end %>
-        <.input field={@form[:boat_number_of_engines]} type="number" label="Boat Number of Engines" />
+        <.input
+          field={@form[:boat_number_of_engines]}
+          type="number"
+          label="Boat Number of Engines"
+          force_validate={@validate_now}
+        />
 
         <h1 class="text-indigo-600 pt-8 font-semibold">People on Board</h1>
         <div class="flex gap-4 flex-row flex-wrap">
@@ -244,10 +336,30 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
           type="datetime-local"
           label="Time of Disembarkation"
         />
-        <.input field={@form[:place_of_disembarkation]} type="text" label="Place of Disembarkation" />
-        <.input field={@form[:disembarked_by]} type="text" label="Disembarked by" />
-        <.input field={@form[:outcome_actors]} type="text" label="Outcome Actors" />
-        <.input field={@form[:frontext_involvement]} type="text" label="Frontext Involvement" />
+        <.input
+          field={@form[:place_of_disembarkation]}
+          type="text"
+          label="Place of Disembarkation"
+          force_validate={@validate_now}
+        />
+        <.input
+          field={@form[:disembarked_by]}
+          type="text"
+          label="Disembarked by"
+          force_validate={@validate_now}
+        />
+        <.input
+          field={@form[:outcome_actors]}
+          type="text"
+          label="Outcome Actors"
+          force_validate={@validate_now}
+        />
+        <.input
+          field={@form[:frontext_involvement]}
+          type="text"
+          label="Frontext Involvement"
+          force_validate={@validate_now}
+        />
 
         <%= if assigns[:imported_case] && @imported_case.followup_needed_string do %>
           <div class="text-rose-600">
@@ -255,13 +367,23 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
           </div>
         <% end %>
 
-        <.input field={@form[:followup_needed]} type="checkbox" label="Followup needed" />
+        <.input
+          field={@form[:followup_needed]}
+          type="checkbox"
+          label="Followup needed"
+          force_validate={@validate_now}
+        />
 
-        <.input field={@form[:source]} label="Source" force_validate={true} />
+        <.input field={@form[:source]} label="Source" force_validate={@validate_now} />
 
         <h1 class="text-indigo-600 pt-8 font-semibold">Meta</h1>
-        <.input field={@form[:url]} type="textarea" label="URL" />
-        <.input field={@form[:cloud_file_links]} type="textarea" label="Cloud file links" />
+        <.input field={@form[:url]} type="textarea" label="URL" force_validate={@validate_now} />
+        <.input
+          field={@form[:cloud_file_links]}
+          type="textarea"
+          label="Cloud file links"
+          force_validate={@validate_now}
+        />
 
         <:actions>
           <.button phx-disable-with="Saving...">Save Case</.button>
@@ -278,7 +400,9 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
     {:ok,
      socket
      |> assign(assigns)
-     |> assign_form(changeset)}
+     |> assign_new(:form, fn ->
+       to_form(changeset, action: :validate)
+     end)}
   end
 
   def update(%{case: case} = assigns, socket) do
@@ -343,7 +467,7 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
     end
   end
 
-  defp save_case(socket, :validate, case_params) do
+  defp save_case(socket, :import, case_params) do
     # creating the case and deleting the imported case should be done in a transaction.
     case Cases.create_case_and_delete_imported(
            case_params,
@@ -365,4 +489,15 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
   end
 
   defp notify_parent(msg), do: send(self(), {__MODULE__, msg})
+
+  ## TODO Improve
+  def get_options(module, key, field, allow_invalid \\ false) do
+    valid_values = Ecto.Enum.values(module, key)
+
+    if allow_invalid && field.value && field.value not in valid_values do
+      valid_values ++ [{"INVALID -> " <> field.value <> " <- INVALID", field.value}]
+    else
+      valid_values
+    end
+  end
 end

@@ -4,17 +4,19 @@ user interface to assign them to various cases.
 
 
 # v1.0
+- [ ] Load imported positions into form!
+- [x] Use same form for imported and normal case
 - [x] Add Flash :warning
 - [x] Fix next import cases navigation
 - [x] Fix dropdown validation
 - [x] Replace common outcome strings
 - [ ] Style validation errors
 - [ ] Style fill hints
-- [ ] Add delete button to validation form
+- [x] Add delete button to validation form
 - [x] Take validation form out of popup
 - [x] Delete queue red, and right and padding
-- [ ] Embedded positions in form
-- [ ] Use same form for imported and normal case
+
+
 
 # v2.0
 - Quick Compose: Titel, Timestamp

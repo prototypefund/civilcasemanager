@@ -10,8 +10,8 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
     ~H"""
     <div>
       <.header>
-        <%= @title %>
-        <:subtitle>Check the import data</:subtitle>
+        <%= @title %> Row <%= @imported_case.row %>
+        <:subtitle>Check the import data and fix any fields marked in red</:subtitle>
       </.header>
 
       <.simple_form

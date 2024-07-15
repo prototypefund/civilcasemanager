@@ -46,7 +46,7 @@ defmodule CaseManager.ImportedCases.Template do
     }
   }
 
-  def map_input_to_template(input_map) do
+  def map_input_to_template(input_map, index) do
     Enum.reduce(@template, %{}, fn {key, template}, acc ->
       case Map.fetch(input_map, key) do
         {:ok, input_value} ->
@@ -88,7 +88,7 @@ defmodule CaseManager.ImportedCases.Template do
           end
       end
     end)
-    |> IO.inspect()
+    |> Map.put("row", index)
   end
 
   def fix_outcome(string) do
@@ -141,8 +141,26 @@ defmodule CaseManager.ImportedCases.Template do
 
   defp parse_value(value, :utc_datetime) do
     case DateTime.from_iso8601(value) do
-      {:ok, datetime, _} -> datetime
-      {:error, _} -> raise(ArgumentError, "Could not parse #{value} as a DateTime")
+      {:ok, datetime, _} ->
+        datetime
+
+      {:error, _} ->
+        case Regex.match?(~r/^\d{2}\.\d{2}\.\d{4}$/, value) do
+          true ->
+            [day, month, year] = String.split(value, ".")
+
+            {:ok, date} =
+              Date.new(
+                String.to_integer(year),
+                String.to_integer(month),
+                String.to_integer(day)
+              )
+
+            DateTime.new!(date, ~T[00:00:00])
+
+          false ->
+            raise(ArgumentError, "Could not parse #{value} as a DateTime")
+        end
     end
   end
 

@@ -21,12 +21,15 @@ defmodule CaseManagerWeb.ImportedCaseLive.Upload do
 
   @impl Phoenix.LiveView
   def handle_event("save", _params, socket) do
+    skip_headers = 1
+
     uploaded_files =
       consume_uploaded_entries(socket, :avatar, fn %{path: path}, _entry ->
         File.stream!(path)
         ## AP Template contains additional header in the first row
-        |> Stream.drop(1)
+        |> Stream.drop(skip_headers)
         |> CSV.decode(headers: true)
+        |> Stream.with_index(skip_headers)
         |> batch_import()
       end)
       |> hd()
@@ -45,8 +48,8 @@ defmodule CaseManagerWeb.ImportedCaseLive.Upload do
   ## Walk throught the enumerable and create a list of ImportedCase structs
   defp batch_import(stream) do
     case_list =
-      Enum.map(stream, fn {:ok, row} ->
-        CaseManager.ImportedCases.Template.map_input_to_template(row)
+      Enum.map(stream, fn {{:ok, content}, index} ->
+        CaseManager.ImportedCases.Template.map_input_to_template(content, index)
       end)
 
     CaseManager.ImportedCases.create_imported_cases_from_list(case_list)
@@ -59,7 +62,6 @@ defmodule CaseManagerWeb.ImportedCaseLive.Upload do
 
     failed_rows =
       Enum.filter(with_index, fn {_, {status, _}} -> status == :error end)
-      |> IO.inspect()
       |> Enum.map(fn {index, _} -> index end)
 
     failed_count = Enum.count(failed_rows)

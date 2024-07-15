@@ -16,7 +16,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.Validate do
 
   defp apply_action(socket, :validate, %{"id" => id}) do
     socket
-    |> assign(:page_title, "Validate Imported case")
+    |> assign(:page_title, "Validate")
     |> assign(:imported_case, ImportedCases.get_imported_case!(id))
     |> assign(:case, %Case{})
   end

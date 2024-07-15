@@ -70,6 +70,7 @@ defmodule CaseManager.ImportedCases.ImportedCase do
     field :first_position, :string
     field :last_position, :string
     field :source, :string
+    field :row, :integer
 
     timestamps(type: :utc_datetime)
   end

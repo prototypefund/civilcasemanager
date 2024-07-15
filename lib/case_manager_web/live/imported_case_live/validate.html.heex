@@ -1,4 +1,3 @@
-<%!-- FIXME: phx-mounted doenst work --%>
 <.live_component
   :if={@live_action in [:validate]}
   module={CaseManagerWeb.ImportedCaseLive.FormComponent}
@@ -8,5 +7,4 @@
   imported_case={@imported_case}
   case={@case}
   patch={~p"/imported_cases"}
-  phx-mounted={JS.add_class("highlight underline", to: "body")}
 />

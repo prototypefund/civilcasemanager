@@ -14,6 +14,7 @@ user interface to assign them to various cases.
 - [x] Take validation form out of popup
 - [x] Delete queue red, and right and padding
 - [ ] Embedded positions in form
+- [ ] Use same form for imported and normal case
 
 # v2.0
 - Quick Compose: Titel, Timestamp

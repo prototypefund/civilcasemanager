@@ -9,7 +9,7 @@
       phx-click={JS.push("delete", value: %{all: true})}
       data-confirm="Are you sure? All unprocessed cases will be deleted."
     >
-      <.button class="bg-red-800 text-white">Delete queue</.button>
+      <.button class="bg-red-700 text-white">Delete queue</.button>
     </.link>
   </:actions>
 </.header>
@@ -21,7 +21,11 @@
     fn {_id, imported_case} -> JS.navigate(~p"/imported_cases/#{imported_case}/validate") end
   }
 >
-  <:col :let={{_id, imported_case}} label="Name"><%= imported_case.name %></:col>
+  <:col :let={{_id, imported_case}} label="Name">
+    <span class={!imported_case.name && "text-red-700"}>
+      <%= imported_case.name || gettext("Missing") %>
+    </span>
+  </:col>
   <:col :let={{_id, imported_case}} label="Notes"><%= imported_case.notes %></:col>
   <:col :let={{_id, imported_case}} label="Status"><%= imported_case.status %></:col>
   <:col :let={{_id, imported_case}} label="Occurred at"><%= imported_case.occurred_at %></:col>

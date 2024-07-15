@@ -23,7 +23,7 @@ defmodule CaseManager.Positions.Position do
     field :lat, :decimal
     field :lon, :decimal
     field :imported_from, :string
-    ## FIXME
+    ## TODO Make plan which field to use
     # field :pos_geo, Geo.PostGIS.Geometry
     field :soft_deleted, :boolean, default: false
     belongs_to :case, CaseManager.Cases.Case, foreign_key: :item_id, type: CaseManager.StringId
@@ -44,6 +44,6 @@ defmodule CaseManager.Positions.Position do
       :imported_from,
       :soft_deleted
     ])
-    |> validate_required([:lat, :lon, :timestamp])
+    |> validate_required([:lat, :lon])
   end
 end

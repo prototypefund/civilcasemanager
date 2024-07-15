@@ -4,18 +4,10 @@ user interface to assign them to various cases.
 
 
 # v1.0
-- [ ] Load imported positions into form!
-- [x] Use same form for imported and normal case
-- [x] Add Flash :warning
-- [x] Fix next import cases navigation
-- [x] Fix dropdown validation
-- [x] Replace common outcome strings
-- [ ] Style validation errors
-- [ ] Style fill hints
-- [x] Add delete button to validation form
-- [x] Take validation form out of popup
-- [x] Delete queue red, and right and padding
-
+- [ ] Add feedback on validation error and save.
+- [ ] Fix dropdown validation
+- [ ] Make navigation transparent to user. 
+- [x] Load imported positions into form!
 
 
 # v2.0

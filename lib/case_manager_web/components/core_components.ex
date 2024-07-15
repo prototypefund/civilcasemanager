@@ -370,7 +370,7 @@ defmodule CaseManagerWeb.CoreComponents do
 
   def input(%{type: "textarea"} = assigns) do
     ~H"""
-    <div>
+    <div class={["flex flex-row items-baseline gap-4", @wrapper_class]}>
       <.label for={@id} class={@label_class}><%= @label %></.label>
       <textarea
         id={@id}
@@ -392,26 +392,28 @@ defmodule CaseManagerWeb.CoreComponents do
   # All other inputs text, datetime-local, url, password, etc. are handled here...
   def input(assigns) do
     ~H"""
-    <div class={["flex items-center gap-4", @wrapper_class]}>
+    <div class={["flex flex-row items-baseline gap-4", @wrapper_class]}>
       <%= if (is_binary(@label) && String.trim(@label) != "") do %>
         <.label for={@id} class={@label_class}><%= @label %></.label>
       <% end %>
-      <input
-        type={@type}
-        name={@name}
-        id={@id}
-        value={Phoenix.HTML.Form.normalize_value(@type, @value)}
-        class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-5",
-          " ",
-          "dark:bg-zinc-900 dark:text-zinc-100",
-          @errors == [] && "border-zinc-300 focus:border-zinc-400",
-          @errors != [] && "border-rose-400 focus:border-rose-400 has-errors",
-          @class
-        ]}
-        {@rest}
-      />
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <div class="w-full">
+        <input
+          type={@type}
+          name={@name}
+          id={@id}
+          value={Phoenix.HTML.Form.normalize_value(@type, @value)}
+          class={[
+            "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-5",
+            " ",
+            "dark:bg-zinc-900 dark:text-zinc-100",
+            @errors == [] && "border-zinc-300 focus:border-zinc-400",
+            @errors != [] && "border-rose-400 focus:border-rose-400 has-errors",
+            @class
+          ]}
+          {@rest}
+        />
+        <.error :for={msg <- @errors}><%= msg %></.error>
+      </div>
     </div>
     """
   end
@@ -427,7 +429,10 @@ defmodule CaseManagerWeb.CoreComponents do
     ~H"""
     <label
       for={@for}
-      class={["block text-sm font-semibold leading-5 text-zinc-800 dark:text-zinc-200 w-32", @class]}
+      class={[
+        "block text-sm font-semibold leading-5 text-zinc-800 dark:text-zinc-200 w-28 shrink-0",
+        @class
+      ]}
     >
       <%= render_slot(@inner_block) %>
     </label>
@@ -441,10 +446,26 @@ defmodule CaseManagerWeb.CoreComponents do
 
   def error(assigns) do
     ~H"""
-    <p class="mt-3 flex gap-3 text-sm leading-5 text-rose-600 ">
+    <p class="mt-1 flex gap-3 text-sm leading-5 text-rose-600 ">
       <.icon name="hero-exclamation-circle-mini" class="mt-0.5 h-5 w-5 flex-none" />
       <%= render_slot(@inner_block) %>
     </p>
+    """
+  end
+
+  @doc """
+  Generates a hint if the data could not be processed automatically.
+  """
+  attr :field_name, :string, required: true
+  slot :inner_block, required: true
+
+  def parsing_hint(assigns) do
+    ~H"""
+    <%= if assigns[:imported_case] && @imported_case.occurred_at_string do %>
+      <.error>
+        <strong>Couldn't parse the value for <%= @field_name %></strong> <%= render_slot(@inner_block) %>
+      </.error>
+    <% end %>
     """
   end
 

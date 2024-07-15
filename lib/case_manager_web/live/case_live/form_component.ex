@@ -28,12 +28,11 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
         phx-target={@myself}
         phx-change="validate"
         phx-submit="save"
-        phx-hook="FormHelpers"
         class="pb-4 pr-4"
       >
         <h1 class="text-indigo-600 pt-8 font-semibold">Base data</h1>
         <.input field={@form[:name]} type="text" label="Identifier" force_validate={@validate_now} />
-        <.input field={@form[:notes]} type="text" label="Notes" force_validate={@validate_now} />
+        <.input field={@form[:notes]} type="textarea" label="Notes" force_validate={@validate_now} />
 
         <.input
           field={@form[:status]}
@@ -42,16 +41,10 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
           options={Ecto.Enum.values(CaseManager.Cases.Case, :status)}
         />
         <%= if assigns[:imported_case] && @imported_case.occurred_at_string do %>
-          <div class="text-rose-600">
-            <strong>Occurred at (original):</strong> <%= @imported_case.occurred_at_string %>
-          </div>
+          <.parsing_hint field_name="Occurred at">
+            <%= @imported_case.occurred_at_string %>
+          </.parsing_hint>
         <% end %>
-        <.input
-          field={@form[:created_at]}
-          type="datetime-local"
-          label="Created at"
-          force_validate={@validate_now}
-        />
         <.input
           field={@form[:occurred_at]}
           type="datetime-local"
@@ -60,9 +53,9 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
         />
 
         <%= if assigns[:imported_case] && @imported_case.time_of_departure_string do %>
-          <div class="text-rose-600">
-            <strong>Time of departure (original):</strong> <%= @imported_case.time_of_departure_string %>
-          </div>
+          <.parsing_hint field_name="Time of departure">
+            <%= @imported_case.time_of_departure_string %>
+          </.parsing_hint>
         <% end %>
         <h1 class="text-indigo-600 pt-8 font-semibold">Departure</h1>
         <.input
@@ -95,24 +88,31 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
 
         <h1 class="text-indigo-600 pt-8 font-semibold">Positions</h1>
 
+        <%= if assigns[:imported_case] && @imported_case.first_position do %>
+          <.parsing_hint field_name="First position">
+            <%= @imported_case.first_position %>
+          </.parsing_hint>
+        <% end %>
+        <%= if assigns[:imported_case] && @imported_case.last_position do %>
+          <.parsing_hint field_name="Last position">
+            <%= @imported_case.last_position %>
+          </.parsing_hint>
+        <% end %>
         <.inputs_for :let={ef} field={@form[:positions]}>
           <div class="break-inside-avoid-column flex flex-row gap-4">
             <input type="hidden" name="case[positions_sort][]" value={ef.index} />
-            <.input type="text" field={ef[:lat]} placeholder="Lat" force_validate={@validate_now} />
-            <.input type="text" field={ef[:lon]} placeholder="Lon" force_validate={@validate_now} />
-            <.input
-              type="datetime-local"
-              field={ef[:timestamp]}
-              placeholder="Lon"
-              force_validate={@validate_now}
-            />
+            <.input type="text" field={ef[:lat]} placeholder="Lat" />
+            <.input type="text" field={ef[:lon]} placeholder="Lon" />
+            <.input type="datetime-local" field={ef[:timestamp]} placeholder="Lon" />
             <button
               type="button"
               name="case[positions_drop][]"
               value={ef.index}
+              class="w-9 h-9 mt-2 bg-rose-600 rounded-lg py-1 px-2"
               phx-click={JS.dispatch("change")}
+              data-confirm="Are you sure to delete this position?"
             >
-              <.icon name="hero-trash" class="w-6 h-6 relative top-2 text-cerise-600" />
+              <.icon name="hero-trash" class="w-5 h-5 text-white" />
             </button>
           </div>
         </.inputs_for>
@@ -124,8 +124,12 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
           name="case[positions_sort][]"
           value="new"
           phx-click={JS.dispatch("change")}
+          class={[
+            "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 dark:bg-zinc-600 hover:bg-zinc-700 py-2 px-3",
+            "text-sm font-semibold leading-5 text-white active:text-white/80"
+          ]}
         >
-          add more
+          Add position
         </button>
 
         <h1 class="text-indigo-600 pt-8 font-semibold">Involved parties</h1>
@@ -154,9 +158,9 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
           force_validate={@validate_now}
         />
         <%= if assigns[:imported_case] && @imported_case.authorities_alerted_string do %>
-          <div class="text-rose-600">
-            <strong>Authorities alerted (original):</strong> <%= @imported_case.authorities_alerted_string %>
-          </div>
+          <.parsing_hint field_name="Authorities alerted">
+            <%= @imported_case.authorities_alerted_string %>
+          </.parsing_hint>
         <% end %>
         <.input
           field={@form[:authorities_alerted]}
@@ -204,9 +208,9 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
         />
 
         <%= if assigns[:imported_case] && @imported_case.boat_number_of_engines_string do %>
-          <div class="text-rose-600">
-            <strong>Boat number of engines (original):</strong> <%= @imported_case.boat_number_of_engines_string %>
-          </div>
+          <.parsing_hint field_name="Number of engines">
+            <%= @imported_case.boat_number_of_engines_string %>
+          </.parsing_hint>
         <% end %>
         <.input
           field={@form[:boat_number_of_engines]}
@@ -218,9 +222,9 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
         <h1 class="text-indigo-600 pt-8 font-semibold">People on Board</h1>
         <div class="flex gap-4 flex-row flex-wrap">
           <%= if assigns[:imported_case] && @imported_case.pob_total_string do %>
-            <div class="text-rose-600">
-              <strong>Pob total (original):</strong> <%= @imported_case.pob_total_string %>
-            </div>
+            <.parsing_hint field_name="POB Total">
+              <%= @imported_case.pob_total_string %>
+            </.parsing_hint>
           <% end %>
           <.input
             field={@form[:pob_total]}
@@ -230,9 +234,9 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
             force_validate={true}
           />
           <%= if assigns[:imported_case] && @imported_case.pob_men_string do %>
-            <div class="text-rose-600">
-              <strong>Pob men (original):</strong> <%= @imported_case.pob_men_string %>
-            </div>
+            <.parsing_hint field_name="Men">
+              <%= @imported_case.pob_men_string %>
+            </.parsing_hint>
           <% end %>
           <.input
             field={@form[:pob_men]}
@@ -242,9 +246,9 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
             force_validate={true}
           />
           <%= if assigns[:imported_case] && @imported_case.pob_women_string do %>
-            <div class="text-rose-600">
-              <strong>Pob women (original):</strong> <%= @imported_case.pob_women_string %>
-            </div>
+            <.parsing_hint field_name="Women">
+              <%= @imported_case.pob_women_string %>
+            </.parsing_hint>
           <% end %>
           <.input
             field={@form[:pob_women]}
@@ -254,9 +258,9 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
             force_validate={true}
           />
           <%= if assigns[:imported_case] && @imported_case.pob_minors_string do %>
-            <div class="text-rose-600">
-              <strong>Pob minors (original):</strong> <%= @imported_case.pob_minors_string %>
-            </div>
+            <.parsing_hint field_name="Minors">
+              <%= @imported_case.pob_minors_string %>
+            </.parsing_hint>
           <% end %>
           <.input
             field={@form[:pob_minors]}
@@ -266,9 +270,9 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
             force_validate={true}
           />
           <%= if assigns[:imported_case] && @imported_case.pob_gender_ambiguous_string do %>
-            <div class="text-rose-600">
-              <strong>Pob gender ambiguous (original):</strong> <%= @imported_case.pob_gender_ambiguous_string %>
-            </div>
+            <.parsing_hint field_name="Gender ambigous">
+              <%= @imported_case.pob_gender_ambiguous_string %>
+            </.parsing_hint>
           <% end %>
           <.input
             field={@form[:pob_gender_ambiguous]}
@@ -285,9 +289,9 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
             force_validate={true}
           />
           <%= if assigns[:imported_case] && @imported_case.people_dead_string do %>
-            <div class="text-rose-600">
-              <strong>People dead (original):</strong> <%= @imported_case.people_dead_string %>
-            </div>
+            <.parsing_hint field_name="People dead">
+              <%= @imported_case.people_dead_string %>
+            </.parsing_hint>
           <% end %>
           <.input
             field={@form[:people_dead]}
@@ -297,9 +301,9 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
             force_validate={true}
           />
           <%= if assigns[:imported_case] && @imported_case.people_missing_string do %>
-            <div class="text-rose-600">
-              <strong>People missing (original):</strong> <%= @imported_case.people_missing_string %>
-            </div>
+            <.parsing_hint field_name="People missing">
+              <%= @imported_case.people_missing_string %>
+            </.parsing_hint>
           <% end %>
           <.input
             field={@form[:people_missing]}
@@ -326,9 +330,9 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
         />
 
         <%= if assigns[:imported_case] && @imported_case.time_of_disembarkation_string do %>
-          <div class="text-rose-600">
-            <strong>Time of disembarkation (original):</strong> <%= @imported_case.time_of_disembarkation_string %>
-          </div>
+          <.parsing_hint field_name="Time of disembarkation">
+            <%= @imported_case.time_of_disembarkation_string %>
+          </.parsing_hint>
         <% end %>
 
         <.input
@@ -362,9 +366,9 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
         />
 
         <%= if assigns[:imported_case] && @imported_case.followup_needed_string do %>
-          <div class="text-rose-600">
-            <strong>Followup needed (original):</strong> <%= @imported_case.followup_needed_string %>
-          </div>
+          <.parsing_hint field_name="Followup needed">
+            <%= @imported_case.followup_needed_string %>
+          </.parsing_hint>
         <% end %>
 
         <.input
@@ -468,6 +472,7 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
   end
 
   defp save_case(socket, :import, case_params) do
+    IO.puts("HEEERRE")
     # creating the case and deleting the imported case should be done in a transaction.
     case Cases.create_case_and_delete_imported(
            case_params,
@@ -476,11 +481,14 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
       {:ok, %{insert_case: case}} ->
         {:noreply,
          socket
-         |> push_patch(to: socket.assigns.patch)
+         |> push_navigate(to: socket.assigns.patch)
          |> put_flash(:info, "Case #{case.name} added to the main database successfully")}
 
       {:error, :insert_case, %Ecto.Changeset{} = changeset, _} ->
-        {:noreply, assign(socket, form: to_form(changeset))}
+        ## TODO Add flash message on validation error
+        {:noreply,
+         socket
+         |> assign(form: to_form(changeset))}
     end
   end
 

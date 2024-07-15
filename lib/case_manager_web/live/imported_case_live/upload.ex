@@ -21,15 +21,15 @@ defmodule CaseManagerWeb.ImportedCaseLive.Upload do
 
   @impl Phoenix.LiveView
   def handle_event("save", _params, socket) do
-    skip_headers = 1
-
     uploaded_files =
       consume_uploaded_entries(socket, :avatar, fn %{path: path}, _entry ->
         File.stream!(path)
         ## AP Template contains additional header in the first row
-        |> Stream.drop(skip_headers)
+        |> Stream.drop(1)
         |> CSV.decode(headers: true)
-        |> Stream.with_index(skip_headers)
+        ## In total there are two headers so we offset the index so that
+        ## the resulting row index is the same as in Excel.
+        |> Stream.with_index(2)
         |> batch_import()
       end)
       |> hd()

@@ -1,6 +1,6 @@
 defmodule CaseManager.Cases.Case do
-  alias CaseManager.Positions
   use Ecto.Schema
+
   import Ecto.Changeset
   import CaseManager.ChangesetValidators
 
@@ -151,6 +151,9 @@ defmodule CaseManager.Cases.Case do
 
   @doc false
   def changeset(case, attrs) do
+    # IO.inspect(Map.keys(attrs))
+    # IO.inspect(attrs)
+
     case
     |> cast(attrs, [
       :notes,

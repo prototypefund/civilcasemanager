@@ -28,6 +28,8 @@ defmodule CaseManager.ImportedCases.Template do
     "POB Number MAX" => %{key: "pob_total", type: :integer},
     "POB Number MIN" => %{key: "pob_total", type: :integer},
     "number ppl" => %{key: "pob_total", type: :integer},
+    "Nationalities" => %{key: "pob_per_nationality", type: :string, join: true},
+    "nationalities" => %{key: "pob_per_nationality", type: :string, join: true},
     "POB Number CONFIRMED" => %{key: "pob_total", type: :integer},
     "SAR" => %{key: "sar_region", type: :string, default: "unknown", prepend: "sar"},
     "Source" => %{key: "source", type: :string, regex: ~r/\bhttps?:\/\/\S+\b/},
@@ -47,6 +49,8 @@ defmodule CaseManager.ImportedCases.Template do
   }
 
   def map_input_to_template(input_map, index) do
+    IO.inspect(input_map)
+
     Enum.reduce(@template, %{}, fn {key, template}, acc ->
       case Map.fetch(input_map, key) do
         {:ok, input_value} ->
@@ -64,7 +68,12 @@ defmodule CaseManager.ImportedCases.Template do
               input_value
             end
 
-          input_value = String.trim(input_value)
+          input_value =
+            if is_binary(input_value) do
+              String.trim(input_value)
+            else
+              input_value
+            end
 
           {new_value, key} = transform(input_value, template)
 
@@ -116,6 +125,9 @@ defmodule CaseManager.ImportedCases.Template do
 
           Map.has_key?(template, :lowercase) ->
             String.downcase(value)
+
+          Map.has_key?(template, :join) ->
+            Enum.join(value, " ")
 
           true ->
             parse_value(value, template[:type])

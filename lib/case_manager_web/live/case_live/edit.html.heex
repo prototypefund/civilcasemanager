@@ -1,0 +1,17 @@
+<div class=" gap-4 items-start h-full" phx-window-keyup="keyup">
+  <div class="grow shrink-1 basis-1/1 sm:basis-3/12 h-full">
+    <.live_component
+      :if={@live_action == :edit}
+      module={CaseManagerWeb.CaseLive.FormComponent}
+      id={@case.id}
+      title={@page_title}
+      action={@live_action}
+      case={@case}
+      current_user={@current_user}
+      patch={~p"/cases/#{@case}"}
+    />
+  </div>
+</div>
+<div class="shadow-lg z-10 fixed bottom-0 right-0 left-0 bg-indigo-100">
+  <.back class="!mt-0 p-2 w-screen" navigate={~p"/cases"}>Return to overview</.back>
+</div>

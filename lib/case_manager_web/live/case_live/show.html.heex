@@ -1,18 +1,6 @@
 <div class=" gap-4 items-start h-full" phx-window-keyup="keyup">
   <div class="grow shrink-1 basis-1/1 sm:basis-3/12 h-full">
-    <!-- Either render the edit form-->
-    <.live_component
-      :if={@live_action == :edit}
-      module={CaseManagerWeb.CaseLive.FormComponent}
-      id={@case.id}
-      title={@page_title}
-      action={@live_action}
-      case={@case}
-      current_user={@current_user}
-      patch={~p"/cases/#{@case}"}
-    />
-    <!-- ..or the details view -->
-    <div :if={@live_action == :show} class="flex flex-col h-full">
+    <div class="flex flex-col h-full">
       <.header class="mb-4">
         <%= @case.name %>
         <:actions>
@@ -94,10 +82,9 @@
   </div>
 
   <div class="grow shrink-1 basis-1/1 sm:basis-3/12">
-    <.h1 :if={@live_action == :show}>Associated Positions</.h1>
+    <.h1>Associated Positions</.h1>
 
     <.compact_table
-      :if={@live_action == :show}
       id="assoc_positions"
       rows={@streams.assoc_positions}
       row_click={fn {_id, position} -> JS.navigate(~p"/positions/#{position}") end}
@@ -130,9 +117,9 @@
       </:action>
     </.compact_table>
 
-    <.h1 :if={@live_action == :show}>Associated Events</.h1>
+    <.h1>Associated Events</.h1>
     <.live_component
-      :if={@current_user.role != :readonly && @live_action == :show}
+      :if={@current_user.role != :readonly}
       module={CaseManagerWeb.EventLive.FormSmall}
       id={:new}
       title={@page_title}
@@ -143,7 +130,7 @@
       patch={~p"/events"}
     />
 
-    <div :if={@live_action == :show} phx-update="stream" id="assoc_events">
+    <div phx-update="stream" id="assoc_events">
       <%= for {id, event} <- @streams.assoc_events do %>
         <div id={id} phx-click={JS.navigate(~p"/events/#{event}")} phx-hook="FadeIn" class="py-3">
           <.card id={id}>

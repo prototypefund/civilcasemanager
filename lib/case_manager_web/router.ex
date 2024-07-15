@@ -25,7 +25,7 @@ defmodule CaseManagerWeb.Router do
       on_mount: [{CaseManagerWeb.UserLive.Auth, :ensure_write_user}] do
       live "/cases/new", CaseLive.Index, :new
       live "/cases/:id/edit", CaseLive.Index, :edit
-      live "/cases/:id/show/edit", CaseLive.Show, :edit
+      live "/cases/:id/show/edit", CaseLive.Edit, :edit
 
       live "/events/:id/show/edit", EventLive.Show, :edit
       live "/events/new", EventLive.Index, :new

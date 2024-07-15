@@ -49,55 +49,68 @@ defmodule CaseManager.ImportedCases.Template do
   }
 
   def map_input_to_template(input_map, index) do
-    IO.inspect(input_map)
-
     Enum.reduce(@template, %{}, fn {key, template}, acc ->
-      case Map.fetch(input_map, key) do
-        {:ok, input_value} ->
-          input_value =
-            if Map.has_key?(template, :append_key) && Map.has_key?(input_map, template[:append]) do
-              input_value <> " " <> Map.get(input_map, template[:append_key])
-            else
-              input_value
-            end
-
-          input_value =
-            if Map.has_key?(template, :prepend) && input_value != "" do
-              template[:prepend] <> input_value
-            else
-              input_value
-            end
-
-          input_value =
-            if is_binary(input_value) do
-              String.trim(input_value)
-            else
-              input_value
-            end
-
-          {new_value, key} = transform(input_value, template)
-
-          case new_value do
-            nil ->
-              acc
-
-            "" ->
-              acc
-
-            _ ->
-              Map.put(acc, key, new_value)
-          end
-
-        :error ->
-          # Populate default values if specified (currently unused)
-          if Map.has_key?(template, :default) do
-            Map.put(acc, template[:field], template[:default])
-          else
-            acc
-          end
-      end
+      process(input_map, key, template, acc)
     end)
     |> Map.put("row", index)
+  end
+
+  def process(input_map, key, template, acc) do
+    case Map.fetch(input_map, key) do
+      {:ok, input_value} ->
+        {new_value, key} =
+          input_value
+          |> append_conditionally(template, input_map)
+          |> prepend_conditionally(template)
+          |> trim_conditionally()
+          |> parse_values(template)
+
+        cond do
+          new_value == "" && Map.has_key?(template, :default) ->
+            Map.put(acc, key, template[:default])
+
+          new_value == "" ->
+            acc
+
+          new_value == nil ->
+            acc
+
+          true ->
+            Map.put(acc, key, new_value)
+        end
+
+      :error ->
+        # Populate default values if specified
+        if Map.has_key?(template, :default) do
+          Map.put(acc, template[:field], template[:default])
+        else
+          acc
+        end
+    end
+  end
+
+  def append_conditionally(input_value, template, input_map) do
+    if Map.has_key?(template, :append) && Map.has_key?(input_map, template[:append]) do
+      input_value <> " " <> Map.get(input_map, template[:append])
+    else
+      input_value
+    end
+  end
+
+  def prepend_conditionally(input_value, template) do
+    if Map.has_key?(template, :prepend) && input_value != "" do
+      template[:prepend] <> input_value
+    else
+      input_value
+    end
+  end
+
+  def trim_conditionally(input_value) do
+    if is_binary(input_value) do
+      String.trim(input_value)
+    else
+      input_value
+    end
   end
 
   def fix_outcome(string) do
@@ -113,7 +126,7 @@ defmodule CaseManager.ImportedCases.Template do
   # Trys to parse the value using the type specified in the template.
   # If it fails the original value is returned with the key appended
   # with "_string"
-  defp transform(value, template) do
+  defp parse_values(value, template) do
     try do
       new_value =
         cond do

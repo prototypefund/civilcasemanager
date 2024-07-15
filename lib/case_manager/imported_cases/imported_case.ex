@@ -18,7 +18,7 @@ defmodule CaseManager.ImportedCases.ImportedCase do
     field :disembarked_by, :string
     field :people_missing, :integer
     field :people_missing_string, :string
-    field :boat_color, :string
+    field :boat_color, :string, default: "unknown"
     field :cloud_file_links, :string
     field :notes, :string
     field :pob_women, :integer
@@ -26,7 +26,7 @@ defmodule CaseManager.ImportedCases.ImportedCase do
     field :time_of_departure, :utc_datetime
     field :time_of_departure_string, :string
     field :place_of_departure, :string
-    field :boat_type, :string
+    field :boat_type, :string, default: "unknown"
     field :pob_minors, :integer
     field :pob_minors_string, :string
     field :name, :string
@@ -50,7 +50,7 @@ defmodule CaseManager.ImportedCases.ImportedCase do
     field :confirmation_by, :string
     field :time_of_disembarkation, :utc_datetime
     field :time_of_disembarkation_string, :string
-    field :sar_region, :string
+    field :sar_region, :string, default: "unknown"
     field :pob_gender_ambiguous, :integer
     field :pob_gender_ambiguous_string, :string
     field :boat_number_of_engines, :integer

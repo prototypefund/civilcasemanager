@@ -17,7 +17,7 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
             phx-click={JS.push("delete", value: %{imported_id: @imported_case.id})}
             data-confirm="Are you sure?"
           >
-            <.button class="bg-red-700 text-white">Delete row</.button>
+            <.button class="!bg-red-700 text-white">Delete row</.button>
           </.link>
         </:actions>
       </.header>

@@ -323,22 +323,21 @@ defmodule CaseManagerWeb.CoreComponents do
 
     ~H"""
     <div class={["flex items-center gap-4", @wrapper_class]}>
-      <label class={"flex items-center gap-4 text-sm leading-5 text-zinc-600 #{@label_class}"}>
-        <input type="hidden" name={@name} value="false" />
-        <input
-          type="checkbox"
-          id={@id}
-          name={@name}
-          value="true"
-          checked={@checked}
-          class={[
-            "rounded border-zinc-300 text-zinc-900 focus:ring-0",
-            @class
-          ]}
-          {@rest}
-        />
-        <%= @label %>
-      </label>
+      <.label for={@id} class={@label_class}><%= @label %></.label>
+
+      <input type="hidden" name={@name} value="false" />
+      <input
+        type="checkbox"
+        id={@id}
+        name={@name}
+        value="true"
+        checked={@checked}
+        class={[
+          "rounded border-zinc-300 text-zinc-900 focus:ring-0",
+          @class
+        ]}
+        {@rest}
+      />
       <.error :for={msg <- @errors}><%= msg %></.error>
     </div>
     """

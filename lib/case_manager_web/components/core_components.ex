@@ -322,7 +322,7 @@ defmodule CaseManagerWeb.CoreComponents do
       end)
 
     ~H"""
-    <div class={["flex items-center gap-4", @wrapper_class]}>
+    <div class={["flex items-center gap-4  break-inside-avoid", @wrapper_class]}>
       <.label for={@id} class={@label_class}><%= @label %></.label>
 
       <input type="hidden" name={@name} value="false" />
@@ -345,7 +345,7 @@ defmodule CaseManagerWeb.CoreComponents do
 
   def input(%{type: "select"} = assigns) do
     ~H"""
-    <div class={["flex items-center gap-4", @wrapper_class]}>
+    <div class={["flex items-center gap-4 break-inside-avoid", @wrapper_class]}>
       <.label for={@id} class={@label_class}><%= @label %></.label>
       <select
         id={@id}
@@ -369,7 +369,7 @@ defmodule CaseManagerWeb.CoreComponents do
 
   def input(%{type: "textarea"} = assigns) do
     ~H"""
-    <div class={["flex flex-row items-baseline gap-4", @wrapper_class]}>
+    <div class={["flex flex-row items-baseline gap-4  break-inside-avoid", @wrapper_class]}>
       <.label for={@id} class={@label_class}><%= @label %></.label>
       <textarea
         id={@id}
@@ -391,7 +391,7 @@ defmodule CaseManagerWeb.CoreComponents do
   # All other inputs text, datetime-local, url, password, etc. are handled here...
   def input(assigns) do
     ~H"""
-    <div class={["flex flex-row items-baseline gap-4", @wrapper_class]}>
+    <div class={["flex flex-row items-baseline gap-4 break-inside-avoid", @wrapper_class]}>
       <%= if (is_binary(@label) && String.trim(@label) != "") do %>
         <.label for={@id} class={@label_class}><%= @label %></.label>
       <% end %>

@@ -17,7 +17,7 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
             phx-click={JS.push("delete", value: %{imported_id: @imported_case.id})}
             data-confirm="Are you sure?"
           >
-            <.button class="!bg-red-700 text-white">Delete row</.button>
+            <.button class="!bg-rose-600 text-white">Delete row</.button>
           </.link>
         </:actions>
       </.header>
@@ -190,9 +190,9 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
         />
         <.input
           field={@form[:boat_color]}
-          type="text"
+          type="select"
           label="Boat Color"
-          force_validate={@validate_now}
+          options={Ecto.Enum.values(CaseManager.Cases.Case, :boat_color)}
         />
         <.input
           field={@form[:boat_engine_status]}

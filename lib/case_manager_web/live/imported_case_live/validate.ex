@@ -6,7 +6,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.Validate do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, stream(socket, :imported_cases, [])}
+    {:ok, socket, layout: {CaseManagerWeb.Layouts, :autocolumn}}
   end
 
   @impl true
@@ -15,38 +15,22 @@ defmodule CaseManagerWeb.ImportedCaseLive.Validate do
   end
 
   defp apply_action(socket, :validate, %{"id" => id}) do
+    imported_case = ImportedCases.get_imported_case!(id)
+    title = "Validate Row #{imported_case.row}"
+
     socket
-    |> assign(:page_title, "Validate")
-    |> assign(:imported_case, ImportedCases.get_imported_case!(id))
+    |> assign(:page_title, title)
+    |> assign(:imported_case, imported_case)
     |> assign(:case, %Case{})
+    |> assign(:force_validate, true)
   end
 
-  # @impl true
-  # def handle_info(
-  #       {CaseManagerWeb.ImportedCaseLive.FormComponent, {:saved, imported_case}},
-  #       socket
-  #     ) do
-  #   {:noreply, stream_insert(socket, :imported_cases, imported_case)}
-  # end
+  @impl true
+  def handle_event("keyup", %{"key" => "Escape"}, socket) do
+    {:noreply, socket |> push_navigate(to: ~p"/imported_cases")}
+  end
 
-  # def handle_info(
-  #       {CaseManagerWeb.ImportedCaseLive.FormComponent, {:deleted, imported_case}},
-  #       socket
-  #     ) do
-  #   {:noreply, stream_delete(socket, :imported_cases, imported_case)}
-  # end
-
-  # def handle_event("delete", %{"all" => _todo}, socket) do
-  #   ImportedCases.delete_all()
-
-  #   {:noreply, stream(socket, :imported_cases, [], reset: true)}
-  # end
-
-  # @impl true
-  # def handle_event("delete", %{"id" => id}, socket) do
-  #   imported_case = ImportedCases.get_imported_case!(id)
-  #   {:ok, _} = ImportedCases.delete_imported_case(imported_case)
-
-  #   {:noreply, stream_delete(socket, :imported_cases, imported_case)}
-  # end
+  def handle_event("keyup", %{"key" => _}, socket) do
+    {:noreply, socket}
+  end
 end

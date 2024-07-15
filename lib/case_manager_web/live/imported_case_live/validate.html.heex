@@ -1,10 +1,18 @@
-<.live_component
-  :if={@live_action in [:validate]}
-  module={CaseManagerWeb.CaseLive.FormComponent}
-  id={@imported_case.id || :new}
-  title={@page_title}
-  action={@live_action}
-  imported_case={@imported_case}
-  case={@case}
-  patch={~p"/imported_cases"}
-/>
+<div class=" gap-4 items-start h-full" phx-window-keyup="keyup">
+  <div class="grow shrink-1 basis-1/1 sm:basis-3/12 h-full">
+    <.live_component
+      module={CaseManagerWeb.CaseLive.FormComponent}
+      id={@imported_case.id || :new}
+      title={@page_title}
+      subtitle={gettext("Check the import data and fix any fields marked in red")}
+      action={@live_action}
+      case={@case}
+      imported_case={@imported_case}
+      current_user={@current_user}
+      patch={~p"/imported_cases"}
+    />
+  </div>
+</div>
+<div class="shadow-lg z-10 fixed bottom-0 right-0 left-0 bg-indigo-100">
+  <.back class="!mt-0 p-2 w-screen" navigate={~p"/cases"}>Return to overview</.back>
+</div>

@@ -35,7 +35,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
           force_validate={true}
         />
 
-        <%= if @imported_case.occurred_at_string do %>
+        <%= if assigns[:imported_case] && @imported_case.occurred_at_string do %>
           <div class="text-rose-600">
             <strong>Occurred at (original):</strong> <%= @imported_case.occurred_at_string %>
           </div>
@@ -62,7 +62,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
           label="Place of Departure"
           force_validate={true}
         />
-        <%= if @imported_case.time_of_departure_string do %>
+        <%= if assigns[:imported_case] && @imported_case.time_of_departure_string do %>
           <div class="text-rose-600">
             <strong>Time of departure (original):</strong> <%= @imported_case.time_of_departure_string %>
           </div>
@@ -101,7 +101,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
           label="Actors involved"
           force_validate={true}
         />
-        <%= if @imported_case.authorities_alerted_string do %>
+        <%= if assigns[:imported_case] && @imported_case.authorities_alerted_string do %>
           <div class="text-rose-600">
             <strong>Authorities alerted (original):</strong> <%= @imported_case.authorities_alerted_string %>
           </div>
@@ -140,7 +140,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
           label="Boat Engine Working"
           force_validate={true}
         />
-        <%= if @imported_case.boat_number_of_engines_string do %>
+        <%= if assigns[:imported_case] && @imported_case.boat_number_of_engines_string do %>
           <div class="text-rose-600">
             <strong>Boat number of engines (original):</strong> <%= @imported_case.boat_number_of_engines_string %>
           </div>
@@ -154,7 +154,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
 
         <h1 class="text-indigo-600 pt-8 font-semibold">People on Board</h1>
         <div class="flex gap-4 flex-row flex-wrap">
-          <%= if @imported_case.pob_total_string do %>
+          <%= if assigns[:imported_case] && @imported_case.pob_total_string do %>
             <div class="text-rose-600">
               <strong>Pob total (original):</strong> <%= @imported_case.pob_total_string %>
             </div>
@@ -166,7 +166,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
             wrapper_class="w-2/5 flex-grow"
             force_validate={true}
           />
-          <%= if @imported_case.pob_men_string do %>
+          <%= if assigns[:imported_case] && @imported_case.pob_men_string do %>
             <div class="text-rose-600">
               <strong>Pob men (original):</strong> <%= @imported_case.pob_men_string %>
             </div>
@@ -178,7 +178,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
             wrapper_class="w-2/5 flex-grow"
             force_validate={true}
           />
-          <%= if @imported_case.pob_women_string do %>
+          <%= if assigns[:imported_case] && @imported_case.pob_women_string do %>
             <div class="text-rose-600">
               <strong>Pob women (original):</strong> <%= @imported_case.pob_women_string %>
             </div>
@@ -190,7 +190,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
             wrapper_class="w-2/5 flex-grow"
             force_validate={true}
           />
-          <%= if @imported_case.pob_minors_string do %>
+          <%= if assigns[:imported_case] && @imported_case.pob_minors_string do %>
             <div class="text-rose-600">
               <strong>Pob minors (original):</strong> <%= @imported_case.pob_minors_string %>
             </div>
@@ -202,7 +202,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
             wrapper_class="w-2/5 flex-grow"
             force_validate={true}
           />
-          <%= if @imported_case.pob_gender_ambiguous_string do %>
+          <%= if assigns[:imported_case] && @imported_case.pob_gender_ambiguous_string do %>
             <div class="text-rose-600">
               <strong>Pob gender ambiguous (original):</strong> <%= @imported_case.pob_gender_ambiguous_string %>
             </div>
@@ -221,7 +221,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
             wrapper_class="w-2/5 flex-grow"
             force_validate={true}
           />
-          <%= if @imported_case.people_dead_string do %>
+          <%= if assigns[:imported_case] && @imported_case.people_dead_string do %>
             <div class="text-rose-600">
               <strong>People dead (original):</strong> <%= @imported_case.people_dead_string %>
             </div>
@@ -233,7 +233,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
             wrapper_class="w-2/5 flex-grow"
             force_validate={true}
           />
-          <%= if @imported_case.people_missing_string do %>
+          <%= if assigns[:imported_case] && @imported_case.people_missing_string do %>
             <div class="text-rose-600">
               <strong>People missing (original):</strong> <%= @imported_case.people_missing_string %>
             </div>
@@ -263,7 +263,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
           force_validate={true}
         />
 
-        <%= if @imported_case.time_of_disembarkation_string do %>
+        <%= if assigns[:imported_case] && @imported_case.time_of_disembarkation_string do %>
           <div class="text-rose-600">
             <strong>Time of disembarkation (original):</strong> <%= @imported_case.time_of_disembarkation_string %>
           </div>
@@ -299,7 +299,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
           label="Frontext Involvement"
           force_validate={true}
         />
-        <%= if @imported_case.followup_needed_string do %>
+        <%= if assigns[:imported_case] && @imported_case.followup_needed_string do %>
           <div class="text-rose-600">
             <strong>Followup needed (original):</strong> <%= @imported_case.followup_needed_string %>
           </div>
@@ -350,44 +350,5 @@ defmodule CaseManagerWeb.ImportedCaseLive.FormComponent do
      |> assign_new(:form, fn ->
        to_form(changeset, action: :validate)
      end)}
-  end
-
-  @impl true
-  def handle_event("validate", %{"case" => imported_case_params}, socket) do
-    changeset =
-      Cases.change_case(socket.assigns.case, imported_case_params)
-
-    {:noreply, assign(socket, form: to_form(changeset, action: :validate))}
-  end
-
-  def handle_event("save", %{"case" => imported_case_params}, socket) do
-    save_imported_case(socket, socket.assigns.action, imported_case_params)
-  end
-
-  defp save_imported_case(socket, _, imported_case_params) do
-    # creating the case and deleting the imported case should be done in a transaction.
-    case Cases.create_case_and_delete_imported(
-           imported_case_params,
-           socket.assigns.imported_case
-         ) do
-      {:ok, %{insert_case: case}} ->
-        ## FIXME get actually next in list based on current
-        next_case =
-          ImportedCases.get_next_case_after(socket.assigns.imported_case)
-
-        patch_url =
-          if next_case,
-            do: ~p"/imported_cases/#{next_case.id}/validate#imported_case-modal-content",
-            else: ~p"/imported_cases"
-
-        {:noreply,
-         socket
-         |> push_patch(to: patch_url)
-         |> clear_flash()
-         |> put_flash(:info, "Case #{case.name} added to the main database successfully")}
-
-      {:error, :insert_case, %Ecto.Changeset{} = changeset, _} ->
-        {:noreply, assign(socket, form: to_form(changeset))}
-    end
   end
 end

@@ -26,14 +26,6 @@ defmodule CaseManagerWeb.CaseLive.Show do
 
   @impl true
 
-  def handle_event("keyup", %{"key" => "Escape"}, socket) do
-    {:noreply, socket |> push_navigate(to: ~p"/cases")}
-  end
-
-  def handle_event("keyup", %{"key" => _}, socket) do
-    {:noreply, socket}
-  end
-
   def handle_info({:event_created, event}, socket) do
     # We only call stream_insert if the received event has a case in cases with the same case_id as the case we are showing
     case = socket.assigns.case
@@ -48,7 +40,7 @@ defmodule CaseManagerWeb.CaseLive.Show do
 
   @impl true
   def handle_info({:event_updated, event}, socket) do
-    # TODO Filter correctly here
+    # TODO Use Flop to apply filter here
     {:noreply, stream_insert(socket, :assoc_events, event, at: 0)}
   end
 
@@ -65,7 +57,6 @@ defmodule CaseManagerWeb.CaseLive.Show do
   end
 
   defp page_title(:show), do: "Show Case"
-  defp page_title(:edit), do: "Edit Case"
 
   # Get a mailto link with the body using fill_template_with_case()
   # defp get_mailto_link(case) do

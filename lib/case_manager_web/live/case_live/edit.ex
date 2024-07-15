@@ -2,7 +2,6 @@ defmodule CaseManagerWeb.CaseLive.Edit do
   use CaseManagerWeb, :live_view
 
   alias CaseManager.Cases
-  alias CaseManager.Events.Event
 
   @impl true
   def mount(_params, _session, socket) do
@@ -64,12 +63,5 @@ defmodule CaseManagerWeb.CaseLive.Edit do
      |> assign(:case, case)}
   end
 
-  defp page_title(:show), do: "Show Case"
   defp page_title(:edit), do: "Edit Case"
-
-  # Get a mailto link with the body using fill_template_with_case()
-  # defp get_mailto_link(case) do
-  #   "mailto: ?subject=#{URI.encode("Distress Case #{case.name} in SRR")}
-  #   &body=#{URI.encode(Cases.fill_template_with_case(case))}"
-  # end
 end

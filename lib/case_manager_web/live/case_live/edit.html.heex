@@ -1,7 +1,6 @@
 <div class=" gap-4 items-start h-full" phx-window-keyup="keyup">
   <div class="grow shrink-1 basis-1/1 sm:basis-3/12 h-full">
     <.live_component
-      :if={@live_action == :edit}
       module={CaseManagerWeb.CaseLive.FormComponent}
       id={@case.id}
       title={@page_title}

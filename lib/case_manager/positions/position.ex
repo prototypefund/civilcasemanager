@@ -1,6 +1,7 @@
 defmodule CaseManager.Positions.Position do
   use Ecto.Schema
   import Ecto.Changeset
+  import CaseManager.GeoTools
 
   @derive {
     Flop.Schema,
@@ -22,6 +23,7 @@ defmodule CaseManager.Positions.Position do
     field :heading, :decimal
     field :lat, :decimal
     field :lon, :decimal
+    field :short_code, :string, virtual: true
     field :imported_from, :string
     ## TODO Make plan which field to use
     # field :pos_geo, Geo.PostGIS.Geometry
@@ -42,8 +44,33 @@ defmodule CaseManager.Positions.Position do
       :speed,
       :timestamp,
       :imported_from,
-      :soft_deleted
+      :soft_deleted,
+      :short_code
     ])
+    |> convert_short_code()
     |> validate_required([:lat, :lon])
+  end
+
+  def convert_short_code(changeset) do
+    case get_change(changeset, :short_code) do
+      nil ->
+        changeset
+
+      short_code ->
+        safe_parse_short_code(changeset, short_code)
+    end
+  end
+
+  defp safe_parse_short_code(changeset, short_code) do
+    try do
+      {lat, lon} = combined_short_string_to_float(short_code)
+
+      changeset
+      |> put_change(:lat, lat)
+      |> put_change(:lon, lon)
+    rescue
+      _ ->
+        add_error(changeset, :short_code, "Invalid short code: Use DEG MIN / DEG MIN")
+    end
   end
 end

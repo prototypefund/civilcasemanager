@@ -89,11 +89,8 @@
       rows={@streams.assoc_positions}
       row_click={fn {_id, position} -> JS.navigate(~p"/positions/#{position}") end}
     >
-      <:col :let={{_id, position}} label="Lat">
-        <%= Decimal.to_string(position.lat, :normal) |> String.slice(0..6) %>
-      </:col>
-      <:col :let={{_id, position}} label="Lon">
-        <%= Decimal.to_string(position.lon) |> String.slice(0..6) %>
+      <:col :let={{_id, position}} label="Shortcode">
+        <%= position.short_code %>
       </:col>
       <:col :let={{_id, position}} label="Timestamp">
         <%= position.timestamp %>

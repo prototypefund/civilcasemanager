@@ -101,7 +101,8 @@ defmodule CaseManagerWeb.CaseForm do
         <.inputs_for :let={ef} field={@form[:positions]}>
           <div class="break-inside-avoid-column flex flex-row gap-4">
             <input type="hidden" name="case[positions_sort][]" value={ef.index} />
-            <.input type="datetime-local" field={ef[:timestamp]} placeholder="Lon" />
+            <.input type="text" field={ef[:short_code]} placeholder="12 22 / 33 44" />
+            <.input type="datetime-local" field={ef[:timestamp]} />
             <button
               type="button"
               name="case[positions_drop][]"

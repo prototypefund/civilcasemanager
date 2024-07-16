@@ -1,4 +1,6 @@
 defmodule CaseManager.Positions do
+  import CaseManager.GeoTools
+
   @moduledoc """
   The Positions context.
   """
@@ -46,6 +48,12 @@ defmodule CaseManager.Positions do
   def list_positions_for_case(case_identifier) do
     from(p in Position, where: p.item_id == ^case_identifier)
     |> Repo.all()
+    |> Enum.map(&add_shortcode/1)
+  end
+
+  defp add_shortcode(position) do
+    position
+    |> Map.put(:short_code, number_to_short_string({position.lat, position.lon}))
   end
 
   @doc """

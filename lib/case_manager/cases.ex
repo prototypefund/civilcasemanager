@@ -83,12 +83,14 @@ defmodule CaseManager.Cases do
 
   """
   def get_case!(id, preload \\ true) do
-    Repo.one!(
-      from c in Case,
-        where: c.id == ^id,
-        preload: ^if(preload, do: [:events, :positions], else: [])
-    )
-    |> populate_shortcodes()
+    case =
+      Repo.one!(
+        from c in Case,
+          where: c.id == ^id,
+          preload: ^if(preload, do: [:events, :positions], else: [])
+      )
+
+    if preload, do: populate_shortcodes(case), else: case
   end
 
   def list_positions_for_case(case_identifier) do

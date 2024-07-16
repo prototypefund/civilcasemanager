@@ -88,12 +88,13 @@
 
 <.modal :if={@live_action in [:new, :edit]} id="case-modal" show on_cancel={JS.patch(~p"/cases")}>
   <.live_component
-    module={CaseManagerWeb.CaseLive.FormComponent}
+    module={CaseManagerWeb.CaseForm}
     id={@case.id || :new}
     title={@page_title}
     action={@live_action}
     case={@case}
     current_user={@current_user}
     patch={~p"/cases"}
+    validate_now={false}
   />
 </.modal>

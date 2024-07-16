@@ -60,7 +60,7 @@ defmodule CaseManagerWeb.CaseLive.Index do
   end
 
   @impl true
-  def handle_info({CaseManagerWeb.CaseLive.FormComponent, {:saved, case}}, socket) do
+  def handle_info({CaseManagerWeb.CaseForm, {:saved, case}}, socket) do
     {:noreply, stream_insert(socket, :cases, case)}
   end
 

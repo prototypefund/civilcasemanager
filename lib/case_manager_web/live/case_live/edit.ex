@@ -57,7 +57,7 @@ defmodule CaseManagerWeb.CaseLive.Edit do
   end
 
   @impl true
-  def handle_info({CaseManagerWeb.CaseLive.FormComponent, {:saved, case}}, socket) do
+  def handle_info({CaseManagerWeb.CaseForm, {:saved, case}}, socket) do
     {:noreply,
      socket
      |> assign(:case, case)}

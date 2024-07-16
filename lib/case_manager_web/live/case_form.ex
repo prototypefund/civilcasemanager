@@ -488,7 +488,6 @@ defmodule CaseManagerWeb.CaseForm do
       {:error, :insert_case, %Ecto.Changeset{} = changeset, _} ->
         ## TODO Add flash message on validation error
         IO.puts("FAIL_HEEERRE")
-        IO.inspect(changeset)
 
         {:noreply,
          socket

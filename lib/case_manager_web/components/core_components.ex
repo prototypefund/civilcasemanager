@@ -373,7 +373,7 @@ defmodule CaseManagerWeb.CoreComponents do
       "flex flex-row items-baseline gap-4  break-inside-avoid tabular-nums slashed-zero",
       @wrapper_class
     ]}>
-      <.label for={@id} class={@label_class}><%= @label %></.label>
+      <.label :if={@label} for={@id} class={@label_class}><%= @label %></.label>
       <textarea
         id={@id}
         name={@name}
@@ -387,6 +387,20 @@ defmodule CaseManagerWeb.CoreComponents do
         {@rest}
       ><%= Phoenix.HTML.Form.normalize_value("textarea", @value) %></textarea>
       <.error :for={msg <- @errors}><%= msg %></.error>
+    </div>
+    """
+  end
+
+  def input(%{type: "hidden"} = assigns) do
+    ~H"""
+    <div class={["invisible", @wrapper_class]}>
+      <input
+        type={@type}
+        name={@name}
+        id={@id}
+        value={Phoenix.HTML.Form.normalize_value(@type, @value)}
+        {@rest}
+      />
     </div>
     """
   end
@@ -624,7 +638,7 @@ defmodule CaseManagerWeb.CoreComponents do
 
     ~H"""
     <div class="overflow-y-auto px-4 sm:px-0 text-sm">
-      <table class="w-[40rem] my-2 overflow-hidden">
+      <table class="w-full my-2 overflow-hidden">
         <tbody
           id={@id}
           phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}

@@ -1,6 +1,6 @@
-<div class=" gap-4 items-start h-full">
-  <div class="grow shrink-1 basis-1/1 sm:basis-3/12 h-full">
-    <div class="flex flex-col h-full">
+<div class=" gap-4 items-start">
+  <div class="grow shrink-1 basis-1/1 sm:basis-3/12">
+    <div class="flex flex-col">
       <.header class="mb-4">
         <%= @case.name %>
         <:actions>
@@ -16,7 +16,7 @@
           </a>-->
         </:actions>
       </.header>
-      <div class="h-full overflow-y-scroll pb-8 pr-4">
+      <div class="pb-8 pr-4">
         <.list>
           <:item title="Notes"><%= @case.notes %></:item>
           <:item title="Created at"><%= @case.created_at %></:item>
@@ -81,7 +81,7 @@
   </div>
 
   <div class="grow shrink-1 basis-1/1 sm:basis-3/12">
-    <.h1>Associated Positions</.h1>
+    <.h1 class="mt-8">Associated Positions</.h1>
 
     <.compact_table
       id="assoc_positions"
@@ -113,7 +113,7 @@
       </:action>
     </.compact_table>
 
-    <.h1>Associated Events</.h1>
+    <.h1 class="mt-8">Associated Events</.h1>
     <.live_component
       :if={@current_user.role != :readonly}
       module={CaseManagerWeb.EventLive.FormSmall}

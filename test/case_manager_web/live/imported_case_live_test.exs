@@ -48,90 +48,6 @@ defmodule CaseManagerWeb.ImportedCaseLiveTest do
     url: "some url",
     alarmphone_contact: "some alarmphone_contact"
   }
-  @update_attrs %{
-    people_dead: 43,
-    template: "some updated template",
-    pob_per_nationality: "some updated pob_per_nationality",
-    outcome_actors: "some updated outcome_actors",
-    occurred_at: "2024-07-10T08:22:00Z",
-    boat_engine_status: "some updated boat_engine_status",
-    boat_engine_working: "some updated boat_engine_working",
-    imported_from: "some updated imported_from",
-    departure_region: "some updated departure_region",
-    outcome: "some updated outcome",
-    boat_number_of_engines: 43,
-    pob_gender_ambiguous: 43,
-    sar_region: "some updated sar_region",
-    time_of_disembarkation: "2024-07-10T08:22:00Z",
-    confirmation_by: "some updated confirmation_by",
-    frontext_involvement: "some updated frontext_involvement",
-    pob_total: 43,
-    status: "some updated status",
-    pob_medical_cases: 43,
-    pob_men: 43,
-    boat_notes: "some updated boat_notes",
-    phonenumber: "some updated phonenumber",
-    followup_needed: false,
-    authorities_alerted: false,
-    actors_involved: "some updated actors_involved",
-    authorities_details: "some updated authorities_details",
-    place_of_disembarkation: "some updated place_of_disembarkation",
-    name: "DC2999",
-    pob_minors: 43,
-    boat_type: "some updated boat_type",
-    place_of_departure: "some updated place_of_departure",
-    time_of_departure: "2024-07-10T08:22:00Z",
-    pob_women: 43,
-    notes: "some updated notes",
-    cloud_file_links: "some updated cloud_file_links",
-    boat_color: "some updated boat_color",
-    people_missing: 43,
-    disembarked_by: "some updated disembarked_by",
-    url: "some updated url",
-    alarmphone_contact: "some updated alarmphone_contact"
-  }
-  @invalid_attrs %{
-    people_dead: nil,
-    template: nil,
-    pob_per_nationality: nil,
-    outcome_actors: nil,
-    occurred_at: nil,
-    boat_engine_status: nil,
-    boat_engine_working: nil,
-    imported_from: nil,
-    departure_region: nil,
-    outcome: nil,
-    boat_number_of_engines: nil,
-    pob_gender_ambiguous: nil,
-    sar_region: nil,
-    time_of_disembarkation: nil,
-    confirmation_by: nil,
-    frontext_involvement: nil,
-    pob_total: nil,
-    status: nil,
-    pob_medical_cases: nil,
-    pob_men: nil,
-    boat_notes: nil,
-    phonenumber: nil,
-    followup_needed: false,
-    authorities_alerted: false,
-    actors_involved: nil,
-    authorities_details: nil,
-    place_of_disembarkation: nil,
-    name: nil,
-    pob_minors: nil,
-    boat_type: nil,
-    place_of_departure: nil,
-    time_of_departure: nil,
-    pob_women: nil,
-    notes: nil,
-    cloud_file_links: nil,
-    boat_color: nil,
-    people_missing: nil,
-    disembarked_by: nil,
-    url: nil,
-    alarmphone_contact: nil
-  }
 
   defp create_imported_case(_) do
     imported_case = imported_case_fixture()
@@ -189,56 +105,6 @@ defmodule CaseManagerWeb.ImportedCaseLiveTest do
       assert html =~ imported_case.status
     end
 
-    # test "upload csv", %{conn: conn} do
-    #   {:ok, index_live, _html} = live(conn, ~p"/imported_cases")
-
-    #   assert index_live |> element("a", "Upload") |> render_click() =~
-    #            "Case Importer"
-
-    #   assert_patch(index_live, ~p"/imported_cases/upload")
-
-    #   assert index_live
-    #          |> form("#upload-form", imported_case: @invalid_attrs)
-    #          |> render_change() =~ "can&#39;t be blank"
-
-    #   assert index_live
-    #          |> form("#upload-form", imported_case: @create_attrs)
-    #          |> render_submit()
-
-    #   # assert_flash(index_live, :info, "rows imported")
-
-    #   html = render(index_live)
-    #   assert html =~ "Imported case created successfully"
-    #   assert html =~ "some status"
-    # end
-
-    # test "validate imported_case in listing", %{conn: conn, imported_case: imported_case} do
-    #   ## TODO: Check that the case is not in the list afterwards
-
-    #   {:ok, index_live, _html} = live(conn, ~p"/imported_cases")
-
-    #   assert index_live
-    #          |> element("#imported_cases-#{imported_case.id} a", "Validate")
-    #          |> render_click() =~
-    #            "Validate Imported case"
-
-    #   assert_patch(index_live, ~p"/imported_cases/#{imported_case}/validate")
-
-    #   assert index_live
-    #          |> form("#imported_case-form", case: @invalid_attrs)
-    #          |> render_change() =~ "can&#39;t be blank"
-
-    #   assert index_live
-    #          |> form("#imported_case-form", case: @update_attrs)
-    #          |> render_submit()
-
-    #   assert_patch(index_live, ~p"/imported_cases")
-
-    #   html = render(index_live)
-    #   assert html =~ "Imported case updated successfully"
-    #   assert html =~ "some updated template"
-    # end
-
     test "deletes imported_case in listing", %{conn: conn, imported_case: imported_case} do
       {:ok, index_live, _html} = live(conn, ~p"/imported_cases")
 
@@ -247,6 +113,81 @@ defmodule CaseManagerWeb.ImportedCaseLiveTest do
              |> render_click()
 
       refute has_element?(index_live, "#imported_cases-#{imported_case.id}")
+    end
+  end
+
+  describe "Upload" do
+    setup [:login]
+
+    test "renders upload form", %{conn: conn} do
+      {:ok, view, html} = live(conn, ~p"/imported_cases/upload")
+
+      assert html =~ "Case Importer"
+      assert has_element?(view, "form")
+      assert has_element?(view, "input[type=file]")
+      assert has_element?(view, "button", "Upload")
+    end
+
+    test "uploads CSV file successfully", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/imported_cases/upload")
+
+      file_input =
+        file_input(view, "#upload-form", :avatar, [
+          %{
+            last_modified: 1_594_171_879_000,
+            name: "test.csv",
+            content: File.read!("test/fixtures/test.csv"),
+            type: "text/csv"
+          }
+        ])
+
+      assert render_upload(file_input, "test.csv") =~ "100%"
+
+      assert view
+             |> element("#upload-form")
+             |> render_submit() =~ "2 rows imported"
+    end
+
+    test "handles CSV file with errors", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/imported_cases/upload")
+
+      file_input =
+        file_input(view, "#upload-form", :avatar, [
+          %{
+            last_modified: 1_594_171_879_000,
+            name: "test_with_errors.csv",
+            content: "header1,header2\nvalue1\nvalue3,value4,extra",
+            type: "text/csv"
+          }
+        ])
+
+      assert render_upload(file_input, "test_with_errors.csv") =~ "100%"
+
+      assert view
+             |> element("#upload-form")
+             |> render_submit() =~ "1 row imported 1 row failed Failed rows: 2"
+    end
+
+    test "cancels upload", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/imported_cases/upload")
+
+      file_input =
+        file_input(view, "#upload-form", :avatar, [
+          %{
+            last_modified: 1_594_171_879_000,
+            name: "test.csv",
+            content: "header1,header2\nvalue1,value2",
+            type: "text/csv"
+          }
+        ])
+
+      assert render_upload(file_input, "test.csv") =~ "100%"
+
+      assert view
+             |> element("button", "Cancel")
+             |> render_click()
+
+      refute has_element?(view, "progress")
     end
   end
 end

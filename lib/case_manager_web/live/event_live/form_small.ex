@@ -25,7 +25,7 @@ defmodule CaseManagerWeb.EventLive.FormSmall do
         <:actions>
           <.button
             phx-disable-with="Saving..."
-            class="-mt-5 text-white !bg-indigo-600 rounded-md !hover:bg-indigo-500 ml-auto"
+            class="text-white !bg-indigo-600 rounded-md !hover:bg-indigo-500 ml-auto"
           >
             Submit
           </.button>

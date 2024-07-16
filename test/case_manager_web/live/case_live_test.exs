@@ -90,9 +90,9 @@ defmodule CaseManagerWeb.CaseLiveTest do
     name: nil
   }
 
-  @invalid_name %{
-    name: "DC100 AC2300"
-  }
+  # @invalid_name %{
+  #   name: "DC100 AC2300"
+  # }
 
   @invalid_status %{
     status: :random

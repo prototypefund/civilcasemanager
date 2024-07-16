@@ -369,14 +369,17 @@ defmodule CaseManagerWeb.CoreComponents do
 
   def input(%{type: "textarea"} = assigns) do
     ~H"""
-    <div class={["flex flex-row items-baseline gap-4  break-inside-avoid", @wrapper_class]}>
+    <div class={[
+      "flex flex-row items-baseline gap-4  break-inside-avoid tabular-nums slashed-zero",
+      @wrapper_class
+    ]}>
       <.label for={@id} class={@label_class}><%= @label %></.label>
       <textarea
         id={@id}
         name={@name}
         class={[
           "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-5",
-          "min-h-[6rem]  ",
+          "min-h-[6rem] tabular-nums slashed-zero ",
           @errors == [] && "border-zinc-300 focus:border-zinc-400",
           @errors != [] && "border-rose-400 focus:border-rose-400 has-errors",
           @class
@@ -391,7 +394,7 @@ defmodule CaseManagerWeb.CoreComponents do
   # All other inputs text, datetime-local, url, password, etc. are handled here...
   def input(assigns) do
     ~H"""
-    <div class={["flex flex-row items-baseline gap-4 break-inside-avoid", @wrapper_class]}>
+    <div class={["flex flex-row items-baseline gap-4 break-inside-avoid ", @wrapper_class]}>
       <%= if (is_binary(@label) && String.trim(@label) != "") do %>
         <.label for={@id} class={@label_class}><%= @label %></.label>
       <% end %>
@@ -403,7 +406,7 @@ defmodule CaseManagerWeb.CoreComponents do
           value={Phoenix.HTML.Form.normalize_value(@type, @value)}
           class={[
             "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-5",
-            " ",
+            " tabular-nums slashed-zero",
             "dark:bg-zinc-900 dark:text-zinc-100",
             @errors == [] && "border-zinc-300 focus:border-zinc-400",
             @errors != [] && "border-rose-400 focus:border-rose-400 has-errors",

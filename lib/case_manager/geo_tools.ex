@@ -73,7 +73,7 @@ defmodule CaseManager.GeoTools do
 
   def number_to_short_string(decimal) do
     {deg, min, sec} = number_to_dms(decimal)
-    rounded_min = min + round(sec)
+    rounded_min = min + round(sec / 60)
     "#{deg} #{String.pad_leading(Integer.to_string(rounded_min), 2, "0")}"
   end
 

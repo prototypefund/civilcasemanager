@@ -65,6 +65,10 @@ defmodule CaseManager.GeoToolsTest do
       assert GeoTools.number_to_short_string(34.233333333333334) == "34 14"
     end
 
+    test "rounds seconds correctly" do
+      assert GeoTools.number_to_short_string(12.7333333333333) == "12 44"
+    end
+
     test "converts negative decimal to short string" do
       assert GeoTools.number_to_short_string(-12.966666666666667) == "-12 58"
     end

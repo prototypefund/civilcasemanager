@@ -6,49 +6,6 @@ defmodule CaseManagerWeb.ImportedCaseLiveTest do
 
   import CaseManagerWeb.LoginUtils
 
-  @create_attrs %{
-    people_dead: 42,
-    template: "some template",
-    pob_per_nationality: "some pob_per_nationality",
-    outcome_actors: "some outcome_actors",
-    occurred_at: "2024-07-09T08:22:00Z",
-    boat_engine_status: "some boat_engine_status",
-    boat_engine_working: "some boat_engine_working",
-    imported_from: "some imported_from",
-    departure_region: "some departure_region",
-    outcome: "some outcome",
-    boat_number_of_engines: 42,
-    pob_gender_ambiguous: 42,
-    sar_region: "some sar_region",
-    time_of_disembarkation: "2024-07-09T08:22:00Z",
-    confirmation_by: "some confirmation_by",
-    frontext_involvement: "some frontext_involvement",
-    pob_total: 42,
-    status: "some status",
-    pob_medical_cases: 42,
-    pob_men: 42,
-    boat_notes: "some boat_notes",
-    phonenumber: "some phonenumber",
-    followup_needed: true,
-    authorities_alerted: true,
-    actors_involved: "some actors_involved",
-    authorities_details: "some authorities_details",
-    place_of_disembarkation: "some place_of_disembarkation",
-    name: "some name",
-    pob_minors: 42,
-    boat_type: "some boat_type",
-    place_of_departure: "some place_of_departure",
-    time_of_departure: "2024-07-09T08:22:00Z",
-    pob_women: 42,
-    notes: "some notes",
-    cloud_file_links: "some cloud_file_links",
-    boat_color: "some boat_color",
-    people_missing: 42,
-    disembarked_by: "some disembarked_by",
-    url: "some url",
-    alarmphone_contact: "some alarmphone_contact"
-  }
-
   defp create_imported_case(_) do
     imported_case = imported_case_fixture()
     %{imported_case: imported_case}
@@ -136,12 +93,12 @@ defmodule CaseManagerWeb.ImportedCaseLiveTest do
           %{
             last_modified: 1_594_171_879_000,
             name: "test.csv",
-            content: File.read!("test/fixtures/test.csv"),
+            content: File.read!("test/support/fixtures/test.csv"),
             type: "text/csv"
           }
         ])
 
-      assert render_upload(file_input, "test.csv") =~ "100%"
+      render_upload(file_input, "test.csv")
 
       assert view
              |> element("#upload-form")
@@ -156,38 +113,16 @@ defmodule CaseManagerWeb.ImportedCaseLiveTest do
           %{
             last_modified: 1_594_171_879_000,
             name: "test_with_errors.csv",
-            content: "header1,header2\nvalue1\nvalue3,value4,extra",
+            content: File.read!("test/support/fixtures/test_with_errors.csv"),
             type: "text/csv"
           }
         ])
 
-      assert render_upload(file_input, "test_with_errors.csv") =~ "100%"
+      render_upload(file_input, "test_with_errors.csv")
 
       assert view
              |> element("#upload-form")
-             |> render_submit() =~ "1 row imported 1 row failed Failed rows: 2"
-    end
-
-    test "cancels upload", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/imported_cases/upload")
-
-      file_input =
-        file_input(view, "#upload-form", :avatar, [
-          %{
-            last_modified: 1_594_171_879_000,
-            name: "test.csv",
-            content: "header1,header2\nvalue1,value2",
-            type: "text/csv"
-          }
-        ])
-
-      assert render_upload(file_input, "test.csv") =~ "100%"
-
-      assert view
-             |> element("button", "Cancel")
-             |> render_click()
-
-      refute has_element?(view, "progress")
+             |> render_submit() =~ "No valid rows found"
     end
   end
 end

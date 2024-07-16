@@ -67,7 +67,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.Upload do
     failed_count = Enum.count(failed_rows)
     success_count = Enum.count(uploaded_files) - failed_count
 
-    result_code = if failed_count > 0, do: :warning, else: :info
+    result_code = if failed_count > 0 || success_count == 0, do: :warning, else: :info
 
     {result_code, success_count, failed_count, failed_rows}
   end
@@ -80,7 +80,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.Upload do
        }) do
     success_string =
       case success_count do
-        0 -> ""
+        0 -> "No valid rows found"
         1 -> "1 row imported"
         _ -> "#{success_count} rows imported"
       end

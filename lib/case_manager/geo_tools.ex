@@ -85,6 +85,7 @@ defmodule CaseManager.GeoTools do
 
   @doc """
   Converts a short string format (DEG MIN) to a decimal coordinate.
+  The minute part can be either an integer or a float.
 
   ## Examples
 
@@ -93,11 +94,14 @@ defmodule CaseManager.GeoTools do
 
   iex> CaseManager.Geo.short_string_to_decimal("12 57")
   12.95
+
+  iex> CaseManager.Geo.short_string_to_decimal("34 17.5")
+  34.29166666666667
   """
   def short_string_to_decimal(short_string) do
     [deg, min] = short_string |> String.trim() |> String.split()
     {deg, _} = Integer.parse(deg)
-    {min, _} = Integer.parse(min)
+    {min, _} = Float.parse(min)
     deg + min / 60
   end
 
@@ -143,11 +147,15 @@ defmodule CaseManager.GeoTools do
   end
 
   defp parse_dms(dms) do
-    [deg, min, sec, dir] =
-      Regex.run(~r/(\d+)°\s*(\d+)['‘]\s*(\d+)\s*([NSEW])/, dms, capture: :all_but_first)
-
-    {String.to_integer(deg), String.to_integer(min), String.to_integer(sec), dir}
+    case Regex.run(~r/(\d+)°\s*(\d+)['\‘]\s*(\d*)?\s*([NSEW])/, dms, capture: :all_but_first) do
+      [deg, min, sec, dir] ->
+        {String.to_integer(deg), String.to_integer(min), parse_seconds(sec), dir}
+    end
   end
+
+  ## Handle missing seconds
+  defp parse_seconds(""), do: 0
+  defp parse_seconds(sec), do: String.to_integer(sec)
 
   defp dms_to_decimal(deg, min, sec, dir) do
     decimal = deg + min / 60 + sec / 3600

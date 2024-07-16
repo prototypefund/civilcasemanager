@@ -112,6 +112,7 @@ defmodule CaseManager.Cases.Case do
         :interception_tn,
         :ngo_rescue,
         :afm_rescue,
+        :hcg_rescue,
         :italy_rescue,
         :merv_interception,
         :merv_rescue,

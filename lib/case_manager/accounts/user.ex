@@ -114,6 +114,27 @@ defmodule CaseManager.Accounts.User do
   end
 
   @doc """
+  A user changeset that can edit any attribute
+  """
+  def admin_changeset(user, attrs, opts \\ []) do
+    user
+    |> cast(attrs, [:name, :role, :email, :password, :role])
+    |> validate_required([:name, :role, :email])
+    |> maybe_validate_password(opts)
+  end
+
+  defp maybe_validate_password(changeset, opts) do
+    new_password = get_change(changeset, :password)
+
+    if new_password != nil do
+      changeset
+      |> validate_password(opts)
+    else
+      changeset
+    end
+  end
+
+  @doc """
   A user changeset for changing the email.
 
   It requires the email to change otherwise an error is added.

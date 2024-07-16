@@ -21,7 +21,7 @@ defmodule CaseManagerWeb.UserLive.FormComponent do
       >
         <.input field={@form[:name]} type="text" label="Name" required />
         <.input field={@form[:email]} type="email" label="Email" required />
-        <.input field={@form[:password]} type="password" label="Password" required />
+        <.input field={@form[:password]} type="password" label="Password" />
 
         <.input
           field={@form[:role]}
@@ -63,7 +63,7 @@ defmodule CaseManagerWeb.UserLive.FormComponent do
   end
 
   defp save_user(socket, :edit, user_params) do
-    case Accounts.update_user_generic_attrs(socket.assigns.user, user_params) do
+    case Accounts.update_user_admin_attrs(socket.assigns.user, user_params) do
       {:ok, user} ->
         notify_parent({:saved, user})
 

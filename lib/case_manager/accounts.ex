@@ -176,6 +176,40 @@ defmodule CaseManager.Accounts do
   end
 
   @doc """
+  Returns an `%Ecto.Changeset{}` for changing the user email.
+
+  ## Examples
+
+      iex> change_user_email(user)
+      %Ecto.Changeset{data: %User{}}
+
+  """
+  def change_admin_attrs(user, attrs \\ %{}) do
+    User.admin_changeset(user, attrs)
+  end
+
+  @doc """
+  Updates any attributes that can be edited by an admin.
+
+  ## Examples
+
+    iex> update_user_admin_attrs(user, %{name: "John Doe"})
+    {:ok, %User{}}
+
+    iex> update_user_admin_attrs(user, %{role: "admin"})
+    {:ok, %User{}}
+
+  """
+  def update_user_admin_attrs(%User{} = user, attrs) do
+    ret =
+      user
+      |> User.admin_changeset(attrs)
+
+    IO.inspect(ret, label: "AAA")
+    Repo.update(ret)
+  end
+
+  @doc """
   Emulates that the email will change without actually changing
   it in the database.
 

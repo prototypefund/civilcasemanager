@@ -1,4 +1,4 @@
-defmodule CaseManagerWeb.CaseLive.FormComponent do
+defmodule CaseManagerWeb.CaseForm do
   require Logger
 
   use CaseManagerWeb, :live_component
@@ -101,8 +101,6 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
         <.inputs_for :let={ef} field={@form[:positions]}>
           <div class="break-inside-avoid-column flex flex-row gap-4">
             <input type="hidden" name="case[positions_sort][]" value={ef.index} />
-            <.input type="text" field={ef[:lat]} placeholder="Lat" />
-            <.input type="text" field={ef[:lon]} placeholder="Lon" />
             <.input type="datetime-local" field={ef[:timestamp]} placeholder="Lon" />
             <button
               type="button"
@@ -479,6 +477,8 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
            socket.assigns.imported_case
          ) do
       {:ok, %{insert_case: case}} ->
+        IO.puts("OK_HEEERRE")
+
         {:noreply,
          socket
          |> push_navigate(to: socket.assigns.patch)
@@ -486,6 +486,9 @@ defmodule CaseManagerWeb.CaseLive.FormComponent do
 
       {:error, :insert_case, %Ecto.Changeset{} = changeset, _} ->
         ## TODO Add flash message on validation error
+        IO.puts("FAIL_HEEERRE")
+        IO.inspect(changeset)
+
         {:noreply,
          socket
          |> assign(form: to_form(changeset))}

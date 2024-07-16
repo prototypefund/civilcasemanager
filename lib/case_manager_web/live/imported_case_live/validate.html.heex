@@ -1,7 +1,7 @@
 <div class=" gap-4 items-start h-full" phx-window-keyup="keyup">
   <div class="grow shrink-1 basis-1/1 sm:basis-3/12 h-full">
     <.live_component
-      module={CaseManagerWeb.CaseLive.FormComponent}
+      module={CaseManagerWeb.CaseForm}
       id={@imported_case.id || :new}
       title={@page_title}
       subtitle={gettext("Check the import data and fix any fields marked in red")}

@@ -13,8 +13,8 @@ defmodule CaseManager.GeoTools do
     {lat_deg, lat_min, lat_sec, lat_dir} = parse_dms(String.trim(lat))
     {lon_deg, lon_min, lon_sec, lon_dir} = parse_dms(String.trim(lon))
 
-    lat_decimal = dms_to_decimal(lat_deg, lat_min, lat_sec, lat_dir)
-    lon_decimal = dms_to_decimal(lon_deg, lon_min, lon_sec, lon_dir)
+    lat_decimal = dms_to_float(lat_deg, lat_min, lat_sec, lat_dir)
+    lon_decimal = dms_to_float(lon_deg, lon_min, lon_sec, lon_dir)
 
     %Geo.Point{coordinates: {lon_decimal, lat_decimal}, properties: %{}}
   end
@@ -29,8 +29,8 @@ defmodule CaseManager.GeoTools do
   "34° 14' 00\" N, 12° 58' 00\" E"
   """
   def point_to_dms_string(%Geo.Point{coordinates: {lon, lat}}) do
-    lat_dms = decimal_to_dms_string(lat, "NS")
-    lon_dms = decimal_to_dms_string(lon, "EW")
+    lat_dms = number_to_dms_string(lat, :lat)
+    lon_dms = number_to_dms_string(lon, :lon)
     "#{lat_dms}, #{lon_dms}"
   end
 
@@ -39,31 +39,40 @@ defmodule CaseManager.GeoTools do
 
   ## Examples
 
-  iex> CaseManager.Geo.decimal_to_dms_string(34.27777777777778, "NS")
+  iex> CaseManager.Geo.float_to_dms_string(34.27777777777778, :lat)
   "34° 14' 00\" N"
 
-  iex> CaseManager.Geo.decimal_to_dms_string(-12.94722222222222, "EW")
+  iex> CaseManager.Geo.float_to_dms_string(-12.94722222222222, :lon)
   "12° 58' 00\" W"
   """
-  def decimal_to_dms_string(decimal, directions) do
-    {deg, min, sec, dir} = decimal_to_dms(decimal, directions)
+  def number_to_dms_string(decimal, directions) do
+    {deg, min, sec, dir} = number_to_dms_with_direction(decimal, directions)
 
     "#{String.pad_leading(Integer.to_string(deg), 2, "0")}° #{String.pad_leading(Integer.to_string(min), 2, "0")}' #{String.pad_leading(Integer.to_string(sec), 2, "0")}\" #{dir}"
   end
 
   @doc """
-  Converts a decimal coordinate to a short string format (DEG MIN).
+  Converts a tuple of decimal coordinates {lat, lon} to a short string format (DEG MIN / DEG MIN).
 
   ## Examples
 
-  iex> CaseManager.Geo.decimal_to_short_string(34.27777777777778)
+  iex> CaseManager.Geo.number_to_short_string({34.27777777777778, 12.94722222222222})
+  "34 17 / 12 57"
+
+  iex> CaseManager.Geo.number_to_short_string(34.27777777777778)
   "34 17"
 
-  iex> CaseManager.Geo.decimal_to_short_string(-12.94722222222222)
+  iex> CaseManager.Geo.number_to_short_string(-12.94722222222222)
   "12 57"
   """
-  def decimal_to_short_string(decimal, directions \\ "NE") do
-    {deg, min, sec, _dir} = decimal_to_dms(decimal, directions)
+  def number_to_short_string({lat, lon}) do
+    lat_short = number_to_short_string(lat)
+    lon_short = number_to_short_string(lon)
+    "#{lat_short} / #{lon_short}"
+  end
+
+  def number_to_short_string(decimal) do
+    {deg, min, sec} = number_to_dms(decimal)
     rounded_min = min + round(sec)
     "#{deg} #{String.pad_leading(Integer.to_string(rounded_min), 2, "0")}"
   end
@@ -78,8 +87,8 @@ defmodule CaseManager.GeoTools do
   "34 17 / 12 57"
   """
   def point_to_short_string(%Geo.Point{coordinates: {lon, lat}}) do
-    lat_short = decimal_to_short_string(lat)
-    lon_short = decimal_to_short_string(lon)
+    lat_short = number_to_short_string(lat)
+    lon_short = number_to_short_string(lon)
     "#{lat_short} / #{lon_short}"
   end
 
@@ -89,20 +98,36 @@ defmodule CaseManager.GeoTools do
 
   ## Examples
 
-  iex> CaseManager.Geo.short_string_to_decimal("34 17")
+  iex> CaseManager.Geo.short_string_to_float("34 17")
   34.28333333333333
 
-  iex> CaseManager.Geo.short_string_to_decimal("12 57")
+  iex> CaseManager.Geo.short_string_to_float("12 57")
   12.95
 
-  iex> CaseManager.Geo.short_string_to_decimal("34 17.5")
+  iex> CaseManager.Geo.short_string_to_float("34 17.5")
   34.29166666666667
   """
-  def short_string_to_decimal(short_string) do
+  def short_string_to_float(short_string) do
     [deg, min] = short_string |> String.trim() |> String.split()
     {deg, _} = Integer.parse(deg)
     {min, _} = Float.parse(min)
-    deg + min / 60
+
+    # Don't accept negative minutes
+    if min < 0 do
+      raise ArgumentError, message: "Minutes must be positive"
+    end
+
+    # Don't accept minutes greater than 60
+    if min > 60 do
+      raise ArgumentError, message: "Minutes must be less than 60"
+    end
+
+    # Depending on the negative sign of the degree, the minutes need to be added or subtracted
+    if deg >= 0 do
+      deg + min / 60
+    else
+      deg - min / 60
+    end
   end
 
   @doc """
@@ -110,13 +135,13 @@ defmodule CaseManager.GeoTools do
 
   ## Examples
 
-  iex> CaseManager.Geo.combined_short_string_to_decimal("34 17 / 12 57")
+  iex> CaseManager.Geo.combined_short_string_to_float("34 17 / 12 57")
   {34.28333333333333, 12.95}
   """
-  def combined_short_string_to_decimal(combined_short_string) do
+  def combined_short_string_to_float(combined_short_string) do
     [lat_string, lon_string] = String.split(combined_short_string, "/")
-    lat = lat_string |> short_string_to_decimal()
-    lon = lon_string |> short_string_to_decimal()
+    lat = lat_string |> short_string_to_float()
+    lon = lon_string |> short_string_to_float()
     {lat, lon}
   end
 
@@ -130,18 +155,41 @@ defmodule CaseManager.GeoTools do
   """
   def short_string_to_point(short_string) do
     [lat_string, lon_string] = String.split(short_string, " / ")
-    lat = short_string_to_decimal(lat_string)
-    lon = short_string_to_decimal(lon_string)
+    lat = short_string_to_float(lat_string)
+    lon = short_string_to_float(lon_string)
     %Geo.Point{coordinates: {lon, lat}, properties: %{}}
   end
 
-  defp decimal_to_dms(decimal, directions) do
-    abs_decimal = abs(decimal)
-    deg = trunc(abs_decimal)
-    min = trunc((abs_decimal - deg) * 60)
-    sec = trunc(((abs_decimal - deg) * 60 - min) * 60)
+  defp number_to_dms(%Decimal{} = decimal) do
+    ## Convert to float and continue normally
+    float = Decimal.to_float(decimal)
+    number_to_dms(float)
+  end
 
-    dir = if decimal >= 0, do: String.first(directions), else: String.last(directions)
+  defp number_to_dms(float) when is_float(float) do
+    abs_float = abs(float)
+    deg = trunc(float)
+    abs_deg = abs(deg)
+    min = trunc((abs_float - abs_deg) * 60)
+    sec = round(((abs_float - abs_deg) * 60 - min) * 60)
+
+    {deg, min, sec}
+  end
+
+  defp number_to_dms_with_direction(%Decimal{} = decimal, direction) do
+    ## Convert to float and continue normally
+    float = Decimal.to_float(decimal)
+
+    number_to_dms_with_direction(float, direction)
+  end
+
+  defp number_to_dms_with_direction(float, direction) when is_float(float) do
+    abs_float = abs(float)
+    deg = trunc(abs_float)
+    min = trunc((abs_float - deg) * 60)
+    sec = trunc(((abs_float - deg) * 60 - min) * 60)
+
+    dir = get_dms_direction(direction, float >= 0)
 
     {deg, min, sec, dir}
   end
@@ -153,11 +201,20 @@ defmodule CaseManager.GeoTools do
     end
   end
 
+  defp get_dms_direction(key, positive) do
+    cond do
+      key == :lat && positive -> "N"
+      key == :lat && !positive -> "S"
+      key == :lon && positive -> "E"
+      key == :lon && !positive -> "W"
+    end
+  end
+
   ## Handle missing seconds
   defp parse_seconds(""), do: 0
   defp parse_seconds(sec), do: String.to_integer(sec)
 
-  defp dms_to_decimal(deg, min, sec, dir) do
+  defp dms_to_float(deg, min, sec, dir) do
     decimal = deg + min / 60 + sec / 3600
 
     case dir do

@@ -116,6 +116,7 @@ defmodule CaseManager.Cases.Case do
         :merv_interception,
         :merv_rescue,
         :returned,
+        :arrived,
         :autonomous,
         :unknown,
         :empty_boat,
@@ -151,9 +152,6 @@ defmodule CaseManager.Cases.Case do
 
   @doc false
   def changeset(case, attrs) do
-    # IO.inspect(Map.keys(attrs))
-    # IO.inspect(attrs)
-
     case
     |> cast(attrs, [
       :notes,
@@ -199,11 +197,11 @@ defmodule CaseManager.Cases.Case do
     ])
     |> validate_required([:name, :status])
     # |> validate_number(:course_over_ground, greater_than_or_equal_to: 0, less_than_or_equal_to: 360)
-    |> validate_format(
-      :name,
-      ~r/^[a-zA-Z0-9\-]+$/,
-      message: "ID must only contain letters, numbers and a dash."
-    )
+    # |> validate_format(
+    #   :name,
+    #   ~r/^[a-zA-Z0-9\-]+$/,
+    #   message: "ID must only contain letters, numbers and a dash."
+    # )
     |> put_timestamp_if_nil(:created_at)
     |> cast_assoc(:positions,
       sort_param: :positions_sort,

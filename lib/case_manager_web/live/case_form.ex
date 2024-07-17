@@ -9,6 +9,16 @@ defmodule CaseManagerWeb.CaseForm do
   def render(assigns) do
     ~H"""
     <div class="">
+      <%= if assigns[:flash_copy] && @flash_copy["info"] do %>
+        <div
+          id="loader"
+          class="fixed inset-0 flex items-center justify-center z-1  text-4xl font-bold "
+          style="animation: fadeOut 700ms 100ms forwards, hide 800ms 1ms forwards;"
+        >
+          <div class="p-5 rounded-lg bg-gray-800 bg-opacity-75 text-white">Opening next Case...</div>
+        </div>
+      <% end %>
+
       <.header>
         <%= @title %>
         <:subtitle :if={assigns[:subtitle]}><%= @subtitle %></:subtitle>
@@ -482,8 +492,10 @@ defmodule CaseManagerWeb.CaseForm do
       {:ok, %{insert_case: case}} ->
         {:noreply,
          socket
+         |> push_event("transition", %{name: "Case"})
+         |> assign(transition: true)
          |> put_flash(:info, "Case #{case.name} added to the main database successfully")
-         |> redirect(to: socket.assigns.patch)}
+         |> push_navigate(to: socket.assigns.patch)}
 
       {:error, :insert_case, %Ecto.Changeset{} = changeset, _} ->
         {:noreply,

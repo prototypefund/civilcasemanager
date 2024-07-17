@@ -24,6 +24,25 @@ body.initial-mount-complete .fade-in {
     }
 }
 
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes hide {
+    from {
+        display: fixed;
+    }
+    to {
+        display: none;
+    }
+}
+
 .break-words {
     overflow-wrap: break-word;
     word-break: break-word;

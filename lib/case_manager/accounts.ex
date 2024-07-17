@@ -201,12 +201,9 @@ defmodule CaseManager.Accounts do
 
   """
   def update_user_admin_attrs(%User{} = user, attrs) do
-    ret =
-      user
-      |> User.admin_changeset(attrs)
-
-    IO.inspect(ret, label: "AAA")
-    Repo.update(ret)
+    user
+    |> User.admin_changeset(attrs)
+    |> Repo.update()
   end
 
   @doc """

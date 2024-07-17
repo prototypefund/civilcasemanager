@@ -4,11 +4,7 @@ user interface to assign them to various cases.
 
 
 # v1.0
-- [ ] Add feedback on validation error and save.
-- [ ] Fix dropdown validation
-- [ ] Make navigation transparent to user. 
-- [x] Load imported positions into form!
-
+- [ ] Improve dropdown validation
 
 # v2.0
 - Quick Compose: Titel, Timestamp

@@ -195,13 +195,12 @@ defmodule CaseManagerWeb.CaseLiveTest do
         |> render_change() =~ "must be one of"
       end
 
-      assert index_live
-             |> form("#case-form", case: @update_attrs)
-             |> render_submit()
+      assert {:ok, _view, html} =
+               index_live
+               |> form("#case-form", case: @update_attrs)
+               |> render_submit()
+               |> follow_redirect(conn, ~p"/cases")
 
-      assert_patch(index_live, ~p"/cases")
-
-      html = render(index_live)
       assert html =~ "Case updated successfully"
       assert html =~ "some updated notes"
     end
@@ -240,13 +239,12 @@ defmodule CaseManagerWeb.CaseLiveTest do
       #        |> form("#case-form", case: @invalid_attrs)
       #        |> render_change() =~ "can't be blank"
 
-      assert edit_live
-             |> form("#case-form", case: @update_attrs)
-             |> render_submit()
+      assert {:ok, _view, html} =
+               edit_live
+               |> form("#case-form", case: @update_attrs)
+               |> render_submit()
+               |> follow_redirect(conn, ~p"/cases/#{case}")
 
-      {:ok, show_live, _html} = live(conn, ~p"/cases/#{case}")
-
-      html = render(show_live)
       assert html =~ "Case updated successfully"
       assert html =~ "some updated notes"
     end

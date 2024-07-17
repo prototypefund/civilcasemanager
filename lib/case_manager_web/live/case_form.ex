@@ -476,7 +476,7 @@ defmodule CaseManagerWeb.CaseForm do
         {:noreply,
          socket
          |> put_flash(:info, "Case created successfully")
-         |> push_navigate(to: socket.assigns.patch)}
+         |> push_patch(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign_form(socket, changeset)}

@@ -41,7 +41,6 @@ defmodule CaseManagerWeb.Router do
       live "/cases/new", CaseLive.Index, :new
       live "/cases/:id/edit", CaseLive.Index, :edit
       live "/cases/:id", CaseLive.Show, :show
-      #### FIXME Flash show when Index but not when Edit
       live "/cases/:id/show/edit", CaseLive.Edit, :edit
 
       live "/events", EventLive.Index, :index

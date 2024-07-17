@@ -30,6 +30,9 @@ defmodule CaseManagerWeb.CaseForm do
         phx-submit="save"
         class="pb-4 pr-4"
       >
+        <%= if assigns[:imported_case] do %>
+          <.input field={@form[:imported_id]} type="hidden" value={@imported_case.id} />
+        <% end %>
         <h1 class="text-indigo-600 pt-8 font-semibold">Base data</h1>
         <.input field={@form[:name]} type="text" label="Identifier" force_validate={@validate_now} />
         <.input field={@form[:notes]} type="textarea" label="Notes" force_validate={@validate_now} />
@@ -463,7 +466,7 @@ defmodule CaseManagerWeb.CaseForm do
         {:noreply,
          socket
          |> put_flash(:info, "Case created successfully")
-         |> push_patch(to: socket.assigns.patch)}
+         |> push_navigate(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign_form(socket, changeset)}
@@ -471,27 +474,23 @@ defmodule CaseManagerWeb.CaseForm do
   end
 
   defp save_case(socket, :import, case_params) do
-    IO.puts("HEEERRE")
     # creating the case and deleting the imported case should be done in a transaction.
     case Cases.create_case_and_delete_imported(
            case_params,
            socket.assigns.imported_case
          ) do
       {:ok, %{insert_case: case}} ->
-        IO.puts("OK_HEEERRE")
-
         {:noreply,
          socket
-         |> push_navigate(to: socket.assigns.patch)
-         |> put_flash(:info, "Case #{case.name} added to the main database successfully")}
+         |> put_flash(:info, "Case #{case.name} added to the main database successfully")
+         |> redirect(to: socket.assigns.patch)}
 
       {:error, :insert_case, %Ecto.Changeset{} = changeset, _} ->
-        ## TODO Add flash message on validation error
-        IO.puts("FAIL_HEEERRE")
-
         {:noreply,
          socket
-         |> assign(form: to_form(changeset))}
+         |> assign(form: to_form(changeset))
+         |> put_flash(:warning, "Cannot save case: There are invalid fields in the form")
+         |> push_patch(to: ~p"/imported_cases/#{case_params["imported_id"]}/validate")}
     end
   end
 

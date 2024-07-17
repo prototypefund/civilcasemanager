@@ -17,30 +17,6 @@ defmodule CaseManagerWeb.Router do
     plug :accepts, ["json"]
   end
 
-  ## Routes that require write permission
-  scope "/", CaseManagerWeb do
-    pipe_through [:browser, :require_write_user]
-
-    live_session :require_write_user,
-      on_mount: [{CaseManagerWeb.UserLive.Auth, :ensure_write_user}] do
-      live "/cases/new", CaseLive.Index, :new
-      live "/cases/:id/edit", CaseLive.Index, :edit
-      live "/cases/:id/show/edit", CaseLive.Edit, :edit
-
-      live "/events/:id/show/edit", EventLive.Show, :edit
-      live "/events/new", EventLive.Index, :new
-      live "/events/:id/edit", EventLive.Index, :edit
-
-      live "/positions/new", PositionLive.Index, :new
-      live "/positions/:id/edit", PositionLive.Index, :edit
-      live "/positions/:id/show/edit", PositionLive.Show, :edit
-
-      live "/imported_cases/upload", ImportedCaseLive.Upload, :new
-      live "/imported_cases/:id/edit", ImportedCaseLive.Index, :edit
-      live "/imported_cases/:id/validate", ImportedCaseLive.Validate, :import
-    end
-  end
-
   ## Routes that require admin users
   scope "/", CaseManagerWeb do
     pipe_through [:browser, :require_admin_user]
@@ -62,15 +38,28 @@ defmodule CaseManagerWeb.Router do
       live "/", CaseLive.Index, :index
 
       live "/cases", CaseLive.Index, :index
+      live "/cases/new", CaseLive.Index, :new
+      live "/cases/:id/edit", CaseLive.Index, :edit
       live "/cases/:id", CaseLive.Show, :show
+      #### FIXME Flash show when Index but not when Edit
+      live "/cases/:id/show/edit", CaseLive.Edit, :edit
 
       live "/events", EventLive.Index, :index
+      live "/events/new", EventLive.Index, :new
+      live "/events/:id/edit", EventLive.Index, :edit
       live "/events/:id", EventLive.Show, :show
+      live "/events/:id/show/edit", EventLive.Show, :edit
 
       live "/positions", PositionLive.Index, :index
+      live "/positions/new", PositionLive.Index, :new
+      live "/positions/:id/edit", PositionLive.Index, :edit
       live "/positions/:id", PositionLive.Show, :show
+      live "/positions/:id/show/edit", PositionLive.Show, :edit
 
       live "/imported_cases", ImportedCaseLive.Index, :index
+      live "/imported_cases/upload", ImportedCaseLive.Upload, :new
+      live "/imported_cases/:id/edit", ImportedCaseLive.Index, :edit
+      live "/imported_cases/:id/validate", ImportedCaseLive.Validate, :import
 
       live "/users/settings", UserLive.Settings, :edit
       live "/users/settings/confirm_email/:token", UserLive.Settings, :confirm_email

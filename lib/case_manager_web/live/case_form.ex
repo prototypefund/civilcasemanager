@@ -448,7 +448,7 @@ defmodule CaseManagerWeb.CaseForm do
         {:noreply,
          socket
          |> put_flash(:info, "Case updated successfully")
-         |> push_patch(to: socket.assigns.patch)}
+         |> push_navigate(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign_form(socket, changeset)}

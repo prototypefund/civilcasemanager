@@ -12,6 +12,7 @@ stages:
 
 variables:
   SECURE_LOG_LEVEL: "debug"
+  IMAGE_NAME_CASEMANAGER: $CI_REGISTRY/civilmrcc/casemanager/casemanager
 
 sast:
   stage: test
@@ -94,14 +95,12 @@ static-analysis:
     - mix local.rebar --force
     - mix credo --all
 
-variables:
-  IMAGE_NAME_CASEMANAGER: $CI_REGISTRY/civilmrcc/casemanager/casemanager
-
+ 
 build_images:
   stage: docker
-  image: $CI_REGISTRY/group/project/docker:20.10.16
+  image: docker:20.10
   services:
-    - name: $CI_REGISTRY/group/project/docker:20.10.16-dind
+    - name: docker:20.10-dind
       alias: docker
   only:
     - main

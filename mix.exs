@@ -37,7 +37,6 @@ defmodule CaseManager.MixProject do
       {:phoenix_ecto, "~> 4.5"},
       {:ecto_sql, "~> 3.10"},
       {:ecto_enum, "~> 1.4"},
-      {:myxql, ">= 0.0.0"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 4.1"},
       {:phoenix_live_reload, "~>1.5.1", only: :dev},
@@ -66,6 +65,7 @@ defmodule CaseManager.MixProject do
       {:earmark, "~> 1.1"},
       {:geo_postgis, "~> 3.6"},
       {:credo, "~> 1.7.7", only: [:dev, :test], runtime: false},
+      {:sobelow, "~> 0.13.0", only: [:dev, :test], runtime: false},
       {:csv, "~> 3.2.1"}
     ]
   end

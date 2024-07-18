@@ -6,13 +6,14 @@
 # Note that environment variables can be set in several places
 # See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
 stages:
-- build
-- test
+  - build
+  - test
+  - docker
 
 sast:
   stage: test
 include:
-- template: Security/SAST.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
 before_script:
   - cp config/workers.exs.EMPTY config/workers.exs
 
@@ -72,7 +73,7 @@ lint:
     - mix deps.get
     - mix local.hex --force
     - mix local.rebar --force
-    - mix format --check-formatted     
+    - mix format --check-formatted
 
 static-analysis:
   stage: test
@@ -88,4 +89,19 @@ static-analysis:
     - mix deps.get
     - mix local.hex --force
     - mix local.rebar --force
-    - mix credo --all   
+    - mix credo --all
+
+variables:
+  IMAGE_NAME_CASEMANAGER: $CI_REGISTRY/civilmrcc/casemanager/casemanager
+
+build_images:
+  stage: docker
+  image: docker:stable
+  only:
+    - main
+  script:
+    - docker info
+    - docker build -t $IMAGE_NAME_CASEMANAGER -f Dockerfile .
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker push $IMAGE_NAME_CASEMANAGER
+    - docker logout $CI_REGISTRY

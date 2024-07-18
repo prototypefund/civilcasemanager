@@ -4,7 +4,7 @@ user interface to assign them to various cases.
 
 
 # v1.0
-- [ ] Improve dropdown validation
+- [ ] Bring back dropdown validation
 
 # v2.0
 - Quick Compose: Titel, Timestamp
@@ -35,7 +35,7 @@ user interface to assign them to various cases.
 
 ## Ideas
 if more advanced Access Control is needed:
-https://github.com/woylie/let_me
+Permit
 
 
 # To use

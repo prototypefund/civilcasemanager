@@ -10,6 +10,9 @@ stages:
   - test
   - docker
 
+variables:
+  SECURE_LOG_LEVEL: "debug"
+
 sast:
   stage: test
 include:

@@ -14,7 +14,7 @@ sast:
 include:
 - template: Security/SAST.gitlab-ci.yml
 before_script:
-  - cp config/TESTworkers.exs config/workers.exs
+  - cp config/workers.exs.EMPTY config/workers.exs
 
 compile:
   stage: build
@@ -26,7 +26,7 @@ compile:
       - _build
       - deps
   script:
-    - cp config/TESTworkers.exs config/workers.exs
+    - cp config/workers.exs.EMPTY config/workers.exs
     - mix local.hex --force
     - mix local.rebar --force
     - mix deps.get
@@ -51,7 +51,7 @@ unittest:
       - _build
       - deps
   script:
-    - cp config/TESTworkers.exs config/workers.exs
+    - cp config/workers.exs.EMPTY config/workers.exs
     - mix deps.get
     - mix local.hex --force
     - mix local.rebar --force
@@ -68,7 +68,7 @@ lint:
       - _build
       - deps
   script:
-    - cp config/TESTworkers.exs config/workers.exs
+    - cp config/workers.exs.EMPTY config/workers.exs
     - mix deps.get
     - mix local.hex --force
     - mix local.rebar --force
@@ -84,7 +84,7 @@ static-analysis:
       - _build
       - deps
   script:
-    - cp config/TESTworkers.exs config/workers.exs
+    - cp config/workers.exs.EMPTY config/workers.exs
     - mix deps.get
     - mix local.hex --force
     - mix local.rebar --force

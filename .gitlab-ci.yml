@@ -96,7 +96,10 @@ variables:
 
 build_images:
   stage: docker
-  image: docker:stable
+  image: $CI_REGISTRY/group/project/docker:20.10.16
+  services:
+    - name: $CI_REGISTRY/group/project/docker:20.10.16-dind
+      alias: docker
   only:
     - main
   script:

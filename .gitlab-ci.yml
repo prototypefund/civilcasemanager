@@ -12,7 +12,7 @@ stages:
 
 variables:
   SECURE_LOG_LEVEL: "debug"
-  IMAGE_NAME_CASEMANAGER: $CI_REGISTRY/civilmrcc/civilcasemanager/civilcasemanager
+  IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
 
 sast:
   stage: test
@@ -106,7 +106,7 @@ build_images:
     - main
   script:
     - docker info
-    - docker build -t $IMAGE_NAME_CASEMANAGER -f Dockerfile .
+    - docker build -t $IMAGE_TAG -f Dockerfile .
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker push $IMAGE_NAME_CASEMANAGER
+    - docker push $IMAGE_TAG
     - docker logout $CI_REGISTRY

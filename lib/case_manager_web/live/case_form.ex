@@ -77,8 +77,7 @@ defmodule CaseManagerWeb.CaseForm do
           label="Departure Region"
           force_validate={@validate_now}
         />
-
-        <%!-- Should be autocomplete --%>
+        <!-- Should be autocomplete -->
         <.input
           field={@form[:place_of_departure]}
           type="text"

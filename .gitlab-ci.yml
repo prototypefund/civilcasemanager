@@ -102,8 +102,6 @@ build_images:
   services:
     - name: docker:20.10-dind
       alias: docker
-  only:
-    - main
   script:
     - docker info
     - docker build -t $IMAGE_TAG -f Dockerfile .

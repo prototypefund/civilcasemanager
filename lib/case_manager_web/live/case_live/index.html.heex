@@ -58,7 +58,7 @@
           <% end %>
         </:tag>
         <:timestamp>
-          <.timestamp timestamp={case.created_at} />
+          <.timestamp timestamp={case.occurred_at || case.created_at} />
         </:timestamp>
         <:actions>
           <.link :if={@current_user.role != :readonly} patch={~p"/cases/#{case}/edit"}>

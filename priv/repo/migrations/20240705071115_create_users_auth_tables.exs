@@ -22,5 +22,16 @@ defmodule CaseManager.Repo.Migrations.CreateUsersAuthTables do
 
     create index(:users_tokens, [:user_id], prefix: "private")
     create unique_index(:users_tokens, [:context, :token], prefix: "private")
+
+    # Create admin account if environment variables are set
+    first_account_email = System.get_env("FIRST_ACCOUNT_EMAIL")
+    first_account_password = System.get_env("FIRST_ACCOUNT_PASSWORD")
+
+    if first_account_email && first_account_password do
+      execute """
+      INSERT INTO private.users (email, hashed_password, confirmed_at, inserted_at, updated_at)
+      VALUES ('#{first_account_email}', '#{Bcrypt.hash_pwd_salt(first_account_password)}', NOW(), NOW(), NOW());
+      """
+    end
   end
 end

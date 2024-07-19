@@ -22,7 +22,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.Validate do
       ImportedCases.get_next_case_after(imported_case)
 
     next_url =
-      if next_case,
+      if next_case && next_case.id != imported_case.id,
         do: ~p"/imported_cases/#{next_case.id}/validate#imported_case-modal-content",
         else: ~p"/imported_cases"
 

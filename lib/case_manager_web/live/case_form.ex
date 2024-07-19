@@ -511,14 +511,27 @@ defmodule CaseManagerWeb.CaseForm do
 
   defp notify_parent(msg), do: send(self(), {__MODULE__, msg})
 
-  ## TODO Move to input, use proved field, and maybe use options group
-  def get_options(module, key, field, show_invalid \\ true) do
-    valid_values = Ecto.Enum.values(module, key)
+  ## TODO Move to input, use provided field, and maybe use options group
+  def get_options(module, key, field) do
+    allowed_values = Ecto.Enum.values(module, key)
+    processed = to_atom_or_nil(field.value)
 
-    if show_invalid && field.value && field.value not in valid_values do
-      valid_values ++ [{"INVALID -> " <> field.value <> " <- INVALID", field.value}]
+    if processed && processed not in allowed_values do
+      allowed_values ++ [{"INVALID -> " <> field.value <> " <- INVALID", field.value}]
     else
-      valid_values
+      allowed_values
     end
   end
+
+  defp to_atom_or_nil(nil), do: nil
+
+  defp to_atom_or_nil(value) when is_binary(value) do
+    try do
+      String.to_existing_atom(value)
+    rescue
+      _ -> nil
+    end
+  end
+
+  defp to_atom_or_nil(value), do: value
 end

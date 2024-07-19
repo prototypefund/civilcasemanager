@@ -4,7 +4,7 @@ user interface to assign them to various cases.
 
 
 # v1.0
-- [ ] Bring back dropdown validation
+
 
 # v2.0
 - Quick Compose: Titel, Timestamp

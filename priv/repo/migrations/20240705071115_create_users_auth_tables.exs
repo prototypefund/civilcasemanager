@@ -9,6 +9,7 @@ defmodule CaseManager.Repo.Migrations.CreateUsersAuthTables do
       add :hashed_password, :string, null: false
       add :confirmed_at, :naive_datetime
       add :name, :string, size: 160
+      add :role, :string, default: "user"
       timestamps(type: :utc_datetime)
     end
 
@@ -32,10 +33,15 @@ defmodule CaseManager.Repo.Migrations.CreateUsersAuthTables do
     if first_account_email && first_account_password do
       Logger.info("Creating first account with email: #{first_account_email}")
 
-      execute """
-      INSERT INTO private.users (email, hashed_password, confirmed_at, inserted_at, updated_at)
-      VALUES ('#{first_account_email}', '#{Bcrypt.hash_pwd_salt(first_account_password)}', NOW(), NOW(), NOW());
-      """
+      execute(fn ->
+        repo().insert(%CaseManager.Accounts.User{
+          email: first_account_email,
+          hashed_password: Bcrypt.hash_pwd_salt(first_account_password),
+          inserted_at: DateTime.truncate(DateTime.utc_now(), :second),
+          updated_at: DateTime.truncate(DateTime.utc_now(), :second),
+          role: "admin"
+        })
+      end)
     else
       Logger.info(
         "No first account created. Set FIRST_ACCOUNT_EMAIL and FIRST_ACCOUNT_PASSWORD environment variables to create an admin account."

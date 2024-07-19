@@ -51,7 +51,7 @@ defmodule CaseManagerWeb.CaseForm do
           field={@form[:status]}
           type="select"
           label="Status"
-          options={Ecto.Enum.values(CaseManager.Cases.Case, :status)}
+          options={get_options(CaseManager.Cases.Case, :status, @form[:status])}
         />
         <%= if assigns[:imported_case] && @imported_case.occurred_at_string do %>
           <.parsing_hint field_name="Occurred at">
@@ -95,7 +95,7 @@ defmodule CaseManagerWeb.CaseForm do
           field={@form[:sar_region]}
           type="select"
           label="SAR Region"
-          options={Ecto.Enum.values(CaseManager.Cases.Case, :sar_region)}
+          options={get_options(CaseManager.Cases.Case, :sar_region, @form[:sar_region])}
         />
 
         <h1 class="text-indigo-600 pt-8 font-semibold">Positions</h1>
@@ -191,7 +191,7 @@ defmodule CaseManagerWeb.CaseForm do
           field={@form[:boat_type]}
           type="select"
           label="Boat Type"
-          options={Ecto.Enum.values(CaseManager.Cases.Case, :boat_type)}
+          options={get_options(CaseManager.Cases.Case, :boat_type, @form[:boat_type])}
         />
         <.input
           field={@form[:boat_notes]}
@@ -203,7 +203,7 @@ defmodule CaseManagerWeb.CaseForm do
           field={@form[:boat_color]}
           type="select"
           label="Boat Color"
-          options={Ecto.Enum.values(CaseManager.Cases.Case, :boat_color)}
+          options={get_options(CaseManager.Cases.Case, :boat_color, @form[:boat_color])}
         />
         <.input
           field={@form[:boat_engine_status]}
@@ -337,7 +337,7 @@ defmodule CaseManagerWeb.CaseForm do
           field={@form[:outcome]}
           type="select"
           label="Outcome"
-          options={Ecto.Enum.values(CaseManager.Cases.Case, :outcome)}
+          options={get_options(CaseManager.Cases.Case, :outcome, @form[:outcome])}
         />
 
         <%= if assigns[:imported_case] && @imported_case.time_of_disembarkation_string do %>
@@ -511,11 +511,11 @@ defmodule CaseManagerWeb.CaseForm do
 
   defp notify_parent(msg), do: send(self(), {__MODULE__, msg})
 
-  ## TODO Improve
-  def get_options(module, key, field, allow_invalid \\ false) do
+  ## TODO Move to input, use proved field, and maybe use options group
+  def get_options(module, key, field, show_invalid \\ true) do
     valid_values = Ecto.Enum.values(module, key)
 
-    if allow_invalid && field.value && field.value not in valid_values do
+    if show_invalid && field.value && field.value not in valid_values do
       valid_values ++ [{"INVALID -> " <> field.value <> " <- INVALID", field.value}]
     else
       valid_values

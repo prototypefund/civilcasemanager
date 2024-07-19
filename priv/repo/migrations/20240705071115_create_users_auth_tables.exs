@@ -1,4 +1,6 @@
 defmodule CaseManager.Repo.Migrations.CreateUsersAuthTables do
+  require Logger
+
   use Ecto.Migration
 
   def change do
@@ -28,10 +30,16 @@ defmodule CaseManager.Repo.Migrations.CreateUsersAuthTables do
     first_account_password = System.get_env("FIRST_ACCOUNT_PASSWORD")
 
     if first_account_email && first_account_password do
+      Logger.info("Creating first account with email: #{first_account_email}")
+
       execute """
       INSERT INTO private.users (email, hashed_password, confirmed_at, inserted_at, updated_at)
       VALUES ('#{first_account_email}', '#{Bcrypt.hash_pwd_salt(first_account_password)}', NOW(), NOW(), NOW());
       """
+    else
+      Logger.info(
+        "No first account created. Set FIRST_ACCOUNT_EMAIL and FIRST_ACCOUNT_PASSWORD environment variables to create an admin account."
+      )
     end
   end
 end

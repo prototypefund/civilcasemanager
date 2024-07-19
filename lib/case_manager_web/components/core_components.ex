@@ -206,7 +206,7 @@ defmodule CaseManagerWeb.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class={["space-y-4 bg-white dark:bg-zinc-900", @class]}>
+      <div class={["space-y-4 ", @class]}>
         <%= render_slot(@inner_block, f) %>
         <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
           <%= render_slot(action, f) %>
@@ -333,7 +333,7 @@ defmodule CaseManagerWeb.CoreComponents do
         value="true"
         checked={@checked}
         class={[
-          "rounded border-zinc-300 text-zinc-900 focus:ring-0",
+          "rounded border-zinc-300 dark:border-zinc-600  text-zinc-900 focus:ring-0",
           @class
         ]}
         {@rest}
@@ -352,7 +352,7 @@ defmodule CaseManagerWeb.CoreComponents do
         name={@name}
         class={[
           "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-5 dark:bg-zinc-900 dark:text-zinc-100 ",
-          @errors == [] && "border-zinc-300 focus:border-zinc-400",
+          @errors == [] && "border-zinc-300 dark:border-zinc-600 focus:border-zinc-400",
           @errors != [] && "border-rose-400 focus:border-rose-400 has-errors",
           @class
         ]}
@@ -378,9 +378,9 @@ defmodule CaseManagerWeb.CoreComponents do
         id={@id}
         name={@name}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-5",
+          "mt-2 block w-full rounded-lg text-zinc-900 dark:text-zinc-100 dark:bg-zinc-900 focus:ring-0 sm:text-sm sm:leading-5",
           "min-h-[6rem] tabular-nums slashed-zero ",
-          @errors == [] && "border-zinc-300 focus:border-zinc-400",
+          @errors == [] && "border-zinc-300 dark:border-zinc-600 focus:border-zinc-400",
           @errors != [] && "border-rose-400 focus:border-rose-400 has-errors",
           @class
         ]}
@@ -422,7 +422,7 @@ defmodule CaseManagerWeb.CoreComponents do
             "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-5",
             " tabular-nums slashed-zero",
             "dark:bg-zinc-900 dark:text-zinc-100",
-            @errors == [] && "border-zinc-300 focus:border-zinc-400",
+            @errors == [] && "border-zinc-300 dark:border-zinc-600 focus:border-zinc-400",
             @errors != [] && "border-rose-400 focus:border-rose-400 has-errors",
             @class
           ]}
@@ -501,7 +501,7 @@ defmodule CaseManagerWeb.CoreComponents do
         <.h1>
           <%= render_slot(@inner_block) %>
         </.h1>
-        <p :if={@subtitle != []} class="mt-2 text-sm leading-5 text-zinc-600">
+        <p :if={@subtitle != []} class="mt-2 text-sm leading-5 text-zinc-700 dark:text-zinc-300">
           <%= render_slot(@subtitle) %>
         </p>
       </div>
@@ -560,7 +560,7 @@ defmodule CaseManagerWeb.CoreComponents do
     ~H"""
     <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
       <table class="w-[40rem] mt-11 sm:w-full">
-        <thead class="text-sm text-left leading-5 text-zinc-500">
+        <thead class="text-sm text-left leading-5 text-zinc-500 dark:text-zinc-300">
           <tr>
             <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal"><%= col[:label] %></th>
             <th :if={@action != []} class="relative p-0 pb-4">
@@ -571,7 +571,7 @@ defmodule CaseManagerWeb.CoreComponents do
         <tbody
           id={@id}
           phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
-          class="relative divide-y divide-zinc-100 dark:divide-zinc-800 border-t border-zinc-200 text-sm leading-5 text-zinc-700"
+          class="relative divide-y divide-zinc-100 dark:divide-zinc-800 border-t border-zinc-200 text-sm leading-5 dark:text-zinc-300 text-zinc-700"
         >
           <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-zinc-50">
             <td
@@ -580,15 +580,15 @@ defmodule CaseManagerWeb.CoreComponents do
               class={["relative p-0", @row_click && "hover:cursor-pointer"]}
             >
               <div class="block py-4 pr-6">
-                <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
-                <span class={["relative", i == 0 && "font-semibold text-zinc-900"]}>
+                <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50  dark:group-hover:bg-zinc-800 sm:rounded-l-xl" />
+                <span class={["relative", i == 0 && "font-semibold text-zinc-900 dark:text-zinc-100"]}>
                   <%= render_slot(col, @row_item.(row)) %>
                 </span>
               </div>
             </td>
             <td :if={@action != []} class="relative w-14 p-0">
               <div class="relative whitespace-nowrap py-4 text-right text-sm font-medium">
-                <span class="absolute -inset-y-px -right-4 left-0 group-hover:bg-zinc-50 sm:rounded-r-xl" />
+                <span class="absolute -inset-y-px -right-4 left-0 group-hover:bg-zinc-50 dark:group-hover:bg-zinc-800 sm:rounded-r-xl" />
                 <span
                   :for={action <- @action}
                   class="relative ml-4 font-semibold leading-5 text-zinc-900 hover:text-zinc-700"
@@ -642,7 +642,7 @@ defmodule CaseManagerWeb.CoreComponents do
         <tbody
           id={@id}
           phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
-          class="relative  text-sm leading-4 text-zinc-700"
+          class="relative  text-sm leading-4 text-zinc-700 dark:text-zinc-300"
         >
           <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-zinc-50">
             <td
@@ -651,7 +651,7 @@ defmodule CaseManagerWeb.CoreComponents do
               class={["relative p-0", @row_click && "hover:cursor-pointer"]}
             >
               <div class="block">
-                <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
+                <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50  dark:group-hover:bg-zinc-800 sm:rounded-l-xl" />
                 <span class={["relative", i == 0 && "font-semibold text-zinc-900"]}>
                   <%= render_slot(col, @row_item.(row)) %>
                 </span>
@@ -659,7 +659,7 @@ defmodule CaseManagerWeb.CoreComponents do
             </td>
             <td :if={@action != []} class="relative w-14 p-0">
               <div class="relative whitespace-nowrap py-2 text-right text-sm font-medium">
-                <span class="absolute -inset-y-px -right-4 left-0 group-hover:bg-zinc-50 sm:rounded-r-xl" />
+                <span class="absolute -inset-y-px -right-4 left-0 group-hover:bg-zinc-50 dark:group-hover:bg-zinc-800 sm:rounded-r-xl" />
                 <span
                   :for={action <- @action}
                   class="relative ml-4 font-semibold leading-5 text-zinc-900 hover:text-zinc-700"
@@ -694,7 +694,7 @@ defmodule CaseManagerWeb.CoreComponents do
     <div class="mt-4">
       <dl class="-my-4 divide-y divide-zinc-100 dark:divide-zinc-800">
         <div :for={item <- @item} class="flex gap-4 py-2 text-sm leading-5 sm:gap-8">
-          <dt class="w-1/4 flex-none text-zinc-500"><%= item.title %></dt>
+          <dt class="w-1/4 flex-none dark:text-zinc-300"><%= item.title %></dt>
           <dd class="text-zinc-700 dark:text-zinc-300 break-words"><%= render_slot(item) %></dd>
         </div>
       </dl>
@@ -800,7 +800,7 @@ defmodule CaseManagerWeb.CoreComponents do
   def card(assigns) do
     ~H"""
     <div class={[
-      "flex gap-x-3 flex-row items-center shadow rounded-lg p-3 space-x-4 border-2 border-calypso-50 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-950",
+      "flex gap-x-3 flex-row items-center shadow rounded-lg p-3 space-x-4 border-2 border-calypso-50 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-950 dark:bg-zinc-800",
       @class
     ]}>
       <div class="grow">
@@ -817,7 +817,7 @@ defmodule CaseManagerWeb.CoreComponents do
             class={[@actions == [] && "hidden", "actions relative"]}
           >
             <button
-              class="hero-ellipsis-vertical-solid text-gray-700 h-5 -mr-2"
+              class="hero-ellipsis-vertical-solid text-zinc-700 dark:text-zinc-200 h-5 -mr-2"
               phx-click={
                 JS.toggle(
                   to: "##{@id}-menu",
@@ -828,7 +828,7 @@ defmodule CaseManagerWeb.CoreComponents do
             />
             <div
               id={@id <> "-menu"}
-              class="dropdown absolute hidden right-0 z-10 shadow rounded-md bg-gray-50 p-2 text-sm w-28"
+              class="dropdown absolute hidden right-0 z-10 shadow rounded-md bg-zinc-100 dark:bg-zinc-700 p-2 text-sm w-28 border-zinc-300 border-2 dark:border-zinc-600"
             >
               <%= render_slot(@actions) %>
             </div>
@@ -861,19 +861,39 @@ defmodule CaseManagerWeb.CoreComponents do
     colors =
       case assigns.color do
         "gray" ->
-          ["bg-gray-100", "border-gray-300", "text-gray-700"]
+          [
+            "bg-gray-100 dark:bg-gray-800",
+            "border-gray-300 dark:border-gray-600",
+            "text-gray-700 dark:text-gray-300"
+          ]
 
         "emerald" ->
-          ["bg-emerald-100", "border-emerald-300", "text-emerald-700"]
+          [
+            "bg-emerald-100 dark:bg-emerald-800",
+            "border-emerald-300 dark:border-emerald-600",
+            "text-emerald-700 dark:text-emerald-300"
+          ]
 
         "red" ->
-          ["bg-red-100", "border-red-300", "text-red-700"]
+          [
+            "bg-red-100 dark:bg-red-800",
+            "border-red-300 dark:border-red-600",
+            "text-red-700 dark:text-red-300"
+          ]
 
         "blue" ->
-          ["bg-blue-100", "border-blue-300", "text-blue-700"]
+          [
+            "bg-blue-100 dark:bg-blue-800",
+            "border-blue-300 dark:border-blue-600",
+            "text-blue-700 dark:text-blue-300"
+          ]
 
         _ ->
-          ["bg-#{assigns.color}-100", "border-#{assigns.color}-300", "text-#{assigns.color}-700"]
+          [
+            "bg-#{assigns.color}-100 dark:bg-#{assigns.color}-800",
+            "border-#{assigns.color}-300 dark:border-#{assigns.color}-600",
+            "text-#{assigns.color}-700 dark:text-#{assigns.color}-300"
+          ]
       end
 
     assigns = assign(assigns, :colors, colors)

@@ -92,7 +92,7 @@ defmodule CaseManagerWeb.CaseLive.Index do
     year = Cases.get_year(case)
 
     if year do
-      if year == Integer.to_string(Date.utc_today().year) do
+      if year == Date.utc_today().year do
         "emerald"
       else
         "gray"

@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+  postgres-db:
+    image: postgis/postgis:13-3.4
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+    volumes:
+      - /var/lib/postgresql/data:/var/lib/postgresql/data
+
+  core:
+    image: civilcasemanager:latest
+    restart: always
+    depends_on:
+      - postgres-db
+    environment:
+      - SECRET_KEY_BASE=$SECRET_KEY_BASE
+      - DATABASE_URL=postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres-db:5432/$POSTGRES_DB
+      - FIRST_ACCOUNT_EMAIL=$FIRST_ACCOUNT_EMAIL
+      - FIRST_ACCOUNT_PASSWORD=$FIRST_ACCOUNT_PASSWORD
+      - PHX_HOST=$DOMAIN
+    ports:
+      - "4000:4000"

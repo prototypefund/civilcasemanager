@@ -41,3 +41,6 @@ npm-debug.log
 
 config/workers.exs
 .elixir_ls
+
+# Environment variables
+.env

@@ -18,22 +18,25 @@ To build the Docker container, make sure you have Docker installed on your syste
 1. `cd` into the project root directory containing the Dockerfile.
 2. Copy the environment file and modify it as needed:
 
-   cp .env.example .env
+   `cp .env.example .env`
 
 3. Build the Docker image:
 
-   docker build -t civilcasemanager .
+   `docker build -t civilcasemanager .`
 
 4. Once the build is complete, you can run the container using Docker Compose:
 
-   docker-compose up
+   `docker-compose up`
 
    This command will start both the Civil Case Manager and a PostgreSQL database.
 
 5. The default configuration will have no workers defined. To setup workers to listen to incoming events, create a `workers.exs` configuration file, and modify the docker-compose file to link it into the container:
 
+  ```
    volumes:
      - /path/to/workers.exs:/app/config/workers.exs
+   ```
+
 
    Refer to config/workers.exs.EXAMPLE for an example of a workers.exs file.
 
@@ -59,6 +62,7 @@ To add new workers to the Civil Case Manager & Logger, you can follow these step
 4. The worker processes do the actual job of conencting to some external service and receiving data
 5. Once you have received data, pass it onto the core application using `CaseManager.FetchEvent` structs:
 
+```
     event = %CaseManager.FetchEvent{
       type: IMAPSupervisor.event_type(),
       body: extract_body(message.body),
@@ -70,6 +74,8 @@ To add new workers to the Civil Case Manager & Logger, you can follow these step
 
     manager_pid = Process.whereis(:fetch_manager)
     GenServer.cast(manager_pid, {:new_event, event})
+```
+
 
 Refer to IMAP and Slackworkers for an existing implementation.
 

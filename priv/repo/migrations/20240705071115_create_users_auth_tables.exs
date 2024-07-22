@@ -39,7 +39,7 @@ defmodule CaseManager.Repo.Migrations.CreateUsersAuthTables do
           hashed_password: Bcrypt.hash_pwd_salt(first_account_password),
           inserted_at: DateTime.truncate(DateTime.utc_now(), :second),
           updated_at: DateTime.truncate(DateTime.utc_now(), :second),
-          role: "admin"
+          role: :admin
         })
       end)
     else

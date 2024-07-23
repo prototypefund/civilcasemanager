@@ -8,6 +8,7 @@
       case={@case}
       current_user={@current_user}
       patch={~p"/cases/#{@case}"}
+      patch_error={~p"/cases/#{@case}/show/edit"}
       validate_now={false}
       flash_copy={@flash}
     />

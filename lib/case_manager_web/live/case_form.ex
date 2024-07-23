@@ -110,6 +110,18 @@ defmodule CaseManagerWeb.CaseForm do
             <%= @imported_case.last_position %>
           </.parsing_hint>
         <% end %>
+        <button
+          type="button"
+          name="case[positions_sort][]"
+          value="new"
+          phx-click={JS.dispatch("change")}
+          class={[
+            "phx-submit-loading:opacity-75 rounded-lg bg-emerald-600 hover:dark:bg-emerald-700 py-2 px-3",
+            "text-sm font-semibold leading-5 text-white active:text-white/80"
+          ]}
+        >
+          <.icon name="hero-plus-circle" class="w-5 h-5 text-white" />
+        </button>
         <.inputs_for :let={ef} field={@form[:positions]}>
           <div class="break-inside-avoid-column flex flex-row gap-4">
             <input type="hidden" name="case[positions_sort][]" value={ef.index} />
@@ -119,7 +131,7 @@ defmodule CaseManagerWeb.CaseForm do
               type="button"
               name="case[positions_drop][]"
               value={ef.index}
-              class="w-9 h-9 mt-2 bg-rose-600 rounded-lg py-1 px-2"
+              class="w-9 h-9 mt-2 bg-rose-600 hover:bg-rose-700 rounded-lg py-1 px-2"
               phx-click={JS.dispatch("change")}
               data-confirm="Are you sure to delete this position?"
             >
@@ -129,19 +141,6 @@ defmodule CaseManagerWeb.CaseForm do
         </.inputs_for>
 
         <input type="hidden" name="case[positions_drop][]" />
-
-        <button
-          type="button"
-          name="case[positions_sort][]"
-          value="new"
-          phx-click={JS.dispatch("change")}
-          class={[
-            "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 dark:bg-zinc-600 hover:bg-zinc-700 py-2 px-3",
-            "text-sm font-semibold leading-5 text-white active:text-white/80"
-          ]}
-        >
-          Add position
-        </button>
 
         <h1 class="text-indigo-300 pt-8 font-semibold">Involved parties</h1>
         <.input
@@ -182,7 +181,7 @@ defmodule CaseManagerWeb.CaseForm do
         <.input
           field={@form[:authorities_details]}
           type="text"
-          label="Authorities details"
+          label="Details of contact w/ authorities"
           force_validate={@validate_now}
         />
 
@@ -204,12 +203,6 @@ defmodule CaseManagerWeb.CaseForm do
           type="select"
           label="Boat Color"
           options={get_options(CaseManager.Cases.Case, :boat_color, @form[:boat_color])}
-        />
-        <.input
-          field={@form[:boat_engine_status]}
-          type="text"
-          label="Boat Engine Status"
-          force_validate={@validate_now}
         />
         <.input
           field={@form[:boat_engine_working]}
@@ -392,7 +385,7 @@ defmodule CaseManagerWeb.CaseForm do
         <.input field={@form[:source]} label="Source" force_validate={@validate_now} />
 
         <h1 class="text-indigo-300 pt-8 font-semibold">Meta</h1>
-        <.input field={@form[:url]} type="textarea" label="URL" force_validate={@validate_now} />
+        <.input field={@form[:url]} type="textarea" label="URLs" force_validate={@validate_now} />
         <.input
           field={@form[:cloud_file_links]}
           type="textarea"
@@ -463,7 +456,11 @@ defmodule CaseManagerWeb.CaseForm do
          |> push_navigate(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign_form(socket, changeset)}
+        {:noreply,
+         socket
+         |> assign_form(changeset)
+         |> put_flash(:warning, "Cannot save case: There are invalid fields in the form")
+         |> push_patch(to: socket.assigns.patch_error)}
     end
   end
 
@@ -501,7 +498,7 @@ defmodule CaseManagerWeb.CaseForm do
          socket
          |> assign(form: to_form(changeset))
          |> put_flash(:warning, "Cannot save case: There are invalid fields in the form")
-         |> push_patch(to: ~p"/imported_cases/#{case_params["imported_id"]}/validate")}
+         |> push_patch(to: socket.assigns.patch_error)}
     end
   end
 

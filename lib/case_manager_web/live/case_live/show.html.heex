@@ -37,14 +37,15 @@
           <:item title="Confirmation by"><%= @case.confirmation_by %></:item>
           <:item title="Actors involved"><%= @case.actors_involved %></:item>
           <:item title="Authorities alerted"><%= @case.authorities_alerted %></:item>
-          <:item title="Authorities details"><%= @case.authorities_details %></:item>
+          <:item title="Details of contact w/ authorities">
+            <%= @case.authorities_details %>
+          </:item>
         </.list>
         <.h1 class="text-indigo-300 pt-8">The boat</.h1>
         <.list>
           <:item title="Boat type"><%= @case.boat_type %></:item>
           <:item title="Boat notes"><%= @case.boat_notes %></:item>
           <:item title="Boat color"><%= @case.boat_color %></:item>
-          <:item title="Boat engine status"><%= @case.boat_engine_status %></:item>
           <:item title="Boat engine working"><%= @case.boat_engine_working %></:item>
           <:item title="Boat number of engines"><%= @case.boat_number_of_engines %></:item>
         </.list>
@@ -73,7 +74,7 @@
         <.h1 class="text-indigo-300 pt-8">Meta</.h1>
         <.list>
           <:item title="Imported from"><%= @case.imported_from %></:item>
-          <:item title="Url"><%= @case.url %></:item>
+          <:item title="URLs"><%= @case.url %></:item>
           <:item title="Cloud file links"><%= @case.cloud_file_links %></:item>
         </.list>
       </div>

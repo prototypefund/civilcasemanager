@@ -10,6 +10,7 @@
       imported_case={@imported_case}
       current_user={@current_user}
       patch={@next_url}
+      patch_error={~p"/imported_cases/#{@imported_case.id}/validate"}
       validate_now={true}
       flash_copy={@flash}
     />

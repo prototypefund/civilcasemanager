@@ -508,27 +508,32 @@ defmodule CaseManagerWeb.CaseForm do
 
   defp notify_parent(msg), do: send(self(), {__MODULE__, msg})
 
-  ## TODO Move to input, use provided field, and maybe use options group
+  ## TODO Move to input & use provided field
   def get_options(module, key, field) do
     allowed_values = Ecto.Enum.values(module, key)
-    processed = to_atom_or_nil(field.value)
+    processed = to_atom_if_exists(field.value)
 
     if processed && processed not in allowed_values do
-      allowed_values ++ [{"INVALID -> " <> field.value <> " <- INVALID", field.value}]
+      [
+        Valid: allowed_values,
+        Invalid: [
+          processed
+        ]
+      ]
     else
       allowed_values
     end
   end
 
-  defp to_atom_or_nil(nil), do: nil
+  defp to_atom_if_exists(nil), do: nil
 
-  defp to_atom_or_nil(value) when is_binary(value) do
+  defp to_atom_if_exists(value) when is_binary(value) do
     try do
       String.to_existing_atom(value)
     rescue
-      _ -> nil
+      _ -> value
     end
   end
 
-  defp to_atom_or_nil(value), do: value
+  defp to_atom_if_exists(value), do: value
 end

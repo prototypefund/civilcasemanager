@@ -360,12 +360,42 @@ defmodule CaseManagerWeb.CoreComponents do
         {@rest}
       >
         <option :if={@prompt} value=""><%= @prompt %></option>
-        <%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
+        <%= options_for_select_with_invalid(@options, @value) %>
       </select>
       <.error :for={msg <- @errors}><%= msg %></.error>
     </div>
     """
   end
+
+  defp options_for_select_with_invalid(allowed_options, current_value) do
+    processed = to_atom_if_exists(current_value)
+
+    new_options =
+      if processed && processed not in allowed_options do
+        [
+          Valid: allowed_options,
+          Invalid: [
+            processed
+          ]
+        ]
+      else
+        allowed_options
+      end
+
+    Phoenix.HTML.Form.options_for_select(new_options, current_value)
+  end
+
+  defp to_atom_if_exists(nil), do: nil
+
+  defp to_atom_if_exists(value) when is_binary(value) do
+    try do
+      String.to_existing_atom(value)
+    rescue
+      _ -> value
+    end
+  end
+
+  defp to_atom_if_exists(value), do: value
 
   def input(%{type: "textarea"} = assigns) do
     ~H"""

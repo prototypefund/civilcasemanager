@@ -51,7 +51,7 @@ defmodule CaseManagerWeb.CaseForm do
           field={@form[:status]}
           type="select"
           label="Status"
-          options={get_options(CaseManager.Cases.Case, :status, @form[:status])}
+          options={Ecto.Enum.values(CaseManager.Cases.Case, :status)}
         />
         <%= if assigns[:imported_case] && @imported_case.occurred_at_string do %>
           <.parsing_hint field_name="Occurred at">
@@ -95,7 +95,7 @@ defmodule CaseManagerWeb.CaseForm do
           field={@form[:sar_region]}
           type="select"
           label="SAR Region"
-          options={get_options(CaseManager.Cases.Case, :sar_region, @form[:sar_region])}
+          options={Ecto.Enum.values(CaseManager.Cases.Case, :sar_region)}
         />
 
         <h1 class="text-indigo-300 pt-8 font-semibold">Positions</h1>
@@ -190,7 +190,7 @@ defmodule CaseManagerWeb.CaseForm do
           field={@form[:boat_type]}
           type="select"
           label="Boat Type"
-          options={get_options(CaseManager.Cases.Case, :boat_type, @form[:boat_type])}
+          options={Ecto.Enum.values(CaseManager.Cases.Case, :boat_type)}
         />
         <.input
           field={@form[:boat_notes]}
@@ -202,7 +202,7 @@ defmodule CaseManagerWeb.CaseForm do
           field={@form[:boat_color]}
           type="select"
           label="Boat Color"
-          options={get_options(CaseManager.Cases.Case, :boat_color, @form[:boat_color])}
+          options={Ecto.Enum.values(CaseManager.Cases.Case, :boat_color)}
         />
         <.input
           field={@form[:boat_engine_working]}
@@ -330,7 +330,7 @@ defmodule CaseManagerWeb.CaseForm do
           field={@form[:outcome]}
           type="select"
           label="Outcome"
-          options={get_options(CaseManager.Cases.Case, :outcome, @form[:outcome])}
+          options={Ecto.Enum.values(CaseManager.Cases.Case, :outcome)}
         />
 
         <%= if assigns[:imported_case] && @imported_case.time_of_disembarkation_string do %>
@@ -480,7 +480,6 @@ defmodule CaseManagerWeb.CaseForm do
   end
 
   defp save_case(socket, :import, case_params) do
-    # creating the case and deleting the imported case should be done in a transaction.
     case Cases.create_case_and_delete_imported(
            case_params,
            socket.assigns.imported_case
@@ -507,33 +506,4 @@ defmodule CaseManagerWeb.CaseForm do
   end
 
   defp notify_parent(msg), do: send(self(), {__MODULE__, msg})
-
-  ## TODO Move to input & use provided field
-  def get_options(module, key, field) do
-    allowed_values = Ecto.Enum.values(module, key)
-    processed = to_atom_if_exists(field.value)
-
-    if processed && processed not in allowed_values do
-      [
-        Valid: allowed_values,
-        Invalid: [
-          processed
-        ]
-      ]
-    else
-      allowed_values
-    end
-  end
-
-  defp to_atom_if_exists(nil), do: nil
-
-  defp to_atom_if_exists(value) when is_binary(value) do
-    try do
-      String.to_existing_atom(value)
-    rescue
-      _ -> value
-    end
-  end
-
-  defp to_atom_if_exists(value), do: value
 end

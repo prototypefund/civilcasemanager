@@ -35,9 +35,15 @@ defmodule CaseManagerWeb.CaseLive.Index do
   defp apply_action(socket, :index, params) do
     case Cases.list_cases(params) do
       {:ok, {cases, meta}} ->
+        grouped_cases =
+          cases
+          |> Enum.group_by(&get_key_from_date(&1.occurred_at))
+          |> Enum.map(fn {date, case_list} -> %{id: date, case_list: case_list} end)
+          |> Enum.sort_by(fn %{id: date} -> date_to_compare_value(date) end, {:desc, Date})
+
         socket
         |> assign(:meta, meta)
-        |> stream(:cases, cases, reset: true)
+        |> stream(:cases, grouped_cases, reset: true)
         |> assign(:page_title, "Listing Cases")
         |> assign(:case, nil)
 
@@ -49,19 +55,49 @@ defmodule CaseManagerWeb.CaseLive.Index do
     end
   end
 
-  @impl true
-  def handle_info({:case_created, case}, socket) do
-    {:noreply, stream_insert(socket, :cases, case, at: 0)}
+  defp date_to_compare_value(:unknown) do
+    ~D[9999-12-31]
+  end
+
+  defp date_to_compare_value(date) do
+    date
+  end
+
+  defp get_key_from_date(nil) do
+    :unknown
+  end
+
+  defp get_key_from_date(date) do
+    DateTime.to_date(date)
+  end
+
+  defp key_to_string(:unknown) do
+    "Unknown date"
+  end
+
+  defp key_to_string(date) do
+    Date.to_string(date)
   end
 
   @impl true
-  def handle_info({:case_updated, case}, socket) do
-    {:noreply, stream_insert(socket, :cases, case, at: 0)}
+  def handle_info({:case_created, _case}, socket) do
+    # TODO: Must be rethought to accomodate date grouping
+    # {:noreply, stream_insert(socket, :cases, case, at: 0)}
+    {:noreply, socket}
   end
 
   @impl true
-  def handle_info({CaseManagerWeb.CaseForm, {:saved, case}}, socket) do
-    {:noreply, stream_insert(socket, :cases, case)}
+  def handle_info({:case_updated, _case}, socket) do
+    # TODO: Must be rethought to accomodate date grouping
+    # {:noreply, stream_insert(socket, :cases, case, at: 0)}
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info({CaseManagerWeb.CaseForm, {:saved, _case}}, socket) do
+    # TODO: Must be rethought to accomodate date grouping
+    # {:noreply, stream_insert(socket, :cases, case)}
+    {:noreply, socket}
   end
 
   @impl true
@@ -76,7 +112,9 @@ defmodule CaseManagerWeb.CaseLive.Index do
       case = Cases.get_case!(id)
       {:ok, _} = Cases.delete_case(case)
 
-      {:noreply, stream_delete(socket, :cases, case)}
+      # TODO: Must be rethought to accomodate date grouping
+      # {:noreply, stream_delete(socket, :cases, case)}
+      {:noreply, socket}
     else
       Logger.warning(
         "User #{socket.assigns.current_user.email} tried to delete case, but is a read-only user."

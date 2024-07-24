@@ -434,6 +434,14 @@ defmodule CaseManagerWeb.CoreComponents do
     """
   end
 
+  defp options_for_select_with_invalid([], []) do
+    Phoenix.HTML.Form.options_for_select([], [])
+  end
+
+  defp options_for_select_with_invalid(allowed_options, []) do
+    Phoenix.HTML.Form.options_for_select(allowed_options, [])
+  end
+
   ## Helper functions for input
   defp options_for_select_with_invalid(allowed_options, current_value) do
     processed = to_atom_if_exists(current_value)
@@ -834,52 +842,53 @@ defmodule CaseManagerWeb.CoreComponents do
   slot :title, required: true
   slot :tag, default: nil
   slot :timestamp, default: nil
+  attr :rest, :global, doc: "the arbitrary HTML attributes to add to the flash container"
   slot :actions
 
   def card(assigns) do
     ~H"""
-    <div class={[
-      "flex gap-x-3 flex-row items-center shadow rounded-lg p-3 space-x-4 border-2 border-calypso-50 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-950 dark:bg-zinc-800",
-      @class
-    ]}>
-      <div class="grow">
-        <div class="row-1 text-gray-900 dark:text-gray-200 leading-snug text-base flex items-center gap-x-2 mb-1">
-          <%= render_slot(@icon) %>
-          <strong class="text-base !leading-tight font-semibold">
-            <%= render_slot(@title) %>
-          </strong>
-          <span class="ml-auto flex gap-2">
-            <%= render_slot(@tag) %>
-          </span>
+    <div
+      class={[
+        "flex flex-col justify-between h-full shadow rounded-lg p-3 border-2 border-calypso-50 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-950 dark:bg-zinc-800",
+        @class
+      ]}
+      id={@id}
+      {@rest}
+    >
+      <div class="row-1 text-gray-900 dark:text-gray-200 leading-snug text-base flex items-start gap-x-2">
+        <%= render_slot(@icon) %>
+        <strong class="text-base !leading-tight font-semibold">
+          <%= render_slot(@title) %>
+        </strong>
+        <span class="ml-auto flex gap-2">
+          <%= render_slot(@tag) %>
+        </span>
+        <div
+          phx-click-away={JS.hide(to: "##{@id}-menu")}
+          class={[@actions == [] && "hidden", "actions relative"]}
+        >
+          <button
+            class="hero-ellipsis-vertical-solid text-zinc-700 dark:text-zinc-200 h-5 -mr-2"
+            phx-click={
+              JS.toggle(
+                to: "##{@id}-menu",
+                in: {"ease-out duration-100", "opacity-0 scale-95", "opacity-100 scale-100"},
+                out: {"ease-out duration-75", "opacity-100 scale-100", "opacity-0 scale-95"}
+              )
+            }
+          />
           <div
-            phx-click-away={JS.hide(to: "##{@id}-menu")}
-            class={[@actions == [] && "hidden", "actions relative"]}
+            id={@id <> "-menu"}
+            class="dropdown absolute hidden right-0 z-10 shadow rounded-md bg-zinc-100 dark:bg-zinc-700 p-2 text-sm w-28 border-zinc-300 border-2 dark:border-zinc-600"
           >
-            <button
-              class="hero-ellipsis-vertical-solid text-zinc-700 dark:text-zinc-200 h-5 -mr-2"
-              phx-click={
-                JS.toggle(
-                  to: "##{@id}-menu",
-                  in: {"ease-out duration-100", "opacity-0 scale-95", "opacity-100 scale-100"},
-                  out: {"ease-out duration-75", "opacity-100 scale-100", "opacity-0 scale-95"}
-                )
-              }
-            />
-            <div
-              id={@id <> "-menu"}
-              class="dropdown absolute hidden right-0 z-10 shadow rounded-md bg-zinc-100 dark:bg-zinc-700 p-2 text-sm w-28 border-zinc-300 border-2 dark:border-zinc-600"
-            >
-              <%= render_slot(@actions) %>
-            </div>
+            <%= render_slot(@actions) %>
           </div>
         </div>
-        <p class="text-gray-700">
-          <div class="text-wrap break-words text-sm mb-1">
-            <%= render_slot(@inner_block) %>
-          </div>
-          <%= render_slot(@timestamp) %>
-        </p>
       </div>
+      <div class="text-wrap break-words text-sm mb-1">
+        <%= render_slot(@inner_block) %>
+      </div>
+      <%= render_slot(@timestamp) %>
     </div>
     """
   end

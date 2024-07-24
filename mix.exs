@@ -66,6 +66,7 @@ defmodule CaseManager.MixProject do
       {:geo_postgis, "~> 3.6"},
       {:credo, "~> 1.7.7", only: [:dev, :test], runtime: false},
       {:sobelow, "~> 0.13.0", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
       {:csv, "~> 3.2.1"}
     ]
   end

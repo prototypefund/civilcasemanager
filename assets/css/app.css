@@ -12,15 +12,16 @@ body.initial-mount-complete .fade-in {
     animation: fadeIn ease 1s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
-  }
-  
+}
+
 
 @keyframes fadeIn {
     from {
-        opacity:0;
+        opacity: 0;
     }
+
     to {
-        opacity:1;
+        opacity: 1;
     }
 }
 
@@ -29,6 +30,7 @@ body.initial-mount-complete .fade-in {
     from {
         opacity: 1;
     }
+
     to {
         opacity: 0;
     }
@@ -38,6 +40,7 @@ body.initial-mount-complete .fade-in {
     from {
         display: fixed;
     }
+
     to {
         display: none;
     }
@@ -46,5 +49,4 @@ body.initial-mount-complete .fade-in {
 .break-words {
     overflow-wrap: break-word;
     word-break: break-word;
-
 }

@@ -73,15 +73,16 @@ defmodule CaseManagerWeb.CaseForm do
         <h1 class="text-indigo-300 pt-8 font-semibold">Departure</h1>
         <.input
           field={@form[:departure_region]}
-          type="text"
+          type="select"
           label="Departure Region"
+          options={CaseManager.Places.valid_departure_regions()}
           force_validate={@validate_now}
         />
-        <!-- Should be autocomplete -->
         <.input
           field={@form[:place_of_departure]}
-          type="text"
+          type="select"
           label="Place of Departure"
+          options={CaseManager.Places.valid_departure_places()}
           force_validate={@validate_now}
         />
         <.input
@@ -346,8 +347,9 @@ defmodule CaseManagerWeb.CaseForm do
         />
         <.input
           field={@form[:place_of_disembarkation]}
-          type="text"
+          type="select"
           label="Place of Disembarkation"
+          options={CaseManager.Places.valid_disembarkation_places()}
           force_validate={@validate_now}
         />
         <.input

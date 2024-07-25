@@ -37,7 +37,7 @@ defmodule CaseManager.ImportedCasesFixtures do
         people_missing: 42,
         phonenumber: "some phonenumber",
         place_of_departure: "some place_of_departure",
-        place_of_disembarkation: "some place_of_disembarkation",
+        place_of_disembarkation: "Salerno",
         pob_gender_ambiguous: 42,
         pob_medical_cases: 42,
         pob_men: 42,

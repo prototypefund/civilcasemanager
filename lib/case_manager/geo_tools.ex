@@ -108,26 +108,39 @@ defmodule CaseManager.GeoTools do
   34.29166666666667
   """
   def short_string_to_float(short_string) do
-    [deg, min] = short_string |> String.trim() |> String.split()
-    {deg, _} = Integer.parse(deg)
-    {min, _} = Float.parse(min)
+    [deg, min, sec] =
+      short_string
+      |> String.trim()
+      |> String.split()
+      |> parse_short_string_components()
 
     # Don't accept negative minutes
-    if min < 0 do
-      raise ArgumentError, message: "Minutes must be positive"
+    if min < 0 || sec < 0 do
+      raise ArgumentError, message: "Minutes and Seconds must be positive"
     end
 
     # Don't accept minutes greater than 60
-    if min > 60 do
-      raise ArgumentError, message: "Minutes must be less than 60"
+    if min > 60 || sec > 60 do
+      raise ArgumentError, message: "Minutes and Seconds must be less than 60"
     end
 
-    # Depending on the negative sign of the degree, the minutes need to be added or subtracted
+    # Depending on the negative sign of the degree, the minutes and seconds need to be added or subtracted
     if deg >= 0 do
-      deg + min / 60
+      deg + min / 60 + sec / 3600
     else
-      deg - min / 60
+      deg - min / 60 - sec / 3600
     end
+  end
+
+  defp parse_short_string_components([deg, min]) do
+    parse_short_string_components([deg, min, "0"])
+  end
+
+  defp parse_short_string_components([deg, min, sec]) do
+    {deg, _} = Integer.parse(deg)
+    {min, _} = Float.parse(min)
+    {sec, _} = Float.parse(sec)
+    [deg, min, sec]
   end
 
   @doc """

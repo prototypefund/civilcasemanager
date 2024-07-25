@@ -73,8 +73,9 @@ defmodule CaseManager.GeoTools do
 
   def number_to_short_string(decimal) do
     {deg, min, sec} = number_to_dms(decimal)
-    rounded_min = min + round(sec / 60)
-    "#{deg} #{String.pad_leading(Integer.to_string(rounded_min), 2, "0")}"
+    rounded_sec = round(sec)
+
+    "#{deg} #{String.pad_leading(Integer.to_string(min), 2, "0")} #{String.pad_leading(Integer.to_string(rounded_sec), 2, "0")}"
   end
 
   @doc """
@@ -186,7 +187,12 @@ defmodule CaseManager.GeoTools do
     min = trunc((abs_float - abs_deg) * 60)
     sec = round(((abs_float - abs_deg) * 60 - min) * 60)
 
-    {deg, min, sec}
+    # Is this the most elegant solution?
+    if sec == 60 do
+      {deg, min + 1, 0}
+    else
+      {deg, min, sec}
+    end
   end
 
   defp number_to_dms_with_direction(%Decimal{} = decimal, direction) do

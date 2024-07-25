@@ -62,38 +62,38 @@ defmodule CaseManager.GeoToolsTest do
 
   describe "number_to_short_string/2" do
     test "converts positive decimal to short string" do
-      assert GeoTools.number_to_short_string(34.233333333333334) == "34 14"
+      assert GeoTools.number_to_short_string(34.233333333333334) == "34 14 00"
     end
 
     test "rounds seconds correctly" do
-      assert GeoTools.number_to_short_string(12.7333333333333) == "12 44"
+      assert GeoTools.number_to_short_string(12.7333333333333) == "12 44 00"
     end
 
     test "converts negative decimal to short string" do
-      assert GeoTools.number_to_short_string(-12.966666666666667) == "-12 58"
+      assert GeoTools.number_to_short_string(-12.966666666666667) == "-12 58 00"
     end
 
     test "converts tuple of decimals to short string" do
       assert GeoTools.number_to_short_string({34.233333333333334, 12.966666666666667}) ==
-               "34 14 / 12 58"
+               "34 14 00 / 12 58 00"
     end
 
     test "handles negative coordinates in tuple" do
       assert GeoTools.number_to_short_string({-34.233333333333334, -12.966666666666667}) ==
-               "-34 14 / -12 58"
+               "-34 14 00 / -12 58 00"
     end
 
     test "handles tuple of Decimal.new numbers" do
       assert GeoTools.number_to_short_string(
                {Decimal.new("34.233333333333334"), Decimal.new("12.966666666666667")}
-             ) == "34 14 / 12 58"
+             ) == "34 14 00 / 12 58 00"
     end
   end
 
   describe "point_to_short_string/1" do
     test "converts Geo.Point to short string" do
-      point = %Geo.Point{coordinates: {12.966666666666667, 34.233333333333334}, properties: %{}}
-      assert GeoTools.point_to_short_string(point) == "34 14 / 12 58"
+      point = %Geo.Point{coordinates: {12.43725628, 34.233333333333334}, properties: %{}}
+      assert GeoTools.point_to_short_string(point) == "34 14 00 / 12 26 14"
     end
   end
 
@@ -205,7 +205,7 @@ defmodule CaseManager.GeoToolsTest do
 
   describe "stability of short string conversion" do
     test "short string to decimal and back becomes stable after first round" do
-      initial_short_string = "34 14"
+      initial_short_string = "34 14 00"
       decimal = GeoTools.short_string_to_float(initial_short_string)
       first_round_short_string = GeoTools.number_to_short_string(decimal)
       assert first_round_short_string == initial_short_string
@@ -220,7 +220,7 @@ defmodule CaseManager.GeoToolsTest do
     end
 
     test "stability with negative values" do
-      initial_short_string = "-12 58"
+      initial_short_string = "-12 58 00"
       decimal = GeoTools.short_string_to_float(initial_short_string)
       first_round_short_string = GeoTools.number_to_short_string(decimal)
       assert first_round_short_string == initial_short_string

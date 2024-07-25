@@ -57,7 +57,7 @@ defmodule CaseManager.CasesTest do
       pob_per_nationality: "some pob_per_nationality",
       outcome: :interception_libya,
       time_of_disembarkation: ~U[2024-03-08 08:58:00Z],
-      place_of_disembarkation: "some place_of_disembarkation",
+      place_of_disembarkation: "Salerno",
       disembarked_by: "some disembarked_by",
       outcome_actors: "some outcome_actors",
       frontext_involvement: "some frontext_involvement",
@@ -109,7 +109,7 @@ defmodule CaseManager.CasesTest do
       assert case.pob_per_nationality == "some pob_per_nationality"
       assert case.outcome == :interception_libya
       assert case.time_of_disembarkation == ~U[2024-03-08 08:58:00Z]
-      assert case.place_of_disembarkation == "some place_of_disembarkation"
+      assert case.place_of_disembarkation == "Salerno"
       assert case.disembarked_by == "some disembarked_by"
       assert case.outcome_actors == "some outcome_actors"
       assert case.frontext_involvement == "some frontext_involvement"
@@ -130,7 +130,7 @@ defmodule CaseManager.CasesTest do
         notes: "some updated notes",
         status: :closed,
         occurred_at: ~U[2024-03-08 08:58:00Z],
-        departure_region: "some updated departure_region",
+        departure_region: "Libya",
         place_of_departure: "some updated place_of_departure",
         time_of_departure: ~U[2024-03-08 08:58:00Z],
         sar_region: :sar1,
@@ -157,7 +157,7 @@ defmodule CaseManager.CasesTest do
         pob_per_nationality: "some updated pob_per_nationality",
         outcome: :interception_libya,
         time_of_disembarkation: ~U[2024-03-08 08:58:00Z],
-        place_of_disembarkation: "some updated place_of_disembarkation",
+        place_of_disembarkation: "Salento",
         disembarked_by: "some updated disembarked_by",
         outcome_actors: "some updated outcome_actors",
         frontext_involvement: "some updated frontext_involvement",
@@ -172,7 +172,7 @@ defmodule CaseManager.CasesTest do
       assert case.notes == "some updated notes"
       assert case.status == :closed
       assert case.occurred_at == ~U[2024-03-08 08:58:00Z]
-      assert case.departure_region == "some updated departure_region"
+      assert case.departure_region == "Libya"
       assert case.place_of_departure == "some updated place_of_departure"
       assert case.time_of_departure == ~U[2024-03-08 08:58:00Z]
       assert case.sar_region == :sar1
@@ -199,7 +199,7 @@ defmodule CaseManager.CasesTest do
       assert case.pob_per_nationality == "some updated pob_per_nationality"
       assert case.outcome == :interception_libya
       assert case.time_of_disembarkation == ~U[2024-03-08 08:58:00Z]
-      assert case.place_of_disembarkation == "some updated place_of_disembarkation"
+      assert case.place_of_disembarkation == "Salento"
       assert case.disembarked_by == "some updated disembarked_by"
       assert case.outcome_actors == "some updated outcome_actors"
       assert case.frontext_involvement == "some updated frontext_involvement"

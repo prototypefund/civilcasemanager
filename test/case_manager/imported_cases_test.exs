@@ -89,7 +89,7 @@ defmodule CaseManager.ImportedCasesTest do
         authorities_alerted: true,
         actors_involved: "some actors_involved",
         authorities_details: "some authorities_details",
-        place_of_disembarkation: "some place_of_disembarkation",
+        place_of_disembarkation: "Salerno",
         name: "some name",
         pob_minors: 42,
         boat_type: "some boat_type",
@@ -121,7 +121,7 @@ defmodule CaseManager.ImportedCasesTest do
       assert imported_case.boat_type == "some boat_type"
       assert imported_case.pob_minors == 42
       assert imported_case.name == "some name"
-      assert imported_case.place_of_disembarkation == "some place_of_disembarkation"
+      assert imported_case.place_of_disembarkation == "Salerno"
       assert imported_case.authorities_details == "some authorities_details"
       assert imported_case.actors_involved == "some actors_involved"
       assert imported_case.authorities_alerted == true
@@ -165,7 +165,7 @@ defmodule CaseManager.ImportedCasesTest do
         boat_engine_status: "some updated boat_engine_status",
         boat_engine_working: "some updated boat_engine_working",
         imported_from: "some updated imported_from",
-        departure_region: "some updated departure_region",
+        departure_region: "Tunisia",
         outcome: "some updated outcome",
         boat_number_of_engines: 43,
         pob_gender_ambiguous: 43,
@@ -233,7 +233,7 @@ defmodule CaseManager.ImportedCasesTest do
       assert imported_case.pob_gender_ambiguous == 43
       assert imported_case.boat_number_of_engines == 43
       assert imported_case.outcome == "some updated outcome"
-      assert imported_case.departure_region == "some updated departure_region"
+      assert imported_case.departure_region == "Tunisia"
       assert imported_case.imported_from == "some updated imported_from"
       assert imported_case.boat_engine_working == "some updated boat_engine_working"
       assert imported_case.boat_engine_status == "some updated boat_engine_status"

@@ -360,7 +360,7 @@ defmodule CaseManagerWeb.CoreComponents do
         {@rest}
       >
         <option :if={@prompt} value=""><%= @prompt %></option>
-        <%= options_for_select_with_invalid(@options, @value) %>
+        <%= CaseManagerWeb.FormOptions.options_for_select_with_invalid(@options, @value) %>
       </select>
       <.error :for={msg <- @errors}><%= msg %></.error>
     </div>
@@ -433,45 +433,6 @@ defmodule CaseManagerWeb.CoreComponents do
     </div>
     """
   end
-
-  defp options_for_select_with_invalid([], []) do
-    Phoenix.HTML.Form.options_for_select([], [])
-  end
-
-  defp options_for_select_with_invalid(allowed_options, []) do
-    Phoenix.HTML.Form.options_for_select(allowed_options, [])
-  end
-
-  ## Helper functions for input
-  defp options_for_select_with_invalid(allowed_options, current_value) do
-    processed = to_atom_if_exists(current_value)
-
-    new_options =
-      if processed && processed not in allowed_options do
-        [
-          Valid: allowed_options,
-          Invalid: [
-            processed
-          ]
-        ]
-      else
-        allowed_options
-      end
-
-    Phoenix.HTML.Form.options_for_select(new_options, current_value)
-  end
-
-  defp to_atom_if_exists(nil), do: nil
-
-  defp to_atom_if_exists(value) when is_binary(value) do
-    try do
-      String.to_existing_atom(value)
-    rescue
-      _ -> value
-    end
-  end
-
-  defp to_atom_if_exists(value), do: value
 
   @doc """
   Renders a label.

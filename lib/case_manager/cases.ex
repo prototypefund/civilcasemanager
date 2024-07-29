@@ -248,11 +248,16 @@ defmodule CaseManager.Cases do
 
   """
   def get_year_from_id(case) do
-    # Get second part of identifier or nothing if it doesn't exist
-    case.name
-    |> String.split("-")
-    |> tl()
-    |> Enum.at(0)
+    case String.split(case.name, "-") do
+      [_, year | _] ->
+        case Integer.parse(String.trim(year)) do
+          {year, ""} -> year
+          _ -> nil
+        end
+
+      _ ->
+        nil
+    end
   end
 
   @doc """

@@ -246,5 +246,41 @@ defmodule CaseManager.CasesTest do
         Cases.create_case_and_delete_imported(@valid_attrs, imported)
       end
     end
+
+    test "get_year_from_id/1 extracts year from case identifier" do
+      case_with_year = %Case{name: "EB123-2024"}
+      case_without_year = %Case{name: "EB123"}
+
+      assert Cases.get_year_from_id(case_with_year) == 2024
+      assert Cases.get_year_from_id(case_without_year) == nil
+    end
+
+    test "get_year_from_occurred/1 extracts year from occurred_at field" do
+      case_with_occurred = %Case{occurred_at: ~U[2023-01-01 00:00:00Z]}
+      case_without_occurred = %Case{occurred_at: nil}
+
+      assert Cases.get_year_from_occurred(case_with_occurred) == 2023
+      assert Cases.get_year_from_occurred(case_without_occurred) == nil
+    end
+
+    test "get_year/1 returns year using different strategies" do
+      case_with_id = %Case{name: "EB123-2024", occurred_at: ~U[2023-01-01 00:00:00Z]}
+      case_with_occurred = %Case{name: "EB123", occurred_at: ~U[2023-01-01 00:00:00Z]}
+      case_without_year = %Case{name: "EB123", occurred_at: nil}
+
+      assert Cases.get_year(case_with_id) == 2024
+      assert Cases.get_year(case_with_occurred) == 2023
+      assert Cases.get_year(case_without_year) == nil
+    end
+
+    test "get_year_from_id/1 returns nil for multiple identifiers or slash" do
+      case_with_multiple_ids = %Case{name: "EB123-2024/AB456-2025"}
+      case_with_slash_ids = %Case{name: "EB123 - AB456 / 2025"}
+      case_with_slash = %Case{name: "EB123/2024"}
+
+      assert Cases.get_year_from_id(case_with_multiple_ids) == nil
+      assert Cases.get_year_from_id(case_with_slash_ids) == nil
+      assert Cases.get_year_from_id(case_with_slash) == nil
+    end
   end
 end

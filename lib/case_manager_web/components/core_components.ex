@@ -704,7 +704,7 @@ defmodule CaseManagerWeb.CoreComponents do
             >
               <div class="block">
                 <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50  dark:group-hover:bg-zinc-800 sm:rounded-l-xl" />
-                <span class={["relative", i == 0 && "font-semibold text-zinc-900"]}>
+                <span class={["relative", i == 0 && "font-semibold text-zinc-900 dark:text-zinc-100"]}>
                   <%= render_slot(col, @row_item.(row)) %>
                 </span>
               </div>
@@ -714,7 +714,7 @@ defmodule CaseManagerWeb.CoreComponents do
                 <span class="absolute -inset-y-px -right-4 left-0 group-hover:bg-zinc-50 dark:group-hover:bg-zinc-800 sm:rounded-r-xl" />
                 <span
                   :for={action <- @action}
-                  class="relative ml-4 font-semibold leading-5 text-zinc-900 hover:text-zinc-700"
+                  class="relative ml-4 font-semibold leading-5 text-zinc-900 dark:text-zinc-100 dark:hover:text-zinc-400 hover:text-zinc-700"
                 >
                   <%= render_slot(action, @row_item.(row)) %>
                 </span>

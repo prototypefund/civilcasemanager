@@ -50,7 +50,11 @@ defmodule CaseManagerWeb.CoreComponents do
       data-cancel={JS.exec(@on_cancel, "phx-remove")}
       class="relative z-50 hidden"
     >
-      <div id={"#{@id}-bg"} class="bg-zinc-50/90 fixed inset-0 transition-opacity" aria-hidden="true" />
+      <div
+        id={"#{@id}-bg"}
+        class="bg-zinc-50/90 dark:bg-zinc-500/90 fixed inset-0 transition-opacity"
+        aria-hidden="true"
+      />
       <div
         class="fixed inset-0 overflow-y-auto"
         aria-labelledby={"#{@id}-title"}
@@ -66,7 +70,7 @@ defmodule CaseManagerWeb.CoreComponents do
               phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
               phx-key="escape"
               phx-click-away={JS.exec("data-cancel", to: "##{@id}")}
-              class="shadow-zinc-700/10 ring-zinc-700/10 relative hidden rounded-2xl bg-white p-14 shadow-lg ring-1 transition"
+              class="shadow-zinc-700/10 ring-zinc-700/10 relative hidden rounded-2xl bg-white dark:bg-black p-14 shadow-lg ring-1 transition"
             >
               <div class="absolute top-6 right-5">
                 <button
@@ -279,7 +283,7 @@ defmodule CaseManagerWeb.CoreComponents do
   attr :type, :string,
     default: "text",
     values: ~w(checkbox color date datetime-local email file hidden month number password
-               range radio search select tel text textarea time url week)
+               range radio search select tel text textarea time url week radiogroup)
 
   attr :field, Phoenix.HTML.FormField,
     doc: "a form field struct retrieved from the form, for example: @form[:email]"
@@ -333,7 +337,7 @@ defmodule CaseManagerWeb.CoreComponents do
         value="true"
         checked={@checked}
         class={[
-          "rounded border-zinc-300 dark:border-zinc-600  text-zinc-900 focus:ring-0",
+          "rounded border-zinc-300 dark:border-zinc-500  text-zinc-900 focus:ring-0 dark:bg-zinc-900 dark:text-zinc-100 checked:dark:!bg-zinc-900 checked:dark:!border-zinc-500 box-border",
           @class
         ]}
         {@rest}
@@ -351,7 +355,7 @@ defmodule CaseManagerWeb.CoreComponents do
         id={@id}
         name={@name}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-5 dark:bg-zinc-900 dark:text-zinc-100 ",
+          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-5 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-2 box-border",
           @errors == [] && "border-zinc-300 dark:border-zinc-600 focus:border-zinc-400",
           @errors != [] && "border-rose-400 focus:border-rose-400 has-errors",
           @class
@@ -362,6 +366,46 @@ defmodule CaseManagerWeb.CoreComponents do
         <option :if={@prompt} value=""><%= @prompt %></option>
         <%= CaseManagerWeb.FormOptions.options_for_select_with_invalid(@options, @value) %>
       </select>
+      <.error :for={msg <- @errors}><%= msg %></.error>
+    </div>
+    """
+  end
+
+  def input(%{type: "radiogroup"} = assigns) do
+    ~H"""
+    <div class={["flex  gap-4 break-inside-avoid", @wrapper_class]} {@rest}>
+      <.label :if={@label} class={@label_class}><%= @label %></.label>
+      <div class="flex">
+        <.input
+          :for={value <- @options}
+          type="radio"
+          name={@name}
+          id={"#{@id}_#{value}"}
+          value={value}
+          checked={@value == value}
+        />
+      </div>
+    </div>
+    """
+  end
+
+  def input(%{type: "radio"} = assigns) do
+    ~H"""
+    <div class={["flex flex-row items-center gap-2 break-inside-avoid", @wrapper_class]} {@rest}>
+      <input
+        type="radio"
+        name={@name}
+        id={@id}
+        value={@value || nil}
+        checked={@checked}
+        class={[
+          "border-2 rounded-full border-zinc-300 dark:border-zinc-500 text-zinc-900 focus:ring-0 dark:focus:border-2 box-border",
+          "checked:dark:!border-zinc-500",
+          @class
+        ]}
+        {@rest}
+      />
+      <.label for={@id} class={@label_class}><%= @label || @value %></.label>
       <.error :for={msg <- @errors}><%= msg %></.error>
     </div>
     """
@@ -379,8 +423,8 @@ defmodule CaseManagerWeb.CoreComponents do
         name={@name}
         class={[
           "mt-2 block w-full rounded-lg text-zinc-900 dark:text-zinc-100 dark:bg-zinc-900 focus:ring-0 sm:text-sm sm:leading-5",
-          "min-h-[6rem] tabular-nums slashed-zero ",
-          @errors == [] && "border-zinc-300 dark:border-zinc-600 focus:border-zinc-400",
+          "min-h-[6rem] tabular-nums slashed-zero dark:focus:border-2 box-border",
+          @errors == [] && "border-zinc-300 dark:border-zinc-500 focus:border-zinc-400",
           @errors != [] && "border-rose-400 focus:border-rose-400 has-errors",
           @class
         ]}
@@ -420,9 +464,9 @@ defmodule CaseManagerWeb.CoreComponents do
           value={Phoenix.HTML.Form.normalize_value(@type, @value)}
           class={[
             "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-5",
-            " tabular-nums slashed-zero",
+            " tabular-nums slashed-zero dark:focus:ring-0 dark:focus:border-2 box-border",
             "dark:bg-zinc-900 dark:text-zinc-100",
-            @errors == [] && "border-zinc-300 dark:border-zinc-600 focus:border-zinc-400",
+            @errors == [] && "border-zinc-300 dark:border-zinc-500 focus:border-zinc-400",
             @errors != [] && "border-rose-400 focus:border-rose-400 has-errors",
             @class
           ]}

@@ -207,8 +207,9 @@ defmodule CaseManagerWeb.CaseForm do
         />
         <.input
           field={@form[:boat_engine_working]}
-          type="text"
+          type="radiogroup"
           label="Boat Engine Working"
+          options={["yes", "no", "unknown"]}
           force_validate={@validate_now}
         />
 

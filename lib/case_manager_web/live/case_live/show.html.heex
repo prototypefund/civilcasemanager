@@ -84,25 +84,13 @@
   <div class="grow shrink-1 basis-1/1 sm:basis-3/12">
     <.h1 class="mt-8">Associated Positions</.h1>
 
-    <.compact_table
-      id="assoc_positions"
-      rows={@streams.assoc_positions}
-      row_click={fn {_id, position} -> JS.navigate(~p"/positions/#{position}") end}
-    >
+    <.compact_table id="assoc_positions" rows={@streams.assoc_positions}>
       <:col :let={{_id, position}} label="Shortcode">
         <%= position.short_code %>
       </:col>
       <:col :let={{_id, position}} label="Timestamp">
         <%= position.timestamp %>
       </:col>
-      <:action :let={{_id, position}}>
-        <div class="sr-only">
-          <.link navigate={~p"/positions/#{position}"}>Show</.link>
-        </div>
-        <.link :if={@current_user.role != :readonly} patch={~p"/positions/#{position}/edit"}>
-          Edit
-        </.link>
-      </:action>
       <:action :let={{id, position}}>
         <.link
           :if={@current_user.role != :readonly}

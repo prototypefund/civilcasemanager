@@ -133,12 +133,16 @@ defmodule CaseManager.GeoTools do
     end
   end
 
+  defp parse_short_string_components([deg]) do
+    parse_short_string_components([deg, "0", "0"])
+  end
+
   defp parse_short_string_components([deg, min]) do
     parse_short_string_components([deg, min, "0"])
   end
 
   defp parse_short_string_components([deg, min, sec]) do
-    {deg, _} = Integer.parse(deg)
+    {deg, _} = Float.parse(deg)
     {min, _} = Float.parse(min)
     {sec, _} = Float.parse(sec)
     [deg, min, sec]

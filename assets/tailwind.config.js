@@ -6,7 +6,7 @@ const fs = require("fs")
 const path = require("path")
 
 module.exports = {
-  darkMode: 'media',
+  darkMode: 'selector',
   content: [
     "./js/**/*.js",
     "../lib/case_manager_web.ex",

@@ -112,6 +112,7 @@ defmodule CaseManager.GeoTools do
     [deg, min, sec] =
       short_string
       |> String.trim()
+      |> String.replace(~r/[ESWN]/, "")
       |> String.split()
       |> parse_short_string_components()
 

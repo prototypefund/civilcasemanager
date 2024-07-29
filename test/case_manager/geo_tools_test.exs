@@ -206,6 +206,26 @@ defmodule CaseManager.GeoToolsTest do
       assert GeoTools.combined_short_string_to_float("23.33 / 11.57") ==
                {23.33, 11.57}
     end
+
+    test "handles strings with degree symbols and ticks" do
+      assert GeoTools.combined_short_string_to_float("34° 14' 20\" / 12° 58' 30\"") ==
+               {34.23888888888889, 12.975}
+    end
+
+    test "handles strings with degree symbols, ticks, and whitespace variations" do
+      assert GeoTools.combined_short_string_to_float("  34°  14'  20\"  /   12°  58'  30\"  ") ==
+               {34.23888888888889, 12.975}
+    end
+
+    test "handles strings with degree symbols and ticks for decimal minutes" do
+      assert GeoTools.combined_short_string_to_float("34° 14.5' / 12° 58.25'") ==
+               {34.24166666666667, 12.970833333333333}
+    end
+
+    test "handles strings with degree symbols and N/E direction indicators" do
+      assert GeoTools.combined_short_string_to_float("34° 14.5' N / 12° 58.25' E") ==
+               {34.24166666666667, 12.970833333333333}
+    end
   end
 
   describe "stability of short string conversion" do

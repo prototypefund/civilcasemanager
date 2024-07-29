@@ -17,7 +17,7 @@ defmodule CaseManager.ImportedCasesFixtures do
         authorities_details: "some authorities_details",
         boat_color: "some boat_color",
         boat_engine_status: "some boat_engine_status",
-        boat_engine_working: "some boat_engine_working",
+        boat_engine_working: "yes",
         boat_notes: "some boat_notes",
         boat_number_of_engines: 42,
         boat_type: "some boat_type",

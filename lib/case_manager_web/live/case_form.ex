@@ -43,7 +43,7 @@ defmodule CaseManagerWeb.CaseForm do
         <%= if assigns[:imported_case] do %>
           <.input field={@form[:imported_id]} type="hidden" value={@imported_case.id} />
         <% end %>
-        <h1 class="text-indigo-300 pt-8 font-semibold">Base data</h1>
+        <h1 class="dark:text-indigo-300 text-indigo-600 pt-8 font-semibold">Base data</h1>
         <.input field={@form[:name]} type="text" label="Identifier" force_validate={@validate_now} />
         <.input field={@form[:notes]} type="textarea" label="Notes" force_validate={@validate_now} />
 
@@ -70,7 +70,7 @@ defmodule CaseManagerWeb.CaseForm do
             <%= @imported_case.time_of_departure_string %>
           </.parsing_hint>
         <% end %>
-        <h1 class="text-indigo-300 pt-8 font-semibold">Departure</h1>
+        <h1 class="dark:text-indigo-300 text-indigo-600 pt-8 font-semibold">Departure</h1>
         <.input
           field={@form[:departure_region]}
           type="select"
@@ -99,7 +99,7 @@ defmodule CaseManagerWeb.CaseForm do
           options={Ecto.Enum.values(CaseManager.Cases.Case, :sar_region)}
         />
 
-        <h1 class="text-indigo-300 pt-8 font-semibold">Positions</h1>
+        <h1 class="dark:text-indigo-300 text-indigo-600 pt-8 font-semibold">Positions</h1>
 
         <%= if assigns[:imported_case] && @imported_case.first_position do %>
           <.parsing_hint field_name="First position">
@@ -143,7 +143,7 @@ defmodule CaseManagerWeb.CaseForm do
 
         <input type="hidden" name="case[positions_drop][]" />
 
-        <h1 class="text-indigo-300 pt-8 font-semibold">Involved parties</h1>
+        <h1 class="dark:text-indigo-300 text-indigo-600 pt-8 font-semibold">Involved parties</h1>
         <.input
           field={@form[:phonenumber]}
           type="text"
@@ -186,7 +186,7 @@ defmodule CaseManagerWeb.CaseForm do
           force_validate={@validate_now}
         />
 
-        <h1 class="text-indigo-300 pt-8 font-semibold">The boat</h1>
+        <h1 class="dark:text-indigo-300 text-indigo-600 pt-8 font-semibold">The boat</h1>
         <.input
           field={@form[:boat_type]}
           type="select"
@@ -225,7 +225,7 @@ defmodule CaseManagerWeb.CaseForm do
           force_validate={@validate_now}
         />
 
-        <h1 class="text-indigo-300 pt-8 font-semibold">People on Board</h1>
+        <h1 class="dark:text-indigo-300 text-indigo-600 pt-8 font-semibold">People on Board</h1>
         <div class="flex gap-4 flex-row flex-wrap">
           <%= if assigns[:imported_case] && @imported_case.pob_total_string do %>
             <.parsing_hint field_name="POB Total">
@@ -327,7 +327,7 @@ defmodule CaseManagerWeb.CaseForm do
           />
         </div>
 
-        <h1 class="text-indigo-300 pt-8 font-semibold">Outcome</h1>
+        <h1 class="dark:text-indigo-300 text-indigo-600 pt-8 font-semibold">Outcome</h1>
         <.input
           field={@form[:outcome]}
           type="select"
@@ -387,7 +387,7 @@ defmodule CaseManagerWeb.CaseForm do
 
         <.input field={@form[:source]} label="Source" force_validate={@validate_now} />
 
-        <h1 class="text-indigo-300 pt-8 font-semibold">Meta</h1>
+        <h1 class="dark:text-indigo-300 text-indigo-600 pt-8 font-semibold">Meta</h1>
         <.input field={@form[:url]} type="textarea" label="URLs" force_validate={@validate_now} />
         <.input
           field={@form[:cloud_file_links]}

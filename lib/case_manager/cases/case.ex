@@ -89,7 +89,7 @@ defmodule CaseManager.Cases.Case do
       ]
 
     field :boat_engine_status, :string
-    field :boat_engine_working, :string
+    field :boat_engine_working, :boolean
     field :boat_number_of_engines, :integer
 
     ## People on Board

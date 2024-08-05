@@ -209,7 +209,7 @@ defmodule CaseManagerWeb.CaseForm do
           field={@form[:boat_engine_working]}
           type="radiogroup"
           label="Boat Engine Working"
-          options={["yes", "no", "unknown"]}
+          options={["true", "false", Null]}
           force_validate={@validate_now}
         />
 

@@ -69,7 +69,7 @@ defmodule CaseManager.ImportedCasesTest do
         outcome_actors: "some outcome_actors",
         occurred_at: ~U[2024-07-09 08:22:00Z],
         boat_engine_status: "some boat_engine_status",
-        boat_engine_working: "yes",
+        boat_engine_working: true,
         imported_from: "some imported_from",
         departure_region: "some departure_region",
         outcome: "interception_tn",
@@ -141,7 +141,7 @@ defmodule CaseManager.ImportedCasesTest do
       assert imported_case.outcome == "interception_tn"
       assert imported_case.departure_region == "some departure_region"
       assert imported_case.imported_from == "some imported_from"
-      assert imported_case.boat_engine_working == "yes"
+      assert imported_case.boat_engine_working == true
       assert imported_case.boat_engine_status == "some boat_engine_status"
       assert imported_case.occurred_at == ~U[2024-07-09 08:22:00Z]
       assert imported_case.outcome_actors == "some outcome_actors"
@@ -163,7 +163,7 @@ defmodule CaseManager.ImportedCasesTest do
         outcome_actors: "some updated outcome_actors",
         occurred_at: ~U[2024-07-10 08:22:00Z],
         boat_engine_status: "some updated boat_engine_status",
-        boat_engine_working: "no",
+        boat_engine_working: false,
         imported_from: "some updated imported_from",
         departure_region: "Tunisia",
         outcome: "some updated outcome",
@@ -235,7 +235,7 @@ defmodule CaseManager.ImportedCasesTest do
       assert imported_case.outcome == "some updated outcome"
       assert imported_case.departure_region == "Tunisia"
       assert imported_case.imported_from == "some updated imported_from"
-      assert imported_case.boat_engine_working == "no"
+      assert imported_case.boat_engine_working == false
       assert imported_case.boat_engine_status == "some updated boat_engine_status"
       assert imported_case.occurred_at == ~U[2024-07-10 08:22:00Z]
       assert imported_case.outcome_actors == "some updated outcome_actors"

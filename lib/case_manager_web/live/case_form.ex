@@ -99,30 +99,31 @@ defmodule CaseManagerWeb.CaseForm do
           options={Ecto.Enum.values(CaseManager.Cases.Case, :sar_region)}
         />
 
-        <h1 class="dark:text-indigo-300 text-indigo-600 pt-8 font-semibold">Positions</h1>
-
-        <%= if assigns[:imported_case] && @imported_case.first_position do %>
-          <.parsing_hint field_name="First position">
-            <%= @imported_case.first_position %>
-          </.parsing_hint>
-        <% end %>
-        <%= if assigns[:imported_case] && @imported_case.last_position do %>
-          <.parsing_hint field_name="Last position">
-            <%= @imported_case.last_position %>
-          </.parsing_hint>
-        <% end %>
-        <button
-          type="button"
-          name="case[positions_sort][]"
-          value="new"
-          phx-click={JS.dispatch("change")}
-          class={[
-            "phx-submit-loading:opacity-75 rounded-lg bg-emerald-600 hover:dark:bg-emerald-700 py-2 px-3",
-            "text-sm font-semibold leading-5 text-white active:text-white/80"
-          ]}
-        >
-          <.icon name="hero-plus-circle" class="w-5 h-5 text-white" />
-        </button>
+        <div class="flex between items-baseline justify-between">
+          <h1 class="dark:text-indigo-300 text-indigo-600 pt-8 font-semibold grow">Positions</h1>
+          <button
+            type="button"
+            name="case[positions_sort][]"
+            value="new"
+            phx-click={JS.dispatch("change")}
+            class={[
+              "phx-submit-loading:opacity-75 rounded-lg bg-emerald-600 hover:dark:bg-emerald-700 w-9 h-9 py-1 px-2",
+              "text-sm font-semibold leading-5 text-white active:text-white/80"
+            ]}
+          >
+            <.icon name="hero-plus-circle" class="w-5 h-5 text-white" />
+          </button>
+          <%= if assigns[:imported_case] && @imported_case.first_position do %>
+            <.parsing_hint field_name="First position">
+              <%= @imported_case.first_position %>
+            </.parsing_hint>
+          <% end %>
+          <%= if assigns[:imported_case] && @imported_case.last_position do %>
+            <.parsing_hint field_name="Last position">
+              <%= @imported_case.last_position %>
+            </.parsing_hint>
+          <% end %>
+        </div>
         <.inputs_for :let={ef} field={@form[:positions]}>
           <div class="break-inside-avoid-column flex flex-row gap-4">
             <input type="hidden" name="case[positions_sort][]" value={ef.index} />

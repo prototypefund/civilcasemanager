@@ -42,7 +42,9 @@ defmodule CaseManager.Cases.Case do
         :sar2,
         :sar3,
         :currently_unknown,
-        :unknown
+        :unknown,
+        ## TODO in Dagster
+        :nan
       ]
 
     ## Involved parties
@@ -72,19 +74,18 @@ defmodule CaseManager.Cases.Case do
     field :boat_color, Ecto.Enum,
       values: [
         :unknown,
-        :red,
-        :green,
-        :blue,
-        :yellow,
-        :white,
         :black,
-        :gray,
+        :blue,
         :brown,
-        :other,
         :currently_unknown,
-        ## TODO Remove these?
-        :purple,
-        :pink
+        :gray,
+        :green,
+        :other,
+        :red,
+        :white,
+        :yellow,
+        ## TODO in Dagster
+        :nan
       ]
 
     field :boat_engine_status, :string
@@ -129,8 +130,8 @@ defmodule CaseManager.Cases.Case do
         :empty_boat,
         :shipwreck,
         :unclear,
-        ## TODO Remove these?
-        :not_filled
+        ## TODO in Dagster
+        :nan
       ]
 
     field :time_of_disembarkation, :utc_datetime

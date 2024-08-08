@@ -64,8 +64,7 @@ defmodule CaseManager.Cases.Case do
         :fishing_vessel,
         :other,
         :currently_unknown,
-        ## TODO Remove dupes
-        :fishing
+        :sailing
       ]
 
     field :boat_notes, :string

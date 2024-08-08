@@ -44,7 +44,7 @@ defmodule CaseManager.CasesTest do
       boat_notes: "some boat_notes",
       boat_color: :red,
       boat_engine_status: "some boat_engine_status",
-      boat_engine_working: true,
+      boat_engine_working: "yes",
       boat_number_of_engines: 42,
       pob_total: 42,
       pob_men: 42,
@@ -96,7 +96,7 @@ defmodule CaseManager.CasesTest do
       assert case.boat_notes == "some boat_notes"
       assert case.boat_color == :red
       assert case.boat_engine_status == "some boat_engine_status"
-      assert case.boat_engine_working == true
+      assert case.boat_engine_working == :yes
       assert case.boat_number_of_engines == 42
       assert case.pob_total == 42
       assert case.pob_men == 42
@@ -144,7 +144,7 @@ defmodule CaseManager.CasesTest do
         boat_notes: "some updated boat_notes",
         boat_color: :red,
         boat_engine_status: "some updated boat_engine_status",
-        boat_engine_working: false,
+        boat_engine_working: "no",
         boat_number_of_engines: 42,
         pob_total: 42,
         pob_men: 42,
@@ -186,7 +186,7 @@ defmodule CaseManager.CasesTest do
       assert case.boat_notes == "some updated boat_notes"
       assert case.boat_color == :red
       assert case.boat_engine_status == "some updated boat_engine_status"
-      assert case.boat_engine_working == false
+      assert case.boat_engine_working == :no
       assert case.boat_number_of_engines == 42
       assert case.pob_total == 42
       assert case.pob_men == 42

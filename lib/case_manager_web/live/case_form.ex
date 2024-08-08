@@ -210,7 +210,7 @@ defmodule CaseManagerWeb.CaseForm do
           field={@form[:boat_engine_working]}
           type="radiogroup"
           label="Boat Engine Working"
-          options={["true", "false", Null]}
+          options={Ecto.Enum.values(CaseManager.Cases.Case, :boat_engine_working)}
           force_validate={@validate_now}
         />
 

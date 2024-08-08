@@ -89,7 +89,14 @@ defmodule CaseManager.Cases.Case do
       ]
 
     field :boat_engine_status, :string
-    field :boat_engine_working, :boolean
+
+    field :boat_engine_working, Ecto.Enum,
+      values: [
+        :unknown,
+        :yes,
+        :no
+      ]
+
     field :boat_number_of_engines, :integer
 
     ## People on Board

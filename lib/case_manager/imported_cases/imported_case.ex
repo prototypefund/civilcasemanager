@@ -58,7 +58,7 @@ defmodule CaseManager.ImportedCases.ImportedCase do
     field :outcome, :string
     field :departure_region, :string
     field :imported_from, :string
-    field :boat_engine_working, :boolean
+    field :boat_engine_working, :string
     field :boat_engine_status, :string
     field :occurred_at, :utc_datetime
     field :occurred_at_string, :string

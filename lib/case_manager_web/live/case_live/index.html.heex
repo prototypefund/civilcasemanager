@@ -72,7 +72,10 @@
                 <%= gettext("Delete Case") %>
               </.link>
             </:actions>
-            <%= case.notes %>
+            <%= if case.notes != nil do %>
+              <%= String.slice(case.notes, 0, 400) <>
+                if String.length(case.notes) > 400, do: "...", else: "" %>
+            <% end %>
           </.card>
         <% end %>
       </div>

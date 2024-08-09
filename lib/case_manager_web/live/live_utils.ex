@@ -9,7 +9,8 @@ defmodule CaseManagerWeb.LiveUtils do
       previous_link_attrs: [class: "order-1 py-2 px-3 " <> base],
       next_link_attrs: [class: "order-3 py-2 px-3 " <> base],
       pagination_link_attrs: [class: "py-2 px-3 " <> base],
-      current_link_attrs: [class: "py-2 px-3 " <> base <> "bg-indigo-400"]
+      current_link_attrs: [class: "py-2 px-3 " <> base <> "bg-indigo-400"],
+      page_links: {:ellipsis, 8}
     ]
   end
 end

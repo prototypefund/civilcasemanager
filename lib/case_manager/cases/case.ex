@@ -41,10 +41,7 @@ defmodule CaseManager.Cases.Case do
         :sar1,
         :sar2,
         :sar3,
-        :currently_unknown,
-        :unknown,
-        ## TODO in Dagster
-        :nan
+        :unknown
       ]
 
     ## Involved parties
@@ -65,7 +62,6 @@ defmodule CaseManager.Cases.Case do
         :fiberglass,
         :fishing_vessel,
         :other,
-        :currently_unknown,
         :sailing
       ]
 
@@ -77,15 +73,12 @@ defmodule CaseManager.Cases.Case do
         :black,
         :blue,
         :brown,
-        :currently_unknown,
         :gray,
         :green,
         :other,
         :red,
         :white,
-        :yellow,
-        ## TODO in Dagster
-        :nan
+        :yellow
       ]
 
     field :boat_engine_status, :string
@@ -114,7 +107,7 @@ defmodule CaseManager.Cases.Case do
 
     field :outcome, Ecto.Enum,
       values: [
-        :currently_unknown,
+        :unknown,
         :interception_libya,
         :interception_tn,
         :ngo_rescue,
@@ -126,12 +119,11 @@ defmodule CaseManager.Cases.Case do
         :returned,
         :arrived,
         :autonomous,
-        :unknown,
         :empty_boat,
         :shipwreck,
         :unclear,
-        ## TODO in Dagster
-        :nan
+        ## TODO Remove in dagster
+        :currently_unknown
       ]
 
     field :time_of_disembarkation, :utc_datetime

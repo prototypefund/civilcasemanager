@@ -1,7 +1,7 @@
-defmodule CaseManager.Repo.Migrations.RenameEngineWorkingToEngineFailure do
+defmodule CaseManager.Repo.Migrations.RenamImportedEngineWorkingToEngineFailure do
   use Ecto.Migration
 
   def change do
-    rename table(:imported_cases), :boat_engine_working, to: :boat_engine_failure
+    execute "ALTER TABLE imported_cases RENAME COLUMN boat_engine_working TO boat_engine_failure"
   end
 end

@@ -207,10 +207,10 @@ defmodule CaseManagerWeb.CaseForm do
           options={Ecto.Enum.values(CaseManager.Cases.Case, :boat_color)}
         />
         <.input
-          field={@form[:boat_engine_working]}
+          field={@form[:boat_engine_failure]}
           type="radiogroup"
-          label="Boat Engine Working"
-          options={Ecto.Enum.values(CaseManager.Cases.Case, :boat_engine_working)}
+          label="Boat Engine Failed"
+          options={Ecto.Enum.values(CaseManager.Cases.Case, :boat_engine_failure)}
           force_validate={@validate_now}
         />
 

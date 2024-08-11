@@ -1,7 +1,8 @@
 defmodule CaseManager.Places do
   def valid_departure_places,
     do: %{
-      sar1: [
+      "unknown" => "unknown",
+      SAR1: [
         "Abu Kammash",
         "al-Maya",
         "Chebba",
@@ -19,7 +20,7 @@ defmodule CaseManager.Places do
         "Zawiyah",
         "Zuwarah"
       ],
-      sar2: [
+      SAR2: [
         "al-Khums",
         "Alaluas",
         "Garabulli",
@@ -27,7 +28,7 @@ defmodule CaseManager.Places do
         "Tajura",
         "Zliten"
       ],
-      sar3: [
+      SAR3: [
         "Ajdabiya",
         "Benghazi",
         "Bodrum",
@@ -44,7 +45,8 @@ defmodule CaseManager.Places do
 
   def valid_disembarkation_places,
     do: %{
-      italy: [
+      "unknown" => "unknown",
+      Italy: [
         "Augusta",
         "Bari",
         "Brindisi",
@@ -74,17 +76,18 @@ defmodule CaseManager.Places do
         "Trapani",
         "Vibo Valentina"
       ],
-      malta: ["Malta"],
-      libya: [
+      Malta: ["Malta"],
+      Libya: [
         "Al-Maya",
         "Tripoli"
       ],
-      greece: ["Palaiochora"],
-      egypt: ["Port Said"]
+      Greece: ["Palaiochora"],
+      Egypt: ["Port Said"]
     }
 
   def valid_departure_regions,
     do: [
+      "unknown",
       "Libya",
       "Tunisia",
       "Lebanon",

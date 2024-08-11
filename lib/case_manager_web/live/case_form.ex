@@ -127,7 +127,7 @@ defmodule CaseManagerWeb.CaseForm do
         <.inputs_for :let={ef} field={@form[:positions]}>
           <div class="break-inside-avoid-column flex flex-row gap-4">
             <input type="hidden" name="case[positions_sort][]" value={ef.index} />
-            <.input type="text" field={ef[:short_code]} placeholder="12 22 / 33 44" />
+            <.input type="text" field={ef[:short_code]} placeholder="DEG MIN (SEC) / DEG MIN (SEC)" />
             <.input type="datetime-local" field={ef[:timestamp]} />
             <button
               type="button"
@@ -183,7 +183,7 @@ defmodule CaseManagerWeb.CaseForm do
         <.input
           field={@form[:authorities_details]}
           type="text"
-          label="Details of contact w/ authorities"
+          label="Details about contact w/ authorities"
           force_validate={@validate_now}
         />
 

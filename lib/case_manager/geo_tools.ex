@@ -158,7 +158,7 @@ defmodule CaseManager.GeoTools do
   {34.28333333333333, 12.95}
   """
   def combined_short_string_to_float(combined_short_string) do
-    [lat_string, lon_string] = String.split(combined_short_string, "/")
+    [lat_string, lon_string] = String.split(combined_short_string, ~r{[/,]})
     lat = lat_string |> short_string_to_float()
     lon = lon_string |> short_string_to_float()
     {lat, lon}

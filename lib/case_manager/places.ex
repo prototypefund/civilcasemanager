@@ -1,7 +1,7 @@
 defmodule CaseManager.Places do
   def valid_departure_places,
     do: %{
-      "unknown" => "unknown",
+      "Unknown" => [:unknown],
       SAR1: [
         "Abu Kammash",
         "al-Maya",
@@ -45,7 +45,7 @@ defmodule CaseManager.Places do
 
   def valid_disembarkation_places,
     do: %{
-      "unknown" => "unknown",
+      "Unknown" => [:unknown],
       Italy: [
         "Augusta",
         "Bari",
@@ -87,7 +87,7 @@ defmodule CaseManager.Places do
 
   def valid_departure_regions,
     do: [
-      "unknown",
+      :unknown,
       "Libya",
       "Tunisia",
       "Lebanon",

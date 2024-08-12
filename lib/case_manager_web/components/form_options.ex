@@ -44,10 +44,11 @@ defmodule CaseManagerWeb.FormOptions do
   """
 
   def preprocess_options(allowed_options, current_value) do
-    processed = to_atom_if_exists(current_value)
+    string = to_string(current_value)
+    atom_or_string = to_atom_if_exists(current_value)
 
-    if processed do
-      valid = valid_option?(allowed_options, current_value, processed)
+    if atom_or_string do
+      valid = valid_option?(allowed_options, string, atom_or_string)
 
       if valid do
         allowed_options
@@ -55,7 +56,7 @@ defmodule CaseManagerWeb.FormOptions do
         [
           Valid: allowed_options,
           Invalid: [
-            processed
+            atom_or_string
           ]
         ]
       end
@@ -81,8 +82,12 @@ defmodule CaseManagerWeb.FormOptions do
 
   def valid_option?(allowed_options, current_value, processed) do
     Enum.any?(allowed_options, fn
-      {_key, values} when is_list(values) -> processed in values || current_value in values
-      value -> processed == value || current_value == value
+      {_key, values}
+      when is_list(values) ->
+        processed in values || current_value in values
+
+      value ->
+        processed == value || current_value == value
     end)
   end
 

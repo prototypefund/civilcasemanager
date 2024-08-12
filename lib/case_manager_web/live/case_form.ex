@@ -380,10 +380,14 @@ defmodule CaseManagerWeb.CaseForm do
           force_validate={@validate_now}
         />
 
-        <.input field={@form[:source]} label="Source" force_validate={@validate_now} />
-
         <h1 class="dark:text-indigo-300 text-indigo-600 pt-8 font-semibold">Meta</h1>
-        <.input field={@form[:url]} type="textarea" label="URLs" force_validate={@validate_now} />
+        <.input
+          field={@form[:url]}
+          type="textarea"
+          label="URLs"
+          force_validate={@validate_now}
+          placeholder="Add one link per line"
+        />
         <.input
           field={@form[:cloud_file_links]}
           type="textarea"

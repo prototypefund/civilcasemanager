@@ -74,7 +74,9 @@
         <.h1 class="dark:text-indigo-300 text-indigo-600 pt-8">Meta</.h1>
         <.list>
           <:item title="Imported from"><%= @case.imported_from %></:item>
-          <:item title="URLs"><%= @case.url %></:item>
+          <:item title="URLs">
+            <%= if(@case.url, do: raw(@case.url |> String.replace("\n", "<br>"))) %>
+          </:item>
           <:item title="Cloud file links"><%= @case.cloud_file_links %></:item>
         </.list>
       </div>

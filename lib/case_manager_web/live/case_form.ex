@@ -394,6 +394,7 @@ defmodule CaseManagerWeb.CaseForm do
           field={@form[:cloud_file_links]}
           type="textarea"
           label="Cloud file links"
+          placeholder="Add one link per line"
           force_validate={@validate_now}
         />
 

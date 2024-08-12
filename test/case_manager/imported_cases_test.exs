@@ -47,8 +47,7 @@ defmodule CaseManager.ImportedCasesTest do
       boat_color: nil,
       people_missing: "eeee",
       disembarked_by: nil,
-      url: nil,
-      alarmphone_contact: nil
+      url: nil
     }
 
     test "list_imported_cases/0 returns all imported_cases" do
@@ -101,14 +100,12 @@ defmodule CaseManager.ImportedCasesTest do
         boat_color: "some boat_color",
         people_missing: 42,
         disembarked_by: "some disembarked_by",
-        url: "some url",
-        alarmphone_contact: "some alarmphone_contact"
+        url: "some url"
       }
 
       assert {:ok, %ImportedCase{} = imported_case} =
                ImportedCases.create_imported_case(valid_attrs)
 
-      assert imported_case.alarmphone_contact == "some alarmphone_contact"
       assert imported_case.url == "some url"
       assert imported_case.disembarked_by == "some disembarked_by"
       assert imported_case.people_missing == 42

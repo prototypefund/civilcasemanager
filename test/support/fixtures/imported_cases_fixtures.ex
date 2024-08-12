@@ -12,7 +12,6 @@ defmodule CaseManager.ImportedCasesFixtures do
       attrs
       |> Enum.into(%{
         actors_involved: "some actors_involved",
-        alarmphone_contact: "some alarmphone_contact",
         authorities_alerted: true,
         authorities_details: "some authorities_details",
         boat_color: "some boat_color",

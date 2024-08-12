@@ -152,21 +152,15 @@ defmodule CaseManagerWeb.CaseForm do
           force_validate={@validate_now}
         />
         <.input
-          field={@form[:alarmphone_contact]}
+          field={@form[:actors_involved]}
           type="text"
-          label="Alarmphone contact"
+          label="Actors involved"
           force_validate={@validate_now}
         />
         <.input
           field={@form[:confirmation_by]}
           type="text"
           label="Confirmation by"
-          force_validate={@validate_now}
-        />
-        <.input
-          field={@form[:actors_involved]}
-          type="text"
-          label="Actors involved"
           force_validate={@validate_now}
         />
         <%= if assigns[:imported_case] && @imported_case.authorities_alerted_string do %>

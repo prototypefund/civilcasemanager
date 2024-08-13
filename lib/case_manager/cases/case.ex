@@ -38,10 +38,10 @@ defmodule CaseManager.Cases.Case do
 
     field :sar_region, Ecto.Enum,
       values: [
+        :unknown,
         :sar1,
         :sar2,
-        :sar3,
-        :unknown
+        :sar3
       ]
 
     ## Involved parties

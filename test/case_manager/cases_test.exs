@@ -35,7 +35,6 @@ defmodule CaseManager.CasesTest do
       time_of_departure: ~U[2024-03-08 08:58:00Z],
       sar_region: :sar1,
       phonenumber: "some phonenumber",
-      confirmation_by: "some confirmation_by",
       actors_involved: "some actors_involved",
       authorities_alerted: true,
       authorities_details: "some authorities_details",
@@ -85,7 +84,6 @@ defmodule CaseManager.CasesTest do
       assert case.time_of_departure == ~U[2024-03-08 08:58:00Z]
       assert case.sar_region == :sar1
       assert case.phonenumber == "some phonenumber"
-      assert case.confirmation_by == "some confirmation_by"
       assert case.actors_involved == "some actors_involved"
       assert case.authorities_alerted == true
       assert case.authorities_details == "some authorities_details"
@@ -131,7 +129,6 @@ defmodule CaseManager.CasesTest do
         time_of_departure: ~U[2024-03-08 08:58:00Z],
         sar_region: :sar1,
         phonenumber: "some updated phonenumber",
-        confirmation_by: "some updated confirmation_by",
         actors_involved: "some updated actors_involved",
         authorities_alerted: true,
         authorities_details: "some updated authorities_details",
@@ -171,7 +168,6 @@ defmodule CaseManager.CasesTest do
       assert case.time_of_departure == ~U[2024-03-08 08:58:00Z]
       assert case.sar_region == :sar1
       assert case.phonenumber == "some updated phonenumber"
-      assert case.confirmation_by == "some updated confirmation_by"
       assert case.actors_involved == "some updated actors_involved"
       assert case.authorities_alerted == true
       assert case.authorities_details == "some updated authorities_details"

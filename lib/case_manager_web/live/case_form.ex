@@ -157,12 +157,6 @@ defmodule CaseManagerWeb.CaseForm do
           label="Actors involved"
           force_validate={@validate_now}
         />
-        <.input
-          field={@form[:confirmation_by]}
-          type="text"
-          label="Confirmation by"
-          force_validate={@validate_now}
-        />
         <%= if assigns[:imported_case] && @imported_case.authorities_alerted_string do %>
           <.parsing_hint field_name="Authorities alerted">
             <%= @imported_case.authorities_alerted_string %>

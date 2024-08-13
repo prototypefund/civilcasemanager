@@ -376,13 +376,6 @@ defmodule CaseManagerWeb.CaseForm do
           force_validate={@validate_now}
           placeholder="Add one link per line"
         />
-        <.input
-          field={@form[:cloud_file_links]}
-          type="textarea"
-          label="Cloud file links"
-          placeholder="Add one link per line"
-          force_validate={@validate_now}
-        />
 
         <:actions>
           <.button phx-disable-with="Saving...">Save Case</.button>

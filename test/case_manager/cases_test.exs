@@ -59,8 +59,7 @@ defmodule CaseManager.CasesTest do
       disembarked_by: "some disembarked_by",
       outcome_actors: "some outcome_actors",
       followup_needed: true,
-      url: "some url",
-      cloud_file_links: "some cloud_file_links"
+      url: "some url"
     }
 
     test "list_cases/0 returns all cases" do
@@ -109,7 +108,6 @@ defmodule CaseManager.CasesTest do
       assert case.outcome_actors == "some outcome_actors"
       assert case.followup_needed == true
       assert case.url == "some url"
-      assert case.cloud_file_links == "some cloud_file_links"
     end
 
     test "create_case/1 with invalid data returns error changeset" do
@@ -153,8 +151,7 @@ defmodule CaseManager.CasesTest do
         disembarked_by: "some updated disembarked_by",
         outcome_actors: "some updated outcome_actors",
         followup_needed: true,
-        url: "some updated url",
-        cloud_file_links: "some updated cloud_file_links"
+        url: "some updated url"
       }
 
       assert {:ok, %Case{} = case} = Cases.update_case(case, update_attrs)
@@ -193,7 +190,6 @@ defmodule CaseManager.CasesTest do
       assert case.outcome_actors == "some updated outcome_actors"
       assert case.followup_needed == true
       assert case.url == "some updated url"
-      assert case.cloud_file_links == "some updated cloud_file_links"
     end
 
     test "update_case/2 with invalid data returns error changeset" do

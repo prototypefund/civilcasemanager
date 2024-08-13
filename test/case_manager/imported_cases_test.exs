@@ -41,7 +41,6 @@ defmodule CaseManager.ImportedCasesTest do
       time_of_departure: nil,
       pob_women: nil,
       notes: nil,
-      cloud_file_links: nil,
       boat_color: nil,
       people_missing: "eeee",
       disembarked_by: nil,
@@ -92,7 +91,6 @@ defmodule CaseManager.ImportedCasesTest do
         time_of_departure: ~U[2024-07-09 08:22:00Z],
         pob_women: 42,
         notes: "some notes",
-        cloud_file_links: "some cloud_file_links",
         boat_color: "some boat_color",
         people_missing: 42,
         disembarked_by: "some disembarked_by",
@@ -106,7 +104,6 @@ defmodule CaseManager.ImportedCasesTest do
       assert imported_case.disembarked_by == "some disembarked_by"
       assert imported_case.people_missing == 42
       assert imported_case.boat_color == "some boat_color"
-      assert imported_case.cloud_file_links == "some cloud_file_links"
       assert imported_case.notes == "some notes"
       assert imported_case.pob_women == 42
       assert imported_case.time_of_departure == ~U[2024-07-09 08:22:00Z]
@@ -180,7 +177,6 @@ defmodule CaseManager.ImportedCasesTest do
         time_of_departure: ~U[2024-07-10 08:22:00Z],
         pob_women: 43,
         notes: "some updated notes",
-        cloud_file_links: "some updated cloud_file_links",
         boat_color: "some updated boat_color",
         people_missing: 43,
         disembarked_by: "some updated disembarked_by",
@@ -196,7 +192,6 @@ defmodule CaseManager.ImportedCasesTest do
       assert imported_case.disembarked_by == "some updated disembarked_by"
       assert imported_case.people_missing == 43
       assert imported_case.boat_color == "some updated boat_color"
-      assert imported_case.cloud_file_links == "some updated cloud_file_links"
       assert imported_case.notes == "some updated notes"
       assert imported_case.pob_women == 43
       assert imported_case.time_of_departure == ~U[2024-07-10 08:22:00Z]

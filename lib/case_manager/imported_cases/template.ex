@@ -13,7 +13,7 @@ defmodule CaseManager.ImportedCases.Template do
     "DEAD Min" => %{key: "people_dead", type: :integer},
     "DEAD" => %{key: "people_dead", type: :integer},
     "DEAD CONFIRMED" => %{key: "people_dead", type: :integer},
-    "Links " => %{key: "cloud_file_links", type: :string},
+    "Links " => %{key: "url", type: :string},
     "missing ppl MAX" => %{key: "people_missing", type: :integer},
     "missing ppl" => %{key: "people_missing", type: :integer},
     "missing ppl CONFIRMED" => %{key: "people_missing", type: :integer},

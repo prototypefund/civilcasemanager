@@ -38,8 +38,7 @@ defmodule CaseManagerWeb.CaseLiveTest do
     disembarked_by: "some disembarked_by",
     outcome_actors: "some outcome_actors",
     followup_needed: true,
-    url: "some url",
-    cloud_file_links: "some cloud_file_links"
+    url: "some url"
   }
   @update_attrs %{
     name: "DC1001",
@@ -74,8 +73,7 @@ defmodule CaseManagerWeb.CaseLiveTest do
     disembarked_by: "some updated disembarked_by",
     outcome_actors: "some updated outcome_actors",
     followup_needed: false,
-    url: "some updated url",
-    cloud_file_links: "some updated cloud_file_links"
+    url: "some updated url"
   }
 
   @invalid_attrs %{

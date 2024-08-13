@@ -20,7 +20,6 @@ defmodule CaseManager.ImportedCasesFixtures do
         boat_notes: "some boat_notes",
         boat_number_of_engines: 42,
         boat_type: "some boat_type",
-        cloud_file_links: "some cloud_file_links",
         departure_region: "some departure_region",
         disembarked_by: "some disembarked_by",
         followup_needed: true,

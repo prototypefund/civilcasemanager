@@ -79,7 +79,6 @@
           <:item title="URLs">
             <%= if(@case.url, do: raw(@case.url |> String.replace("\n", "<br>"))) %>
           </:item>
-          <:item title="Cloud file links"><%= @case.cloud_file_links %></:item>
         </.list>
       </div>
     </div>

@@ -38,7 +38,6 @@ defmodule CaseManagerWeb.CaseLiveTest do
     place_of_disembarkation: "Salerno",
     disembarked_by: "some disembarked_by",
     outcome_actors: "some outcome_actors",
-    frontext_involvement: "some frontext_involvement",
     followup_needed: true,
     url: "some url",
     cloud_file_links: "some cloud_file_links"
@@ -76,7 +75,6 @@ defmodule CaseManagerWeb.CaseLiveTest do
     place_of_disembarkation: "Bari",
     disembarked_by: "some updated disembarked_by",
     outcome_actors: "some updated outcome_actors",
-    frontext_involvement: "some updated frontext_involvement",
     followup_needed: false,
     url: "some updated url",
     cloud_file_links: "some updated cloud_file_links"

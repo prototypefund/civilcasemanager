@@ -25,7 +25,6 @@ defmodule CaseManager.ImportedCasesFixtures do
         departure_region: "some departure_region",
         disembarked_by: "some disembarked_by",
         followup_needed: true,
-        frontext_involvement: "some frontext_involvement",
         imported_from: "some imported_from",
         name: "some name",
         notes: "some notes",

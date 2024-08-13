@@ -360,12 +360,6 @@ defmodule CaseManagerWeb.CaseForm do
           label="Outcome Actors"
           force_validate={@validate_now}
         />
-        <.input
-          field={@form[:frontext_involvement]}
-          type="text"
-          label="Frontext Involvement"
-          force_validate={@validate_now}
-        />
 
         <%= if assigns[:imported_case] && @imported_case.followup_needed_string do %>
           <.parsing_hint field_name="Followup needed">

@@ -59,7 +59,6 @@ defmodule CaseManager.CasesTest do
       place_of_disembarkation: "Salerno",
       disembarked_by: "some disembarked_by",
       outcome_actors: "some outcome_actors",
-      frontext_involvement: "some frontext_involvement",
       followup_needed: true,
       url: "some url",
       cloud_file_links: "some cloud_file_links"
@@ -110,7 +109,6 @@ defmodule CaseManager.CasesTest do
       assert case.place_of_disembarkation == "Salerno"
       assert case.disembarked_by == "some disembarked_by"
       assert case.outcome_actors == "some outcome_actors"
-      assert case.frontext_involvement == "some frontext_involvement"
       assert case.followup_needed == true
       assert case.url == "some url"
       assert case.cloud_file_links == "some cloud_file_links"
@@ -157,7 +155,6 @@ defmodule CaseManager.CasesTest do
         place_of_disembarkation: "Salento",
         disembarked_by: "some updated disembarked_by",
         outcome_actors: "some updated outcome_actors",
-        frontext_involvement: "some updated frontext_involvement",
         followup_needed: true,
         url: "some updated url",
         cloud_file_links: "some updated cloud_file_links"
@@ -198,7 +195,6 @@ defmodule CaseManager.CasesTest do
       assert case.place_of_disembarkation == "Salento"
       assert case.disembarked_by == "some updated disembarked_by"
       assert case.outcome_actors == "some updated outcome_actors"
-      assert case.frontext_involvement == "some updated frontext_involvement"
       assert case.followup_needed == true
       assert case.url == "some updated url"
       assert case.cloud_file_links == "some updated cloud_file_links"

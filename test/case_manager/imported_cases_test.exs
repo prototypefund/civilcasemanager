@@ -24,7 +24,6 @@ defmodule CaseManager.ImportedCasesTest do
       sar_region: nil,
       time_of_disembarkation: nil,
       confirmation_by: nil,
-      frontext_involvement: nil,
       pob_total: nil,
       status: nil,
       pob_medical_cases: nil,
@@ -77,7 +76,6 @@ defmodule CaseManager.ImportedCasesTest do
         sar_region: "some sar_region",
         time_of_disembarkation: ~U[2024-07-09 08:22:00Z],
         confirmation_by: "some confirmation_by",
-        frontext_involvement: "some frontext_involvement",
         pob_total: 42,
         status: "some status",
         pob_medical_cases: 42,
@@ -129,7 +127,6 @@ defmodule CaseManager.ImportedCasesTest do
       assert imported_case.pob_medical_cases == 42
       assert imported_case.status == "some status"
       assert imported_case.pob_total == 42
-      assert imported_case.frontext_involvement == "some frontext_involvement"
       assert imported_case.confirmation_by == "some confirmation_by"
       assert imported_case.time_of_disembarkation == ~U[2024-07-09 08:22:00Z]
       assert imported_case.sar_region == "some sar_region"
@@ -169,7 +166,6 @@ defmodule CaseManager.ImportedCasesTest do
         sar_region: "some updated sar_region",
         time_of_disembarkation: ~U[2024-07-10 08:22:00Z],
         confirmation_by: "some updated confirmation_by",
-        frontext_involvement: "some updated frontext_involvement",
         pob_total: 43,
         status: "some updated status",
         pob_medical_cases: 43,
@@ -223,7 +219,6 @@ defmodule CaseManager.ImportedCasesTest do
       assert imported_case.pob_medical_cases == 43
       assert imported_case.status == "some updated status"
       assert imported_case.pob_total == 43
-      assert imported_case.frontext_involvement == "some updated frontext_involvement"
       assert imported_case.confirmation_by == "some updated confirmation_by"
       assert imported_case.time_of_disembarkation == ~U[2024-07-10 08:22:00Z]
       assert imported_case.sar_region == "some updated sar_region"

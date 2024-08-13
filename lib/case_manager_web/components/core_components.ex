@@ -74,6 +74,7 @@ defmodule CaseManagerWeb.CoreComponents do
               <div class="absolute top-6 right-5">
                 <button
                   phx-click={JS.exec("data-cancel", to: "##{@id}")}
+                  data-confirm="Changes will be lost, are you sure?"
                   type="button"
                   class="-m-3 flex-none p-3 opacity-20 hover:opacity-40"
                   aria-label={gettext("close")}

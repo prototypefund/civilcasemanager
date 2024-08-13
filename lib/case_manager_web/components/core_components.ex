@@ -69,7 +69,6 @@ defmodule CaseManagerWeb.CoreComponents do
               id={"#{@id}-container"}
               phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
               phx-key="escape"
-              phx-click-away={JS.exec("data-cancel", to: "##{@id}")}
               class="shadow-zinc-700/10 ring-zinc-700/10 relative hidden rounded-2xl bg-white dark:bg-black p-14 shadow-lg ring-1 transition"
             >
               <div class="absolute top-6 right-5">

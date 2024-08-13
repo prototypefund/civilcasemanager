@@ -18,7 +18,9 @@
       </.header>
       <div class="pb-8 pr-4">
         <.list>
-          <:item title="Notes"><%= @case.notes %></:item>
+          <:item title="Notes">
+            <%= if(@case.notes, do: raw(@case.notes |> String.replace("\n", "<br>"))) %>
+          </:item>
           <:item title="Created at"><%= @case.created_at %></:item>
           <:item title="Status"><%= @case.status %></:item>
           <:item title="Occured at"><%= @case.occurred_at %></:item>

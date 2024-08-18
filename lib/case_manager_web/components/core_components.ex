@@ -350,7 +350,9 @@ defmodule CaseManagerWeb.CoreComponents do
   def input(%{type: "select"} = assigns) do
     ~H"""
     <div class={["flex items-center gap-4 break-inside-avoid", @wrapper_class]}>
-      <.label for={@id} class={@label_class}><%= @label %></.label>
+      <.label :if={@label} for={@id} class={@label_class}>
+        <%= @label %>
+      </.label>
       <select
         id={@id}
         name={@name}
@@ -487,15 +489,17 @@ defmodule CaseManagerWeb.CoreComponents do
 
   def label(assigns) do
     ~H"""
-    <label
-      for={@for}
-      class={[
-        "block text-sm font-semibold leading-5 text-zinc-800 dark:text-zinc-200 w-28 shrink-0",
-        @class
-      ]}
-    >
-      <%= render_slot(@inner_block) %>
-    </label>
+    <%= if (@inner_block) do %>
+      <label
+        for={@for}
+        class={[
+          "block text-sm font-semibold leading-5 text-zinc-800 dark:text-zinc-200 w-28 shrink-0",
+          @class
+        ]}
+      >
+        <%= render_slot(@inner_block) %>
+      </label>
+    <% end %>
     """
   end
 

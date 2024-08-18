@@ -98,5 +98,63 @@ defmodule CaseManager.FormOptionsTest do
 
       assert result == expected
     end
+
+    test "value_in_list? returns true when option is in allowed options" do
+      allowed_options = ["Option1", "Option2"]
+      current_value = "Option1"
+      assert FormOptions.value_in_list?(current_value, allowed_options) == true
+    end
+
+    test "value_in_list? returns false when option is not in allowed options" do
+      allowed_options = ["Option1", "Option2"]
+      current_value = "Option3"
+      assert FormOptions.value_in_list?(current_value, allowed_options) == false
+    end
+
+    test "value_in_list? handles nested lists in allowed options" do
+      allowed_options = [colors: ["red", "green"], material: ["wood", "plastic"]]
+      current_value = "red"
+      assert FormOptions.value_in_list?(current_value, allowed_options) == true
+    end
+
+    test "value_in_list? handles atom values" do
+      allowed_options = [:option1, :option2]
+      current_value = :option1
+      assert FormOptions.value_in_list?(current_value, allowed_options) == true
+    end
+
+    test "value_in_list? works for options with keyword list" do
+      allowed_options = [
+        Afghanistan: :AF,
+        "Åland Islands": :AX,
+        Albania: :AL,
+        Algeria: :DZ,
+        "American Samoa": :AS
+      ]
+
+      assert FormOptions.value_in_list?(:AF, allowed_options)
+      assert FormOptions.value_in_list?(:AX, allowed_options)
+    end
+
+    test "value_in_list? works for nested options with keyword list" do
+      allowed_options = [
+        countries: [
+          Afghanistan: :AF,
+          "Åland Islands": :AX,
+          Albania: :AL,
+          Algeria: :DZ,
+          "American Samoa": :AS
+        ],
+        other_countries: [
+          Antarctica: :AQ,
+          Argentina: :AR,
+          Armenia: :AM,
+          Aruba: :AW
+        ]
+      ]
+
+      assert FormOptions.value_in_list?(:AF, allowed_options)
+      assert FormOptions.value_in_list?(:AX, allowed_options)
+    end
   end
 end

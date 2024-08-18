@@ -48,7 +48,8 @@ defmodule CaseManagerWeb.FormOptions do
     atom_or_string = to_atom_if_exists(current_value)
 
     if atom_or_string do
-      valid = valid_option?(allowed_options, string, atom_or_string)
+      valid =
+        value_in_list?(atom_or_string, allowed_options) || value_in_list?(string, allowed_options)
 
       if valid do
         allowed_options
@@ -66,29 +67,26 @@ defmodule CaseManagerWeb.FormOptions do
   end
 
   @doc """
-  Checks if the given option is valid in the list of allowed options.
-  The function checks for validity both as a string and as an atom.
-
-  ## Parameters
-
-    - allowed_options: List of allowed options
-    - current_value: The value to check for validity
-    - processed: The atom representation of current_value (if it exists)
-
-  ## Returns
-
-    - true if the option is valid, false otherwise
+  Recursively checks if the given value is in the list of allowed options.
   """
+  def value_in_list?(value, list) when is_list(list) do
+    check_value(value, list)
+  end
 
-  def valid_option?(allowed_options, current_value, processed) do
-    Enum.any?(allowed_options, fn
-      {_key, values}
-      when is_list(values) ->
-        processed in values || current_value in values
+  defp check_value(value, [{_group, items} | tail]) when is_list(items) do
+    check_value(value, items) or check_value(value, tail)
+  end
 
-      value ->
-        processed == value || current_value == value
-    end)
+  defp check_value(value, [{_name, item} | tail]) do
+    value == item or check_value(value, tail)
+  end
+
+  defp check_value(value, [head | tail]) do
+    value == head or check_value(value, tail)
+  end
+
+  defp check_value(_value, []) do
+    false
   end
 
   defp to_atom_if_exists(nil), do: nil

@@ -61,7 +61,13 @@
           <:item title="Medical cases"><%= @case.pob_medical_cases %></:item>
           <:item title="People dead"><%= @case.people_dead %></:item>
           <:item title="People missing"><%= @case.people_missing %></:item>
-          <:item title="Per nationality"><%= @case.pob_per_nationality %></:item>
+          <:item title="Per nationality">
+            <%= if !Enum.empty?(@case.nationalities) do %>
+              <.nationalities_summary nationalities={@case.nationalities} />
+            <% else %>
+              <%= @case.pob_per_nationality %>
+            <% end %>
+          </:item>
         </.list>
         <.h1 class="dark:text-indigo-300 text-indigo-600 pt-8">Outcome</.h1>
         <.list>

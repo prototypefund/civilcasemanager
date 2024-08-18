@@ -87,7 +87,7 @@ defmodule CaseManager.Cases do
       Repo.one!(
         from c in Case,
           where: c.id == ^id,
-          preload: ^if(preload, do: [:events, :positions], else: [])
+          preload: ^if(preload, do: [:events, :positions, :nationalities], else: [])
       )
 
     if preload, do: populate_shortcodes(case), else: case

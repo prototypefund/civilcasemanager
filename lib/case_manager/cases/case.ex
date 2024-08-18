@@ -4,6 +4,8 @@ defmodule CaseManager.Cases.Case do
   import Ecto.Changeset
   import CaseManager.ChangesetValidators
 
+  alias CaseManager.CaseNationalities.CaseNationality
+
   @derive {
     Flop.Schema,
     filterable: [:status, :name],
@@ -102,6 +104,8 @@ defmodule CaseManager.Cases.Case do
     field :people_dead, :integer
     field :people_missing, :integer
     field :pob_per_nationality, :string
+
+    has_many :nationalities, CaseNationality, on_replace: :delete
 
     ## Outcome
 
@@ -206,6 +210,10 @@ defmodule CaseManager.Cases.Case do
     |> cast_assoc(:positions,
       sort_param: :positions_sort,
       drop_param: :positions_drop
+    )
+    |> cast_assoc(:nationalities,
+      sort_param: :nationalities_sort,
+      drop_param: :nationalities_drop
     )
 
     # |> put_timestamp_if_nil(:opened_at)

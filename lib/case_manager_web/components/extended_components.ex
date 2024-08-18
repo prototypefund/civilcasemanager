@@ -37,4 +37,25 @@ defmodule CaseManagerWeb.ExtendedComponents do
     </.form>
     """
   end
+
+  attr :nationalities, :list, required: true
+  attr :use_bold, :boolean, default: false
+
+  def nationalities_summary(assigns) do
+    ~H"""
+    <%= if is_list(@nationalities) do %>
+      <%= for {%CaseManager.CaseNationalities.CaseNationality{} = nat, index} <- Enum.with_index(@nationalities) do %>
+        <%= if index > 0 do %>
+          ,
+        <% end %>
+        <span class={@use_bold && "font-bold"}>
+          <%= CaseManager.CountryCodes.get_full_name(nat.country) %>:
+        </span>
+        <%= nat.count || "?" %>
+      <% end %>
+    <% else %>
+      None
+    <% end %>
+    """
+  end
 end

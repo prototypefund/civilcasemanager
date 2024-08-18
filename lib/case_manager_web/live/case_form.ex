@@ -307,13 +307,57 @@ defmodule CaseManagerWeb.CaseForm do
             wrapper_class="w-2/5 flex-grow"
             force_validate={true}
           />
-          <.input
-            field={@form[:pob_per_nationality]}
-            type="text"
-            label="Per nationality"
-            wrapper_class="w-2/5 flex-grow"
-            force_validate={true}
-          />
+        </div>
+        <h2 class="dark:text-indigo-300 text-indigo-600 pt-4 font-semibold">
+          Nationalities on Board
+        </h2>
+        <%= if assigns[:imported_case] && @imported_case.pob_per_nationality do %>
+          <.parsing_hint field_name="Nationalities">
+            <%= @imported_case.pob_per_nationality %>
+          </.parsing_hint>
+        <% end %>
+        <div id="nationalities-container">
+          <details>
+            <summary>
+              <.nationalities_summary nationalities={@case.nationalities} use_bold={true} />
+            </summary>
+            <.inputs_for :let={f_nat} field={@form[:nationalities]}>
+              <div class="flex items-center space-x-2 mb-2" id={"nationality-#{f_nat.index}"}>
+                <.input
+                  field={f_nat[:country]}
+                  type="select"
+                  options={CaseManager.CountryCodes.get_country_codes()}
+                />
+                <.input
+                  field={f_nat[:count]}
+                  type="number"
+                  min="0"
+                  placeholder="Leave empty if unknown"
+                />
+                <button
+                  type="button"
+                  name="case[nationalities_drop][]"
+                  value={f_nat.index}
+                  class="w-9 h-9 mt-2 bg-rose-600 hover:bg-rose-700 rounded-lg py-1 px-2"
+                  phx-click={JS.dispatch("change")}
+                >
+                  <.icon name="hero-trash" class="w-5 h-5 text-white" />
+                </button>
+              </div>
+            </.inputs_for>
+            <button
+              type="button"
+              name="case[nationalities_sort][]"
+              value="new"
+              phx-click={JS.dispatch("change")}
+              class={[
+                "phx-submit-loading:opacity-75 rounded-lg bg-emerald-600 hover:dark:bg-emerald-700  py-2 px-3",
+                "text-sm font-semibold leading-5 text-white active:text-white/80"
+              ]}
+            >
+              Add Nationality
+            </button>
+          </details>
         </div>
 
         <h1 class="dark:text-indigo-300 text-indigo-600 pt-8 font-semibold">Outcome</h1>

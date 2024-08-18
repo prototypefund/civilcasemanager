@@ -7,8 +7,6 @@ defmodule CaseManagerWeb.CaseLive.Index do
   alias CaseManager.Cases.Case
   import CaseManagerWeb.LiveUtils
 
-  import CaseManagerWeb.LiveComponents
-
   @impl true
   def mount(_params, _session, socket) do
     if connected?(socket), do: Cases.subscribe()

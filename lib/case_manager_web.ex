@@ -85,6 +85,7 @@ defmodule CaseManagerWeb do
       import Phoenix.HTML
       # Core UI components and translation
       import CaseManagerWeb.CoreComponents
+      import CaseManagerWeb.ExtendedComponents
       import CaseManagerWeb.Gettext
 
       # Shortcut for generating JS commands

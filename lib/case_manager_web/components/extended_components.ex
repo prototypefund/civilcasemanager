@@ -1,4 +1,4 @@
-defmodule CaseManagerWeb.LiveComponents do
+defmodule CaseManagerWeb.ExtendedComponents do
   use Phoenix.Component
 
   import Flop.Phoenix

@@ -73,7 +73,6 @@ defmodule CaseManagerWeb.Router do
       on_mount: [{CaseManagerWeb.UserLive.Auth, :redirect_if_user_is_authenticated}] do
       live "/users/log_in", UserLive.Login, :new
       live "/users/reset_password", UserLive.ForgotPassword, :new
-      live "/users/reset_password/:token", UserLive.ResetPassword, :edit
     end
 
     post "/users/log_in", UserLive.SessionController, :create

@@ -18,7 +18,7 @@ defmodule CaseManagerWeb.CaseLive.Edit do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:case, Cases.get_case!(id))
+     |> assign(:case, case)
      |> stream(:assoc_events, events)
      |> stream(:assoc_positions, positions)}
   end

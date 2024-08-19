@@ -2,10 +2,10 @@ import Config
 
 # Configure your database
 config :case_manager, CaseManager.Repo,
-  username: "dev",
-  password: "dev",
+  username: "casemanager",
+  password: "casemanager",
   hostname: "localhost",
-  database: "sarchive",
+  database: "casemanager",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10,

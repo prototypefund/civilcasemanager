@@ -17,7 +17,7 @@ defmodule CaseManager.CaseNationalities.CaseNationality do
   def changeset(case_nationality, attrs) do
     case_nationality
     |> cast(attrs, [:country, :count, :case_id])
-    |> validate_required([:country, :case_id])
+    |> validate_required([:country])
     |> validate_exclusion(:country, ["unknown", :unknown], message: "Country cannot be 'unknown'")
   end
 end

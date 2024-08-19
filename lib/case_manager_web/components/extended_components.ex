@@ -38,12 +38,12 @@ defmodule CaseManagerWeb.ExtendedComponents do
     """
   end
 
-  attr :nationalities, :list, required: true
+  attr :nationalities, :any, required: true
   attr :use_bold, :boolean, default: false
 
   def nationalities_summary(assigns) do
     ~H"""
-    <%= if is_list(@nationalities) do %>
+    <%= if is_list(@nationalities) and length(@nationalities) > 0 do %>
       <%= for {%CaseManager.CaseNationalities.CaseNationality{} = nat, index} <- Enum.with_index(@nationalities) do %>
         <%= if index > 0 do %>
           ,

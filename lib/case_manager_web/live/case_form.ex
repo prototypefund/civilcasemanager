@@ -357,6 +357,7 @@ defmodule CaseManagerWeb.CaseForm do
             >
               Add Nationality
             </button>
+            <input type="hidden" name="case[nationalities_drop][]" />
           </details>
         </div>
 

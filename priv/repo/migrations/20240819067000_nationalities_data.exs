@@ -2,7 +2,6 @@ defmodule CaseManager.Repo.Migrations.NationalitiesData do
   use Ecto.Migration
 
   use Ecto.Migration
-  import Ecto.Query
   import CaseManager.CaseNationalities
 
   def up do

@@ -22,6 +22,7 @@ defmodule CaseManager.Repo.Migrations.PlacesMigrateData do
     "Khoms" => "al-Khums",
     "Sabratha" => "Sabratah",
     "Sabrathah" => "Sabratah",
+    "SABRATAH" => "Sabratah",
     "Sfax, Tunisia" => "Sfax",
     "Tajoura" => "Tajura",
     "Tipoli" => "Tripoli",

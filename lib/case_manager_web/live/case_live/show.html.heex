@@ -19,7 +19,7 @@
       <div class="pb-8 pr-4">
         <.list>
           <:item title="Notes">
-            <%= if(@case.notes, do: raw(@case.notes |> String.replace("\n", "<br>"))) %>
+            <.print_with_linebreaks text={@case.notes} />
           </:item>
           <:item title="Created at"><%= @case.created_at %></:item>
           <:item title="Status"><%= @case.status %></:item>
@@ -83,7 +83,7 @@
         <.list>
           <:item title="Imported from"><%= @case.imported_from %></:item>
           <:item title="URLs">
-            <%= if(@case.url, do: raw(@case.url |> String.replace("\n", "<br>"))) %>
+            <.print_with_linebreaks text={@case.url} />
           </:item>
         </.list>
       </div>

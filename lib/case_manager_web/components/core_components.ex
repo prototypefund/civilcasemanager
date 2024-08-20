@@ -533,6 +533,24 @@ defmodule CaseManagerWeb.CoreComponents do
   end
 
   @doc """
+  Renders a component that splits a string if not nil and intersperses it with <br>.
+  """
+  attr :text, :string, default: ""
+
+  def print_with_linebreaks(assigns) do
+    ~H"""
+    <%= if @text do %>
+      <.intersperse :let={line} enum={@text |> String.split("\n")}>
+        <:separator>
+          <br />
+        </:separator>
+        <%= line %>
+      </.intersperse>
+    <% end %>
+    """
+  end
+
+  @doc """
   Renders a header with title.
   """
   attr :class, :string, default: nil

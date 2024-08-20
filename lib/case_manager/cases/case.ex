@@ -33,9 +33,18 @@ defmodule CaseManager.Cases.Case do
 
     field :occurred_at, :utc_datetime
 
-    ## Depature
+    ## Departure
     field :departure_region, :string
+
+    ### Deprecated
     field :place_of_departure, :string
+
+    belongs_to :departure_place,
+               CaseManager.Places.Place,
+               foreign_key: :departure_key,
+               type: :string,
+               references: :name
+
     field :time_of_departure, :utc_datetime
 
     field :sar_region, Ecto.Enum,
@@ -131,7 +140,16 @@ defmodule CaseManager.Cases.Case do
       ]
 
     field :time_of_disembarkation, :utc_datetime
+
+    ### Deprecated
     field :place_of_disembarkation, :string
+
+    belongs_to :arrival_place,
+               CaseManager.Places.Place,
+               foreign_key: :arrival_key,
+               type: :string,
+               references: :name
+
     field :disembarked_by, :string
     field :outcome_actors, :string
     field :frontext_involvement, :string
@@ -165,6 +183,7 @@ defmodule CaseManager.Cases.Case do
       :occurred_at,
       :departure_region,
       :place_of_departure,
+      :departure_key,
       :time_of_departure,
       :sar_region,
       :phonenumber,
@@ -191,6 +210,7 @@ defmodule CaseManager.Cases.Case do
       :outcome,
       :time_of_disembarkation,
       :place_of_disembarkation,
+      :arrival_key,
       :disembarked_by,
       :outcome_actors,
       :frontext_involvement,

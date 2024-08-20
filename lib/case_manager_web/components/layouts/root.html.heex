@@ -20,6 +20,7 @@
             <%= if @current_user do %>
               <a href={~p"/cases"} class="mx-2 hover:text-zinc-300">Cases</a>
               <a href={~p"/imported_cases"} class="mx-2 hover:text-zinc-300">Import Queue</a>
+              <a href={~p"/places"} class="mx-2 hover:text-zinc-300">Places</a>
 
               <a
                 :if={@current_user.role == :admin}

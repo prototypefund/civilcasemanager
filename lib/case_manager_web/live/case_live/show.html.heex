@@ -27,8 +27,13 @@
         </.list>
         <.h1 class="dark:text-indigo-300 text-indigo-600 pt-8">Departure</.h1>
         <.list>
-          <:item title="Departure region"><%= @case.departure_region %></:item>
-          <:item title="Place of departure"><%= @case.place_of_departure %></:item>
+          <:item :if={!@case.departure_key} title="Departure region">
+            <%= @case.departure_region %>
+          </:item>
+
+          <:item title="Place of departure">
+            <%= @case.departure_key || @case.place_of_departure %>
+          </:item>
           <:item title="Time of departure"><%= @case.time_of_departure %></:item>
           <:item title="SAR region"><%= @case.sar_region %></:item>
         </.list>
@@ -72,7 +77,10 @@
         <.h1 class="dark:text-indigo-300 text-indigo-600 pt-8">Outcome</.h1>
         <.list>
           <:item title="Time of disembarkation"><%= @case.time_of_disembarkation %></:item>
-          <:item title="Place of disembarkation"><%= @case.place_of_disembarkation %></:item>
+
+          <:item title="Place of arrival">
+            <%= @case.arrival_key || @case.place_of_disembarkation %>
+          </:item>
           <:item title="Disembarked by"><%= @case.disembarked_by %></:item>
           <:item title="Outcome actors"><%= @case.outcome_actors %></:item>
           <:item title="Outcome"><%= @case.outcome %></:item>

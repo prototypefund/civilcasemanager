@@ -71,19 +71,33 @@ defmodule CaseManagerWeb.CaseForm do
           </.parsing_hint>
         <% end %>
         <h1 class="dark:text-indigo-300 text-indigo-600 pt-8 font-semibold">Departure</h1>
+
+        <%= if !@case.departure_key do %>
+          <.input
+            field={@form[:departure_region]}
+            type="select"
+            label="Departure Region"
+            options={CaseManager.Places.valid_departure_regions()}
+            add_invalid_options={true}
+            force_validate={@validate_now}
+          />
+        <% end %>
+        <%= if @case.place_of_departure do %>
+          <.parsing_hint use_structured={true}>
+            <%= @case.place_of_departure %>
+          </.parsing_hint>
+          <.input
+            field={@form[:place_of_departure]}
+            type="text"
+            label="Place of departure custom value"
+          />
+        <% end %>
         <.input
-          field={@form[:departure_region]}
+          field={@form[:departure_key]}
           type="select"
-          label="Departure Region"
-          options={CaseManager.Places.valid_departure_regions()}
-          force_validate={@validate_now}
-        />
-        <.input
-          field={@form[:place_of_departure]}
-          type="select"
-          label="Place of Departure"
-          options={CaseManager.Places.valid_departure_places()}
-          force_validate={@validate_now}
+          label="Departure Place"
+          prompt="Select departure place"
+          options={CaseManager.Places.get_places_for_select(:departure)}
         />
         <.input
           field={@form[:time_of_departure]}
@@ -97,6 +111,7 @@ defmodule CaseManagerWeb.CaseForm do
           type="select"
           label="SAR Region"
           options={Ecto.Enum.values(CaseManager.Cases.Case, :sar_region)}
+          add_invalid_options={true}
         />
 
         <div class="flex between items-baseline justify-between">
@@ -181,6 +196,7 @@ defmodule CaseManagerWeb.CaseForm do
           type="select"
           label="Boat Type"
           options={Ecto.Enum.values(CaseManager.Cases.Case, :boat_type)}
+          add_invalid_options={true}
         />
         <.input
           field={@form[:boat_notes]}
@@ -193,12 +209,14 @@ defmodule CaseManagerWeb.CaseForm do
           type="select"
           label="Boat Color"
           options={Ecto.Enum.values(CaseManager.Cases.Case, :boat_color)}
+          add_invalid_options={true}
         />
         <.input
           field={@form[:boat_engine_failure]}
           type="radiogroup"
           label="Boat Engine Failed"
           options={Ecto.Enum.values(CaseManager.Cases.Case, :boat_engine_failure)}
+          add_invalid_options={true}
           force_validate={@validate_now}
         />
 
@@ -327,6 +345,7 @@ defmodule CaseManagerWeb.CaseForm do
                   field={f_nat[:country]}
                   type="select"
                   options={CaseManager.CountryCodes.get_country_codes()}
+                  add_invalid_options={true}
                 />
                 <.input
                   field={f_nat[:count]}
@@ -367,6 +386,7 @@ defmodule CaseManagerWeb.CaseForm do
           type="select"
           label="Outcome"
           options={Ecto.Enum.values(CaseManager.Cases.Case, :outcome)}
+          add_invalid_options={true}
         />
 
         <%= if assigns[:imported_case] && @imported_case.time_of_disembarkation_string do %>
@@ -380,12 +400,23 @@ defmodule CaseManagerWeb.CaseForm do
           type="datetime-local"
           label="Time of Disembarkation"
         />
+
+        <%= if @case.place_of_disembarkation do %>
+          <.parsing_hint field_name="Place of arrival" use_structured={true}>
+            <%= @case.place_of_disembarkation %>
+          </.parsing_hint>
+          <.input
+            field={@form[:place_of_disembarkation]}
+            type="text"
+            label="Place of arrival custom value"
+          />
+        <% end %>
         <.input
-          field={@form[:place_of_disembarkation]}
+          field={@form[:arrival_key]}
           type="select"
-          label="Place of Disembarkation"
-          options={CaseManager.Places.valid_disembarkation_places()}
-          force_validate={@validate_now}
+          label="Arrival Place"
+          prompt="Select arrival place"
+          options={CaseManager.Places.get_places_for_select(:arrival)}
         />
         <.input
           field={@form[:disembarked_by]}

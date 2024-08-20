@@ -292,6 +292,11 @@ defmodule CaseManagerWeb.CoreComponents do
   attr :checked, :boolean, doc: "the checked flag for checkbox inputs"
   attr :prompt, :string, default: nil, doc: "the prompt for select inputs"
   attr :options, :list, doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
+
+  attr :add_invalid_options, :boolean,
+    default: false,
+    doc: "Whether to preprocess the options to add the current value as an option"
+
   attr :multiple, :boolean, default: false, doc: "the multiple flag for select inputs"
   attr :class, :string, default: ""
   attr :wrapper_class, :string, default: ""
@@ -366,7 +371,11 @@ defmodule CaseManagerWeb.CoreComponents do
         {@rest}
       >
         <option :if={@prompt} value=""><%= @prompt %></option>
-        <%= CaseManagerWeb.FormOptions.options_for_select_with_invalid(@options, @value) %>
+        <%= if @add_invalid_options do %>
+          <%= CaseManagerWeb.FormOptions.options_for_select_with_invalid(@options, @value) %>
+        <% else %>
+          <%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
+        <% end %>
       </select>
       <.error :for={msg <- @errors}><%= msg %></.error>
     </div>
@@ -520,14 +529,19 @@ defmodule CaseManagerWeb.CoreComponents do
   @doc """
   Generates a hint if the data could not be processed automatically.
   """
-  attr :field_name, :string, required: true
+  attr :field_name, :string
+  attr :use_structured, :boolean, default: false
   slot :inner_block, required: true
 
   def parsing_hint(assigns) do
     ~H"""
     <.error>
-      Couldn't process the value for <%= @field_name %>:
-      <strong><%= render_slot(@inner_block) %></strong>
+      <%= if @use_structured do %>
+        An unknown place was set. Please choose an existing place and clear this field.
+      <% else %>
+        Couldn't process the value for <%= @field_name %>:
+        <strong><%= render_slot(@inner_block) %></strong>
+      <% end %>
     </.error>
     """
   end

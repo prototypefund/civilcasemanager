@@ -13,4 +13,12 @@ defmodule CaseManagerWeb.LiveUtils do
       page_links: {:ellipsis, 8}
     ]
   end
+
+  def to_slug(string) do
+    string
+    |> String.downcase()
+    |> String.replace(~r/[^a-z0-9\s-]/, "")
+    |> String.replace(~r/[\s-]+/, "-")
+    |> String.trim("-")
+  end
 end

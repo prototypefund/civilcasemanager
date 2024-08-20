@@ -60,6 +60,13 @@ defmodule CaseManagerWeb.Router do
       live "/imported_cases/:id/edit", ImportedCaseLive.Index, :edit
       live "/imported_cases/:id/validate", ImportedCaseLive.Validate, :import
 
+      live "/places", PlaceLive.Index, :index
+      live "/places/new", PlaceLive.Index, :new
+      live "/places/:id/edit", PlaceLive.Index, :edit
+
+      live "/places/:id", PlaceLive.Show, :show
+      live "/places/:id/show/edit", PlaceLive.Show, :edit
+
       live "/users/settings", UserLive.Settings, :edit
       live "/users/settings/confirm_email/:token", UserLive.Settings, :confirm_email
     end

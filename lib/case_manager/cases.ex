@@ -9,6 +9,7 @@ defmodule CaseManager.Cases do
   alias CaseManager.Repo
 
   alias CaseManager.Cases.Case
+  alias CaseManager.DeletedCases.DeletedCase
   alias CaseManager.Positions.Position
 
   @doc """
@@ -200,7 +201,17 @@ defmodule CaseManager.Cases do
 
   """
   def delete_case(%Case{} = case) do
-    Repo.delete(case)
+    Ecto.Multi.new()
+    |> Ecto.Multi.delete(:delete_case, case)
+    |> Ecto.Multi.insert(
+      :insert_case_in_deleted_table,
+      %DeletedCase{id: case.id}
+    )
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{delete_case: case, insert_case_in_deleted_table: _}} -> {:ok, case}
+      error -> error
+    end
   end
 
   @doc """

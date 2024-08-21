@@ -3,13 +3,12 @@ defmodule CaseManager.CasesTest do
 
   alias CaseManager.Cases
   alias CaseManager.ImportedCases
+  alias CaseManager.Cases.Case
+  alias CaseManager.DeletedCases.DeletedCase
+  import CaseManager.CasesFixtures
+  import CaseManager.ImportedCasesFixtures
 
   describe "cases" do
-    alias CaseManager.Cases.Case
-
-    import CaseManager.CasesFixtures
-    import CaseManager.ImportedCasesFixtures
-
     @invalid_attrs %{
       archived_at: nil,
       closed_at: nil,
@@ -202,6 +201,15 @@ defmodule CaseManager.CasesTest do
       case = case_fixture()
       assert {:ok, %Case{}} = Cases.delete_case(case)
       assert_raise Ecto.NoResultsError, fn -> Cases.get_case!(case.id) end
+    end
+
+    test "delete_case/1 creates an entry in deleted_cases" do
+      case = case_fixture()
+      {:ok, %Case{}} = Cases.delete_case(case)
+
+      deleted_case = Repo.get!(DeletedCase, case.id)
+      assert deleted_case != nil
+      assert deleted_case.id == case.id
     end
 
     test "change_case/1 returns a case changeset" do

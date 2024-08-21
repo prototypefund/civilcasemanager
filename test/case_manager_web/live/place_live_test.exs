@@ -4,7 +4,6 @@ defmodule CaseManagerWeb.PlaceLiveTest do
   import Phoenix.LiveViewTest
   import CaseManager.PlacesFixtures
   import CaseManagerWeb.LoginUtils
-  import CaseManagerWeb.LiveUtils, only: [to_slug: 1]
 
   @create_attrs %{
     name: "some name",
@@ -14,6 +13,7 @@ defmodule CaseManagerWeb.PlaceLiveTest do
     lon: "120.5"
   }
   @update_attrs %{
+    name: "some updated name",
     type: :arrival,
     country: "some updated country",
     lat: "56.7",
@@ -62,7 +62,7 @@ defmodule CaseManagerWeb.PlaceLiveTest do
     test "updates place in listing", %{conn: conn, place: place} do
       {:ok, index_live, _html} = live(conn, ~p"/places")
 
-      assert index_live |> element("#places-#{to_slug(place.name)} a", "Edit") |> render_click() =~
+      assert index_live |> element("#places-#{place.id} a", "Edit") |> render_click() =~
                "Edit Place"
 
       assert_patch(index_live, ~p"/places/#{place}/edit")
@@ -84,8 +84,8 @@ defmodule CaseManagerWeb.PlaceLiveTest do
     test "deletes place in listing", %{conn: conn, place: place} do
       {:ok, index_live, _html} = live(conn, ~p"/places")
 
-      assert index_live |> element("#places-#{to_slug(place.name)} a", "Delete") |> render_click()
-      refute has_element?(index_live, "#places-#{to_slug(place.name)}")
+      assert index_live |> element("#places-#{place.id} a", "Delete") |> render_click()
+      refute has_element?(index_live, "#places-#{place.id}")
     end
   end
 
@@ -119,7 +119,7 @@ defmodule CaseManagerWeb.PlaceLiveTest do
 
       html = render(show_live)
       assert html =~ "Place updated successfully"
-      assert html =~ "some updated country"
+      assert html =~ "some updated name"
     end
   end
 end

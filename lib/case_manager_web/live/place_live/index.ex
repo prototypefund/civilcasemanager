@@ -8,9 +8,6 @@ defmodule CaseManagerWeb.PlaceLive.Index do
   def mount(_params, _session, socket) do
     socket =
       socket
-      |> stream_configure(:places,
-        dom_id: &"places-#{CaseManagerWeb.LiveUtils.to_slug(&1.name)}"
-      )
       |> stream(:places, Places.list_places())
 
     {:ok, socket}

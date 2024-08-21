@@ -12,7 +12,7 @@ defmodule CaseManager.PlacesTest do
 
     test "get_place!/1 returns the place with given name" do
       place = place_fixture()
-      assert Places.get_place!(place.name) == place
+      assert Places.get_place!(place.id) == place
     end
 
     test "create_place/1 with valid data creates a place" do
@@ -57,13 +57,13 @@ defmodule CaseManager.PlacesTest do
     test "update_place/2 with invalid data returns error changeset" do
       place = place_fixture()
       assert {:error, %Ecto.Changeset{}} = Places.update_place(place, @invalid_attrs)
-      assert place == Places.get_place!(place.name)
+      assert place == Places.get_place!(place.id)
     end
 
     test "delete_place/1 deletes the place" do
       place = place_fixture()
       assert {:ok, %Place{}} = Places.delete_place(place)
-      assert_raise Ecto.NoResultsError, fn -> Places.get_place!(place.name) end
+      assert_raise Ecto.NoResultsError, fn -> Places.get_place!(place.id) end
     end
 
     test "change_place/1 returns a place changeset" do

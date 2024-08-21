@@ -72,7 +72,7 @@ defmodule CaseManagerWeb.CaseForm do
         <% end %>
         <h1 class="dark:text-indigo-300 text-indigo-600 pt-8 font-semibold">Departure</h1>
 
-        <%= if !@case.departure_key do %>
+        <%= if !@case.departure_id do %>
           <.input
             field={@form[:departure_region]}
             type="select"
@@ -93,7 +93,7 @@ defmodule CaseManagerWeb.CaseForm do
           />
         <% end %>
         <.input
-          field={@form[:departure_key]}
+          field={@form[:departure_id]}
           type="select"
           label="Departure Place"
           prompt="Select departure place"
@@ -412,7 +412,7 @@ defmodule CaseManagerWeb.CaseForm do
           />
         <% end %>
         <.input
-          field={@form[:arrival_key]}
+          field={@form[:arrival_id]}
           type="select"
           label="Arrival Place"
           prompt="Select arrival place"

@@ -41,9 +41,8 @@ defmodule CaseManager.Cases.Case do
 
     belongs_to :departure_place,
                CaseManager.Places.Place,
-               foreign_key: :departure_key,
-               type: :string,
-               references: :name
+               foreign_key: :departure_id,
+               type: :id
 
     field :time_of_departure, :utc_datetime
 
@@ -146,9 +145,8 @@ defmodule CaseManager.Cases.Case do
 
     belongs_to :arrival_place,
                CaseManager.Places.Place,
-               foreign_key: :arrival_key,
-               type: :string,
-               references: :name
+               foreign_key: :arrival_id,
+               type: :id
 
     field :disembarked_by, :string
     field :outcome_actors, :string
@@ -183,7 +181,7 @@ defmodule CaseManager.Cases.Case do
       :occurred_at,
       :departure_region,
       :place_of_departure,
-      :departure_key,
+      :departure_id,
       :time_of_departure,
       :sar_region,
       :phonenumber,
@@ -210,7 +208,7 @@ defmodule CaseManager.Cases.Case do
       :outcome,
       :time_of_disembarkation,
       :place_of_disembarkation,
-      :arrival_key,
+      :arrival_id,
       :disembarked_by,
       :outcome_actors,
       :frontext_involvement,

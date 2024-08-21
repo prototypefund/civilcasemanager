@@ -2,10 +2,8 @@ defmodule CaseManager.Places.Place do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @primary_key false
-  @derive {Phoenix.Param, key: :name}
   schema "places" do
-    field :name, :string, primary_key: true
+    field :name, :string
     field :country, :string
 
     field :sar_zone, Ecto.Enum,
@@ -25,6 +23,6 @@ defmodule CaseManager.Places.Place do
     place
     |> cast(attrs, [:name, :country, :lat, :lon, :type])
     |> validate_required([:name, :country, :lat, :lon, :type])
-    |> unique_constraint(:name)
+    |> unique_constraint([:name, :country])
   end
 end

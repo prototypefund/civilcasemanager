@@ -24,14 +24,14 @@ defmodule CaseManager.Places do
 
   ## Examples
 
-      iex> get_place!("Some Place")
+      iex> get_place!(3)
       %Place{}
 
-      iex> get_place!("Non-existent Place")
+      iex> get_place!(4235435)
       ** (Ecto.NoResultsError)
 
   """
-  def get_place!(name), do: Repo.get_by!(Place, name: name)
+  def get_place!(id), do: Repo.get!(Place, id)
 
   @doc """
   Creates a place.
@@ -115,7 +115,7 @@ defmodule CaseManager.Places do
   def get_places_for_select(type) do
     list_places()
     |> Enum.filter(&(&1.type in [type, :both]))
-    |> Enum.group_by(& &1.country, & &1.name)
+    |> Enum.group_by(& &1.country, &{&1.name, &1.id})
     |> Map.to_list()
   end
 

@@ -69,6 +69,8 @@ defmodule CaseManagerWeb.Router do
 
       live "/users/settings", UserLive.Settings, :edit
       live "/users/settings/confirm_email/:token", UserLive.Settings, :confirm_email
+
+      live "/maintenance", MaintenanceLive
     end
   end
 

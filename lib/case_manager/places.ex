@@ -126,6 +126,7 @@ defmodule CaseManager.Places do
       "Tunisia",
       "Lebanon",
       "Turkey",
-      "Syria"
+      "Syria",
+      "Egypt"
     ]
 end

@@ -16,7 +16,7 @@ defmodule CaseManagerWeb.MaintenanceLive do
   end
 
   defp run_maintenance(function) do
-    ExUnit.CaptureIO.capture_io(fn -> apply(DataQualityTools, function, []) end)
+    apply(DataQualityTools, function, [])
   end
 
   @impl true

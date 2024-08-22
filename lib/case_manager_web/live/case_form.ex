@@ -72,7 +72,7 @@ defmodule CaseManagerWeb.CaseForm do
         <% end %>
         <h1 class="dark:text-indigo-300 text-indigo-600 pt-8 font-semibold">Departure</h1>
 
-        <%= if !@case.departure_id do %>
+        <%= if !Ecto.Changeset.get_field(@form.source, :departure_id) do %>
           <.input
             field={@form[:departure_region]}
             type="select"
@@ -337,7 +337,10 @@ defmodule CaseManagerWeb.CaseForm do
         <div id="nationalities-container">
           <details>
             <summary>
-              <.nationalities_summary nationalities={@case.nationalities} use_bold={true} />
+              <.nationalities_summary
+                nationalities={Ecto.Changeset.get_field(@form.source, :nationalities)}
+                use_bold={true}
+              />
             </summary>
             <.inputs_for :let={f_nat} field={@form[:nationalities]}>
               <div class="flex items-center space-x-2 mb-2" id={"nationality-#{f_nat.index}"}>

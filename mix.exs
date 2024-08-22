@@ -67,7 +67,8 @@ defmodule CaseManager.MixProject do
       {:credo, "~> 1.7.7", only: [:dev, :test], runtime: false},
       {:sobelow, "~> 0.13.0", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
-      {:csv, "~> 3.2.1"}
+      {:csv, "~> 3.2.1"},
+      {:phoenix_live_dashboard, "~> 0.8.4-rc.0"}
     ]
   end
 

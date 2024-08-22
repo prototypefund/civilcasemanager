@@ -59,7 +59,9 @@ defmodule CaseManagerWeb.UserLive.FormComponent do
   end
 
   def handle_event("save", %{"user" => user_params}, socket) do
-    save_user(socket, socket.assigns.action, user_params)
+    CaseManagerWeb.UserLive.Auth.run_if_user_admin(socket, Accounts.User, fn ->
+      save_user(socket, socket.assigns.action, user_params)
+    end)
   end
 
   defp save_user(socket, :edit, user_params) do

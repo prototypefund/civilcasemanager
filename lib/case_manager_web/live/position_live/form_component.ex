@@ -54,17 +54,9 @@ defmodule CaseManagerWeb.PositionLive.FormComponent do
   end
 
   def handle_event("save", %{"position" => position_params}, socket) do
-    if socket.assigns.current_user.role != :readonly do
+    CaseManagerWeb.UserLive.Auth.run_if_user_can_write(socket, Positions.Position, fn ->
       save_position(socket, socket.assigns.action, position_params)
-    else
-      Logger.warning(
-        "User #{socket.assigns.current_user.email} tried to save positions, but is a read-only user."
-      )
-
-      {:noreply,
-       socket
-       |> put_flash(:error, "Method not allowed")}
-    end
+    end)
   end
 
   defp save_position(socket, :edit, position_params) do

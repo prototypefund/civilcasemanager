@@ -1,4 +1,5 @@
 defmodule CaseManagerWeb.MaintenanceLive do
+  alias CaseManagerWeb.MaintenanceLive
   use CaseManagerWeb, :live_view
   alias CaseManager.DataQualityTools
 
@@ -9,10 +10,10 @@ defmodule CaseManagerWeb.MaintenanceLive do
 
   @impl true
   def handle_event("run_maintenance", %{"function" => function}, socket) do
-    if socket.assigns.current_user.role == :admin do
+    CaseManagerWeb.UserLive.Auth.run_if_user_admin(socket, MaintenanceLive, fn ->
       output = run_maintenance(String.to_existing_atom(function))
       {:noreply, assign(socket, output: output)}
-    end
+    end)
   end
 
   defp run_maintenance(function) do

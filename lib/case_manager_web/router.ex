@@ -22,10 +22,11 @@ defmodule CaseManagerWeb.Router do
     pipe_through [:browser, :require_admin_user]
 
     live_session :require_admin_user,
-      on_mount: [{CaseManagerWeb.UserLive.Auth, :ensure_authenticated}] do
+      on_mount: [{CaseManagerWeb.UserLive.Auth, :ensure_admin}] do
       live "/users", UserLive.Index, :index
       live "/users/new", UserLive.Index, :new
       live "/users/:id/edit", UserLive.Index, :edit
+      live "/maintenance", MaintenanceLive
     end
   end
 
@@ -69,8 +70,6 @@ defmodule CaseManagerWeb.Router do
 
       live "/users/settings", UserLive.Settings, :edit
       live "/users/settings/confirm_email/:token", UserLive.Settings, :confirm_email
-
-      live "/maintenance", MaintenanceLive
     end
   end
 

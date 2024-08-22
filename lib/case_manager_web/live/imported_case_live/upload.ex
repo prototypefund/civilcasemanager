@@ -21,28 +21,30 @@ defmodule CaseManagerWeb.ImportedCaseLive.Upload do
 
   @impl Phoenix.LiveView
   def handle_event("save", _params, socket) do
-    uploaded_files =
-      consume_uploaded_entries(socket, :avatar, fn %{path: path}, _entry ->
-        File.stream!(path)
-        ## AP Template contains additional header in the first row
-        |> Stream.drop(1)
-        |> CSV.decode(headers: true)
-        ## In total there are two headers so we offset the index so that
-        ## the resulting row index is the same as in Excel.
-        |> Stream.with_index(2)
-        |> batch_import()
-      end)
-      |> hd()
+    CaseManagerWeb.UserLive.Auth.run_if_user_can_write(socket, Upload, fn ->
+      uploaded_files =
+        consume_uploaded_entries(socket, :avatar, fn %{path: path}, _entry ->
+          File.stream!(path)
+          ## AP Template contains additional header in the first row
+          |> Stream.drop(1)
+          |> CSV.decode(headers: true)
+          ## In total there are two headers so we offset the index so that
+          ## the resulting row index is the same as in Excel.
+          |> Stream.with_index(2)
+          |> batch_import()
+        end)
+        |> hd()
 
-    {result_code, result_string} =
-      analyse_import_result(uploaded_files) |> get_string_from_counts()
+      {result_code, result_string} =
+        analyse_import_result(uploaded_files) |> get_string_from_counts()
 
-    {
-      :noreply,
-      socket
-      |> update(:uploaded_files, &(&1 ++ uploaded_files))
-      |> put_flash(result_code, result_string)
-    }
+      {
+        :noreply,
+        socket
+        |> update(:uploaded_files, &(&1 ++ uploaded_files))
+        |> put_flash(result_code, result_string)
+      }
+    end)
   end
 
   ## Walk throught the enumerable and create a list of ImportedCase structs

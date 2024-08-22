@@ -491,18 +491,9 @@ defmodule CaseManagerWeb.CaseForm do
   end
 
   def handle_event("save", %{"case" => case_params}, socket) do
-    # Check user is not readonly
-    if socket.assigns.current_user.role != :readonly do
+    CaseManagerWeb.UserLive.Auth.run_if_user_can_write(socket, Cases.Case, fn ->
       save_case(socket, socket.assigns.action, case_params)
-    else
-      Logger.warning(
-        "User #{socket.assigns.current_user.email} tried to save case, but is a read-only user."
-      )
-
-      {:noreply,
-       socket
-       |> put_flash(:error, "Method not allowed")}
-    end
+    end)
   end
 
   defp save_case(socket, :edit, case_params) do

@@ -55,7 +55,9 @@ defmodule CaseManagerWeb.PlaceLive.FormComponent do
   end
 
   def handle_event("save", %{"place" => place_params}, socket) do
-    save_place(socket, socket.assigns.action, place_params)
+    CaseManagerWeb.UserLive.Auth.run_if_user_can_write(socket, Places.Place, fn ->
+      save_place(socket, socket.assigns.action, place_params)
+    end)
   end
 
   defp save_place(socket, :edit, place_params) do

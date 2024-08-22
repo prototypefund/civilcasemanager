@@ -65,17 +65,9 @@ defmodule CaseManagerWeb.EventLive.FormComponent do
   end
 
   def handle_event("save", %{"event" => event_params}, socket) do
-    if socket.assigns.current_user.role != :readonly do
+    CaseManagerWeb.UserLive.Auth.run_if_user_can_write(socket, Events.Event, fn ->
       save_event(socket, socket.assigns.action, event_params)
-    else
-      Logger.warning(
-        "User #{socket.assigns.current_user.email} tried to save event, but is a read-only user."
-      )
-
-      {:noreply,
-       socket
-       |> put_flash(:error, "Method not allowed")}
-    end
+    end)
   end
 
   defp save_event(socket, :edit, event_params) do

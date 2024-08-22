@@ -1,4 +1,6 @@
 defmodule CaseManagerWeb.UserLive.Auth do
+  require Logger
+
   use CaseManagerWeb, :verified_routes
 
   import Plug.Conn
@@ -170,7 +172,7 @@ defmodule CaseManagerWeb.UserLive.Auth do
     else
       socket =
         socket
-        |> Phoenix.LiveView.put_flash(:error, "You must log in to access this page.")
+        |> Phoenix.LiveView.put_flash(:error, "You must be admin to access this page.")
         |> Phoenix.LiveView.redirect(to: ~p"/users/log_in")
 
       {:halt, socket}
@@ -268,6 +270,28 @@ defmodule CaseManagerWeb.UserLive.Auth do
       |> maybe_store_return_to()
       |> redirect(to: ~p"/users/log_in")
       |> halt()
+    end
+  end
+
+  def run_if_user_can_write(socket, type, func) when is_function(func) do
+    run_if_user_meets_condition(socket, type, fn user -> user.role != :readonly end, func)
+  end
+
+  def run_if_user_admin(socket, type, func) when is_function(func) do
+    run_if_user_meets_condition(socket, type, fn user -> user.role == :admin end, func)
+  end
+
+  def run_if_user_meets_condition(socket, type, condition?, func) do
+    if condition?.(socket.assigns.current_user) do
+      func.()
+    else
+      Logger.warning(
+        "User #{socket.assigns.current_user.email} modify a #{type}, but doesn't have the required permissions"
+      )
+
+      {:noreply,
+       socket
+       |> put_flash(:error, "Method not allowed")}
     end
   end
 

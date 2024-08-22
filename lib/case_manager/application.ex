@@ -12,6 +12,13 @@ defmodule CaseManager.Application do
       CaseManager.Repo,
       {DNSCluster, query: Application.get_env(:case_manager, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: CaseManager.PubSub},
+      {EctoWatch,
+       repo: CaseManager.Repo,
+       pub_sub: CaseManager.PubSub,
+       watchers: [
+         {CaseManager.Cases.Case, :inserted}
+       ]},
+      CaseManager.DataQualityService,
       # Start the Finch HTTP client for sending emails
       {Finch, name: CaseManager.Finch},
       # Start the FetchCoordinator

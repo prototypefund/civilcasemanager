@@ -16,15 +16,18 @@ defmodule CaseManager.DataQualityTools do
     ]
   end
 
-  def fixup_nationality_strings do
-    IO.inspect("Fixing Nationality Strings")
+  def fixup_nationality_strings(case_id \\ nil) do
+    Logger.info("Fixing Nationality Strings")
 
-    cases =
+    query =
       CaseManager.Cases.Case
       |> where([c], not is_nil(c.pob_per_nationality))
-      |> CaseManager.Repo.all()
 
-    IO.puts("Found #{length(cases)} cases")
+    query = if case_id, do: query |> where([c], c.id == ^case_id), else: query
+
+    cases = CaseManager.Repo.all(query)
+
+    Logger.info("Found #{length(cases)} cases")
 
     Enum.each(cases, fn case ->
       case split_nationalities(case.pob_per_nationality) do
@@ -32,13 +35,12 @@ defmodule CaseManager.DataQualityTools do
           insert_nationalities(case.id, nationalities)
 
         {:error, msg} ->
-          IO.inspect(msg, label: "Error on case #{case.id}")
+          Logger.error("Error on case #{case.id}: #{inspect(msg)}")
       end
     end)
   end
 
   def insert_nationalities(case, nationalities) do
-    ## TODO Use ecto multi or similar to rollback if one of the inserts fails
     Enum.each(nationalities, fn nationality ->
       create_case_nationality(%{
         country: nationality.country,
@@ -59,20 +61,23 @@ defmodule CaseManager.DataQualityTools do
     Map.get(@correction_regions, misspelled_name, misspelled_name)
   end
 
-  def fixup_departure_regions do
-    IO.inspect("Fixing Departure Regions")
+  def fixup_departure_regions(case_id \\ nil) do
+    Logger.info("Fixing Departure Regions")
 
     departure_regions =
       CaseManager.Places.valid_departure_regions() |> Enum.reject(&(&1 == :unknown))
 
-    IO.inspect(departure_regions, label: "Known departure regions")
+    Logger.info("Known departure regions: #{inspect(departure_regions)}")
 
-    cases =
+    query =
       CaseManager.Cases.Case
       |> where([c], not is_nil(c.place_of_departure) and is_nil(c.departure_region))
-      |> CaseManager.Repo.all()
 
-    IO.inspect("Found #{length(cases)} potential cases")
+    query = if case_id, do: query |> where([c], c.id == ^case_id), else: query
+
+    cases = CaseManager.Repo.all(query)
+
+    Logger.info("Found #{length(cases)} potential cases")
 
     Enum.each(cases, fn case ->
       departure_region =
@@ -87,32 +92,39 @@ defmodule CaseManager.DataQualityTools do
           place_of_departure: nil
         })
 
-        IO.puts("Matched #{case.id} to #{departure_region}")
+        Logger.info("Matched #{case.id} to #{departure_region}")
       else
-        IO.inspect(case.place_of_departure, label: "No region could be matched for #{case.id}")
+        Logger.warning("No region could be matched for #{case.id}: #{case.place_of_departure}")
       end
     end)
   end
 
-  def clear_unknown_places() do
-    IO.inspect("Clearing Unknown Places")
+  def clear_unknown_places(case_id \\ nil) do
+    Logger.info("Clearing Unknown Places")
     unknown_values = ["unknown", "", "permanently unknown"]
 
-    disembarkation_count =
+    query =
       from(c in CaseManager.Cases.Case,
         where: fragment("LOWER(TRIM(?))", c.place_of_disembarkation) in ^unknown_values
       )
-      |> CaseManager.Repo.update_all(set: [place_of_disembarkation: nil])
 
-    IO.puts("Found #{elem(disembarkation_count, 0)} unknown places of disembarkation")
+    query = if case_id, do: query |> where([c], c.id == ^case_id), else: query
 
-    departure_count =
+    disembarkation_count =
+      query |> CaseManager.Repo.update_all(set: [place_of_disembarkation: nil])
+
+    Logger.info("Found #{elem(disembarkation_count, 0)} unknown places of disembarkation")
+
+    query =
       from(c in CaseManager.Cases.Case,
         where: fragment("LOWER(TRIM(?))", c.place_of_departure) in ^unknown_values
       )
-      |> CaseManager.Repo.update_all(set: [place_of_departure: nil])
 
-    IO.puts("Found #{elem(departure_count, 0)} unknown places of departure")
+    query = if case_id, do: query |> where([c], c.id == ^case_id), else: query
+
+    departure_count = query |> CaseManager.Repo.update_all(set: [place_of_departure: nil])
+
+    Logger.info("Found #{elem(departure_count, 0)} unknown places of departure")
   end
 
   @correction_map %{
@@ -181,29 +193,33 @@ defmodule CaseManager.DataQualityTools do
       |> Ecto.Changeset.change(%{old_field => nil, new_field => found_place.id})
       |> CaseManager.Repo.update()
     else
-      IO.inspect("Place not found: #{place_name}")
+      Logger.warning("Place not found: #{place_name}")
     end
   end
 
-  def migrate_places() do
-    IO.inspect("Migrating places to references")
+  def migrate_places(case_id \\ nil) do
+    Logger.info("Migrating places to references")
 
-    departure_cases =
-      CaseManager.Repo.all(
-        from c in CaseManager.Cases.Case,
-          where: not is_nil(c.place_of_departure),
-          select: {c.id, c.place_of_departure}
-      )
+    query =
+      from c in CaseManager.Cases.Case,
+        where: not is_nil(c.place_of_departure),
+        select: {c.id, c.place_of_departure}
 
-    IO.inspect("Found #{length(departure_cases)} departure cases")
+    query = if case_id, do: query |> where([c], c.id == ^case_id), else: query
+
+    departure_cases = CaseManager.Repo.all(query)
+
+    Logger.info("Found #{length(departure_cases)} departure cases")
     update_place_reference(departure_cases, :place_of_departure, :departure_id)
 
-    disembarkation_cases =
-      CaseManager.Repo.all(
-        from c in CaseManager.Cases.Case,
-          where: not is_nil(c.place_of_disembarkation),
-          select: {c.id, c.place_of_disembarkation}
-      )
+    query =
+      from c in CaseManager.Cases.Case,
+        where: not is_nil(c.place_of_disembarkation),
+        select: {c.id, c.place_of_disembarkation}
+
+    query = if case_id, do: query |> where([c], c.id == ^case_id), else: query
+
+    disembarkation_cases = CaseManager.Repo.all(query)
 
     update_place_reference(disembarkation_cases, :place_of_disembarkation, :arrival_id)
   end

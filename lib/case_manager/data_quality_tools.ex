@@ -2,6 +2,7 @@
 defmodule CaseManager.DataQualityTools do
   import CaseManager.CaseNationalities
   alias CaseManager.Cases
+  alias CaseManager.CaseNationalities.CaseNationality
 
   use Ecto.Migration
   import Ecto.Query, warn: false
@@ -14,6 +15,84 @@ defmodule CaseManager.DataQualityTools do
       {:clear_unknown_places, "Clear Unknown Places"},
       {:migrate_places, "Migrate places to references"}
     ]
+  end
+
+  @doc """
+  Splits a string in the format Countrycode:count,Countrycode:count into a list of CaseNationalities.
+
+  ## Examples
+
+      iex> split_nationalities("US:10,UK:5")
+      {:ok, [%CaseNationality{country_code: "US", count: 10}, %CaseNationality{country_code: "UK", count: 5}]}
+
+      iex> split_nationalities("US:-,UK:unknown")
+      {:ok, [%CaseNationality{country_code: "US", count: nil}, %CaseNationality{country_code: "UK", count: nil}]}
+
+      iex> split_nationalities("US:invalid")
+      {:error, "Invalid count for country code US"}
+
+      iex> split_nationalities("")
+      {:ok, []}
+
+  """
+  def split_nationalities(nil), do: {:ok, []}
+  def split_nationalities(""), do: {:ok, []}
+
+  def split_nationalities(string) when is_binary(string) do
+    result =
+      string
+      |> String.split(";")
+      |> Enum.map(&parse_individual_nationality/1)
+      |> Enum.reduce_while({:ok, []}, fn
+        {:ok, nationality}, {:ok, acc} -> {:cont, {:ok, [nationality | acc]}}
+        {:error, reason}, _ -> {:halt, {:error, reason}}
+      end)
+
+    case result do
+      {:ok, nationalities} -> {:ok, Enum.reverse(nationalities)}
+      error -> error
+    end
+  end
+
+  defp parse_individual_nationality(string) do
+    case String.split(string, ":") do
+      [country_code, count] when byte_size(country_code) == 2 ->
+        create_nationality_struct(country_code, count)
+
+      _ ->
+        {:error, "Invalid format: #{string}"}
+    end
+  end
+
+  defp parse_int_with_null(count) do
+    case count do
+      "x" ->
+        nil
+
+      "" ->
+        nil
+
+      "-" ->
+        nil
+
+      "unknown" ->
+        nil
+
+      _ ->
+        case Integer.parse(count) do
+          {int_count, ""} -> int_count
+          _ -> {:error, "Cannot parse #{count} into a number."}
+        end
+    end
+  end
+
+  defp create_nationality_struct(country_code, count) do
+    parsed_int = parse_int_with_null(count)
+
+    case parsed_int do
+      {:error, _} = error -> error
+      parsed_int -> {:ok, %CaseNationality{country: country_code, count: parsed_int}}
+    end
   end
 
   def fixup_nationality_strings(case_id \\ nil) do

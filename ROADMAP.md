@@ -17,14 +17,4 @@
 - [ ] cast_assoc doesnt accept [%Case{}] but only [%{}, while put_assoc does
 - [x] Params of Changeset are not logged.
 
-# Later
-* Also, should we maybe turn identifier into primary_id?
-
-## Maybe
-* DB: many_to_many :groups
-
-## Ideas
-if more advanced Access Control is needed:
-Permit
-
 

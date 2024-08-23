@@ -527,6 +527,20 @@ defmodule CaseManagerWeb.CoreComponents do
   end
 
   @doc """
+  Generates a generic warning message.
+  """
+  slot :inner_block, required: true
+
+  def warning(assigns) do
+    ~H"""
+    <p class="mt-1 flex gap-3 text-sm leading-5 text-amber-600 ">
+      <.icon name="hero-exclamation-triangle-mini" class="mt-0.5 h-5 w-5 flex-none" />
+      <%= render_slot(@inner_block) %>
+    </p>
+    """
+  end
+
+  @doc """
   Generates a hint if the data could not be processed automatically.
   """
   attr :field_name, :string

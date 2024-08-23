@@ -404,16 +404,6 @@ defmodule CaseManagerWeb.CaseForm do
           label="Time of Disembarkation"
         />
 
-        <%= if @case.place_of_disembarkation do %>
-          <.parsing_hint field_name="Place of arrival" use_structured={true}>
-            <%= @case.place_of_disembarkation %>
-          </.parsing_hint>
-          <.input
-            field={@form[:place_of_disembarkation]}
-            type="text"
-            label="Place of arrival custom value"
-          />
-        <% end %>
         <.input
           field={@form[:arrival_id]}
           type="select"
@@ -421,6 +411,12 @@ defmodule CaseManagerWeb.CaseForm do
           prompt="Select arrival place"
           options={CaseManager.Places.get_places_for_select(:arrival)}
         />
+        <%= if !Ecto.Changeset.get_field(@form.source, :arrival_id) do %>
+          <.warning :if={Ecto.Changeset.get_field(@form.source, :place_of_disembarkation)}>
+            Please use this field only for cases with multiple arrival ports. If this case has only one arrival port, please select it above and clear this field.
+          </.warning>
+          <.input field={@form[:place_of_disembarkation]} type="text" label="Multiple Arrival Places" />
+        <% end %>
         <.input
           field={@form[:disembarked_by]}
           type="text"

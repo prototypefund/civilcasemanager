@@ -242,8 +242,8 @@ defmodule CaseManager.DataQualityTools do
     "Tajoura" => "Tajura",
     "Tipoli" => "Tripoli",
     "Tripolis" => "Tripoli",
-    "Zarsis, Tunisia" => "Zarsis",
-    "Zarzis" => "Zarsis",
+    "Zarsis, Tunisia" => "Zarzis",
+    "Zarsis" => "Zarzis",
     "Zawiya" => "Zawiyah",
     "Zuwara" => "Zuwarah",
     "ZUWARAH" => "Zuwarah"

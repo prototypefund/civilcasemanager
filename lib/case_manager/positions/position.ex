@@ -49,6 +49,7 @@ defmodule CaseManager.Positions.Position do
     ])
     |> convert_short_code()
     |> validate_required([:lat, :lon])
+    |> unique_constraint([:timestamp, :item_id])
   end
 
   def convert_short_code(changeset) do

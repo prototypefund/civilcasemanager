@@ -8,7 +8,7 @@ defmodule CaseManager.Repo.Migrations.CreatePositions do
 
     execute """
     CREATE TABLE IF NOT EXISTS public.positions (
-      id text NULL,
+      id text PRIMARY KEY,
       item_id text NULL,
       altitude decimal NULL,
       course decimal NULL,

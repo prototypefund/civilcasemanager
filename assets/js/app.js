@@ -21,6 +21,9 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
+//import L from "../vendor/node_modules/leaflet";
+//import 'leaflet/dist/leaflet.css';
+
 
 let Hooks = {};
 
@@ -53,6 +56,35 @@ Hooks.FormHelpers = {
     }
   }
 }
+
+Hooks.Leaflet = {
+  mounted() {
+      const el = this.el;
+      const map = L.map(el).setView([36, 16], 2);
+      L.tileLayer(
+          'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          {
+              attribution:
+                  '© OpenStreetMap contributors',
+              maxZoom: 16,
+          }
+      ).addTo(map);
+
+      const positions = JSON.parse(el.dataset.positions);
+      const bounds = L.latLngBounds();
+    
+      positions.forEach(pos => {
+        L.marker([pos.lat, pos.lon]).bindPopup(`Timestamp: ${pos.timestamp}`).addTo(map);
+        bounds.extend([pos.lat, pos.lon]);
+      });
+
+      if (positions.length > 1) {
+       map.fitBounds(bounds, {
+        maxZoom: 7
+       });
+      }
+  },
+};
 
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")

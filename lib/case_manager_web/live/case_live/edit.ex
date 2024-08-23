@@ -12,15 +12,11 @@ defmodule CaseManagerWeb.CaseLive.Edit do
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
     case = Cases.get_case!(id)
-    events = case.events |> Enum.sort_by(& &1.received_at) |> Enum.reverse()
-    positions = CaseManager.Positions.list_positions_for_case(id)
 
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:case, case)
-     |> stream(:assoc_events, events)
-     |> stream(:assoc_positions, positions)}
+     |> assign(:case, case)}
   end
 
   @impl true

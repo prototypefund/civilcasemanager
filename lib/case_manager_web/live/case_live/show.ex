@@ -14,7 +14,7 @@ defmodule CaseManagerWeb.CaseLive.Show do
   def handle_params(%{"id" => id}, _, socket) do
     case = Cases.get_case!(id)
     events = case.events |> Enum.sort_by(& &1.received_at) |> Enum.reverse()
-    positions = CaseManager.Positions.list_positions_for_case(id)
+    positions = case.positions |> Enum.sort_by(& &1.timestamp)
 
     {:noreply,
      socket

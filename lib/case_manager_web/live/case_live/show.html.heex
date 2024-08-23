@@ -101,7 +101,17 @@
 
   <div class="grow shrink-1 basis-1/1 sm:basis-3/12">
     <.h1 class="mt-8">Associated Positions</.h1>
-
+    <div :if={length(@case.positions) > 0} class="container w-[100%]">
+      <div
+        id="case-map"
+        class="map w-full h-[400px] p-20"
+        phx-hook="Leaflet"
+        data-positions={
+          Jason.encode!(@case.positions |> Enum.map(&Map.take(&1, [:lat, :lon, :timestamp])))
+        }
+      >
+      </div>
+    </div>
     <.compact_table id="assoc_positions" rows={@streams.assoc_positions}>
       <:col :let={{_id, position}} label="Shortcode">
         <%= position.short_code %>
@@ -109,13 +119,9 @@
       <:col :let={{_id, position}} label="Timestamp">
         <%= position.timestamp %>
       </:col>
-      <:action :let={{id, position}}>
-        <.link
-          :if={@current_user.role != :readonly}
-          phx-click={JS.push("delete", value: %{id: position.id}) |> hide("##{id}")}
-          data-confirm="Are you sure?"
-        >
-          Delete
+      <:action :let={{_id, position}}>
+        <.link navigate={~p"/positions/#{position}"}>
+          Show
         </.link>
       </:action>
     </.compact_table>

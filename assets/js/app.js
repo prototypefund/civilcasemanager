@@ -78,7 +78,7 @@ Hooks.Leaflet = {
         bounds.extend([pos.lat, pos.lon]);
       });
 
-      if (positions.length > 1) {
+      if (positions.length > 0) {
        map.fitBounds(bounds, {
         maxZoom: 7
        });

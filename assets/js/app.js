@@ -21,8 +21,13 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
-//import L from "../vendor/node_modules/leaflet";
-//import 'leaflet/dist/leaflet.css';
+window.addEventListener("phx:live_reload:attached", ({detail: reloader}) => {
+  // Enable server log streaming to client.
+  // Disable with reloader.disableServerLogs()
+  reloader.enableServerLogs()
+  window.liveReloader = reloader
+})
+
 
 
 let Hooks = {};

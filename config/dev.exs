@@ -58,6 +58,7 @@ config :case_manager, CaseManagerWeb.Endpoint,
 # Watch static and templates for browser reloading.
 config :case_manager, CaseManagerWeb.Endpoint,
   live_reload: [
+    web_console_logger: true,
     patterns: [
       ~r"priv/static/(?!uploads/).*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",

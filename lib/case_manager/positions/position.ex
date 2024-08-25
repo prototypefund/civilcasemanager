@@ -14,7 +14,7 @@ defmodule CaseManager.Positions.Position do
   }
 
   @primary_key {:id, CaseManager.StringId, autogenerate: true}
-  schema "positions" do
+  schema "case_positions" do
     field :timestamp, :utc_datetime
     field :speed, :decimal
     field :source, :string

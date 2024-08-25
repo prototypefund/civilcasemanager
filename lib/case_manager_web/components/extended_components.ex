@@ -58,4 +58,20 @@ defmodule CaseManagerWeb.ExtendedComponents do
     <% end %>
     """
   end
+
+  attr :positions, :list
+
+  def map(assigns) do
+    ~H"""
+    <div
+      :if={length(@positions) > 0}
+      id="case-map"
+      class="map w-full h-[300px] p-20"
+      phx-hook="Mapbox"
+      data-token={Application.get_env(:case_manager, :map_box_token, "")}
+      data-positions={Jason.encode!(@positions)}
+    >
+    </div>
+    """
+  end
 end

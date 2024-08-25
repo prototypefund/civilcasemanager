@@ -20,6 +20,8 @@ if System.get_env("PHX_SERVER") do
   config :case_manager, CaseManagerWeb.Endpoint, server: true
 end
 
+config :case_manager, :map_box_token, System.get_env("MAP_BOX_TOKEN")
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||

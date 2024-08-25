@@ -1,6 +1,7 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+@import "mapbox-gl/dist/mapbox-gl.css";
 
 /* This file is for your main application CSS */
 
@@ -50,3 +51,4 @@ body.initial-mount-complete .fade-in {
     overflow-wrap: break-word;
     word-break: break-word;
 }
+

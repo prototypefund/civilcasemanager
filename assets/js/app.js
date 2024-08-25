@@ -21,6 +21,9 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
+import mapboxgl from 'mapbox-gl';
+
+
 window.addEventListener("phx:live_reload:attached", ({detail: reloader}) => {
   // Enable server log streaming to client.
   // Disable with reloader.disableServerLogs()
@@ -62,31 +65,37 @@ Hooks.FormHelpers = {
   }
 }
 
-Hooks.Leaflet = {
+Hooks.Mapbox = {
   mounted() {
       const el = this.el;
-      const map = L.map(el).setView([36, 16], 2);
-      L.tileLayer(
-          'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-          {
-              attribution:
-                  '© OpenStreetMap contributors',
-              maxZoom: 16,
-          }
-      ).addTo(map);
+      mapboxgl.accessToken = el.dataset.token;
+      const map = new mapboxgl.Map({
+          container: el,
+          style: 'mapbox://styles/mapbox/outdoors-v12',
+          center: [16, 36],
+          zoom: 2
+      });
 
       const positions = JSON.parse(el.dataset.positions);
-      const bounds = L.latLngBounds();
+      const bounds = new mapboxgl.LngLatBounds();
     
       positions.forEach(pos => {
-        L.marker([pos.lat, pos.lon]).bindPopup(`Timestamp: ${pos.timestamp}`).addTo(map);
-        bounds.extend([pos.lat, pos.lon]);
+          const popup = new mapboxgl.Popup({ offset: 25 })
+              .setText(`Timestamp: ${pos.timestamp}`);
+
+          new mapboxgl.Marker({color: 'rgb(190 18 60)'})
+              .setLngLat([pos.lon, pos.lat])
+              .setPopup(popup)
+              .addTo(map);
+          bounds.extend([pos.lon, pos.lat]);
       });
 
       if (positions.length > 0) {
-       map.fitBounds(bounds, {
-        maxZoom: 7
-       });
+          map.fitBounds(bounds, {
+              maxZoom: 5,
+              padding: 100,
+              animate: false
+          });
       }
   },
 };

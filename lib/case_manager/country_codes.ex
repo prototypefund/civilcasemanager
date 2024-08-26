@@ -11,6 +11,8 @@ defmodule CaseManager.CountryCodes do
   def find_key_for_value(value, [_ | tail]), do: find_key_for_value(value, tail)
   def find_key_for_value(_, []), do: nil
 
+  def get_full_name(nil), do: "Unknown"
+
   def get_full_name(country_code) do
     needle = String.to_atom(country_code)
 

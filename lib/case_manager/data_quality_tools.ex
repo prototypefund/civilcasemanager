@@ -69,6 +69,9 @@ defmodule CaseManager.DataQualityTools do
       "x" ->
         nil
 
+      "?" ->
+        nil
+
       "" ->
         nil
 

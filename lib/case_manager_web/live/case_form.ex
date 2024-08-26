@@ -452,6 +452,14 @@ defmodule CaseManagerWeb.CaseForm do
           placeholder="Add one link per line"
         />
 
+        <%= if !@case.id do %>
+          <.input
+            field={@form[:imported_from]}
+            type="hidden"
+            value={if assigns[:imported_case], do: "cm-excel", else: "cm-form"}
+          />
+        <% end %>
+
         <:actions>
           <.button phx-disable-with="Saving...">Save Case</.button>
         </:actions>

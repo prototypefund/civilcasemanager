@@ -111,7 +111,7 @@ defmodule CaseManager.DataQualityTools do
     Enum.each(cases, fn case ->
       case split_nationalities(case.pob_per_nationality) do
         {:ok, nationalities} ->
-          insert_nationalities(case.id, nationalities)
+          insert_nationalities(case, nationalities)
 
         {:error, msg} ->
           Logger.error("Error on case #{case.id}: #{inspect(msg)}")

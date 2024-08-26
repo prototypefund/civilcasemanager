@@ -8,7 +8,7 @@ defmodule CaseManagerWeb.PlaceLive.Index do
   def mount(_params, _session, socket) do
     socket =
       socket
-      |> stream(:places, Places.list_places())
+      |> stream(:places, Places.list_places() |> Enum.sort_by(&String.downcase(&1.name), :asc))
 
     {:ok, socket}
   end

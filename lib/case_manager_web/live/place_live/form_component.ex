@@ -21,6 +21,13 @@ defmodule CaseManagerWeb.PlaceLive.FormComponent do
       >
         <.input field={@form[:name]} type="text" label="Name" />
         <.input field={@form[:country]} type="text" label="Country" />
+        <.input
+          field={@form[:sar_zone]}
+          type="select"
+          label="SAR Zone"
+          prompt="Choose a value"
+          options={Ecto.Enum.values(CaseManager.Places.Place, :sar_zone)}
+        />
         <.input field={@form[:lat]} type="number" label="Lat" step="any" />
         <.input field={@form[:lon]} type="number" label="Lon" step="any" />
         <.input

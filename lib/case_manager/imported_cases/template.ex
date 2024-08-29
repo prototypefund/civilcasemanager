@@ -7,7 +7,7 @@ defmodule CaseManager.ImportedCases.Template do
     "BOAT COLOR" => %{key: "boat_color", type: :string, default: "unknown", lowercase: true},
     "BOAT TYPE" => %{key: "boat_type", type: :string, default: "unknown", lowercase: true},
     "Country. DEP" => %{key: "departure_region", type: :string},
-    "DATE (rescued, arrived case closed)" => %{key: "occurred_at", type: :utc_datetime},
+    "DATE (rescued, arrived case closed)" => %{key: "time_of_disembarkation", type: :utc_datetime},
     "Date. DEP" => %{key: "time_of_departure", type: :utc_datetime, append_key: "time. DEP"},
     "DEAD max" => %{key: "people_dead", type: :integer},
     "DEAD Min" => %{key: "people_dead", type: :integer},
@@ -53,6 +53,20 @@ defmodule CaseManager.ImportedCases.Template do
       process(input_map, key, template, acc)
     end)
     |> Map.put("row", index)
+    |> populate_occurred_at()
+  end
+
+  defp populate_occurred_at(acc) do
+    cond do
+      Map.has_key?(acc, "time_of_departure") ->
+        Map.put(acc, "occurred_at", acc["time_of_departure"])
+
+      Map.has_key?(acc, "time_of_disembarkation") ->
+        Map.put(acc, "occurred_at", acc["time_of_disembarkation"])
+
+      true ->
+        acc
+    end
   end
 
   def process(input_map, key, template, acc) do
@@ -98,7 +112,8 @@ defmodule CaseManager.ImportedCases.Template do
   end
 
   def prepend_conditionally(input_value, template) do
-    if Map.has_key?(template, :prepend) && input_value != "" do
+    if Map.has_key?(template, :prepend) && input_value != "" &&
+         !String.starts_with?(input_value, template[:prepend]) do
       template[:prepend] <> input_value
     else
       input_value

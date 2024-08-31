@@ -202,6 +202,16 @@ defmodule CaseManager.GeoToolsTest do
       end
     end
 
+    test "refuses degrees > 180" do
+      assert_raise ArgumentError, fn ->
+        GeoTools.combined_short_string_to_float("181 00 00 / 0 00 00")
+      end
+
+      assert_raise ArgumentError, fn ->
+        GeoTools.combined_short_string_to_float("0 00 00 / 190 00 00")
+      end
+    end
+
     test "handles short code with decimal degrees" do
       assert GeoTools.combined_short_string_to_float("23.33 / 11.57") ==
                {23.33, 11.57}

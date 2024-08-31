@@ -121,6 +121,11 @@ defmodule CaseManager.GeoTools do
       raise ArgumentError, message: "Minutes and Seconds must be positive"
     end
 
+    # Don't accept degrees larger than 180
+    if abs(deg) > 180 do
+      raise ArgumentError, message: "Degrees must be between -180 and 180"
+    end
+
     # Don't accept minutes greater than 60
     if min > 60 || sec > 60 do
       raise ArgumentError, message: "Minutes and Seconds must be less than 60"

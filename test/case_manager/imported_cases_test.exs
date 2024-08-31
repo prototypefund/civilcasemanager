@@ -54,7 +54,7 @@ defmodule CaseManager.ImportedCasesTest do
 
     test "get_imported_case!/1 returns the imported_case with given id" do
       imported_case = imported_case_fixture()
-      assert ImportedCases.get_imported_case!(imported_case.id) == imported_case
+      assert ImportedCases.get_imported_case!(imported_case.id, false) == imported_case
     end
 
     test "create_imported_case/1 with valid data creates a imported_case" do
@@ -232,7 +232,7 @@ defmodule CaseManager.ImportedCasesTest do
       assert {:error, %Ecto.Changeset{}} =
                ImportedCases.update_imported_case(imported_case, @invalid_attrs)
 
-      assert imported_case == ImportedCases.get_imported_case!(imported_case.id)
+      assert imported_case == ImportedCases.get_imported_case!(imported_case.id, false)
     end
 
     test "delete_imported_case/1 deletes the imported_case" do

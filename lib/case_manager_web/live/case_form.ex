@@ -82,9 +82,9 @@ defmodule CaseManagerWeb.CaseForm do
             force_validate={@validate_now}
           />
         <% end %>
-        <%= if @case.place_of_departure do %>
+        <%= if Ecto.Changeset.get_field(@form.source, :place_of_departure) do %>
           <.parsing_hint use_structured={true}>
-            <%= @case.place_of_departure %>
+            <%= Ecto.Changeset.get_field(@form.source, :place_of_departure) %>
           </.parsing_hint>
           <.input
             field={@form[:place_of_departure]}

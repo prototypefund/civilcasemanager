@@ -264,10 +264,7 @@ defmodule CaseManager.DataQualityTools do
   end
 
   defp update_one_case(place_name, case_id, old_field, new_field) do
-    corrected_name = String.trim(place_name) |> fix_spellings()
-
-    found_place =
-      CaseManager.Repo.one(from p in CaseManager.Places.Place, where: p.name == ^corrected_name)
+    found_place = find_place(place_name)
 
     if found_place do
       case = CaseManager.Repo.get!(CaseManager.Cases.Case, case_id)
@@ -278,6 +275,24 @@ defmodule CaseManager.DataQualityTools do
     else
       Logger.warning("Place not found: #{place_name}")
     end
+  end
+
+  def update_imported_case(attrs, old_field, new_field) do
+    found_place = find_place(attrs[old_field])
+
+    if found_place do
+      Map.merge(attrs, %{old_field => nil, new_field => found_place.id})
+    else
+      attrs
+    end
+  end
+
+  def find_place(nil), do: nil
+
+  def find_place(place_name) do
+    corrected_name = String.trim(place_name) |> fix_spellings()
+
+    CaseManager.Repo.one(from p in CaseManager.Places.Place, where: p.name == ^corrected_name)
   end
 
   def migrate_places(case_id \\ nil) do

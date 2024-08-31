@@ -31,7 +31,9 @@ defmodule CaseManager.ImportedCases do
 
   """
   def list_imported_cases(params) do
-    Flop.validate_and_run(ImportedCase, params, for: ImportedCase)
+    ImportedCase
+    |> preload([:arrival_place, :departure_place])
+    |> Flop.validate_and_run(params, for: ImportedCase)
   end
 
   @doc """
@@ -48,7 +50,17 @@ defmodule CaseManager.ImportedCases do
       ** (Ecto.NoResultsError)
 
   """
-  def get_imported_case!(id), do: Repo.get!(ImportedCase, id)
+  def get_imported_case!(id, preload \\ true) do
+    Repo.one!(
+      from c in ImportedCase,
+        where: c.id == ^id,
+        preload:
+          ^if(preload,
+            do: [:departure_place, :arrival_place],
+            else: []
+          )
+    )
+  end
 
   @doc """
   Gets the top most case by :inserted_at or nil if none exists.

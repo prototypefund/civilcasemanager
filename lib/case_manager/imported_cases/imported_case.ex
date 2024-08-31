@@ -72,6 +72,16 @@ defmodule CaseManager.ImportedCases.ImportedCase do
     field :source, :string
     field :row, :integer
 
+    belongs_to :arrival_place,
+               CaseManager.Places.Place,
+               foreign_key: :arrival_id,
+               type: :id
+
+    belongs_to :departure_place,
+               CaseManager.Places.Place,
+               foreign_key: :departure_id,
+               type: :id
+
     timestamps(type: :utc_datetime)
   end
 

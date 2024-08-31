@@ -33,7 +33,9 @@
     <%= imported_case.departure_region %>
   </:col>
   <:col :let={{_id, imported_case}} label="Place of departure">
-    <%= imported_case.place_of_departure %>
+    <%= if imported_case.departure_place,
+      do: imported_case.departure_place.name,
+      else: imported_case.place_of_departure %>
   </:col>
   <:action :let={{_id, imported_case}} :if={@current_user.role != :readonly}>
     <.link patch={~p"/imported_cases/#{imported_case}/validate"}>Validate</.link>

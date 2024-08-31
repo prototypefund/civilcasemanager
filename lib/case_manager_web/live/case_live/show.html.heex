@@ -101,7 +101,7 @@
 
   <div class="grow shrink-1 basis-1/1 sm:basis-3/12">
     <.h1 class="mt-8">Associated Positions</.h1>
-    <.map positions={@case.positions  |> Enum.map(&Map.take(&1, [:lat, :lon, :timestamp]))} />
+    <.map positions={@case.positions |> Enum.map(&Map.take(&1, [:lat, :lon, :timestamp]))} />
     <.compact_table id="assoc_positions" rows={@streams.assoc_positions}>
       <:col :let={{_id, position}} label="Shortcode">
         <%= position.short_code %>

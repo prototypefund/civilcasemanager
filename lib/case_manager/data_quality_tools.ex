@@ -231,6 +231,7 @@ defmodule CaseManager.DataQualityTools do
     "Lampeudsa" => "Lampedusa",
     "LMP" => "Lampedusa",
     "Mahdia" => "Mehdia",
+    "Madhia" => "Mehdia",
     "Misrata" => "Misratah",
     "MALTA" => "Malta",
     "Rocella" => "Roccella Ionica",

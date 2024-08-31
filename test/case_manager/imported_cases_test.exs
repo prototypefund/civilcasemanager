@@ -80,7 +80,7 @@ defmodule CaseManager.ImportedCasesTest do
         boat_notes: "some boat_notes",
         phonenumber: "some phonenumber",
         followup_needed: true,
-        authorities_alerted: true,
+        authorities_alerted: "MC ROME",
         actors_involved: "some actors_involved",
         authorities_details: "some authorities_details",
         place_of_disembarkation: "Salerno",
@@ -114,7 +114,7 @@ defmodule CaseManager.ImportedCasesTest do
       assert imported_case.place_of_disembarkation == "Salerno"
       assert imported_case.authorities_details == "some authorities_details"
       assert imported_case.actors_involved == "some actors_involved"
-      assert imported_case.authorities_alerted == true
+      assert imported_case.authorities_alerted == "MC ROME"
       assert imported_case.followup_needed == true
       assert imported_case.phonenumber == "some phonenumber"
       assert imported_case.boat_notes == "some boat_notes"
@@ -166,7 +166,7 @@ defmodule CaseManager.ImportedCasesTest do
         boat_notes: "some updated boat_notes",
         phonenumber: "some updated phonenumber",
         followup_needed: false,
-        authorities_alerted: false,
+        authorities_alerted: "MC MALTA",
         actors_involved: "some updated actors_involved",
         authorities_details: "some updated authorities_details",
         place_of_disembarkation: "some updated place_of_disembarkation",
@@ -202,7 +202,7 @@ defmodule CaseManager.ImportedCasesTest do
       assert imported_case.place_of_disembarkation == "some updated place_of_disembarkation"
       assert imported_case.authorities_details == "some updated authorities_details"
       assert imported_case.actors_involved == "some updated actors_involved"
-      assert imported_case.authorities_alerted == false
+      assert imported_case.authorities_alerted == "MC MALTA"
       assert imported_case.followup_needed == false
       assert imported_case.phonenumber == "some updated phonenumber"
       assert imported_case.boat_notes == "some updated boat_notes"

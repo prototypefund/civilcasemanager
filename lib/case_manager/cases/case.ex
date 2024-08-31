@@ -59,8 +59,10 @@ defmodule CaseManager.Cases.Case do
     field :alarmphone_contact, :string
     field :confirmation_by, :string
     field :actors_involved, :string
-    field :authorities_alerted, :boolean
+    field :authorities_alerted, :string
     field :authorities_details, :string
+    field :alerted_at, :utc_datetime
+    field :alerted_by, :string
 
     ## The boat
     field :boat_type, Ecto.Enum,

@@ -172,23 +172,14 @@ defmodule CaseManagerWeb.CaseForm do
           label="Actors involved"
           force_validate={@validate_now}
         />
-        <%= if assigns[:imported_case] && @imported_case.authorities_alerted_string do %>
-          <.parsing_hint field_name="Authorities alerted">
-            <%= @imported_case.authorities_alerted_string %>
-          </.parsing_hint>
-        <% end %>
-        <.input
-          field={@form[:authorities_alerted]}
-          type="checkbox"
-          label="Authorities alerted"
-          force_validate={@validate_now}
-        />
+        <.input field={@form[:authorities_alerted]} type="text" label="Authorities alerted" />
         <.input
           field={@form[:authorities_details]}
           type="text"
           label="Details about contact w/ authorities"
-          force_validate={@validate_now}
         />
+        <.input field={@form[:alerted_by]} type="text" label="Alerted by whom" />
+        <.input field={@form[:alerted_at]} type="datetime-local" label="Time of first alert" />
 
         <h1 class="dark:text-indigo-300 text-indigo-600 pt-8 font-semibold">The boat</h1>
         <.input

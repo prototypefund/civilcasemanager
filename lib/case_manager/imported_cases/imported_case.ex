@@ -33,8 +33,7 @@ defmodule CaseManager.ImportedCases.ImportedCase do
     field :place_of_disembarkation, :string
     field :authorities_details, :string
     field :actors_involved, :string
-    field :authorities_alerted, :boolean, default: false
-    field :authorities_alerted_string, :string
+    field :authorities_alerted, :string
     field :followup_needed, :boolean, default: false
     field :followup_needed_string, :string
     field :phonenumber, :string

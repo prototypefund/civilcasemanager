@@ -37,7 +37,7 @@ defmodule CaseManager.CasesTest do
       sar_region: :sar1,
       phonenumber: "some phonenumber",
       actors_involved: "some actors_involved",
-      authorities_alerted: true,
+      authorities_alerted: "MC ROME",
       authorities_details: "some authorities_details",
       boat_type: :rubber,
       boat_notes: "some boat_notes",
@@ -85,7 +85,7 @@ defmodule CaseManager.CasesTest do
       assert case.sar_region == :sar1
       assert case.phonenumber == "some phonenumber"
       assert case.actors_involved == "some actors_involved"
-      assert case.authorities_alerted == true
+      assert case.authorities_alerted == "MC ROME"
       assert case.authorities_details == "some authorities_details"
       assert case.boat_type == :rubber
       assert case.boat_notes == "some boat_notes"
@@ -129,7 +129,7 @@ defmodule CaseManager.CasesTest do
         sar_region: :sar1,
         phonenumber: "some updated phonenumber",
         actors_involved: "some updated actors_involved",
-        authorities_alerted: true,
+        authorities_alerted: "MC MALTA",
         authorities_details: "some updated authorities_details",
         boat_type: :rubber,
         boat_notes: "some updated boat_notes",
@@ -167,7 +167,7 @@ defmodule CaseManager.CasesTest do
       assert case.sar_region == :sar1
       assert case.phonenumber == "some updated phonenumber"
       assert case.actors_involved == "some updated actors_involved"
-      assert case.authorities_alerted == true
+      assert case.authorities_alerted == "MC MALTA"
       assert case.authorities_details == "some updated authorities_details"
       assert case.boat_type == :rubber
       assert case.boat_notes == "some updated boat_notes"
@@ -279,7 +279,7 @@ defmodule CaseManager.CasesTest do
 
     test "delete_case/1 deletes a case with positions" do
       case_with_positions = case_fixture()
-      pos = position_fixture(%{item_id: case_with_positions.id})
+      position_fixture(%{item_id: case_with_positions.id})
 
       case = Cases.get_case!(case_with_positions.id)
       assert Repo.preload(case, :positions).positions != []

@@ -17,7 +17,7 @@
   <:item title="Time"><%= @event.received_at %></:item>
   <:item title="Title"><%= @event.title %></:item>
   <:item title="Body">
-    <%= raw(Earmark.as_html!(@event.body)) %>
+    <%= sanitize(Earmark.as_html!(@event.body), :basic_html) %>
   </:item>
   <:item title="From"><%= @event.from %></:item>
   <:item title="Cases">

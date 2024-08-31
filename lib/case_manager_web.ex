@@ -88,6 +88,8 @@ defmodule CaseManagerWeb do
       import CaseManagerWeb.ExtendedComponents
       import CaseManagerWeb.Gettext
 
+      use PhoenixHtmlSanitizer, :basic_html
+
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
 

@@ -151,7 +151,7 @@
             <:timestamp>
               <.timestamp timestamp={event.received_at} />
             </:timestamp>
-            <%= raw(Earmark.as_html!(event.body)) %>
+            <%= sanitize(Earmark.as_html!(event.body), :basic_html) %>
           </.card>
         </div>
       <% end %>

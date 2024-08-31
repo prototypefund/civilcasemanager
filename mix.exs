@@ -69,7 +69,8 @@ defmodule CaseManager.MixProject do
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
       {:csv, "~> 3.2.1"},
       {:phoenix_live_dashboard, "~> 0.8.4-rc.0"},
-      {:ecto_watch, "~> 0.11.1"}
+      {:ecto_watch, "~> 0.11.1"},
+      {:phoenix_html_sanitizer, "~> 1.2"}
     ]
   end
 

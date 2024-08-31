@@ -58,4 +58,22 @@ defmodule CaseManagerWeb.ExtendedComponents do
     <% end %>
     """
   end
+
+  attr :coordinates, :type
+
+  def map(assigns) do
+    ~H"""
+    <div :if={length(@case.positions) > 0} class="container w-[100%] isolate">
+      <div
+        id="case-map"
+        class="map w-full h-[400px] p-20"
+        phx-hook="Leaflet"
+        data-positions={
+          Jason.encode!(@case.positions)
+        }
+      >
+      </div>
+    </div>
+    """
+  end
 end

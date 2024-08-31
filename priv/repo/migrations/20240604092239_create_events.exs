@@ -4,11 +4,13 @@ defmodule CaseManager.Repo.Migrations.CreateEvents do
   def change do
     create table(:events) do
       add :type, :string
-      add :time, :string
-      add :case_id, :string
+      add :received_at, :utc_datetime
       add :title, :string
-      add :body, :string
-      add :origin, :string
+      add :body, :text
+      add :from, :string
+      add :deleted_at, :utc_datetime, from: :datetime
+      add :edited_at, :utc_datetime, from: :datetime
+      add :metadata, :text
 
       timestamps(type: :utc_datetime)
     end

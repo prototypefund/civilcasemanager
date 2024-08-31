@@ -24,7 +24,7 @@ defmodule CaseManager.Repo.Migrations.AddCasesTable do
       add :boat_color, :string
       add :boat_number_of_engines, :integer
       add :boat_engine_status, :string
-      add :boat_engine_working, :string
+      add :boat_engine_failure, :string
       add :boat_notes, :text
       add :pob_total, :integer
       add :pob_women, :integer
@@ -45,6 +45,9 @@ defmodule CaseManager.Repo.Migrations.AddCasesTable do
       add :followup_needed, :boolean
       add :pob_per_nationality, :string
       add :cloud_file_links, :string
+      add :source, :string
+
+      add :updated_at, :utc_datetime
     end
   end
 end

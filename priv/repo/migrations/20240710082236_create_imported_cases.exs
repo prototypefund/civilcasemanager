@@ -21,7 +21,7 @@ defmodule CaseManager.Repo.Migrations.CreateImportedCases do
       add :boat_notes, :string
       add :boat_color, :string
       add :boat_engine_status, :string
-      add :boat_engine_working, :string
+      add :boat_engine_failure, :string
       add :boat_number_of_engines, :integer
       add :pob_total, :integer
       add :pob_men, :integer
@@ -60,6 +60,8 @@ defmodule CaseManager.Repo.Migrations.CreateImportedCases do
       add :boat_number_of_engines_string, :string
       add :occurred_at_string, :string
       add :people_dead_string, :string
+      add :source, :string
+      add :row, :integer
 
       timestamps(type: :utc_datetime)
     end

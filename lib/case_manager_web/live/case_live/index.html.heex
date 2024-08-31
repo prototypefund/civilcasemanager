@@ -67,7 +67,7 @@
                 :if={@current_user.role != :readonly}
                 class="block"
                 phx-click={JS.push("delete", value: %{id: case.id}) |> hide("#cases-#{case.id}")}
-                data-confirm="Are you sure?"
+                data-confirm="Are you sure? This will delete the case including all positions"
               >
                 <%= gettext("Delete Case") %>
               </.link>

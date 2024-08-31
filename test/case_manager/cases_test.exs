@@ -2,10 +2,12 @@ defmodule CaseManager.CasesTest do
   use CaseManager.DataCase
 
   alias CaseManager.Cases
+  alias CaseManager.Positions
   alias CaseManager.ImportedCases
   alias CaseManager.Cases.Case
   alias CaseManager.DeletedCases.DeletedCase
   import CaseManager.CasesFixtures
+  import CaseManager.PositionsFixtures
   import CaseManager.ImportedCasesFixtures
 
   describe "cases" do
@@ -273,6 +275,21 @@ defmodule CaseManager.CasesTest do
       assert Cases.get_year_from_id(case_with_multiple_ids) == nil
       assert Cases.get_year_from_id(case_with_slash_ids) == nil
       assert Cases.get_year_from_id(case_with_slash) == nil
+    end
+
+    test "delete_case/1 deletes a case with positions" do
+      case_with_positions = case_fixture()
+      pos = position_fixture(%{item_id: case_with_positions.id})
+
+      case = Cases.get_case!(case_with_positions.id)
+      assert Repo.preload(case, :positions).positions != []
+
+      assert {:ok, %Case{}} = Cases.delete_case(case_with_positions)
+      assert_raise Ecto.NoResultsError, fn -> Cases.get_case!(case_with_positions.id) end
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Repo.get_by!(Positions.Position, item_id: case_with_positions.id)
+      end
     end
   end
 end

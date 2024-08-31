@@ -2,33 +2,30 @@ defmodule CaseManager.Repo.Migrations.CreatePositions do
   use Ecto.Migration
 
   def up do
-    execute """
-    CREATE EXTENSION IF NOT EXISTS postgis;
-    """
+    execute "CREATE EXTENSION IF NOT EXISTS postgis"
 
-    execute """
-    CREATE TABLE IF NOT EXISTS public.positions (
-      id text PRIMARY KEY,
-      item_id text NULL,
-      altitude decimal NULL,
-      course decimal NULL,
-      heading decimal NULL,
-      lat decimal NULL,
-      lon decimal NULL,
-      source text NULL,
-      speed decimal NULL,
-      timestamp timestamptz NULL,
-      imported_from text NULL,
-      soft_deleted boolean DEFAULT false NOT NULL,
-      pos_geo geometry(Point,4326) NULL
-    );
-    """
+    create table(:case_positions, primary_key: false) do
+      add :id, :text, primary_key: true
+      add :item_id, :string, null: true
+      add :altitude, :decimal
+      add :course, :decimal
+      add :heading, :decimal
+      add :lat, :decimal
+      add :lon, :decimal
+      add :source, :text
+      add :speed, :decimal
+      add :timestamp, :utc_datetime_usec
+      add :imported_from, :text
+      add :soft_deleted, :boolean, default: false, null: false
+      add :pos_geo, :geometry
+    end
 
-    execute """
-     CREATE INDEX IF NOT EXISTS item_id_idx ON positions (item_id);
-    """
+    create index(:case_positions, [:item_id])
+    create unique_index(:case_positions, [:item_id, :timestamp])
   end
 
   def down do
+    drop table(:case_positions)
+    execute "DROP EXTENSION IF EXISTS postgis"
   end
 end

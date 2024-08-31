@@ -29,6 +29,8 @@ defmodule CaseManager.Positions.Position do
     # field :pos_geo, Geo.PostGIS.Geometry
     field :soft_deleted, :boolean, default: false
     belongs_to :case, CaseManager.Cases.Case, foreign_key: :item_id, type: CaseManager.StringId
+
+    timestamps(type: :utc_datetime)
   end
 
   @doc false
@@ -45,7 +47,8 @@ defmodule CaseManager.Positions.Position do
       :timestamp,
       :imported_from,
       :soft_deleted,
-      :short_code
+      :short_code,
+      :item_id
     ])
     |> convert_short_code()
     |> validate_required([:lat, :lon])

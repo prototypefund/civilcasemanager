@@ -218,7 +218,9 @@ defmodule CaseManager.Cases.Case do
       :source,
       :url,
       :cloud_file_links,
-      :imported_from
+      :imported_from,
+      :alerted_at,
+      :alerted_by
     ])
     |> validate_required([:name, :status])
     # |> validate_number(:course_over_ground, greater_than_or_equal_to: 0, less_than_or_equal_to: 360)

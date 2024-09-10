@@ -21,7 +21,7 @@ defmodule CaseManager.Repo.Migrations.CreatePositions do
     end
 
     create index(:case_positions, [:item_id])
-    create unique_index(:case_positions, [:item_id, :timestamp])
+    create unique_index(:case_positions, [:timestamp, :item_id])
   end
 
   def down do

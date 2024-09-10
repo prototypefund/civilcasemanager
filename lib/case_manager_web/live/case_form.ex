@@ -507,9 +507,8 @@ defmodule CaseManagerWeb.CaseForm do
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply,
          socket
-         |> assign_form(changeset)
-         |> put_flash(:warning, "Cannot save case: There are invalid fields in the form")
-         |> push_patch(to: socket.assigns.patch_error)}
+         |> assign(:form, to_form(changeset, action: :validate))
+         }
     end
   end
 
@@ -545,8 +544,7 @@ defmodule CaseManagerWeb.CaseForm do
         {:noreply,
          socket
          |> assign(form: to_form(changeset))
-         |> put_flash(:warning, "Cannot save case: There are invalid fields in the form")
-         |> push_patch(to: socket.assigns.patch_error)}
+         }
     end
   end
 

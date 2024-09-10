@@ -40,7 +40,7 @@ defmodule CaseManager.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 4.1"},
       {:phoenix_live_reload, "~>1.5.1", only: :dev},
-      {:phoenix_live_view, "~> 1.0.0-rc.6"},
+      {:phoenix_live_view, "~> 1.0.0-rc.6", override: true},
       {:floki, ">= 0.30.0", only: :test},
       {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
       {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
@@ -70,7 +70,8 @@ defmodule CaseManager.MixProject do
       {:csv, "~> 3.2.1"},
       {:phoenix_live_dashboard, "~> 0.8.4-rc.0"},
       {:ecto_watch, "~> 0.11.1"},
-      {:phoenix_html_sanitizer, "~> 1.2"}
+      {:phoenix_html_sanitizer, "~> 1.2"},
+      {:sentry, "~> 10.7.1"}
     ]
   end
 

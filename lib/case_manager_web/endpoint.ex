@@ -1,5 +1,6 @@
 defmodule CaseManagerWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :case_manager
+  use Sentry.PlugCapture
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
@@ -38,6 +39,7 @@ defmodule CaseManagerWeb.Endpoint do
   #   param_key: "request_logger",
   #   cookie_key: "request_logger"
 
+  plug Sentry.PlugContext
   plug Plug.RequestId
   plug Plug.Telemetry, event_prefix: [:phoenix, :endpoint]
 

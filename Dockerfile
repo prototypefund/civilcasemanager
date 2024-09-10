@@ -58,12 +58,14 @@ RUN mix assets.deploy
 
 # Compile the release
 RUN mix compile
+RUN mix sentry.package_source_code
 
 # Changes to config/runtime.exs don't require recompiling the code
 COPY config/runtime.exs config/
 
 COPY rel rel
 RUN mix release
+
 
 # start a new build stage so that the final image will only contain
 # the compiled release and other runtime necessities

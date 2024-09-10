@@ -8,6 +8,13 @@ import Config
 config :case_manager, CaseManagerWeb.Endpoint,
   cache_static_manifest: "priv/static/cache_manifest.json"
 
+config :sentry,
+  dsn: System.get_env("GITLAB_ERROR_DSN"),
+  environment_name: Mix.env(),
+  enable_source_code_context: true,
+  root_source_code_paths: [File.cwd!()],
+  client: CaseManager.SentryFinchHTTPClient
+
 # Configures Swoosh API Client
 config :swoosh, api_client: Swoosh.ApiClient.Finch, finch_name: CaseManager.Finch
 

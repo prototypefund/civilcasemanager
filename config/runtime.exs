@@ -20,6 +20,13 @@ if System.get_env("PHX_SERVER") do
   config :case_manager, CaseManagerWeb.Endpoint, server: true
 end
 
+config :sentry,
+  dsn: System.get_env("GITLAB_ERROR_DSN"),
+  environment_name: Mix.env(),
+  enable_source_code_context: true,
+  root_source_code_paths: [File.cwd!()],
+  client: CaseManager.SentryFinchHTTPClient
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||

@@ -142,7 +142,12 @@ defmodule CaseManagerWeb.CaseForm do
         <.inputs_for :let={ef} field={@form[:positions]}>
           <div class="break-inside-avoid-column flex flex-row gap-4">
             <input type="hidden" name="case[positions_sort][]" value={ef.index} />
-            <.input type="text" field={ef[:short_code]} placeholder="DEG MIN (SEC) / DEG MIN (SEC)" wrapper_class="flex-grow" />
+            <.input
+              type="text"
+              field={ef[:short_code]}
+              placeholder="DEG MIN (SEC) / DEG MIN (SEC)"
+              wrapper_class="flex-grow"
+            />
             <.input type="datetime-local" field={ef[:timestamp]} wrapper_class="flex-grow" />
             <button
               type="button"
@@ -507,8 +512,7 @@ defmodule CaseManagerWeb.CaseForm do
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply,
          socket
-         |> assign(:form, to_form(changeset, action: :validate))
-         }
+         |> assign(:form, to_form(changeset, action: :validate))}
     end
   end
 
@@ -543,8 +547,7 @@ defmodule CaseManagerWeb.CaseForm do
       {:error, :insert_case, %Ecto.Changeset{} = changeset, _} ->
         {:noreply,
          socket
-         |> assign(form: to_form(changeset))
-         }
+         |> assign(form: to_form(changeset))}
     end
   end
 

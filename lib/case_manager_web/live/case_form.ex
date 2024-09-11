@@ -91,6 +91,8 @@ defmodule CaseManagerWeb.CaseForm do
             type="text"
             label="Place of departure custom value"
           />
+        <% else %>
+          <.input field={@form[:place_of_departure]} type="hidden" value />
         <% end %>
         <.input
           field={@form[:departure_id]}

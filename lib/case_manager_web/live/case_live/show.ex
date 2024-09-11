@@ -16,13 +16,6 @@ defmodule CaseManagerWeb.CaseLive.Show do
     events = case.events |> Enum.sort_by(& &1.received_at) |> Enum.reverse()
     positions = case.positions |> Enum.sort_by(& &1.timestamp)
 
-    try do
-      raise "This is a test!"
-    rescue
-      exception ->
-        Sentry.capture_exception(exception, stacktrace: __STACKTRACE__)
-    end
-
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))

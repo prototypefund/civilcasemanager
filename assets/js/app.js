@@ -86,6 +86,71 @@ Hooks.Leaflet = {
   },
 };
 
+Hooks.ThemeToggle = {
+  mounted() {
+    this.updateTheme(localStorage.theme || 'system')
+    this.handleClickOutside = (event) => {
+      if (!this.el.contains(event.target)) {
+        this.hideThemeMenu()
+      }
+    }
+    document.addEventListener('click', this.handleClickOutside)
+    
+        this.el.querySelectorAll('#theme-menu a').forEach(link => {
+          link.addEventListener('click', (event) => {
+            event.preventDefault();
+            const theme = event.target.getAttribute('phx-value-theme');
+            this.setTheme(theme);
+          });
+        });
+    
+  },
+  destroyed() {
+    document.removeEventListener('click', this.handleClickOutside)
+  },
+  updated() {
+    this.updateTheme(localStorage.theme || 'system')
+  },
+  updateTheme(theme) {
+    if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+    this.updateIcons(theme)
+  },
+  updateIcons(theme) {
+    const lightIcon = this.el.querySelector('.light-icon')
+    const darkIcon = this.el.querySelector('.dark-icon')
+    const systemIcon = this.el.querySelector('.system-icon')
+    if (theme === 'dark') {
+      lightIcon.style.display = 'none'
+      darkIcon.style.display = 'block'
+      systemIcon.style.display = 'none'
+    } else if (theme === 'light') {
+      lightIcon.style.display = 'block'
+      darkIcon.style.display = 'none'
+      systemIcon.style.display = 'none'
+    } else {
+      lightIcon.style.display = 'none'
+      darkIcon.style.display = 'none'
+      systemIcon.style.display = 'block'
+    }
+  },
+  hideThemeMenu() {
+    this.el.querySelector('.theme-menu').style.display = 'none'
+  },
+  toggleThemeMenu() {
+    const menu = this.el.querySelector('.theme-menu')
+    menu.style.display = menu.style.display === 'none' ? 'block' : 'none'
+  },
+  setTheme(theme) {
+    localStorage.theme = theme
+    this.updateTheme(theme)
+    this.hideThemeMenu()
+  }
+}
+
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {

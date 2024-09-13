@@ -45,10 +45,10 @@ defmodule CaseManagerWeb.CaseLive.Index do
         |> assign(:page_title, "Listing Cases")
         |> assign(:case, nil)
 
-      {:error, _meta} ->
-        # This will reset invalid parameters. Alternatively, you can assign
-        # only the meta and render the errors, or you can ignore the error
-        # case entirely.
+      {:error, meta} ->
+        Logger.warning("Invalid filter parameters: #{inspect(meta)}")
+
+        # Reset the parameters to the default values
         push_navigate(socket, to: ~p"/cases")
     end
   end

@@ -10,6 +10,7 @@ defmodule CaseManagerWeb.ExtendedComponents do
   attr :id, :string, default: nil
   attr :on_change, :string, default: "update-filter"
   attr :target, :string, default: nil
+  attr :class, :string, default: nil
 
   def filter_form(%{meta: meta} = assigns) do
     assigns = assign(assigns, form: Phoenix.Component.to_form(meta), meta: nil)
@@ -21,7 +22,7 @@ defmodule CaseManagerWeb.ExtendedComponents do
       phx-target={@target}
       phx-change={@on_change}
       phx-submit={@on_change}
-      class="flex flex-wrap gap-x-4"
+      class={["grid grid-cols-2 gap-x-4 gap-y-2", @class]}
     >
       <.filter_fields :let={i} form={@form} fields={@fields}>
         <.input
@@ -29,7 +30,7 @@ defmodule CaseManagerWeb.ExtendedComponents do
           label={i.label}
           type={i.type}
           phx-debounce={150}
-          class="inline w-auto mr-4"
+          class="inline mr-0"
           label_class="mr-2 inline"
           {i.rest}
         />

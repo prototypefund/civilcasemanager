@@ -1,34 +1,65 @@
-<.header class=" flex-wrap" action_class="!flex-initial flex-wrap">
+<.header class=" flex-wrap mb-4" action_class="!flex-initial flex-wrap">
   All Cases
   <:actions>
-    <%= if assigns[:meta] do %>
-      <.filter_form
-        fields={[
-          name: [
-            label: "",
-            op: :ilike_and,
-            type: "text",
-            rest: [
-              placeholder: gettext("Search")
-            ]
-          ],
-          status: [
-            label: "Status",
-            type: "select",
-            prompt: "",
-            options: Ecto.Enum.values(CaseManager.Cases.Case, :status)
-          ]
-        ]}
-        meta={@meta}
-        id="user-filter-form"
-      />
-    <% end %>
-    <.link :if={@current_user.role != :readonly} class="mt-2" patch={~p"/cases/new"}>
-      <.button>Open New Case</.button>
-    </.link>
+    <div class="w-full flex flex-row justify-between gap-y-2">
+      <.link :if={@current_user.role != :readonly} class="mt-2" patch={~p"/cases/new"}>
+        <.button>Open New Case</.button>
+      </.link>
+    </div>
   </:actions>
 </.header>
-
+<%= if assigns[:meta] do %>
+  <.filter_form
+    fields={[
+      name: [
+        label: "Identifier",
+        op: :ilike_and,
+        type: "text",
+        rest: [
+          placeholder: gettext("Identifier")
+        ]
+      ],
+      status: [
+        label: "Status",
+        type: "select",
+        prompt: "Status",
+        options: Ecto.Enum.values(CaseManager.Cases.Case, :status)
+      ],
+      occurred_at: [
+        label: "Occurred After",
+        type: "datetime-local",
+        op: :>=,
+        allow_nil: true
+      ],
+      occurred_at: [
+        label: "Occurred Before",
+        type: "datetime-local",
+        op: :<=,
+        allow_nil: true
+      ],
+      outcome: [
+        label: "Outcome",
+        type: "select",
+        prompt: "",
+        options: Ecto.Enum.values(CaseManager.Cases.Case, :outcome)
+      ],
+      actors_involved: [
+        label: "Actors Involved",
+        op: :ilike_and,
+        type: "text",
+        rest: [
+          placeholder: gettext("Actors Involved")
+        ]
+      ]
+    ]}
+    meta={@meta}
+    id="user-filter-form"
+    class="w-full mb-10"
+  />
+<% end %>
+<h2 class="text-xl font-semibold leading-8 text-zinc-800 dark:text-zinc-200 mb-8">
+  Listing <%= @meta.total_count %> Cases
+</h2>
 <div phx-hook="ParentMount" id="cases" class="grid gap-4" phx-update="stream">
   <%= for {id, group} <- @streams.cases do %>
     <div id={id} class="col-span-full">

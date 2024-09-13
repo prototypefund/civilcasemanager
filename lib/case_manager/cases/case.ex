@@ -8,7 +8,7 @@ defmodule CaseManager.Cases.Case do
 
   @derive {
     Flop.Schema,
-    filterable: [:status, :name],
+    filterable: [:status, :name, :occurred_at, :outcome, :actors_involved],
     sortable: [:name, :occurred_at],
     default_order: %{
       order_by: [:occurred_at],

@@ -7,6 +7,7 @@ defmodule CaseManager.PositionsTest do
     alias CaseManager.Positions.Position
 
     import CaseManager.PositionsFixtures
+    import CaseManager.CasesFixtures
 
     @invalid_attrs %{
       id: nil,
@@ -61,6 +62,21 @@ defmodule CaseManager.PositionsTest do
 
     test "create_position/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Positions.create_position(@invalid_attrs)
+    end
+
+    test "create_position/1 with empty args returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Positions.create_position()
+    end
+
+    test "list_positions_for_case/1 returns all positions for a given case identifier" do
+      case = case_fixture()
+      position_fixture(%{item_id: case.id, timestamp: ~U[2024-07-04 16:34:00Z]})
+      position_fixture(%{item_id: case.id, timestamp: ~U[2023-07-04 16:34:00Z]})
+
+      positions = Positions.list_positions_for_case(case.id)
+      assert length(positions) == 2
+      assert Enum.all?(positions, fn p -> p.item_id == case.id end)
+      assert Enum.all?(positions, fn p -> Map.has_key?(p, :short_code) end)
     end
 
     test "update_position/2 with valid data updates the position" do

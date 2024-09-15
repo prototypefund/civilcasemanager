@@ -1,4 +1,3 @@
-# credo:disable-for-this-file Credo.Check.Warning.IoInspect
 defmodule CaseManager.DataQualityTools do
   import CaseManager.CaseNationalities
   alias CaseManager.Cases

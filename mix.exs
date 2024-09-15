@@ -9,7 +9,15 @@ defmodule CaseManager.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [
+        ignore_modules: [
+          CaseManager.FetchEvent,
+          CaseManager.Release,
+          CaseManager.SentryFinchHTTPClient
+        ],
+        summary: [threshold: 75]
+      ]
     ]
   end
 

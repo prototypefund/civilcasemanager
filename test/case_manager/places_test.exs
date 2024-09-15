@@ -32,6 +32,26 @@ defmodule CaseManager.PlacesTest do
       assert place.lon == Decimal.new("120.5")
     end
 
+    test "create_place/1 without args returns error" do
+      assert {:error, _error} = Places.create_place()
+    end
+
+    test "get_places_for_select/1 returns grouped places for select" do
+      place_fixture(%{name: "Rome", country: "Italy", type: :arrival})
+      place_fixture(%{name: "Milan", country: "Italy", type: :both})
+      place_fixture(%{name: "Malta", country: "Malta", type: :arrival})
+      place_fixture(%{name: "Tripoli", country: "Libya", type: :departure})
+
+      result = Places.get_places_for_select(:arrival)
+
+      assert [{"Italy", [{"Rome", _}, {"Milan", _}]}, {"Malta", [{"Malta", _}]}] = result
+
+      assert length(result) == 2
+      assert length(elem(Enum.at(result, 0), 1)) == 2
+      assert length(elem(Enum.at(result, 1), 1)) == 1
+      refute Enum.any?(result, fn {country, _} -> country == "Libya" end)
+    end
+
     test "create_place/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Places.create_place(@invalid_attrs)
     end

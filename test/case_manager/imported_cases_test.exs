@@ -61,7 +61,6 @@ defmodule CaseManager.ImportedCasesTest do
       valid_attrs = %{
         people_dead: 42,
         template: "some template",
-        pob_per_nationality: "some pob_per_nationality",
         outcome_actors: "some outcome_actors",
         occurred_at: ~U[2024-07-09 08:22:00Z],
         boat_engine_status: "some boat_engine_status",
@@ -133,7 +132,6 @@ defmodule CaseManager.ImportedCasesTest do
       assert imported_case.boat_engine_status == "some boat_engine_status"
       assert imported_case.occurred_at == ~U[2024-07-09 08:22:00Z]
       assert imported_case.outcome_actors == "some outcome_actors"
-      assert imported_case.pob_per_nationality == "some pob_per_nationality"
       assert imported_case.people_dead == 42
     end
 
@@ -247,6 +245,63 @@ defmodule CaseManager.ImportedCasesTest do
     test "change_imported_case/1 returns a imported_case changeset" do
       imported_case = imported_case_fixture()
       assert %Ecto.Changeset{} = ImportedCases.change_imported_case(imported_case)
+    end
+
+    test "get_first_case/0 returns the first case" do
+      # Create multiple cases
+      case1 = imported_case_fixture()
+      _case2 = imported_case_fixture()
+      _case3 = imported_case_fixture()
+
+      first_case = ImportedCases.get_first_case()
+      assert first_case.id == case1.id
+    end
+
+    test "get_first_case/0 returns nil when no cases exist" do
+      assert ImportedCases.get_first_case() == nil
+    end
+
+    test "get_next_case_after/1 returns the next case" do
+      # Create multiple cases
+      case1 = imported_case_fixture()
+      case2 = imported_case_fixture()
+      case3 = imported_case_fixture()
+
+      next_case = ImportedCases.get_next_case_after(case1)
+      assert next_case.id == case2.id
+
+      next_case = ImportedCases.get_next_case_after(case2)
+      assert next_case.id == case3.id
+    end
+
+    test "get_next_case_after/1 returns the first case when given the last case" do
+      # Create multiple cases
+      case1 = imported_case_fixture()
+      _case2 = imported_case_fixture()
+      case3 = imported_case_fixture()
+
+      next_case = ImportedCases.get_next_case_after(case3)
+      assert next_case.id == case1.id
+    end
+
+    test "create_imported_cases_from_list/1 creates multiple imported cases" do
+      case_list = [
+        %{name: "Case 1", notes: "Description 1"},
+        %{name: "Case 2", notes: "Description 2"},
+        %{name: "Case 3", notes: "Description 3"}
+      ]
+
+      assert {:ok, created_cases} = ImportedCases.create_imported_cases_from_list(case_list)
+      assert length(created_cases) == 3
+
+      Enum.each(created_cases, fn {:ok, case} ->
+        assert %ImportedCase{} = case
+        assert case.name in ["Case 1", "Case 2", "Case 3"]
+        assert case.notes in ["Description 1", "Description 2", "Description 3"]
+      end)
+
+      # Verify cases are persisted in the database
+      assert length(ImportedCases.list_imported_cases()) == 3
     end
   end
 end

@@ -63,7 +63,7 @@ defmodule CaseManager.ImportedCases do
   end
 
   @doc """
-  Gets the top most case by :inserted_at or nil if none exists.
+  Gets the case with the lowest id, or nil if no cases exist
 
   ## Examples
 
@@ -75,11 +75,11 @@ defmodule CaseManager.ImportedCases do
 
   """
   def get_first_case() do
-    Repo.one(from c in ImportedCase, order_by: [desc: c.id], limit: 1)
+    Repo.one(from c in ImportedCase, order_by: [asc: c.id], limit: 1)
   end
 
   @doc """
-  Gets the next case after the given one (using the native row order)
+  Gets the next case after the given one (using the id counter)
 
   ## Examples
 

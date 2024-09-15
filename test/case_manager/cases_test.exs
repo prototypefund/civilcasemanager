@@ -291,5 +291,14 @@ defmodule CaseManager.CasesTest do
         Repo.get_by!(Positions.Position, item_id: case_with_positions.id)
       end
     end
+
+    test "get_compound_identifier/2 returns correct identifier" do
+      assert Case.get_compound_identifier("AP123", ~U[2023-01-01 00:00:00Z]) == "AP123-2023"
+      assert Case.get_compound_identifier("AP 123", ~U[2023-01-01 00:00:00Z]) == "AP 123-2023"
+      assert Case.get_compound_identifier("123-2024", ~U[2023-01-01 00:00:00Z]) == "123-2024"
+
+      assert Case.get_compound_identifier("123-2024-extra", ~U[2023-01-01 00:00:00Z]) ==
+               "123-2024-extra"
+    end
   end
 end

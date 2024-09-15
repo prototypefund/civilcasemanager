@@ -35,6 +35,10 @@ defmodule CaseManager.DeletedCasesTest do
       assert deleted_case.id == update_attrs.id
     end
 
+    test "create_deleted_case/1 without args returns error" do
+      assert {:error, _error} = DeletedCases.create_deleted_case()
+    end
+
     test "delete_deleted_case/1 deletes the deleted_case" do
       deleted_case = deleted_case_fixture()
       assert {:ok, %DeletedCase{}} = DeletedCases.delete_deleted_case(deleted_case)

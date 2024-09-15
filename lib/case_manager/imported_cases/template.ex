@@ -72,44 +72,55 @@ defmodule CaseManager.ImportedCases.Template do
   end
 
   def process(input_map, key, template, acc) do
-    case Map.fetch(input_map, key) do
-      {:ok, input_value} ->
-        {new_value, key} =
-          input_value
-          |> append_conditionally(template, input_map)
-          |> prepend_conditionally(template)
-          |> trim_conditionally()
-          |> parse_values(template)
+    with {:ok, input_value} <- Map.fetch(input_map, key),
+         {new_value, key} <- process_value(input_value, template, input_map) do
+      update_acc(acc, key, new_value, template)
+    else
+      :error -> insert_default_values_if_available(acc, template)
+    end
+  end
 
-        cond do
-          new_value == "" && Map.has_key?(template, :default) ->
-            Map.put(acc, key, template[:default])
+  defp process_value(input_value, template, input_map) do
+    input_value
+    |> append_conditionally(template, input_map)
+    |> prepend_conditionally(template)
+    |> trim_conditionally()
+    |> parse_values(template)
+  end
 
-          new_value == "" ->
-            acc
+  defp update_acc(acc, key, new_value, template) do
+    cond do
+      empty?(new_value) && Map.has_key?(template, :default) ->
+        Map.put(acc, key, template[:default])
 
-          new_value == nil ->
-            acc
+      empty?(new_value) ->
+        acc
 
-          true ->
-            Map.put(acc, key, new_value)
-        end
+      true ->
+        Map.put(acc, key, new_value)
+    end
+  end
 
-      :error ->
-        # Populate default values if specified
-        if Map.has_key?(template, :default) do
-          Map.put(acc, template[:field], template[:default])
-        else
-          acc
-        end
+  defp empty?(value), do: value == "" || value == nil
+
+  defp insert_default_values_if_available(acc, template) do
+    if Map.has_key?(template, :default) do
+      Map.put(acc, template[:key], template[:default])
+    else
+      acc
     end
   end
 
   def append_conditionally(input_value, template, input_map) do
-    if Map.has_key?(template, :append) && Map.has_key?(input_map, template[:append]) do
-      input_value <> " " <> Map.get(input_map, template[:append])
-    else
-      input_value
+    cond do
+      Map.has_key?(template, :append) && Map.has_key?(input_map, template[:append]) ->
+        input_value <> " " <> Map.get(input_map, template[:append])
+
+      Map.has_key?(template, :append_key) && Map.has_key?(input_map, template[:append_key]) ->
+        input_value <> " " <> to_string(Map.get(input_map, template[:append_key]))
+
+      true ->
+        input_value
     end
   end
 
@@ -172,7 +183,7 @@ defmodule CaseManager.ImportedCases.Template do
   end
 
   defp apply_regex(regex, value) do
-    case Regex.run(regex, value) do
+    case Regex.run(regex, value, capture: :all_but_first) do
       nil -> value
       matches -> Enum.join(matches, ", ")
     end
@@ -187,18 +198,9 @@ defmodule CaseManager.ImportedCases.Template do
         datetime
 
       {:error, _} ->
-        case Regex.match?(~r/^\d{2}\.\d{2}\.\d{4}$/, value) do
+        case Regex.match?(~r/^\d{2}\.\d{2}\.\d{4}(\s\d{2}:\d{2}(:\d{2})?)?$/, value) do
           true ->
-            [day, month, year] = String.split(value, ".")
-
-            {:ok, date} =
-              Date.new(
-                String.to_integer(year),
-                String.to_integer(month),
-                String.to_integer(day)
-              )
-
-            DateTime.new!(date, ~T[00:00:00])
+            parse_complex_date(value)
 
           false ->
             raise(ArgumentError, "Could not parse #{value} as a DateTime")
@@ -207,4 +209,37 @@ defmodule CaseManager.ImportedCases.Template do
   end
 
   defp parse_value(value, _type), do: value
+
+  defp parse_complex_date(value) do
+    [date_part | time_part] = String.split(value, " ")
+    [day, month, year] = String.split(date_part, ".")
+
+    time =
+      case time_part do
+        [] ->
+          ~T[00:00:00]
+
+        [time] ->
+          case String.split(time, ":") do
+            [hour, minute] ->
+              Time.new!(String.to_integer(hour), String.to_integer(minute), 0)
+
+            [hour, minute, second] ->
+              Time.new!(
+                String.to_integer(hour),
+                String.to_integer(minute),
+                String.to_integer(second)
+              )
+          end
+      end
+
+    {:ok, date} =
+      Date.new(
+        String.to_integer(year),
+        String.to_integer(month),
+        String.to_integer(day)
+      )
+
+    DateTime.new!(date, time)
+  end
 end

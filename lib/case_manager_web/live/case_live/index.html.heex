@@ -56,10 +56,11 @@
     id="user-filter-form"
     class="w-full mb-10"
   />
+  <h2 class="text-xl font-semibold leading-8 text-zinc-800 dark:text-zinc-200 mb-8">
+    Listing <%= @meta.total_count %> Cases
+  </h2>
 <% end %>
-<h2 class="text-xl font-semibold leading-8 text-zinc-800 dark:text-zinc-200 mb-8">
-  Listing <%= @meta.total_count %> Cases
-</h2>
+
 <div phx-hook="ParentMount" id="cases" class="grid gap-4" phx-update="stream">
   <%= for {id, group} <- @streams.cases do %>
     <div id={id} class="col-span-full">

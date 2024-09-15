@@ -34,6 +34,10 @@ defmodule CaseManager.CaseNationalitiesTest do
       assert case_nationality.country == "TU"
     end
 
+    test "create_case_nationality/1 without args returns error" do
+      assert {:error, _error} = CaseNationalities.create_case_nationality()
+    end
+
     test "create_case_nationality/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} =
                CaseNationalities.create_case_nationality(@invalid_attrs)

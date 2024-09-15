@@ -61,7 +61,8 @@ unittest:
     - mix local.hex --force
     - mix local.rebar --force
     - mix ecto.setup
-    - mix test
+    - mix test --cover
+  coverage: '/\d+.\d+\%\s+\|\s+Total/'
 
 lint:
   stage: test

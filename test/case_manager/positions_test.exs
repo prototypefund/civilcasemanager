@@ -31,7 +31,7 @@ defmodule CaseManager.PositionsTest do
 
     test "get_position!/1 returns the position with given id" do
       position = position_fixture()
-      assert Positions.get_position!(position.id) == position
+      assert Positions.get_position!(position.id, false) == position
     end
 
     test "create_position/1 with valid data creates a position" do
@@ -42,8 +42,7 @@ defmodule CaseManager.PositionsTest do
         altitude: "120.5",
         course: "120.5",
         heading: "120.5",
-        lat: "120.5",
-        lon: "120.5",
+        short_code: "13 / 17",
         imported_from: "some imported_from",
         soft_deleted: true
       }
@@ -55,8 +54,8 @@ defmodule CaseManager.PositionsTest do
       assert position.altitude == Decimal.new("120.5")
       assert position.course == Decimal.new("120.5")
       assert position.heading == Decimal.new("120.5")
-      assert position.lat == Decimal.new("120.5")
-      assert position.lon == Decimal.new("120.5")
+      assert position.lat == 13.0
+      assert position.lon == 17.0
       assert position.imported_from == "some imported_from"
       assert position.soft_deleted == true
     end
@@ -108,8 +107,7 @@ defmodule CaseManager.PositionsTest do
         altitude: "456.7",
         course: "456.7",
         heading: "456.7",
-        lat: "456.7",
-        lon: "456.7",
+        short_code: "13 / 17",
         imported_from: "some updated imported_from",
         soft_deleted: false
       }
@@ -121,8 +119,8 @@ defmodule CaseManager.PositionsTest do
       assert position.altitude == Decimal.new("456.7")
       assert position.course == Decimal.new("456.7")
       assert position.heading == Decimal.new("456.7")
-      assert position.lat == Decimal.new("456.7")
-      assert position.lon == Decimal.new("456.7")
+      assert position.lat == 13.0
+      assert position.lon == 17.0
       assert position.imported_from == "some updated imported_from"
       assert position.soft_deleted == false
     end
@@ -130,7 +128,7 @@ defmodule CaseManager.PositionsTest do
     test "update_position/2 with invalid data returns error changeset" do
       position = position_fixture()
       assert {:error, %Ecto.Changeset{}} = Positions.update_position(position, @invalid_attrs)
-      assert position == Positions.get_position!(position.id)
+      assert position == Positions.get_position!(position.id, false)
     end
 
     test "delete_position/1 deletes the position" do

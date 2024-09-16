@@ -4,13 +4,13 @@ defmodule CaseManager.Cases do
   """
 
   import Ecto.Query, warn: false
-  import CaseManager.GeoTools
   alias CaseManager.ImportedCases.ImportedCase
   alias CaseManager.Repo
 
   alias CaseManager.Cases.Case
   alias CaseManager.DeletedCases.DeletedCase
   alias CaseManager.Positions.Position
+  import CaseManager.Positions, only: [add_shortcode: 1]
 
   @doc """
   Returns the list of cases.
@@ -94,11 +94,6 @@ defmodule CaseManager.Cases do
   defp populate_shortcodes(%Case{} = case) do
     positions = Enum.map(case.positions, &add_shortcode/1)
     Map.put(case, :positions, positions)
-  end
-
-  defp add_shortcode(%Position{} = position) do
-    position
-    |> Map.put(:short_code, number_to_short_string({position.lat, position.lon}))
   end
 
   @doc """

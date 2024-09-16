@@ -51,9 +51,18 @@ defmodule CaseManager.Positions do
     |> Enum.map(&add_shortcode/1)
   end
 
-  defp add_shortcode(position) do
+  @doc """
+  Populates the virtual short code field from the geo_pos.
+
+  ## Examples
+
+      iex> add_shortcode(%Position{})
+      %Position{short_code: "ABC123"}
+
+  """
+  def add_shortcode(%Position{} = position) do
     position
-    |> Map.put(:short_code, number_to_short_string({position.lat, position.lon}))
+    |> Map.put(:short_code, number_to_short_string(position.pos_geo.coordinates))
   end
 
   @doc """
@@ -70,7 +79,15 @@ defmodule CaseManager.Positions do
       ** (Ecto.NoResultsError)
 
   """
-  def get_position!(id), do: Repo.get!(Position, id)
+  def get_position!(id, populate_short_code \\ true)
+
+  def get_position!(id, false = _populate_short_code) do
+    Repo.get!(Position, id)
+  end
+
+  def get_position!(id, true = _populate_short_code) do
+    Repo.get!(Position, id) |> add_shortcode()
+  end
 
   @doc """
   Creates a position.

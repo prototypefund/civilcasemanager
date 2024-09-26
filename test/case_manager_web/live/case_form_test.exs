@@ -82,5 +82,69 @@ defmodule CaseManagerWeb.CaseFormTest do
         ImportedCases.get_imported_case!(imported_case.id)
       end
     end
+
+    test "renders imported case with occurred_at_string", %{conn: conn} do
+      imported_case =
+        imported_case_fixture(%{
+          occurred_at_string: "occurred_at_string_content",
+          time_of_departure_string: "time_of_departure_string_content",
+          last_position: "last_position_content",
+          time_of_disembarkation_string: "time_of_disembarkation_string_content",
+          people_missing_string: "people_missing_string_content",
+          first_position: "first_position_content",
+          people_dead_string: "people_dead_string_content",
+          pob_total_string: "pob_total_string_content",
+          pob_minors_string: "pob_minors_string_content",
+          boat_number_of_engines_string: "boat_number_of_engines_string_content",
+          pob_men_string: "pob_men_string_content",
+          pob_women_string: "pob_women_string_content",
+          pob_gender_ambiguous_string: "pob_gender_ambiguous_string_content",
+          followup_needed_string: "followup_needed_string_content"
+        })
+
+      {:ok, view, _html} = live(conn, ~p"/imported_cases/#{imported_case}/validate")
+
+      assert view |> render() =~ "occurred_at_string_content"
+      assert view |> render() =~ "time_of_departure_string_content"
+      assert view |> render() =~ "last_position_content"
+      assert view |> render() =~ "time_of_disembarkation_string_content"
+      assert view |> render() =~ "people_missing_string_content"
+      assert view |> render() =~ "first_position_content"
+      assert view |> render() =~ "people_dead_string_content"
+      assert view |> render() =~ "pob_total_string_content"
+      assert view |> render() =~ "pob_minors_string_content"
+      assert view |> render() =~ "boat_number_of_engines_string_content"
+      assert view |> render() =~ "pob_men_string_content"
+      assert view |> render() =~ "pob_women_string_content"
+      assert view |> render() =~ "pob_gender_ambiguous_string_content"
+      assert view |> render() =~ "followup_needed_string_content"
+    end
+
+    test "cannot save form with invalid data", %{conn: conn} do
+      imported_case = imported_case_fixture()
+      {:ok, view, _html} = live(conn, ~p"/imported_cases/#{imported_case}/validate")
+
+      invalid_params = %{
+        "case" => %{
+          # Required field left empty
+          "name" => "",
+          # Invalid number format
+          "pob_total" => "not a number"
+        }
+      }
+
+      result =
+        view
+        |> form("#case-form", invalid_params)
+        |> render_submit()
+
+      assert result =~ "can&#39;t be blank"
+      assert result =~ "is invalid"
+
+      # Ensure the form wasn't saved
+      assert view
+             |> form("#case-form")
+             |> render_change() =~ "can&#39;t be blank"
+    end
   end
 end

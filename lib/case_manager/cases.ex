@@ -227,11 +227,6 @@ defmodule CaseManager.Cases do
     Case.changeset(case, attrs)
   end
 
-  def get_combined_identifier(case_data) do
-    year = DateTime.to_date(case_data[:created_at]).year |> Integer.to_string()
-    case_data[:name] <> "-" <> year
-  end
-
   def get_pretty_identifier(case) do
     # Get first part of identifier
     case.name

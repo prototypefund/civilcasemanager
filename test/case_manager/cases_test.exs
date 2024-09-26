@@ -300,5 +300,66 @@ defmodule CaseManager.CasesTest do
       assert Case.get_compound_identifier("123-2024-extra", ~U[2023-01-01 00:00:00Z]) ==
                "123-2024-extra"
     end
+
+    test "get_cases/1 returns cases based on provided IDs" do
+      case1 = case_fixture()
+      case2 = case_fixture()
+      case3 = case_fixture()
+
+      cases = Cases.get_cases([case1.id, case2.id])
+      assert length(cases) == 2
+      assert Enum.map(cases, & &1.id) == [case1.id, case2.id]
+
+      cases = Cases.get_cases([case1.id, case2.id, case3.id])
+      assert length(cases) == 3
+
+      assert Enum.map(cases, & &1.id) |> Enum.sort() ==
+               [case1.id, case2.id, case3.id] |> Enum.sort()
+    end
+
+    test "list_positions_for_case/1 returns positions for a given case identifier" do
+      case = case_fixture()
+
+      position1 =
+        position_fixture(%{
+          item_id: case.id,
+          lat: 10.0,
+          lon: 20.0,
+          timestamp: ~N[2023-01-01 10:00:00]
+        })
+
+      position2 =
+        position_fixture(%{
+          item_id: case.id,
+          lat: 30.0,
+          lon: 40.0,
+          timestamp: ~N[2023-01-02 14:30:00]
+        })
+
+      positions = Cases.list_positions_for_case(case.id)
+      assert length(positions) == 2
+
+      assert Enum.map(positions, & &1.id) |> Enum.sort() ==
+               [position1.id, position2.id] |> Enum.sort()
+
+      assert Enum.all?(positions, &(&1.short_code != nil))
+    end
+
+    test "list_cases!/1 returns cases using Flop" do
+      case_fixture(%{name: "Case A"})
+      case_fixture(%{name: "Case B"})
+      case_fixture(%{name: "Case C"})
+
+      params = %{filters: [%{field: :name, op: :=~, value: "Case"}], order_by: [:name], limit: 2}
+      {cases, _meta} = Cases.list_cases!(params)
+
+      assert length(cases) == 2
+      assert Enum.map(cases, & &1.name) == ["Case A", "Case B"]
+
+      params = %{filters: [%{field: :name, op: :=~, value: "Non-existent"}]}
+      {cases, _meta} = Cases.list_cases!(params)
+
+      assert cases == []
+    end
   end
 end

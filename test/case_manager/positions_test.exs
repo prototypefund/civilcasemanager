@@ -20,7 +20,8 @@ defmodule CaseManager.PositionsTest do
       lat: nil,
       lon: nil,
       imported_from: nil,
-      soft_deleted: nil
+      soft_deleted: nil,
+      short_code: "fa8fhhhf"
     }
 
     test "list_positions/0 returns all positions" do
@@ -58,6 +59,24 @@ defmodule CaseManager.PositionsTest do
       assert position.lon == Decimal.new("120.5")
       assert position.imported_from == "some imported_from"
       assert position.soft_deleted == true
+    end
+
+    test "create_position/1 with short_code creates a position" do
+      valid_attrs = %{
+        timestamp: ~U[2024-07-04 16:34:00Z],
+        speed: "120.5",
+        source: "some source",
+        altitude: "120.5",
+        course: "120.5",
+        heading: "120.5",
+        short_code: "12 00 / 23 20"
+      }
+
+      assert {:ok, %Position{} = position} = Positions.create_position(valid_attrs)
+      assert position.timestamp == ~U[2024-07-04 16:34:00Z]
+      assert position.course == Decimal.new("120.5")
+      assert position.lat == 12.0
+      assert position.lon == 23.333333333333332
     end
 
     test "create_position/1 with invalid data returns error changeset" do

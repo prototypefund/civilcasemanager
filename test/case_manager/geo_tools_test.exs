@@ -50,13 +50,21 @@ defmodule CaseManager.GeoToolsTest do
     end
   end
 
-  describe "float_to_dms_string/2" do
+  describe "number_to_dms_string/2" do
     test "converts positive decimal to DMS string" do
       assert GeoTools.number_to_dms_string(34.233333333333334, :lat) == "34° 14' 00\" N"
     end
 
     test "converts negative decimal to DMS string" do
       assert GeoTools.number_to_dms_string(-12.966666666666667, :lon) == "12° 58' 00\" W"
+    end
+
+    test "handles Decimal input" do
+      assert GeoTools.number_to_dms_string(Decimal.new("34.233333333333334"), :lat) ==
+               "34° 14' 00\" N"
+
+      assert GeoTools.number_to_dms_string(Decimal.new("-12.966666666666667"), :lon) ==
+               "12° 58' 00\" W"
     end
   end
 

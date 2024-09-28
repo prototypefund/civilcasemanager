@@ -18,7 +18,7 @@ defmodule CaseManager.MixProject do
           CaseManager.Repo,
           CaseManager.PostgresTypes
         ],
-        summary: [threshold: 75]
+        summary: [threshold: 80]
       ]
     ]
   end

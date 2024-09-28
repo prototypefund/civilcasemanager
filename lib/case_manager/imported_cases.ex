@@ -176,11 +176,4 @@ defmodule CaseManager.ImportedCases do
   def change_imported_case(%ImportedCase{} = imported_case, attrs \\ %{}) do
     ImportedCase.changeset(imported_case, attrs)
   end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking uploaded changes.
-  """
-  def change_upload_case(%ImportedCase{} = imported_case, attrs \\ %{}) do
-    ImportedCase.upload_changeset(imported_case, attrs)
-  end
 end

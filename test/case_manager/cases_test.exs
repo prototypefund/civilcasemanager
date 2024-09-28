@@ -115,6 +115,10 @@ defmodule CaseManager.CasesTest do
       assert {:error, %Ecto.Changeset{}} = Cases.create_case(@invalid_attrs)
     end
 
+    test "create_case/1 with no data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Cases.create_case()
+    end
+
     test "update_case/2 with valid data updates the case" do
       case = case_fixture()
 
@@ -345,21 +349,30 @@ defmodule CaseManager.CasesTest do
       assert Enum.all?(positions, &(&1.short_code != nil))
     end
 
-    test "list_cases!/1 returns cases using Flop" do
+    test "list_cases/1 returns cases using Flop" do
       case_fixture(%{name: "Case A"})
       case_fixture(%{name: "Case B"})
       case_fixture(%{name: "Case C"})
 
       params = %{filters: [%{field: :name, op: :=~, value: "Case"}], order_by: [:name], limit: 2}
-      {cases, _meta} = Cases.list_cases!(params)
+      {:ok, {cases, _meta}} = Cases.list_cases(params)
 
       assert length(cases) == 2
       assert Enum.map(cases, & &1.name) == ["Case A", "Case B"]
 
       params = %{filters: [%{field: :name, op: :=~, value: "Non-existent"}]}
-      {cases, _meta} = Cases.list_cases!(params)
+      {:ok, {cases, _meta}} = Cases.list_cases(params)
 
       assert cases == []
+    end
+
+    test "list_cases/1 with invalid params returns error tuple" do
+      case_fixture(%{name: "Case A"})
+      case_fixture(%{name: "Case B"})
+      case_fixture(%{name: "Case C"})
+
+      invalid_params = %{filters: [%{field: :invalid_field, op: :=, value: "Some Value"}]}
+      {:error, _changeset} = Cases.list_cases(invalid_params)
     end
   end
 end

@@ -7,6 +7,7 @@ defmodule CaseManager.EventsTest do
     alias CaseManager.Events.Event
 
     import CaseManager.EventsFixtures
+    import CaseManager.CasesFixtures
 
     @invalid_attrs %{
       body: nil,
@@ -37,6 +38,54 @@ defmodule CaseManager.EventsTest do
       assert event.body == "some body"
       assert event.title == "some title"
       assert event.type == "some type"
+    end
+
+    test "create_event/1 with no data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Events.create_event()
+    end
+
+    test "create_event/1 can assign cases by reference" do
+      case = case_fixture()
+
+      valid_attrs = %{
+        body: "some body",
+        cases: [case],
+        title: "some title",
+        type: "some type"
+      }
+
+      assert {:ok, %Event{} = event} = Events.create_event(valid_attrs)
+      assert event.body == "some body"
+      assert event.title == "some title"
+      assert event.type == "some type"
+      assert event.cases == [case]
+    end
+
+    test "create_event/1 can assign case by id" do
+      case = case_fixture()
+
+      valid_attrs = %{
+        body: "some body",
+        cases: [case.id],
+        title: "some title",
+        type: "some type"
+      }
+
+      assert {:ok, %Event{} = event} = Events.create_event(valid_attrs)
+      assert event.body == "some body"
+      assert event.title == "some title"
+      assert event.type == "some type"
+      assert event.cases == [case]
+    end
+
+    test "update_event/2 with empty cases list clears associated cases" do
+      case = case_fixture()
+      event = event_fixture(%{cases: [case]})
+
+      update_attrs = %{cases: []}
+
+      assert {:ok, %Event{} = updated_event} = Events.update_event(event, update_attrs)
+      assert updated_event.cases == []
     end
 
     test "create_event/1 with invalid data returns error changeset" do

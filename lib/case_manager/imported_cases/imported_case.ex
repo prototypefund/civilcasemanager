@@ -87,15 +87,7 @@ defmodule CaseManager.ImportedCases.ImportedCase do
   @doc false
   def changeset(imported_case, attrs) do
     imported_case
+    ## Not too elegant, but adds all fields as castable.
     |> cast(attrs, __MODULE__.__schema__(:fields))
-  end
-
-  def upload_changeset(imported_case, attrs) do
-    imported_case
-    |> cast(attrs, [
-      :url,
-      :cloud_file_links,
-      :imported_from
-    ])
   end
 end

@@ -3,6 +3,7 @@ defmodule CaseManager.Repo.Migrations.CreateCasesEvents do
 
   def change do
     create table(:cases_events, primary_key: false) do
+      # If a case or event is deleted, delete the association entry
       add :case_id, references(:cases, on_delete: :delete_all, type: :string), null: false
       add :event_id, references(:events, on_delete: :delete_all), null: false
 

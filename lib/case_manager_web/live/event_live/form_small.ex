@@ -21,7 +21,7 @@ defmodule CaseManagerWeb.EventLive.FormSmall do
         <.input field={@form[:title]} type="hidden" value={@case.name} />
         <.input field={@form[:body]} type="textarea" placeholder={gettext("Enter some notes here")} />
         <.input field={@form[:from]} type="hidden" value={@current_user.name} />
-        <.input field={@form[:cases]} type="hidden" value={@case.id} />
+        <.input field={@form[:cases]} type="hidden" value={[@case.id]} />
         <:actions>
           <.button
             phx-disable-with="Saving..."

@@ -166,7 +166,8 @@ defmodule CaseManager.Cases.Case do
       foreign_key: :item_id,
       on_replace: :delete
 
-    many_to_many :events, CaseManager.Events.Event, join_through: CaseManager.CasesEvents
+    many_to_many :events, CaseManager.Events.Event,
+      join_through: CaseManager.CasesEvents.CaseEvent
 
     # Use created_at as timestamp key
     timestamps(inserted_at: :created_at, type: :utc_datetime)

@@ -9,7 +9,7 @@ config :case_manager, CaseManager.Repo,
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10,
-  types: OnefleetApi.PostgresTypes
+  types: CaseManager.PostgresTypes
 
 # migration_timestamps: [type: :timestamptz]
 

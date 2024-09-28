@@ -14,7 +14,9 @@ defmodule CaseManager.MixProject do
         ignore_modules: [
           CaseManager.FetchEvent,
           CaseManager.Release,
-          CaseManager.SentryFinchHTTPClient
+          CaseManager.SentryFinchHTTPClient,
+          CaseManager.Repo,
+          CaseManager.PostgresTypes
         ],
         summary: [threshold: 75]
       ]

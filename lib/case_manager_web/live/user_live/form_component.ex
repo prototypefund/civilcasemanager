@@ -71,7 +71,7 @@ defmodule CaseManagerWeb.UserLive.FormComponent do
 
         {:noreply,
          socket
-         |> put_flash(:info, "user updated successfully")
+         |> put_flash(:info, "User updated successfully")
          |> push_patch(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -86,7 +86,7 @@ defmodule CaseManagerWeb.UserLive.FormComponent do
 
         {:noreply,
          socket
-         |> put_flash(:info, "user created successfully")
+         |> put_flash(:info, "User created successfully")
          |> push_patch(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->

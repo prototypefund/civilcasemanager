@@ -6,6 +6,10 @@ defmodule CaseManager.Cases.Case do
 
   alias CaseManager.CaseNationalities.CaseNationality
 
+  def get_preload_keys do
+    [:events, :positions, :nationalities, :departure_place, :arrival_place]
+  end
+
   @derive {
     Flop.Schema,
     filterable: [:status, :name, :occurred_at, :outcome, :actors_involved],

@@ -73,12 +73,16 @@ defmodule CaseManager.Cases do
           where: c.id == ^id,
           preload:
             ^if(preload,
-              do: [:events, :positions, :nationalities, :departure_place, :arrival_place],
+              do: Case.get_preload_keys(),
               else: []
             )
       )
 
     if preload, do: populate_shortcodes(case), else: case
+  end
+
+  def preload_assoc(case) do
+    Repo.preload(case, Case.get_preload_keys())
   end
 
   def list_positions_for_case(case_identifier) do

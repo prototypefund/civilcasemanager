@@ -205,6 +205,72 @@ defmodule CaseManagerWeb.CaseLiveTest do
       assert_patch(show_live, ~p"/cases/#{case}/show/edit")
     end
 
+    test "adds an event through small form", %{conn: conn, caseStruct: case} do
+      {:ok, show_live, _html} = live(conn, ~p"/cases/#{case}")
+
+      assert show_live
+             |> form("#event-form", event: %{body: "Test event body"})
+             |> render_submit()
+
+      assert_patch(show_live, ~p"/cases/#{case}")
+
+      html = render(show_live)
+      assert html =~ "Comment created successfully"
+      assert html =~ "Test event body"
+    end
+
+    test "updates case content after external edit", %{conn: conn, caseStruct: case} do
+      {:ok, show_live, _html} = live(conn, ~p"/cases/#{case}")
+
+      # Initial assertion
+      html = render(show_live)
+      assert html =~ case.name
+      assert html =~ case.notes
+
+      # Update the case externally
+      updated_attrs = %{name: "Updated Case Name", notes: "Updated case notes"}
+      {:ok, _} = CaseManager.Cases.update_case(case, updated_attrs)
+
+      # Check that the page now has the updated content
+      updated_html = render(show_live)
+      assert updated_html =~ "Updated Case Name"
+      assert updated_html =~ "Updated case notes"
+      refute updated_html =~ case.name
+      refute updated_html =~ case.notes
+    end
+
+    test "updates events after external addition", %{conn: conn, caseStruct: case} do
+      {:ok, show_live, _html} = live(conn, ~p"/cases/#{case}")
+
+      # Initial assertion
+      html = render(show_live)
+      refute html =~ "External event 1"
+      refute html =~ "External event 2"
+      refute html =~ "Event for different case"
+
+      # Add events externally
+      CaseManager.Events.create_event(%{cases: [case.id], body: "External event 1"})
+      CaseManager.Events.create_event(%{cases: [case.id], body: "External event 2"})
+
+      # Create a second case and add an event to it
+      second_case = case_fixture()
+
+      CaseManager.Events.create_event(%{
+        cases: [second_case.id],
+        body: "Event for different case"
+      })
+
+      # Check that the page now has the new events for the current case, but not the event for the second case
+      updated_html = render(show_live)
+      assert updated_html =~ "External event 1"
+      assert updated_html =~ "External event 2"
+      refute updated_html =~ "Event for different case"
+    end
+  end
+
+  describe "Edit" do
+    setup [:create_case, :login]
+
     test "updates case on edit screen", %{conn: conn, caseStruct: case} do
       {:ok, edit_live, _html} = live(conn, ~p"/cases/#{case}/show/edit")
 
@@ -222,18 +288,27 @@ defmodule CaseManagerWeb.CaseLiveTest do
       assert html =~ "some updated notes"
     end
 
-    test "adds an event through small form", %{conn: conn, caseStruct: case} do
-      {:ok, show_live, _html} = live(conn, ~p"/cases/#{case}")
+    test "refreshes edit form after external update", %{conn: conn, caseStruct: case} do
+      {:ok, edit_live, _html} = live(conn, ~p"/cases/#{case}/show/edit")
 
-      assert show_live
-             |> form("#event-form", event: %{body: "Test event body"})
-             |> render_submit()
+      # Initial assertion
+      assert edit_live |> form("#case-form") |> render() =~ case.notes
 
-      assert_patch(show_live, ~p"/cases/#{case}")
+      # Edit another field without submitting
+      assert edit_live
+             |> form("#case-form", case: %{name: "Updated Title"})
+             |> render_change() =~ "Updated Title"
 
-      html = render(show_live)
-      assert html =~ "Comment created successfully"
-      assert html =~ "Test event body"
+      # Update case externally
+      CaseManager.Cases.update_case(case, %{notes: "Externally updated notes"})
+
+      # Check that the form has been refreshed with the new data
+      updated_form = edit_live |> form("#case-form") |> render()
+      assert updated_form =~ "Externally updated notes"
+      refute updated_form =~ case.notes
+
+      # Check that the form still has the updated title
+      assert updated_form =~ "Updated Title"
     end
   end
 end

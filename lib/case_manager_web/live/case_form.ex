@@ -481,6 +481,16 @@ defmodule CaseManagerWeb.CaseForm do
   def update(%{case: case} = assigns, socket) do
     changeset = Cases.change_case(case)
 
+    # If there are already changes and put another user has published other changes,
+    # reapply the current changeset on to the new case.
+    changeset =
+      if socket.assigns[:form] do
+        existing_changes = socket.assigns.form.source.changes
+        Cases.change_case(case, existing_changes)
+      else
+        changeset
+      end
+
     {:ok,
      socket
      |> assign(assigns)

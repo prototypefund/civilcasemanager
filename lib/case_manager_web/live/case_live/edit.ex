@@ -5,7 +5,11 @@ defmodule CaseManagerWeb.CaseLive.Edit do
 
   @impl true
   def mount(_params, _session, socket) do
-    if connected?(socket), do: CaseManager.Events.subscribe()
+    if connected?(socket) do
+      CaseManager.Events.subscribe()
+      CaseManager.Cases.subscribe()
+    end
+
     {:ok, socket, layout: {CaseManagerWeb.Layouts, :autocolumn}}
   end
 
@@ -29,34 +33,23 @@ defmodule CaseManagerWeb.CaseLive.Edit do
     {:noreply, socket}
   end
 
-  def handle_info({:event_created, event}, socket) do
-    # We only call stream_insert if the received event has a case in cases with the same case_id as the case we are showing
-    case = socket.assigns.case
-    # Event.cases is a list of cases that the event is associated with
-    if is_list(event.cases) &&
-         Enum.any?(event.cases, fn assoc_case -> assoc_case.id == case.id end) do
-      {:noreply, stream_insert(socket, :assoc_events, event, at: 0)}
-    else
-      {:noreply, socket}
-    end
-  end
-
-  @impl true
-  def handle_info({:event_updated, event}, socket) do
-    # TODO Filter correctly here
-    {:noreply, stream_insert(socket, :assoc_events, event, at: 0)}
-  end
-
-  @impl true
-  def handle_info({CaseManagerWeb.EventLive.FormSmall, {:saved, event}}, socket) do
-    {:noreply, stream_insert(socket, :assoc_events, event)}
-  end
-
   @impl true
   def handle_info({CaseManagerWeb.CaseForm, {:saved, case}}, socket) do
     {:noreply,
      socket
      |> assign(:case, case)}
+  end
+
+  @impl true
+  def handle_info({:case_updated, case}, socket) do
+    {:noreply,
+     socket
+     |> assign(:case, Cases.preload_assoc(case))}
+  end
+
+  @impl true
+  def handle_info({:case_created, _case}, socket) do
+    {:noreply, socket}
   end
 
   defp page_title(:edit), do: "Edit Case"

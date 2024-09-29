@@ -58,7 +58,6 @@ defmodule CaseManagerWeb.Router do
 
       live "/imported_cases", ImportedCaseLive.Index, :index
       live "/imported_cases/upload", ImportedCaseLive.Upload, :new
-      live "/imported_cases/:id/edit", ImportedCaseLive.Index, :edit
       live "/imported_cases/:id/validate", ImportedCaseLive.Validate, :import
 
       live "/places", PlaceLive.Index, :index
@@ -86,16 +85,11 @@ defmodule CaseManagerWeb.Router do
     post "/users/log_in", UserLive.SessionController, :create
   end
 
+  ## Doesn't require logged-in
   scope "/", CaseManagerWeb do
     pipe_through [:browser]
 
     delete "/users/log_out", UserLive.SessionController, :delete
-
-    live_session :current_user,
-      on_mount: [{CaseManagerWeb.UserLive.Auth, :mount_current_user}] do
-      live "/users/confirm/:token", UserLive.ConfirmationInstructions, :edit
-      live "/users/confirm", UserLive.ConfirmationInstructions, :new
-    end
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development

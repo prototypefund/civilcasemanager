@@ -266,6 +266,26 @@ defmodule CaseManagerWeb.CaseLiveTest do
       assert updated_html =~ "External event 2"
       refute updated_html =~ "Event for different case"
     end
+
+    test "updates associated event and reflects change", %{conn: conn, caseStruct: case} do
+      {:ok, show_live, _html} = live(conn, ~p"/cases/#{case}")
+
+      # Create an associated event
+      {:ok, event} =
+        CaseManager.Events.create_event(%{cases: [case.id], body: "Initial event body"})
+
+      # Initial assertion
+      html = render(show_live)
+      assert html =~ "Initial event body"
+
+      # Update the event externally
+      CaseManager.Events.update_event(event, %{body: "Updated event body"})
+
+      # Check that the page now has the updated event content
+      updated_html = render(show_live)
+      assert updated_html =~ "Updated event body"
+      refute updated_html =~ "Initial event body"
+    end
   end
 
   describe "Edit" do

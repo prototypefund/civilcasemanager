@@ -138,10 +138,10 @@ Hooks.ThemeToggle = {
     }
   },
   hideThemeMenu() {
-    this.el.querySelector('.theme-menu').style.display = 'none'
+    this.el.querySelector('#theme-menu').style.display = 'none'
   },
   toggleThemeMenu() {
-    const menu = this.el.querySelector('.theme-menu')
+    const menu = this.el.querySelector('#theme-menu')
     menu.style.display = menu.style.display === 'none' ? 'block' : 'none'
   },
   setTheme(theme) {

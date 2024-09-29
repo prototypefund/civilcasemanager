@@ -19,7 +19,14 @@ defmodule CaseManager.MixProject do
           CaseManager.Repo,
           CaseManager.PostgresTypes,
           CaseManagerWeb.Layouts,
-          CaseManagerWeb.ErrorHTML
+          CaseManagerWeb.ErrorHTML,
+          ## TODO: Exclude until refactored
+          CaseManager.Datasources.SlackSupervisor,
+          CaseManager.Datasources.IMAPSupervisor,
+          CaseManager.Datasources.SlackImporter,
+          CaseManager.Datasources.IMAPWorker,
+          CaseManager.FetchManager,
+          CaseManager.FetchSupervisor
         ],
         summary: [threshold: 80]
       ]

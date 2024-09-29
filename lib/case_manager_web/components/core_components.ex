@@ -953,7 +953,7 @@ defmodule CaseManagerWeb.CoreComponents do
 
   ## Examples
 
-      <.tag class="bg-emerald-50 text-emerald-800">New</.tag>
+      <.tag color="grey" class="extra-classes">New</.tag>
   """
   attr :class, :string, default: nil
   attr :color, :string, default: "gray"

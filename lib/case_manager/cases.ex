@@ -34,22 +34,6 @@ defmodule CaseManager.Cases do
       [%Case{}, ...]
 
   """
-  def list_cases!(params) do
-    case Flop.validate_and_run(Case, params, for: Case) do
-      {:ok, cases} -> cases
-      {:error, _} -> []
-    end
-  end
-
-  @doc """
-  Returns the list of cases using Flop
-
-  ## Examples
-
-      iex> list_cases(params)
-      [%Case{}, ...]
-
-  """
   def list_cases(params) do
     Flop.validate_and_run(Case, params, for: Case)
   end

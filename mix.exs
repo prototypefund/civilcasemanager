@@ -15,8 +15,11 @@ defmodule CaseManager.MixProject do
           CaseManager.FetchEvent,
           CaseManager.Release,
           CaseManager.SentryFinchHTTPClient,
+          ## False positives
           CaseManager.Repo,
-          CaseManager.PostgresTypes
+          CaseManager.PostgresTypes,
+          CaseManagerWeb.Layouts,
+          CaseManagerWeb.ErrorHTML
         ],
         summary: [threshold: 80]
       ]

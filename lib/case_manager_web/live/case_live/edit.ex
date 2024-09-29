@@ -29,7 +29,7 @@ defmodule CaseManagerWeb.CaseLive.Edit do
     {:noreply, socket |> push_navigate(to: ~p"/cases")}
   end
 
-  def handle_event("keyup", %{"key" => _}, socket) do
+  def handle_event("keyup", _, socket) do
     {:noreply, socket}
   end
 

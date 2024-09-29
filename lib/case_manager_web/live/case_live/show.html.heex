@@ -134,7 +134,7 @@
     <div phx-update="stream" id="assoc_events">
       <%= for {id, event} <- @streams.assoc_events do %>
         <div id={id} phx-click={JS.navigate(~p"/events/#{event}")} phx-hook="FadeIn" class="py-3">
-          <.card id={id}>
+          <.card id={"#{id}-card"}>
             <:icon>
               <.icon name={CaseManager.FetchSupervisor.get_icon_for(event.type)} class="h-4 w-4" />
             </:icon>

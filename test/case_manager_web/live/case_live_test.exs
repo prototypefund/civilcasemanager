@@ -149,13 +149,6 @@ defmodule CaseManagerWeb.CaseLiveTest do
       assert html =~ "some notes"
     end
 
-    ## FIXME
-    # test "readonly user cannot save case", %{conn: conn} do
-    #   {:ok, index_live, _html} = live(conn, ~p"/cases")
-
-    #   assert index_live |> element("a", "New Case") |> has_element?() == false
-    # end
-
     test "updates case in listing", %{conn: conn, caseStruct: case} do
       {:ok, index_live, _html} = live(conn, ~p"/cases")
 
@@ -164,14 +157,9 @@ defmodule CaseManagerWeb.CaseLiveTest do
 
       assert_patch(index_live, ~p"/cases/#{case}/edit")
 
-      ## TODO Test for wrong status
       assert index_live
              |> form("#case-form", case: @invalid_attrs)
              |> render_change() =~ "can&#39;t be blank"
-
-      # assert index_live
-      #        |> form("#case-form", case: @invalid_name)
-      #        |> render_change() =~ "ID must only contain letters, numbers and a dash"
 
       assert_raise ArgumentError, fn ->
         index_live
@@ -220,9 +208,9 @@ defmodule CaseManagerWeb.CaseLiveTest do
     test "updates case on edit screen", %{conn: conn, caseStruct: case} do
       {:ok, edit_live, _html} = live(conn, ~p"/cases/#{case}/show/edit")
 
-      # assert edit_live
-      #        |> form("#case-form", case: @invalid_attrs)
-      #        |> render_change() =~ "can't be blank"
+      assert edit_live
+             |> form("#case-form", case: @invalid_attrs)
+             |> render_change() =~ "can&#39;t be blank"
 
       assert {:ok, _view, html} =
                edit_live
@@ -232,6 +220,20 @@ defmodule CaseManagerWeb.CaseLiveTest do
 
       assert html =~ "Case updated successfully"
       assert html =~ "some updated notes"
+    end
+
+    test "adds an event through small form", %{conn: conn, caseStruct: case} do
+      {:ok, show_live, _html} = live(conn, ~p"/cases/#{case}")
+
+      assert show_live
+             |> form("#event-form", event: %{body: "Test event body"})
+             |> render_submit()
+
+      assert_patch(show_live, ~p"/cases/#{case}")
+
+      html = render(show_live)
+      assert html =~ "Comment created successfully"
+      assert html =~ "Test event body"
     end
   end
 end

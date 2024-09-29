@@ -43,6 +43,10 @@ defmodule CaseManager.Events.Event do
 
   defp assign_cases(changeset, []), do: put_assoc(changeset, :cases, [])
 
+  defp assign_cases(changeset, cases) when is_binary(cases) do
+    assign_cases(changeset, [cases])
+  end
+
   defp assign_cases(changeset, cases) when is_list(cases) and is_binary(hd(cases)) do
     put_assoc(changeset, :cases, Cases.get_cases(cases))
   end

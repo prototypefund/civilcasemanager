@@ -9,8 +9,22 @@ defmodule CaseManagerWeb.UserLive.ForgotPasswordTest do
       {:ok, lv, html} = live(conn, ~p"/users/reset_password")
 
       assert html =~ "Forgot your password?"
-      # assert has_element?(lv, ~s|a[href="#{~p"/users/register"}"]|, "Register")
+      assert html =~ "Please contact the adminstration"
       assert has_element?(lv, ~s|a[href="#{~p"/users/log_in"}"]|, "Log in")
+    end
+
+    test "does not contain a form", %{conn: conn} do
+      {:ok, _view, html} = live(conn, ~p"/users/reset_password")
+
+      refute html =~ "<form"
+    end
+
+    test "contains link to log in page", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/users/reset_password")
+
+      view |> element("a", "Log in") |> render_click()
+
+      assert_redirect(view, ~p"/users/log_in")
     end
 
     test "redirects if already logged in", %{conn: conn} do

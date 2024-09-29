@@ -21,9 +21,6 @@ defmodule CaseManager.Application do
       CaseManager.DataQualityService,
       # Start the Finch HTTP client for sending emails
       {Finch, name: CaseManager.Finch},
-      # Start the FetchCoordinator
-      {CaseManager.FetchManager, name: :fetch_manager},
-      {CaseManager.FetchSupervisor, supervisor_opts()},
       # Start to serve requests, typically the last entry
       CaseManagerWeb.Endpoint
     ]

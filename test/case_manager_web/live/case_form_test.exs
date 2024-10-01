@@ -146,5 +146,46 @@ defmodule CaseManagerWeb.CaseFormTest do
              |> form("#case-form")
              |> render_change() =~ "can&#39;t be blank"
     end
+
+    test "can set nullable enum and integer fields back to null", %{conn: conn} do
+      case =
+        case_fixture(%{
+          boat_type: :rubber,
+          boat_color: :blue,
+          boat_engine_failure: :yes,
+          sar_region: :sar1,
+          outcome: :ngo_rescue,
+          boat_number_of_engines: 2,
+          pob_total: 50
+        })
+
+      {:ok, view, _html} = live(conn, ~p"/cases/#{case}/edit")
+
+      params = %{
+        "case" => %{
+          "boat_type" => "unknown",
+          "boat_color" => "unknown",
+          "boat_engine_failure" => "unknown",
+          "sar_region" => "unknown",
+          "outcome" => "unknown",
+          "boat_number_of_engines" => "",
+          "pob_total" => ""
+        }
+      }
+
+      view
+      |> form("#case-form", params)
+      |> render_submit()
+
+      updated_case = CaseManager.Cases.get_case!(case.id)
+
+      assert updated_case.boat_type == :unknown
+      assert updated_case.boat_color == :unknown
+      assert updated_case.boat_engine_failure == :unknown
+      assert updated_case.sar_region == :unknown
+      assert updated_case.outcome == :unknown
+      assert updated_case.boat_number_of_engines == nil
+      assert updated_case.pob_total == nil
+    end
   end
 end

@@ -7,7 +7,7 @@ defmodule CaseManager.Cases.Case do
   alias CaseManager.CaseNationalities.CaseNationality
 
   def get_preload_keys do
-    [:events, :positions, :nationalities, :departure_place, :arrival_place]
+    [:events, :positions, :nationalities, :departure_place, :arrival_place, :passengers]
   end
 
   @derive {
@@ -170,6 +170,8 @@ defmodule CaseManager.Cases.Case do
       foreign_key: :item_id,
       on_replace: :delete
 
+    has_many :passengers, CaseManager.Passengers.Passenger, on_replace: :delete
+
     many_to_many :events, CaseManager.Events.Event,
       join_through: CaseManager.CasesEvents.CaseEvent
 
@@ -242,6 +244,10 @@ defmodule CaseManager.Cases.Case do
     |> cast_assoc(:nationalities,
       sort_param: :nationalities_sort,
       drop_param: :nationalities_drop
+    )
+    |> cast_assoc(:passengers,
+      sort_param: :passengers_sort,
+      drop_param: :passengers_drop
     )
 
     # |> put_timestamp_if_nil(:opened_at)

@@ -76,6 +76,17 @@
             <% end %>
           </:item>
         </.list>
+
+        <.h1 class="dark:text-indigo-300 text-indigo-600 pt-8">Individual Passengers</.h1>
+        <%= if !Enum.empty?(@case.passengers) do %>
+          <%= for passenger <- @case.passengers do %>
+            <details>
+              <summary><%= passenger.name %></summary>
+              <p><%= passenger.description %></p>
+            </details>
+          <% end %>
+        <% end %>
+
         <.h1 class="dark:text-indigo-300 text-indigo-600 pt-8">Outcome</.h1>
         <.list>
           <:item title="Time of disembarkation"><%= @case.time_of_disembarkation %></:item>

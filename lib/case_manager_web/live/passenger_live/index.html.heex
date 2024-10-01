@@ -1,0 +1,47 @@
+<.header>
+  Listing Passengers
+  <:actions>
+    <.link patch={~p"/passengers/new"}>
+      <.button>New Passenger</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="passengers"
+  rows={@streams.passengers}
+  row_click={fn {_id, passenger} -> JS.navigate(~p"/passengers/#{passenger}") end}
+>
+  <:col :let={{_id, passenger}} label="Name"><%= passenger.name %></:col>
+  <:col :let={{_id, passenger}} label="Description"><%= passenger.description %></:col>
+  <:action :let={{_id, passenger}}>
+    <div class="sr-only">
+      <.link navigate={~p"/passengers/#{passenger}"}>Show</.link>
+    </div>
+    <.link patch={~p"/passengers/#{passenger}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, passenger}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: passenger.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="passenger-modal"
+  show
+  on_cancel={JS.patch(~p"/passengers")}
+>
+  <.live_component
+    module={CaseManagerWeb.PassengerLive.FormComponent}
+    id={@passenger.id || :new}
+    title={@page_title}
+    action={@live_action}
+    passenger={@passenger}
+    patch={~p"/passengers"}
+  />
+</.modal>

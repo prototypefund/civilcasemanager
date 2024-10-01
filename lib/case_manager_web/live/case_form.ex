@@ -381,6 +381,51 @@ defmodule CaseManagerWeb.CaseForm do
           </details>
         </div>
 
+        <div class="flex between items-baseline justify-between">
+          <h2 class="dark:text-indigo-300 text-indigo-600 pt-4 font-semibold">
+            Individual Passengers
+          </h2>
+          <button
+            type="button"
+            name="case[passengers_sort][]"
+            value="new"
+            phx-click={JS.dispatch("change")}
+            class={[
+              "phx-submit-loading:opacity-75 rounded-lg bg-emerald-600 hover:dark:bg-emerald-700 w-9 h-9 py-1 px-2",
+              "text-sm font-semibold leading-5 text-white active:text-white/80"
+            ]}
+          >
+            <.icon name="hero-plus-circle" class="w-5 h-5 text-white" />
+          </button>
+        </div>
+        <.inputs_for :let={ef} field={@form[:passengers]}>
+          <div class="break-inside-avoid-column flex flex-row gap-4">
+            <input type="hidden" name="case[passengers_sort][]" value={ef.index} />
+            <.input
+              type="text"
+              field={ef[:name]}
+              placeholder="Name of person"
+              wrapper_class="flex-grow"
+            />
+            <.input
+              type="textarea"
+              field={ef[:description]}
+              wrapper_class="flex-grow"
+              placeholder="Details of the person"
+            />
+            <button
+              type="button"
+              name="case[passengers_drop][]"
+              value={ef.index}
+              class="w-9 h-9 mt-2 bg-rose-600 hover:bg-rose-700 rounded-lg py-1 px-2"
+              phx-click={JS.dispatch("change")}
+              data-confirm="Are you sure to delete this passenger?"
+            >
+              <.icon name="hero-trash" class="w-5 h-5 text-white" />
+            </button>
+          </div>
+        </.inputs_for>
+
         <h1 class="dark:text-indigo-300 text-indigo-600 pt-8 font-semibold">Outcome</h1>
         <.input
           field={@form[:outcome]}
@@ -522,6 +567,8 @@ defmodule CaseManagerWeb.CaseForm do
          |> push_navigate(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
+        Logger.error("Error updating case: #{inspect(changeset)}")
+
         {:noreply,
          socket
          |> assign(:form, to_form(changeset, action: :validate))}

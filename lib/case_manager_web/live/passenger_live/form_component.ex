@@ -21,6 +21,7 @@ defmodule CaseManagerWeb.PassengerLive.FormComponent do
       >
         <.input field={@form[:name]} type="text" label="Name" />
         <.input field={@form[:description]} type="text" label="Description" />
+        <.input field={@form[:case_id]} type="text" label="Case ID" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Passenger</.button>
         </:actions>

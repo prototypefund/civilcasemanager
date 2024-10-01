@@ -3,6 +3,7 @@ defmodule CaseManagerWeb.PassengerLiveTest do
 
   import Phoenix.LiveViewTest
   import CaseManager.PassengersFixtures
+  import CaseManagerWeb.LoginUtils
 
   @create_attrs %{name: "some name", description: "some description"}
   @update_attrs %{name: "some updated name", description: "some updated description"}
@@ -14,7 +15,7 @@ defmodule CaseManagerWeb.PassengerLiveTest do
   end
 
   describe "Index" do
-    setup [:create_passenger]
+    setup [:create_passenger, :login]
 
     test "lists all passengers", %{conn: conn, passenger: passenger} do
       {:ok, _index_live, html} = live(conn, ~p"/passengers")
@@ -35,8 +36,11 @@ defmodule CaseManagerWeb.PassengerLiveTest do
              |> form("#passenger-form", passenger: @invalid_attrs)
              |> render_change() =~ "can&#39;t be blank"
 
+      case = CaseManager.CasesFixtures.case_fixture()
+      attrs = Map.put(@create_attrs, :case_id, case.id)
+
       assert index_live
-             |> form("#passenger-form", passenger: @create_attrs)
+             |> form("#passenger-form", passenger: attrs)
              |> render_submit()
 
       assert_patch(index_live, ~p"/passengers")
@@ -78,7 +82,7 @@ defmodule CaseManagerWeb.PassengerLiveTest do
   end
 
   describe "Show" do
-    setup [:create_passenger]
+    setup [:create_passenger, :login]
 
     test "displays passenger", %{conn: conn, passenger: passenger} do
       {:ok, _show_live, html} = live(conn, ~p"/passengers/#{passenger}")

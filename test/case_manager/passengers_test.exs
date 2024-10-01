@@ -5,7 +5,7 @@ defmodule CaseManager.PassengersTest do
 
   describe "passengers" do
     alias CaseManager.Passengers.Passenger
-
+    import CaseManager.CasesFixtures
     import CaseManager.PassengersFixtures
 
     @invalid_attrs %{name: nil, description: nil}
@@ -21,7 +21,8 @@ defmodule CaseManager.PassengersTest do
     end
 
     test "create_passenger/1 with valid data creates a passenger" do
-      valid_attrs = %{name: "some name", description: "some description"}
+      case = case_fixture()
+      valid_attrs = %{name: "some name", description: "some description", case_id: case.id}
 
       assert {:ok, %Passenger{} = passenger} = Passengers.create_passenger(valid_attrs)
       assert passenger.name == "some name"

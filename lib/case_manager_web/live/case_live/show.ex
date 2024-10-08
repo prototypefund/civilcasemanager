@@ -66,10 +66,17 @@ defmodule CaseManagerWeb.CaseLive.Show do
   end
 
   @impl true
-  def handle_info({:case_updated, case}, socket) do
+  def handle_info(
+        {:case_updated, %{id: id} = updated_case},
+        %{assigns: %{case: %{id: id}}} = socket
+      ) do
     {:noreply,
      socket
-     |> assign(:case, Cases.preload_assoc(case))}
+     |> assign(:case, Cases.preload_assoc(updated_case))}
+  end
+
+  def handle_info({:case_updated, _}, socket) do
+    {:noreply, socket}
   end
 
   @impl true

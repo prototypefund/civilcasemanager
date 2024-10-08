@@ -24,10 +24,13 @@ defmodule CaseManager.Cases.Case do
   ## for possible values
   @primary_key {:id, CaseManager.StringId, autogenerate: true}
   schema "cases" do
-    ## Base data
+    # Base data
     field :name, :string
     field :notes, :string
 
+    ## Status
+    ### There are Postgres check constraints for this field
+    ### You need to create a migration to update them if adding new values
     field :status, Ecto.Enum,
       values: [
         :open,
@@ -37,10 +40,10 @@ defmodule CaseManager.Cases.Case do
 
     field :occurred_at, :utc_datetime
 
-    ## Departure
+    # Departure
     field :departure_region, :string
 
-    ### Deprecated
+    ## Deprecated
     field :place_of_departure, :string
 
     belongs_to :departure_place,
@@ -50,6 +53,9 @@ defmodule CaseManager.Cases.Case do
 
     field :time_of_departure, :utc_datetime
 
+    ## SAR Zone
+    ### There are Postgres check constraints for this field
+    ### You need to create a migration to update them if adding new values
     field :sar_region, Ecto.Enum,
       values: [
         :unknown,
@@ -68,7 +74,11 @@ defmodule CaseManager.Cases.Case do
     field :alerted_at, :utc_datetime
     field :alerted_by, :string
 
-    ## The boat
+    # The Boat
+
+    ## Boat type
+    ### There are Postgres check constraints for this field
+    ### You need to create a migration to update them if adding new values
     field :boat_type, Ecto.Enum,
       values: [
         :unknown,
@@ -83,6 +93,9 @@ defmodule CaseManager.Cases.Case do
 
     field :boat_notes, :string
 
+    ## Boat color
+    ### There are Postgres check constraints for this field
+    ### You need to create a migration to update them if adding new values
     field :boat_color, Ecto.Enum,
       values: [
         :unknown,
@@ -99,6 +112,9 @@ defmodule CaseManager.Cases.Case do
 
     field :boat_engine_status, :string
 
+    ## Boat engine failure
+    ### There are Postgres check constraints for this field
+    ### You need to create a migration to update them if adding new values
     field :boat_engine_failure, Ecto.Enum,
       values: [
         :unknown,
@@ -108,7 +124,7 @@ defmodule CaseManager.Cases.Case do
 
     field :boat_number_of_engines, :integer
 
-    ## People on Board
+    # People on Board
     field :pob_total, :integer
     field :pob_men, :integer
     field :pob_women, :integer
@@ -122,7 +138,8 @@ defmodule CaseManager.Cases.Case do
     has_many :nationalities, CaseNationality, on_replace: :delete
 
     ## Outcome
-
+    ### There are Postgres check constraints for this field
+    ### You need to create a migration to update them if adding new values
     field :outcome, Ecto.Enum,
       values: [
         :unknown,
@@ -139,9 +156,7 @@ defmodule CaseManager.Cases.Case do
         :autonomous,
         :empty_boat,
         :shipwreck,
-        :unclear,
-        ## TODO Remove in dagster
-        :currently_unknown
+        :unclear
       ]
 
     field :time_of_disembarkation, :utc_datetime
@@ -159,7 +174,7 @@ defmodule CaseManager.Cases.Case do
     field :frontext_involvement, :string
     field :followup_needed, :boolean
 
-    ## Meta
+    # Meta
     field :template, :string
     field :source, :string
     field :url, :string

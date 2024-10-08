@@ -30,7 +30,7 @@ defmodule CaseManagerWeb.CaseLiveTest do
     pob_medical_cases: 42,
     people_dead: 42,
     people_missing: 42,
-    outcome: :currently_unknown,
+    outcome: :unknown,
     time_of_disembarkation: ~U[2024-03-07 08:58:00Z],
     disembarked_by: "some disembarked_by",
     outcome_actors: "some outcome_actors",

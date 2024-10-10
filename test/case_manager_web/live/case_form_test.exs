@@ -40,7 +40,7 @@ defmodule CaseManagerWeb.CaseFormTest do
     test "saves new case", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/cases/new")
 
-      attrs = %{name: "AP303", notes: "Some notes"}
+      attrs = %{name: "AP0303-2001", notes: "Some notes"}
 
       assert view
              |> form("#case-form", case: attrs)
@@ -48,14 +48,14 @@ defmodule CaseManagerWeb.CaseFormTest do
 
       assert_patch(view, ~p"/cases")
 
-      assert Cases.get_case_by_identifier("AP303")
+      assert Cases.get_case_by_identifier(attrs.name)
     end
 
     test "updates existing case", %{conn: conn} do
       case = case_fixture()
       {:ok, view, _html} = live(conn, ~p"/cases/#{case}/edit")
 
-      attrs = %{name: "Updated Case", notes: "Updated notes"}
+      attrs = %{name: "EB1001-2002", notes: "Updated notes"}
 
       view
       |> form("#case-form", case: attrs)
@@ -64,8 +64,8 @@ defmodule CaseManagerWeb.CaseFormTest do
       assert_redirected(view, ~p"/cases")
 
       updated_case = Cases.get_case!(case.id)
-      assert updated_case.name == "Updated Case"
-      assert updated_case.notes == "Updated notes"
+      assert updated_case.name == attrs.name
+      assert updated_case.notes == attrs.notes
     end
 
     test "deletes imported case", %{conn: conn} do

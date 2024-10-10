@@ -26,6 +26,7 @@ defmodule CaseManager.Cases.Case do
   schema "cases" do
     # Base data
     field :name, :string
+    field :subtitle, :string
     field :notes, :string
 
     ## Status
@@ -200,6 +201,7 @@ defmodule CaseManager.Cases.Case do
     |> cast(attrs, [
       :notes,
       :name,
+      :subtitle,
       :status,
       :created_at,
       :occurred_at,
@@ -245,12 +247,7 @@ defmodule CaseManager.Cases.Case do
       :alerted_by
     ])
     |> validate_required([:name, :status])
-    # |> validate_number(:course_over_ground, greater_than_or_equal_to: 0, less_than_or_equal_to: 360)
-    # |> validate_format(
-    #   :name,
-    #   ~r/^[a-zA-Z0-9\-]+$/,
-    #   message: "ID must only contain letters, numbers and a dash."
-    # )
+    |> validate_name()
     |> put_timestamp_if_nil(:created_at)
     |> cast_assoc(:positions,
       sort_param: :positions_sort,
@@ -264,26 +261,38 @@ defmodule CaseManager.Cases.Case do
       sort_param: :passengers_sort,
       drop_param: :passengers_drop
     )
+    |> unique_constraint(:identifier)
+  end
 
-    # |> put_timestamp_if_nil(:opened_at)
-    # |> ensure_identifier_format(:identifier, :created_at)
-    # |> truncate_field(:freetext, 65_535)
-    # |> unique_constraint(:identifier)
+  defp valid_identifier?(part) do
+    trimmed_part = String.trim(part)
+    regex = ~r/\b(EB|3SC|AP|DC|UT|PV|DCPV)(\d{4})(?:\.(\d{1,2}))?-\d{4}\b/
+    String.match?(trimmed_part, regex)
   end
 
   # Check the ID for year suffix
-  # defp ensure_identifier_format(changeset, field, fallback_time) do
-  #   current_value = get_field(changeset, field)
+  defp validate_name(changeset) do
+    current_value = get_field(changeset, :name)
 
-  #   case current_value do
-  #     nil ->
-  #       changeset
+    case current_value do
+      nil ->
+        changeset
 
-  #     _ ->
-  #       fixed_id = get_compound_identifier(current_value, get_field(changeset, fallback_time))
-  #       put_change(changeset, field, fixed_id)
-  #   end
-  # end
+      value ->
+        parts = String.split(value, ~r/[,\/]/)
+        valid_parts = Enum.all?(parts, &valid_identifier?/1)
+
+        if valid_parts do
+          changeset
+        else
+          add_error(
+            changeset,
+            :name,
+            "Identifiers must be a prefix (AP, EB, etc) followed directly by a four digit number, followed by a dash and the year: AP0001-2024"
+          )
+        end
+    end
+  end
 
   def get_compound_identifier(id, fallback_time) when is_binary(id) do
     case String.split(id, "-") do

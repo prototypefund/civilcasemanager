@@ -27,7 +27,7 @@ defmodule CaseManager.CasesTest do
     }
 
     @valid_attrs %{
-      name: "TC0012",
+      name: "DC0011-2023",
       notes: "some notes",
       status: :open,
       occurred_at: ~U[2024-03-08 08:58:00Z],
@@ -75,7 +75,7 @@ defmodule CaseManager.CasesTest do
 
     test "create_case/1 with valid data creates a case" do
       assert {:ok, %Case{} = case} = Cases.create_case(@valid_attrs)
-      assert case.name == "TC0012"
+      assert case.name == "DC0011-2023"
       assert case.notes == "some notes"
       assert case.status == :open
       assert case.occurred_at == ~U[2024-03-08 08:58:00Z]
@@ -123,7 +123,7 @@ defmodule CaseManager.CasesTest do
       case = case_fixture()
 
       update_attrs = %{
-        name: "DC0011",
+        name: "DC0011-2022",
         notes: "some updated notes",
         status: :closed,
         occurred_at: ~U[2024-03-08 08:58:00Z],
@@ -161,7 +161,7 @@ defmodule CaseManager.CasesTest do
 
       assert {:ok, %Case{} = case} = Cases.update_case(case, update_attrs)
 
-      assert case.name == "DC0011"
+      assert case.name == "DC0011-2022"
       assert case.notes == "some updated notes"
       assert case.status == :closed
       assert case.occurred_at == ~U[2024-03-08 08:58:00Z]
@@ -350,15 +350,15 @@ defmodule CaseManager.CasesTest do
     end
 
     test "list_cases/1 returns cases using Flop" do
-      case_fixture(%{name: "Case A"})
-      case_fixture(%{name: "Case B"})
-      case_fixture(%{name: "Case C"})
+      case_fixture(%{name: "DC0001-2022"})
+      case_fixture(%{name: "DC0002-2022"})
+      case_fixture(%{name: "AP0003-2022"})
 
-      params = %{filters: [%{field: :name, op: :=~, value: "Case"}], order_by: [:name], limit: 2}
+      params = %{filters: [%{field: :name, op: :=~, value: "DC"}], order_by: [:name], limit: 2}
       {:ok, {cases, _meta}} = Cases.list_cases(params)
 
       assert length(cases) == 2
-      assert Enum.map(cases, & &1.name) == ["Case A", "Case B"]
+      assert Enum.map(cases, & &1.name) == ["DC0001-2022", "DC0002-2022"]
 
       params = %{filters: [%{field: :name, op: :=~, value: "Non-existent"}]}
       {:ok, {cases, _meta}} = Cases.list_cases(params)
@@ -367,9 +367,9 @@ defmodule CaseManager.CasesTest do
     end
 
     test "list_cases/1 with invalid params returns error tuple" do
-      case_fixture(%{name: "Case A"})
-      case_fixture(%{name: "Case B"})
-      case_fixture(%{name: "Case C"})
+      case_fixture(%{name: "DC0001-2022"})
+      case_fixture(%{name: "DC0002-2022"})
+      case_fixture(%{name: "AP0003-2022"})
 
       invalid_params = %{filters: [%{field: :invalid_field, op: :=, value: "Some Value"}]}
       {:error, _changeset} = Cases.list_cases(invalid_params)

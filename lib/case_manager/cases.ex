@@ -215,10 +215,9 @@ defmodule CaseManager.Cases do
   end
 
   def get_pretty_identifier(case) do
-    # Get first part of identifier
+    # Remove years from identifiers
     case.name
-    |> String.split("-")
-    |> hd()
+    |> String.replace(~r/-\d{4}/, "")
   end
 
   @doc """

@@ -6,7 +6,7 @@ defmodule CaseManagerWeb.CaseLiveTest do
   import CaseManagerWeb.LoginUtils
 
   @create_attrs %{
-    name: "AP9001",
+    name: "AP9001-2022",
     notes: "some notes",
     status: :open,
     occurred_at: ~U[2024-03-07 08:58:00Z],
@@ -38,7 +38,7 @@ defmodule CaseManagerWeb.CaseLiveTest do
     url: "some url"
   }
   @update_attrs %{
-    name: "DC1001",
+    name: "DC1001-2002",
     notes: "some updated notes",
     status: :ready_for_documentation,
     occurred_at: ~U[2024-03-08 08:58:00Z],
@@ -87,6 +87,10 @@ defmodule CaseManagerWeb.CaseLiveTest do
     %{caseStruct: case}
   end
 
+  defp remove_year_from_name(name) do
+    String.replace(name, ~r/-\d{4}$/, "")
+  end
+
   describe "Anonymous user" do
     test "cannot list cases", %{conn: conn} do
       {:error, _} = live(conn, ~p"/cases")
@@ -100,7 +104,7 @@ defmodule CaseManagerWeb.CaseLiveTest do
       {:ok, _index_live, html} = live(conn, ~p"/cases")
 
       assert html =~ "Listing Cases"
-      assert html =~ case.name
+      assert html =~ remove_year_from_name(case.name)
     end
 
     test "cannot saves new case", %{conn: conn} do
@@ -123,7 +127,7 @@ defmodule CaseManagerWeb.CaseLiveTest do
       {:ok, _index_live, html} = live(conn, ~p"/cases")
 
       assert html =~ "Listing Cases"
-      assert html =~ case.name
+      assert html =~ remove_year_from_name(case.name)
     end
 
     test "saves new case", %{conn: conn} do
@@ -193,7 +197,7 @@ defmodule CaseManagerWeb.CaseLiveTest do
       {:ok, _show_live, html} = live(conn, ~p"/cases/#{case}")
 
       assert html =~ "Show Case"
-      assert html =~ case.name
+      assert html =~ remove_year_from_name(case.name)
     end
 
     test "edit button leads to correct URL", %{conn: conn, caseStruct: case} do
@@ -224,18 +228,18 @@ defmodule CaseManagerWeb.CaseLiveTest do
 
       # Initial assertion
       html = render(show_live)
-      assert html =~ case.name
+      assert html =~ remove_year_from_name(case.name)
       assert html =~ case.notes
 
       # Update the case externally
-      updated_attrs = %{name: "Updated Case Name", notes: "Updated case notes"}
+      updated_attrs = %{name: "DC1000-2002", notes: "Updated case notes"}
       {:ok, _} = CaseManager.Cases.update_case(case, updated_attrs)
 
       # Check that the page now has the updated content
       updated_html = render(show_live)
-      assert updated_html =~ "Updated Case Name"
-      assert updated_html =~ "Updated case notes"
-      refute updated_html =~ case.name
+      assert updated_html =~ updated_attrs.name
+      assert updated_html =~ updated_attrs.notes
+      refute updated_html =~ remove_year_from_name(case.name)
       refute updated_html =~ case.notes
     end
 

@@ -5,6 +5,7 @@ defmodule CaseManager.Repo.Migrations.AddCasesTable do
     create table(:cases, primary_key: false) do
       add :id, :string
       add :name, :string
+      add :subtitle, :string
       add :notes, :text
       add :created_at, :utc_datetime
       add :occurred_at, :utc_datetime

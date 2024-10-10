@@ -17,7 +17,7 @@ defmodule CaseManager.CasesFixtures do
         created_at: ~U[2024-03-07 08:58:00Z],
         deleted_at: ~U[2024-03-07 08:58:00Z],
         description: "some description",
-        name: "DC0010",
+        name: "DC0011-2020",
         notes: "Received call from PoB",
         is_archived: true,
         opened_at: ~U[2024-03-07 08:58:00Z],

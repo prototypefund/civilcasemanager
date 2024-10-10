@@ -24,7 +24,7 @@ defmodule CaseManager.ImportedCasesFixtures do
         disembarked_by: "some disembarked_by",
         followup_needed: true,
         imported_from: "some imported_from",
-        name: "some name",
+        name: "DC0011-2019",
         notes: "some notes",
         occurred_at: ~U[2024-07-09 08:22:00Z],
         outcome: "interception_tn",

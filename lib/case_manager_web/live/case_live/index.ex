@@ -146,6 +146,10 @@ defmodule CaseManagerWeb.CaseLive.Index do
     end
   end
 
+  defp escape_id(id) do
+    String.replace(id, "/", "")
+  end
+
   attr :status, :atom, required: true
   attr :class, :string, default: ""
 

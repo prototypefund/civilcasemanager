@@ -261,12 +261,12 @@ defmodule CaseManager.Cases.Case do
       sort_param: :passengers_sort,
       drop_param: :passengers_drop
     )
-    |> unique_constraint(:identifier)
+    |> unique_constraint(:name)
   end
 
   defp valid_identifier?(part) do
     trimmed_part = String.trim(part)
-    regex = ~r/\b(EB|3SC|AP|DC|UT|PV|DCPV)(\d{4})(?:\.(\d{1,2}))?-\d{4}\b/
+    regex = ~r/^(EB|3SC|AP|DC|UT|PV|DCPV)(\d{4})(?:\.(\d{1,2}))?-\d{4}$/
     String.match?(trimmed_part, regex)
   end
 
@@ -279,7 +279,7 @@ defmodule CaseManager.Cases.Case do
         changeset
 
       value ->
-        parts = String.split(value, ~r/[,\/]/)
+        parts = String.split(value, "/")
         valid_parts = Enum.all?(parts, &valid_identifier?/1)
 
         if valid_parts do

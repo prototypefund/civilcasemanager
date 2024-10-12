@@ -67,7 +67,7 @@
       <h2 class="text-lg font-semibold mb-2"><%= key_to_string(group.id) %></h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
         <%= for case <- group.case_list do %>
-          <.card id={"cases-#{case.id}"} phx-click={JS.navigate(~p"/cases/#{case}")}>
+          <.card id={"cases-#{escape_id(case.id)}"} phx-click={JS.navigate(~p"/cases/#{case}")}>
             <:icon>
               <.status_icon status={case.status} class="w-4 h-4" />
             </:icon>
@@ -98,7 +98,9 @@
               <.link
                 :if={@current_user.role != :readonly}
                 class="block"
-                phx-click={JS.push("delete", value: %{id: case.id}) |> hide("#cases-#{case.id}")}
+                phx-click={
+                  JS.push("delete", value: %{id: case.id}) |> hide("#cases-#{escape_id(case.id)}")
+                }
                 data-confirm="Are you sure? This will delete the case including all positions"
               >
                 <%= gettext("Delete Case") %>

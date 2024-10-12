@@ -4,6 +4,10 @@ defmodule CaseManager.CasesFixtures do
   entities via the `CaseManager.Cases` context.
   """
 
+  defp random_four_digit() do
+    :rand.uniform(9999) |> Integer.to_string() |> String.pad_leading(4, "0")
+  end
+
   @doc """
   Generate a case.
   """
@@ -17,7 +21,7 @@ defmodule CaseManager.CasesFixtures do
         created_at: ~U[2024-03-07 08:58:00Z],
         deleted_at: ~U[2024-03-07 08:58:00Z],
         description: "some description",
-        name: "DC0011-2020",
+        name: "DC#{random_four_digit()}-#{random_four_digit()}",
         notes: "Received call from PoB",
         is_archived: true,
         opened_at: ~U[2024-03-07 08:58:00Z],

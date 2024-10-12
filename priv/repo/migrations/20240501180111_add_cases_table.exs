@@ -50,5 +50,7 @@ defmodule CaseManager.Repo.Migrations.AddCasesTable do
 
       add :updated_at, :utc_datetime
     end
+
+    create unique_index(:cases, :name)
   end
 end

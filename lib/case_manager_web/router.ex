@@ -74,7 +74,7 @@ defmodule CaseManagerWeb.Router do
       live "/places/:id", PlaceLive.Show, :show
       live "/places/:id/show/edit", PlaceLive.Show, :edit
 
-      live "/users/settings", UserLive.Settings, :edit
+      live "/users/settings", UserLive.Settings, :show
       live "/users/settings/confirm_email/:token", UserLive.Settings, :confirm_email
     end
   end

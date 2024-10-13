@@ -149,21 +149,6 @@ defmodule CaseManagerWeb.UserLive.Auth do
     {:cont, mount_current_user(socket, session)}
   end
 
-  def on_mount(:ensure_write_user, _params, session, socket) do
-    socket = mount_current_user(socket, session)
-
-    if socket.assigns.current_user && socket.assigns.current_user.role != :readonly do
-      {:cont, socket}
-    else
-      socket =
-        socket
-        |> Phoenix.LiveView.put_flash(:error, "You must log in to access this page.")
-        |> Phoenix.LiveView.redirect(to: ~p"/users/log_in")
-
-      {:halt, socket}
-    end
-  end
-
   def on_mount(:ensure_admin, _params, session, socket) do
     socket = mount_current_user(socket, session)
 
@@ -182,12 +167,19 @@ defmodule CaseManagerWeb.UserLive.Auth do
   def on_mount(:ensure_authenticated, _params, session, socket) do
     socket = mount_current_user(socket, session)
 
-    if socket.assigns.current_user do
+    if socket.assigns.current_user && has_permission?(socket.assigns) do
       {:cont, socket}
     else
+      error_message =
+        if socket.assigns.current_user && !has_permission?(socket.assigns) do
+          "You don't have permission to edit or create new items."
+        else
+          "You must log in to access this page."
+        end
+
       socket =
         socket
-        |> Phoenix.LiveView.put_flash(:error, "You must log in to access this page.")
+        |> Phoenix.LiveView.put_flash(:error, error_message)
         |> Phoenix.LiveView.redirect(to: ~p"/users/log_in")
 
       {:halt, socket}
@@ -211,6 +203,14 @@ defmodule CaseManagerWeb.UserLive.Auth do
       end
     end)
   end
+
+  defp has_permission?(%{current_user: user, live_action: action}) do
+    user.role != :readonly ||
+      (user.role == :readonly &&
+         action not in [:edit, :new, :import])
+  end
+
+  defp has_permission?(%{current_user: _user}), do: true
 
   @doc """
   Used for routes that require the user to not be authenticated.
@@ -246,21 +246,6 @@ defmodule CaseManagerWeb.UserLive.Auth do
   @doc """
   Used for routes that require the user to have writing access.
   """
-  def require_write_user(conn, _opts) do
-    if conn.assigns[:current_user] && conn.assigns[:current_user].role != :readonly do
-      conn
-    else
-      conn
-      |> put_flash(:error, "You don't have permission to access this page.")
-      |> maybe_store_return_to()
-      |> redirect(to: ~p"/users/log_in")
-      |> halt()
-    end
-  end
-
-  @doc """
-  Used for routes that require the user to have writing access.
-  """
   def require_admin_user(conn, _opts) do
     if conn.assigns[:current_user] && conn.assigns[:current_user].role == :admin do
       conn
@@ -285,13 +270,14 @@ defmodule CaseManagerWeb.UserLive.Auth do
     if condition?.(socket.assigns.current_user) do
       func.()
     else
-      Logger.warning(
-        "User #{socket.assigns.current_user.email} modify a #{type}, but doesn't have the required permissions"
-      )
+      Sentry.capture_exception(%RuntimeError{
+        message:
+          "User #{socket.assigns.current_user.email} tried to modify a #{type}, but doesn't have the required permissions"
+      })
 
       {:noreply,
        socket
-       |> put_flash(:error, "Method not allowed")}
+       |> Phoenix.LiveView.put_flash(:error, "Method not allowed")}
     end
   end
 

@@ -1,7 +1,7 @@
 <.header>
   Listing Passengers
   <:actions>
-    <.link patch={~p"/passengers/new"}>
+    <.link :if={@current_user.role != :readonly} patch={~p"/passengers/new"}>
       <.button>New Passenger</.button>
     </.link>
   </:actions>
@@ -18,10 +18,13 @@
     <div class="sr-only">
       <.link navigate={~p"/passengers/#{passenger}"}>Show</.link>
     </div>
-    <.link patch={~p"/passengers/#{passenger}/edit"}>Edit</.link>
+    <.link :if={@current_user.role != :readonly} patch={~p"/passengers/#{passenger}/edit"}>
+      Edit
+    </.link>
   </:action>
   <:action :let={{id, passenger}}>
     <.link
+      :if={@current_user.role != :readonly}
       phx-click={JS.push("delete", value: %{id: passenger.id}) |> hide("##{id}")}
       data-confirm="Are you sure?"
     >
@@ -42,6 +45,7 @@
     title={@page_title}
     action={@live_action}
     passenger={@passenger}
+    current_user={@current_user}
     patch={~p"/passengers"}
   />
 </.modal>

@@ -37,6 +37,9 @@ defmodule CaseManager.Application do
       max_seconds: 10
     ]
 
+    # Add additional handler for sentry
+    Logger.add_handlers(:case_manager)
+
     Supervisor.start_link(children, opts)
   end
 

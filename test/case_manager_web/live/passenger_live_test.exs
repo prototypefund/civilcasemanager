@@ -81,6 +81,33 @@ defmodule CaseManagerWeb.PassengerLiveTest do
     end
   end
 
+  describe "Readonly" do
+    setup [:create_passenger, :login_readonly]
+
+    test "cannot create passenger", %{conn: conn} do
+      {:ok, index_live, _html} = live(conn, ~p"/passengers")
+
+      refute has_element?(index_live, "a", "New Passenger")
+
+      {:error, {:redirect, _}} =
+        live(conn, ~p"/passengers/new")
+    end
+
+    test "cannot edit passenger", %{conn: conn, passenger: passenger} do
+      {:ok, index_live, _html} = live(conn, ~p"/passengers")
+
+      refute has_element?(index_live, "#passengers-#{passenger.id} a", "Edit")
+
+      {:error, {:redirect, _}} = live(conn, ~p"/passengers/#{passenger}/edit")
+    end
+
+    test "cannot delete passenger", %{conn: conn, passenger: passenger} do
+      {:ok, index_live, _html} = live(conn, ~p"/passengers")
+
+      refute has_element?(index_live, "#passengers-#{passenger.id} a", "Delete")
+    end
+  end
+
   describe "Show" do
     setup [:create_passenger, :login]
 

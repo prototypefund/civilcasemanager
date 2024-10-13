@@ -269,4 +269,64 @@ defmodule CaseManagerWeb.UserLive.AuthTest do
       refute conn.status
     end
   end
+
+  describe "run_if_user_meets_condition/4" do
+    test "executes function if condition is met", %{conn: _conn} do
+      socket = %Phoenix.LiveView.Socket{assigns: %{current_user: %{role: :admin}}}
+      condition = fn user -> user.role == :admin end
+      func = fn -> {:ok, "executed"} end
+
+      assert {:ok, "executed"} == Auth.run_if_user_meets_condition(socket, :test, condition, func)
+    end
+
+    test "does not execute function if condition is not met", %{conn: _conn} do
+      socket = %Phoenix.LiveView.Socket{
+        assigns: %{
+          current_user: %{role: :user, email: "test@example.com"},
+          flash: %{},
+          __changed__: %{}
+        }
+      }
+
+      condition = fn user -> user.role == :admin end
+      func = fn -> {:ok, "executed"} end
+
+      assert {:noreply, _socket} =
+               Auth.run_if_user_meets_condition(socket, :test, condition, func)
+    end
+  end
+
+  describe "require_admin_user/2" do
+    test "allows access for admin user", %{conn: conn} do
+      admin_user = %{role: :admin}
+      conn = conn |> assign(:current_user, admin_user) |> Auth.require_admin_user([])
+      refute conn.halted
+      refute conn.status
+    end
+
+    test "redirects for non-admin user", %{conn: conn} do
+      non_admin_user = %{role: :user}
+
+      conn =
+        conn
+        |> assign(:current_user, non_admin_user)
+        |> fetch_flash()
+        |> Auth.require_admin_user([])
+
+      assert conn.halted
+      assert redirected_to(conn) == ~p"/users/log_in"
+
+      assert Phoenix.Flash.get(conn.assigns.flash, :error) ==
+               "You don't have permission to access this page."
+    end
+
+    test "redirects if user is not authenticated", %{conn: conn} do
+      conn = conn |> fetch_flash() |> Auth.require_admin_user([])
+      assert conn.halted
+      assert redirected_to(conn) == ~p"/users/log_in"
+
+      assert Phoenix.Flash.get(conn.assigns.flash, :error) ==
+               "You don't have permission to access this page."
+    end
+  end
 end

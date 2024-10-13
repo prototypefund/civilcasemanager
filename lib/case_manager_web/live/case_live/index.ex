@@ -140,7 +140,6 @@ defmodule CaseManagerWeb.CaseLive.Index do
     case status do
       :open -> "emerald"
       :closed -> "gray"
-      :archived -> "gray"
       :ready_for_documentation -> "blue"
       _ -> "blue"
     end
@@ -158,7 +157,6 @@ defmodule CaseManagerWeb.CaseLive.Index do
       case status do
         :open -> "hero-inbox-solid text-"
         :closed -> "hero-lock-closed text-"
-        :archived -> "hero-archive-box text-"
         :ready_for_documentation -> "hero-clipboard-document-list text-0"
         _ -> "hero-question-mark-circle text-"
       end

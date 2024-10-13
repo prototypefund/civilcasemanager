@@ -243,6 +243,30 @@ defmodule CaseManagerWeb.CaseLiveTest do
       refute updated_html =~ case.notes
     end
 
+    test "doesn't update case content if external edit to different case", %{
+      conn: conn,
+      caseStruct: case
+    } do
+      {:ok, show_live, _html} = live(conn, ~p"/cases/#{case}")
+
+      # Initial assertion
+      html = render(show_live)
+      assert html =~ remove_year_from_name(case.name)
+      assert html =~ case.notes
+
+      # Create and update a different case
+      different_case = case_fixture()
+      updated_attrs = %{name: "DC2000-2003", notes: "Different case notes"}
+      {:ok, _} = CaseManager.Cases.update_case(different_case, updated_attrs)
+
+      # Check that the page still has the original content
+      updated_html = render(show_live)
+      assert updated_html =~ remove_year_from_name(case.name)
+      assert updated_html =~ case.notes
+      refute updated_html =~ updated_attrs.name
+      refute updated_html =~ updated_attrs.notes
+    end
+
     test "updates events after external addition", %{conn: conn, caseStruct: case} do
       {:ok, show_live, _html} = live(conn, ~p"/cases/#{case}")
 
@@ -333,6 +357,28 @@ defmodule CaseManagerWeb.CaseLiveTest do
 
       # Check that the form still has the updated title
       assert updated_form =~ "Updated Title"
+    end
+
+    test "doesn't refresh edit when a different case was edited", %{conn: conn, caseStruct: case} do
+      {:ok, edit_live, _html} = live(conn, ~p"/cases/#{case}/show/edit")
+
+      # Initial assertion
+      assert edit_live |> form("#case-form") |> render() =~ case.notes
+
+      # Create and update a different case
+      {:ok, different_case} =
+        CaseManager.Cases.create_case(%{
+          notes: "Different case notes",
+          name: "DC2000-2003",
+          status: :open
+        })
+
+      CaseManager.Cases.update_case(different_case, %{notes: "Updated different case notes"})
+
+      # Check that the form hasn't been refreshed
+      updated_form = edit_live |> form("#case-form") |> render()
+      assert updated_form =~ case.notes
+      refute updated_form =~ "Updated different case notes"
     end
   end
 end

@@ -4,11 +4,13 @@ defmodule CaseManager.CasesTest do
   alias CaseManager.Cases
   alias CaseManager.Positions
   alias CaseManager.ImportedCases
+  alias CaseManager.CaseNationalities
   alias CaseManager.Cases.Case
   alias CaseManager.DeletedCases.DeletedCase
   import CaseManager.CasesFixtures
   import CaseManager.PositionsFixtures
   import CaseManager.ImportedCasesFixtures
+  import CaseManager.CaseNationalitiesFixtures
 
   describe "cases" do
     @invalid_attrs %{
@@ -296,15 +298,6 @@ defmodule CaseManager.CasesTest do
       end
     end
 
-    test "get_compound_identifier/2 returns correct identifier" do
-      assert Case.get_compound_identifier("AP123", ~U[2023-01-01 00:00:00Z]) == "AP123-2023"
-      assert Case.get_compound_identifier("AP 123", ~U[2023-01-01 00:00:00Z]) == "AP 123-2023"
-      assert Case.get_compound_identifier("123-2024", ~U[2023-01-01 00:00:00Z]) == "123-2024"
-
-      assert Case.get_compound_identifier("123-2024-extra", ~U[2023-01-01 00:00:00Z]) ==
-               "123-2024-extra"
-    end
-
     test "get_cases/1 returns cases based on provided IDs" do
       case1 = case_fixture()
       case2 = case_fixture()
@@ -373,6 +366,118 @@ defmodule CaseManager.CasesTest do
 
       invalid_params = %{filters: [%{field: :invalid_field, op: :=, value: "Some Value"}]}
       {:error, _changeset} = Cases.list_cases(invalid_params)
+    end
+
+    test "can delete case with case_nationalities, positions etc..." do
+      case = case_fixture()
+
+      case_nationality =
+        case_nationality_fixture(%{case_id: case.id})
+
+      position =
+        position_fixture(%{
+          item_id: case.id,
+          lat: 10.0,
+          lon: 20.0,
+          timestamp: ~N[2023-01-01 10:00:00]
+        })
+
+      assert {:ok, deleted_case} = Cases.delete_case(case)
+      assert deleted_case.id == case.id
+
+      assert_raise Ecto.NoResultsError, fn -> Cases.get_case!(case.id) end
+
+      assert_raise Ecto.NoResultsError, fn ->
+        CaseNationalities.get_case_nationality!(case.id, case_nationality.country)
+      end
+
+      assert_raise Ecto.NoResultsError, fn -> Positions.get_position!(position.id) end
+    end
+
+    test "cannot set duplicate names" do
+      case_fixture(%{name: "DC0001-2022"})
+      {:error, changeset} = Cases.create_case(%{name: "DC0001-2022", status: :closed})
+      assert "has already been taken" in errors_on(changeset).name
+    end
+
+    test "cannot set invalid names" do
+      {:error, changeset} = Cases.create_case(%{name: "Invalid Name"})
+      assert errors_on(changeset).name != []
+
+      {:error, changeset} = Cases.create_case(%{name: ""})
+      assert "can't be blank" in errors_on(changeset).name
+    end
+
+    test "multiple valid ids separated by / are permitted" do
+      {:ok, case1} = Cases.create_case(%{name: "DC0001-2002 / AP0002-2022", status: :closed})
+      assert case1.name == "DC0001-2002 / AP0002-2022"
+
+      {:error, changeset} = Cases.create_case(%{name: "Invalid/Name-2022"})
+      assert errors_on(changeset).name != []
+    end
+
+    test "date validation checks for dates before 2020" do
+      {:error, changeset} =
+        Cases.create_case(%{name: "DC0001-2022", occurred_at: ~U[2019-12-31 23:59:59Z]})
+
+      assert "Date must be after 2020" in errors_on(changeset).occurred_at
+    end
+
+    test "date validation checks for dates too far in the future" do
+      future_date = Date.add(Date.utc_today(), 31) |> DateTime.new!(~T[00:00:00], "Etc/UTC")
+      {:error, changeset} = Cases.create_case(%{name: "DC0001-2022", occurred_at: future_date})
+      assert "Date is in the future" in errors_on(changeset).occurred_at
+    end
+
+    test "date validation checks for valid dates" do
+      valid_date = DateTime.utc_now() |> DateTime.add(-1, :day)
+
+      {:ok, _case} =
+        Cases.create_case(%{name: "DC0001-2022", occurred_at: valid_date, status: :open})
+    end
+
+    test "date validation checks for date difference validation" do
+      base_date = ~U[2023-01-01 12:00:00Z]
+
+      {:error, changeset} =
+        Cases.create_case(%{
+          name: "DC0001-2022",
+          occurred_at: base_date,
+          alerted_at: DateTime.add(base_date, 31, :day),
+          status: "open"
+        })
+
+      assert "Date cannot be more than 30 days apart from alerted_at" in errors_on(changeset).occurred_at
+    end
+
+    test "date validation checks for multiple valid date fields" do
+      base_date = ~U[2023-01-01 12:00:00Z]
+
+      {:ok, _case} =
+        Cases.create_case(%{
+          name: "DC0001-2022",
+          occurred_at: base_date,
+          alerted_at: DateTime.add(base_date, 1, :day),
+          time_of_departure: DateTime.add(base_date, 2, :day),
+          time_of_disembarkation: DateTime.add(base_date, 3, :day),
+          status: "open"
+        })
+    end
+
+    test "date validation checks for one invalid date among multiple date fields" do
+      base_date = ~U[2023-01-01 12:00:00Z]
+
+      {:error, changeset} =
+        Cases.create_case(%{
+          name: "DC0001-2022",
+          occurred_at: base_date,
+          alerted_at: DateTime.add(base_date, 1, :day),
+          time_of_departure: DateTime.add(base_date, 2, :day),
+          time_of_disembarkation: DateTime.add(base_date, 35, :day),
+          status: "open"
+        })
+
+      assert "Date cannot be more than 30 days apart from occurred_at" in errors_on(changeset).time_of_disembarkation
     end
   end
 end

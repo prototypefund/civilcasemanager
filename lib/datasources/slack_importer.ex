@@ -96,7 +96,7 @@ defmodule CaseManager.Datasources.SlackImporter do
     date = created_at |> split_date() |> fix_date()
 
     %{
-      identifier: CaseManager.Cases.Case.get_compound_identifier(case_id, date),
+      identifier: normalize_identifier(case_id, date),
       created_at: date,
       title: additional
     }
@@ -106,7 +106,7 @@ defmodule CaseManager.Datasources.SlackImporter do
     date = created_at |> split_date() |> fix_date()
 
     %{
-      identifier: CaseManager.Cases.Case.get_compound_identifier(case_id, date),
+      identifier: normalize_identifier(case_id, date),
       created_at: date
     }
   end
@@ -115,9 +115,24 @@ defmodule CaseManager.Datasources.SlackImporter do
     date = DateTime.utc_now() |> DateTime.truncate(:second)
 
     %{
-      identifier: CaseManager.Cases.Case.get_compound_identifier(case_id, date),
+      identifier: normalize_identifier(case_id, date),
       created_at: date
     }
+  end
+
+  # TODO should be extended and moved to data quality tools
+  def normalize_identifier(id, fallback_time) when is_binary(id) do
+    case String.split(id, "-") do
+      [_num, _year] ->
+        id
+
+      [num] ->
+        year = DateTime.to_date(fallback_time).year
+        "#{num}-#{year}"
+
+      [_num, _year | _tail] ->
+        id
+    end
   end
 
   defp split_date(date_string) do

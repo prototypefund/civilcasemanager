@@ -262,6 +262,55 @@ defmodule CaseManager.Cases.Case do
       drop_param: :passengers_drop
     )
     |> unique_constraint(:name)
+    |> validate_change(:occurred_at, &validate_date/2)
+    |> validate_change(:alerted_at, &validate_date/2)
+    |> validate_change(:time_of_departure, &validate_date/2)
+    |> validate_change(:time_of_disembarkation, &validate_date/2)
+    |> validate_date_differences()
+  end
+
+  defp validate_date(field, date) do
+    cond do
+      Date.compare(date, ~D[2020-01-01]) == :lt ->
+        [{field, "Date must be after 2020"}]
+
+      Date.compare(date, Date.add(Date.utc_today(), 30)) == :gt ->
+        [{field, "Date is in the future"}]
+
+      true ->
+        []
+    end
+  end
+
+  defp validate_date_differences(changeset) do
+    date_fields = [:occurred_at, :alerted_at, :time_of_departure, :time_of_disembarkation]
+
+    Enum.reduce(date_fields, changeset, fn field, acc ->
+      case get_change(acc, field) do
+        nil -> acc
+        date -> validate_date_difference(acc, field, date, date_fields)
+      end
+    end)
+  end
+
+  defp validate_date_difference(changeset, field, date, date_fields) do
+    other_dates = Enum.reject(date_fields, &(&1 == field))
+
+    Enum.reduce(other_dates, changeset, fn other_field, acc ->
+      case get_field(acc, other_field) do
+        nil ->
+          acc
+
+        other_date ->
+          diff = abs(Date.diff(date, other_date))
+
+          if diff > 30 do
+            add_error(acc, field, "Date cannot be more than 30 days apart from #{other_field}")
+          else
+            acc
+          end
+      end
+    end)
   end
 
   defp valid_identifier?(part) do
@@ -291,20 +340,6 @@ defmodule CaseManager.Cases.Case do
             "Identifiers must be a prefix (AP, EB, etc) followed directly by a four digit number, followed by a dash and the year: AP0001-2024"
           )
         end
-    end
-  end
-
-  def get_compound_identifier(id, fallback_time) when is_binary(id) do
-    case String.split(id, "-") do
-      [_num, _year] ->
-        id
-
-      [num] ->
-        year = DateTime.to_date(fallback_time).year
-        "#{num}-#{year}"
-
-      [_num, _year | _tail] ->
-        id
     end
   end
 end

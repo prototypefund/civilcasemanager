@@ -45,5 +45,23 @@ defmodule CaseManagerWeb.ImportedCaseLive.ValidateTest do
         ImportedCases.get_imported_case!(imported_case.id)
       end
     end
+
+    test "handles Escape key press", %{conn: conn, imported_case: imported_case} do
+      {:ok, view, _html} = live(conn, ~p"/imported_cases/#{imported_case.id}/validate")
+
+      assert view
+             |> element("#case-form-wrapper")
+             |> render_keyup(%{key: "Escape"})
+
+      assert_redirect(view, ~p"/imported_cases")
+    end
+
+    test "other key doesn't trigger action", %{conn: conn, imported_case: imported_case} do
+      {:ok, view, _html} = live(conn, ~p"/imported_cases/#{imported_case.id}/validate")
+
+      assert view
+             |> element("#case-form-wrapper")
+             |> render_keyup(%{key: "Shift"}) =~ "Validate Row #{imported_case.row}"
+    end
   end
 end

@@ -89,6 +89,33 @@ defmodule CaseManagerWeb.PlaceLiveTest do
     end
   end
 
+  describe "Readonly" do
+    setup [:create_place, :login_readonly]
+
+    test "cannot create a new place", %{conn: conn} do
+      {:ok, index_live, _html} = live(conn, ~p"/places")
+      refute has_element?(index_live, "a", "New Place")
+    end
+
+    test "cannot edit an existing place", %{conn: conn, place: place} do
+      {:ok, index_live, _html} = live(conn, ~p"/places")
+      refute has_element?(index_live, "#places-#{place.id} a", "Edit")
+    end
+
+    test "cannot delete an existing place", %{conn: conn, place: place} do
+      {:ok, index_live, _html} = live(conn, ~p"/places")
+      refute has_element?(index_live, "#places-#{place.id} a", "Delete")
+    end
+
+    test "cannot access new place form", %{conn: conn} do
+      assert {:error, {:redirect, _}} = live(conn, ~p"/places/new")
+    end
+
+    test "cannot access edit place form", %{conn: conn, place: place} do
+      assert {:error, {:redirect, _}} = live(conn, ~p"/places/#{place}/edit")
+    end
+  end
+
   describe "Show" do
     setup [:create_place, :login]
 

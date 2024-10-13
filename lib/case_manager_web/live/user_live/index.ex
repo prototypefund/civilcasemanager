@@ -33,16 +33,6 @@ defmodule CaseManagerWeb.UserLive.Index do
   end
 
   @impl true
-  def handle_info({:user_created, user}, socket) do
-    {:noreply, stream_insert(socket, :users, user, at: 0)}
-  end
-
-  @impl true
-  def handle_info({:user_updated, user}, socket) do
-    {:noreply, stream_insert(socket, :users, user, at: 0)}
-  end
-
-  @impl true
   def handle_info({CaseManagerWeb.UserLive.FormComponent, {:saved, user}}, socket) do
     {:noreply, stream_insert(socket, :users, user)}
   end

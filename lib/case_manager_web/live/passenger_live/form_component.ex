@@ -47,7 +47,9 @@ defmodule CaseManagerWeb.PassengerLive.FormComponent do
   end
 
   def handle_event("save", %{"passenger" => passenger_params}, socket) do
-    save_passenger(socket, socket.assigns.action, passenger_params)
+    CaseManagerWeb.UserLive.Auth.run_if_user_can_write(socket, Passengers.Passenger, fn ->
+      save_passenger(socket, socket.assigns.action, passenger_params)
+    end)
   end
 
   defp save_passenger(socket, :edit, passenger_params) do

@@ -17,5 +17,17 @@ config :swoosh, local: false
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :case_manager, :logger, [
+  {:handler, :log_errors_to_sentry, Sentry.LoggerHandler,
+   %{
+     config: %{
+       metadata: [:file, :line],
+       rate_limiting: [max_events: 10, interval: _1_second = 1_000],
+       capture_log_messages: true,
+       level: :error
+     }
+   }}
+]
+
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.

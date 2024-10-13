@@ -92,6 +92,30 @@ defmodule CaseManagerWeb.UserLive.IndexTest do
     end
   end
 
+  describe "Index with readonly" do
+    setup [:create_user, :login_readonly]
+
+    test "redirects to login page when accessing users index", %{conn: conn} do
+      {:error, {:redirect, %{to: redirect_path}}} = live(conn, ~p"/users")
+      assert redirect_path == ~p"/users/log_in"
+    end
+
+    test "cannot access new user form", %{conn: conn} do
+      {:error, {:redirect, %{to: redirect_path}}} = live(conn, ~p"/users/new")
+      assert redirect_path == ~p"/users/log_in"
+    end
+
+    test "can access /users/settings", %{conn: conn} do
+      {:ok, _live, html} = live(conn, ~p"/users/settings")
+      assert html =~ "Settings"
+    end
+
+    test "cannot access edit user form", %{conn: conn, user: user} do
+      {:error, {:redirect, %{to: redirect_path}}} = live(conn, ~p"/users/#{user}/edit")
+      assert redirect_path == ~p"/users/log_in"
+    end
+  end
+
   describe "Index without login" do
     setup [:create_user]
 

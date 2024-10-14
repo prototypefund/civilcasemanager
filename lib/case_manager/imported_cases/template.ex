@@ -3,7 +3,7 @@ defmodule CaseManager.ImportedCases.Template do
 
   @template %{
     "Add info/summary/notes" => %{key: :notes, type: :string},
-    "AP NR" => %{key: :name, type: :string, prepend: "AP"},
+    "AP NR" => %{key: :name, type: :string},
     "BOAT COLOR" => %{key: :boat_color, type: :string, default: "unknown", lowercase: true},
     "BOAT TYPE" => %{key: :boat_type, type: :string, default: "unknown", lowercase: true},
     "Country. DEP" => %{key: :departure_region, type: :string},
@@ -48,12 +48,19 @@ defmodule CaseManager.ImportedCases.Template do
     }
   }
 
-  def map_input_to_template(input_map, index) do
+  @doc """
+  Maps one input row onto the template structure.
+
+  This function takes an input map, an index, and a year, and processes the input
+  according to the defined template. It returns a map that can be used to create a new case.
+  """
+  def map_input_to_template(input_map, index, year \\ nil) do
     Enum.reduce(@template, %{}, fn {key, template}, acc ->
       process(input_map, key, template, acc)
     end)
     |> Map.put(:row, index)
     |> populate_occurred_at()
+    |> put_formatted_name(year)
     |> CaseManager.DataQualityTools.update_imported_case(:place_of_departure, :departure_id)
     |> CaseManager.DataQualityTools.update_imported_case(:place_of_disembarkation, :arrival_id)
   end
@@ -69,6 +76,18 @@ defmodule CaseManager.ImportedCases.Template do
       true ->
         acc
     end
+  end
+
+  def put_formatted_name(map, nil), do: map
+
+  def put_formatted_name(%{name: name} = map, year) do
+    Map.put(map, :name, format_name(name, year))
+  end
+
+  def put_formatted_name(map, _year), do: map
+
+  def format_name(name, year) do
+    "AP" <> String.pad_leading(name, 4, "0") <> "-" <> year
   end
 
   def process(input_map, key, template, acc) do

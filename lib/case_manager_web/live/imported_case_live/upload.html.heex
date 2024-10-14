@@ -1,6 +1,8 @@
 <.header>
   Case Importer
-  <:subtitle>Here you can import csv files</:subtitle>
+  <:subtitle>
+    Import CSV case sheets here. If your file is in XLS format, you'll need to export it to CSV first
+  </:subtitle>
   <:actions>
     <.link patch={~p"/imported_cases/"} phx-click={JS.push_focus()}>
       <.button>View Queue</.button>
@@ -15,7 +17,8 @@
   phx-change="validate"
   class="mt-4"
 >
-  <.live_file_input upload={@uploads.avatar} />
+  <.input name="year" value={get_current_year()} type="select" label="Year" options={@years} />
+  <.live_file_input upload={@uploads.csv} />
   <:actions>
     <.button phx-disable-with="Uploading...">Upload</.button>
   </:actions>

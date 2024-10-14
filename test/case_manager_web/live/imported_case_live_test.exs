@@ -89,7 +89,7 @@ defmodule CaseManagerWeb.ImportedCaseLiveTest do
       {:ok, view, _html} = live(conn, ~p"/imported_cases/upload")
 
       file_input =
-        file_input(view, "#upload-form", :avatar, [
+        file_input(view, "#upload-form", :csv, [
           %{
             last_modified: 1_594_171_879_000,
             name: "test.csv",
@@ -109,7 +109,7 @@ defmodule CaseManagerWeb.ImportedCaseLiveTest do
       {:ok, view, _html} = live(conn, ~p"/imported_cases/upload")
 
       file_input =
-        file_input(view, "#upload-form", :avatar, [
+        file_input(view, "#upload-form", :csv, [
           %{
             last_modified: 1_594_171_879_000,
             name: "test_with_errors.csv",

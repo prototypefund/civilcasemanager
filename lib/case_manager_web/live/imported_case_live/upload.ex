@@ -7,7 +7,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.Upload do
      socket
      |> assign(:uploaded_files, [])
      |> assign(:years, get_possible_years())
-     |> allow_upload(:avatar, accept: [".csv"], max_entries: 1)}
+     |> allow_upload(:csv, accept: [".csv"], max_entries: 1)}
   end
 
   @impl Phoenix.LiveView
@@ -17,14 +17,14 @@ defmodule CaseManagerWeb.ImportedCaseLive.Upload do
 
   @impl Phoenix.LiveView
   def handle_event("cancel-upload", %{"ref" => ref}, socket) do
-    {:noreply, cancel_upload(socket, :avatar, ref)}
+    {:noreply, cancel_upload(socket, :csv, ref)}
   end
 
   @impl Phoenix.LiveView
   def handle_event("save", params, socket) do
     CaseManagerWeb.UserLive.Auth.run_if_user_can_write(socket, Upload, fn ->
       uploaded_files =
-        consume_uploaded_entries(socket, :avatar, fn %{path: path}, _entry ->
+        consume_uploaded_entries(socket, :csv, fn %{path: path}, _entry ->
           File.stream!(path)
           ## AP Template contains additional header in the first row
           |> Stream.drop(1)

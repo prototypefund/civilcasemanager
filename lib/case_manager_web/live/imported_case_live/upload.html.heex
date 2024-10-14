@@ -15,6 +15,7 @@
   phx-change="validate"
   class="mt-4"
 >
+  <.input name="year" value={get_current_year()} type="select" label="Year" options={@years} />
   <.live_file_input upload={@uploads.avatar} />
   <:actions>
     <.button phx-disable-with="Uploading...">Upload</.button>

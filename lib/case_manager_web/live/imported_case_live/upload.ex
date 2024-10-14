@@ -6,6 +6,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.Upload do
     {:ok,
      socket
      |> assign(:uploaded_files, [])
+     |> assign(:years, get_possible_years())
      |> allow_upload(:avatar, accept: [".csv"], max_entries: 1)}
   end
 
@@ -20,7 +21,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.Upload do
   end
 
   @impl Phoenix.LiveView
-  def handle_event("save", _params, socket) do
+  def handle_event("save", params, socket) do
     CaseManagerWeb.UserLive.Auth.run_if_user_can_write(socket, Upload, fn ->
       uploaded_files =
         consume_uploaded_entries(socket, :avatar, fn %{path: path}, _entry ->
@@ -31,7 +32,7 @@ defmodule CaseManagerWeb.ImportedCaseLive.Upload do
           ## In total there are two headers so we offset the index so that
           ## the resulting row index is the same as in Excel.
           |> Stream.with_index(2)
-          |> batch_import()
+          |> batch_import(params["year"])
         end)
         |> hd()
 
@@ -48,10 +49,10 @@ defmodule CaseManagerWeb.ImportedCaseLive.Upload do
   end
 
   ## Walk throught the enumerable and create a list of ImportedCase structs
-  defp batch_import(stream) do
+  defp batch_import(stream, year) do
     case_list =
       Enum.map(stream, fn {{:ok, content}, index} ->
-        CaseManager.ImportedCases.Template.map_input_to_template(content, index)
+        CaseManager.ImportedCases.Template.map_input_to_template(content, index, year)
       end)
 
     CaseManager.ImportedCases.create_imported_cases_from_list(case_list)
@@ -99,5 +100,24 @@ defmodule CaseManagerWeb.ImportedCaseLive.Upload do
 
     result_string = "#{success_string} #{failed_string} #{failed_rows_string}"
     {result_code, result_string}
+  end
+
+  @doc """
+  Get the year in UTC now
+  """
+  def get_current_year(), do: Date.utc_today().year
+
+  @doc """
+  Returns a a list of the current year and four years before that.
+
+  ## Examples
+
+      iex> get_possible_years()
+      2019..2024  # Assuming the current year is 2024
+
+  """
+  def get_possible_years() do
+    current_year = get_current_year()
+    (current_year - 5)..current_year
   end
 end

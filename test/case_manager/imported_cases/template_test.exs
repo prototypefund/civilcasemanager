@@ -13,9 +13,9 @@ defmodule CaseManager.ImportedCases.TemplateTest do
         "1st position" => "35.123N, 12.456E @ 2023-05-01T10:00:00"
       }
 
-      result = Template.map_input_to_template(input, 1)
+      result = Template.map_input_to_template(input, 1, "2020")
 
-      assert result.name == "AP123"
+      assert result.name == "AP0123-2020"
       assert result.boat_color == "blue"
       assert result.time_of_disembarkation == ~U[2023-05-01 12:00:00Z]
       assert result.pob_per_nationality == "Italian French"

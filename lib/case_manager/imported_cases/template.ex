@@ -54,7 +54,7 @@ defmodule CaseManager.ImportedCases.Template do
   This function takes an input map, an index, and a year, and processes the input
   according to the defined template. It returns a map that can be used to create a new case.
   """
-  def map_input_to_template(input_map, index, year) do
+  def map_input_to_template(input_map, index, year \\ nil) do
     Enum.reduce(@template, %{}, fn {key, template}, acc ->
       process(input_map, key, template, acc)
     end)
@@ -83,6 +83,8 @@ defmodule CaseManager.ImportedCases.Template do
   def put_formatted_name(%{name: name} = map, year) do
     Map.put(map, :name, format_name(name, year))
   end
+
+  def put_formatted_name(map, _year), do: map
 
   def format_name(name, year) do
     "AP" <> String.pad_leading(name, 4, "0") <> "-" <> year

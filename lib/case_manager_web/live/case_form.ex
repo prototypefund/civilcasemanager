@@ -44,7 +44,13 @@ defmodule CaseManagerWeb.CaseForm do
           <.input field={@form[:imported_id]} type="hidden" value={@imported_case.id} />
         <% end %>
         <h1 class="dark:text-indigo-300 text-indigo-600 pt-8 font-semibold">Base data</h1>
-        <.input field={@form[:name]} type="text" label="Identifier" force_validate={@validate_now} />
+        <.input
+          field={@form[:name]}
+          type="text"
+          label="Identifier"
+          placeholder="Example: AP0001-2024"
+          force_validate={@validate_now}
+        />
         <.input field={@form[:notes]} type="textarea" label="Notes" force_validate={@validate_now} />
 
         <.input

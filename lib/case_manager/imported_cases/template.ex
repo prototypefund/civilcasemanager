@@ -31,7 +31,13 @@ defmodule CaseManager.ImportedCases.Template do
     "Nationalities" => %{key: :pob_per_nationality, type: :string, join: true},
     "nationalities" => %{key: :pob_per_nationality, type: :string, join: true},
     "POB Number CONFIRMED" => %{key: :pob_total, type: :integer},
-    "SAR" => %{key: :sar_region, type: :string, default: "unknown", prepend: "sar"},
+    "SAR" => %{
+      key: :sar_region,
+      type: :string,
+      default: "unknown",
+      lowercase: true,
+      prepend: "sar"
+    },
     "Source" => %{key: :source, type: :string, regex: ~r/\bhttps?:\/\/\S+\b/},
     "THURAYA" => %{key: :phonenumber, type: :string},
     "1st position" => %{
@@ -87,7 +93,8 @@ defmodule CaseManager.ImportedCases.Template do
   def put_formatted_name(map, _year), do: map
 
   def format_name(name, year) do
-    "AP" <> String.pad_leading(name, 4, "0") <> "-" <> year
+    number = if String.starts_with?(name, "AP"), do: String.slice(name, 2..-1//1), else: name
+    "AP" <> String.pad_leading(number, 4, "0") <> "-" <> year
   end
 
   def process(input_map, key, template, acc) do
@@ -101,6 +108,7 @@ defmodule CaseManager.ImportedCases.Template do
 
   defp process_value(input_value, template, input_map) do
     input_value
+    |> lowercase_conditionally(template)
     |> append_conditionally(template, input_map)
     |> prepend_conditionally(template)
     |> trim_conditionally()
@@ -127,6 +135,14 @@ defmodule CaseManager.ImportedCases.Template do
       Map.put(acc, template[:key], template[:default])
     else
       acc
+    end
+  end
+
+  defp lowercase_conditionally(input_value, template) do
+    if Map.has_key?(template, :lowercase) && template[:lowercase] do
+      String.downcase(input_value)
+    else
+      input_value
     end
   end
 
@@ -182,9 +198,6 @@ defmodule CaseManager.ImportedCases.Template do
 
           Map.has_key?(template, :apply) ->
             apply(template[:apply], [value])
-
-          Map.has_key?(template, :lowercase) ->
-            String.downcase(value)
 
           Map.has_key?(template, :join) ->
             Enum.join(value, " ")

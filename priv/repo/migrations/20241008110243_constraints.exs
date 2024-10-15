@@ -32,7 +32,7 @@ defmodule CaseManager.Repo.Migrations.Constraints do
     # Outcome constraint
     create constraint("cases", :outcome_constraint,
              check:
-               "outcome IN ('unknown', 'interception_libya', 'interception_tn', 'ngo_rescue', 'afm_rescue', 'hcg_rescue', 'italy_rescue', 'merv_interception', 'merv_rescue', 'returned', 'arrived', 'autonomous', 'empty_boat', 'shipwreck', 'unclear')"
+               "outcome IN ('unknown', 'interception_libya', 'interception_tn', 'ngo_rescue', 'afm_rescue', 'hcg_rescue', 'italy_rescue', 'merv_interception', 'merv_rescue', 'returned', 'arrived', 'autonomous', 'empty_boat', 'shipwreck')"
            )
   end
 end

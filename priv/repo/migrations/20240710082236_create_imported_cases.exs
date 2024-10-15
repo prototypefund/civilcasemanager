@@ -4,7 +4,7 @@ defmodule CaseManager.Repo.Migrations.CreateImportedCases do
   def change do
     create table(:imported_cases) do
       add :name, :string
-      add :notes, :string
+      add :notes, :text
       add :status, :string
       add :occurred_at, :utc_datetime
       add :departure_region, :string

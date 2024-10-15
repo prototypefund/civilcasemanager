@@ -156,8 +156,7 @@ defmodule CaseManager.Cases.Case do
         :arrived,
         :autonomous,
         :empty_boat,
-        :shipwreck,
-        :unclear
+        :shipwreck
       ]
 
     field :time_of_disembarkation, :utc_datetime

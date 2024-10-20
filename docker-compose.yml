@@ -1,8 +1,6 @@
-version: '3.9'
-
 services:
   postgres-db:
-    image: postgis/postgis:13-3.4
+    image: postgis/postgis:17-3.4
     restart: always
     ports:
       - "5432:5432"

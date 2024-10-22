@@ -22,8 +22,13 @@ defmodule CaseManagerWeb.PositionLive.FormComponent do
         <.input field={@form[:altitude]} type="number" label="Altitude" step="any" />
         <.input field={@form[:course]} type="number" label="Course" step="any" />
         <.input field={@form[:heading]} type="number" label="Heading" step="any" />
-        <.input field={@form[:lat]} type="number" label="Lat" step="any" />
-        <.input field={@form[:lon]} type="number" label="Lon" step="any" />
+        <.input
+          field={@form[:short_code]}
+          type="text"
+          placeholder="DEG MIN (SEC) / DEG MIN (SEC)"
+          label="Position"
+          step="any"
+        />
         <.input field={@form[:source]} type="text" label="Source" />
         <.input field={@form[:speed]} type="number" label="Speed" step="any" />
         <.input field={@form[:timestamp]} type="datetime-local" label="Timestamp" />

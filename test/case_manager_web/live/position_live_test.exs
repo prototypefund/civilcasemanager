@@ -13,8 +13,7 @@ defmodule CaseManagerWeb.PositionLiveTest do
     altitude: "120.5",
     course: "120.5",
     heading: "120.5",
-    lat: "120.5",
-    lon: "120.5",
+    short_code: "11.34 / 12",
     imported_from: "some imported_from",
     soft_deleted: true
   }
@@ -25,8 +24,7 @@ defmodule CaseManagerWeb.PositionLiveTest do
     altitude: "456.7",
     course: "456.7",
     heading: "456.7",
-    lat: "456.7",
-    lon: "456.7",
+    short_code: "11.56 / 12",
     imported_from: "some updated imported_from",
     soft_deleted: false
   }
@@ -37,8 +35,6 @@ defmodule CaseManagerWeb.PositionLiveTest do
     altitude: nil,
     course: nil,
     heading: nil,
-    lat: nil,
-    lon: nil,
     imported_from: nil,
     soft_deleted: false
   }
@@ -107,7 +103,7 @@ defmodule CaseManagerWeb.PositionLiveTest do
 
       html = render(index_live)
       assert html =~ "Position created successfully"
-      assert html =~ "120.5"
+      assert html =~ "11.34"
     end
 
     test "updates position in listing", %{conn: conn, position: position} do
@@ -130,7 +126,7 @@ defmodule CaseManagerWeb.PositionLiveTest do
 
       html = render(index_live)
       assert html =~ "Position updated successfully"
-      assert html =~ "456.7"
+      assert html =~ "11.56"
     end
 
     test "deletes position in listing", %{conn: conn, position: position} do
@@ -171,7 +167,7 @@ defmodule CaseManagerWeb.PositionLiveTest do
 
       html = render(show_live)
       assert html =~ "Position updated successfully"
-      assert html =~ "456.7"
+      assert html =~ "11.56"
     end
   end
 end

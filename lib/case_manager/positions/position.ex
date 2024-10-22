@@ -25,8 +25,7 @@ defmodule CaseManager.Positions.Position do
     field :lon, :decimal
     field :short_code, :string, virtual: true
     field :imported_from, :string
-    ## TODO Make plan which field to use
-    # field :pos_geo, Geo.PostGIS.Geometry
+    field :pos_geo, Geo.PostGIS.Geometry
     field :soft_deleted, :boolean, default: false
     belongs_to :case, CaseManager.Cases.Case, foreign_key: :item_id, type: CaseManager.StringId
 
@@ -42,6 +41,7 @@ defmodule CaseManager.Positions.Position do
       :heading,
       :lat,
       :lon,
+      :pos_geo,
       :source,
       :speed,
       :timestamp,
@@ -51,7 +51,9 @@ defmodule CaseManager.Positions.Position do
       :item_id
     ])
     |> convert_short_code()
-    |> validate_required([:lat, :lon])
+    |> validate_required([:lat, :lon, :timestamp])
+    |> fill_geo_if_missing()
+    |> validate_required([:pos_geo])
     |> unique_constraint([:timestamp, :item_id])
   end
 
@@ -72,9 +74,39 @@ defmodule CaseManager.Positions.Position do
       changeset
       |> put_change(:lat, lat)
       |> put_change(:lon, lon)
+      |> put_change(:pos_geo, %Geo.Point{coordinates: {lon, lat}, srid: 4326})
     rescue
       _ ->
         add_error(changeset, :short_code, "Invalid short code: Use DEG MIN / DEG MIN")
     end
+  end
+
+  def fill_geo_if_missing(changeset) do
+    if !get_field(changeset, :geo_pos) && get_field(changeset, :lon) do
+      put_change(
+        changeset,
+        :pos_geo,
+        geo_point_from_lat_lon(
+          get_field(changeset, :lon),
+          get_field(changeset, :lat)
+        )
+      )
+    else
+      changeset
+    end
+  end
+
+  defp geo_point_from_lat_lon(lat, lon) when is_float(lat) and is_float(lon) do
+    %Geo.Point{
+      coordinates: {lon, lat},
+      srid: 4326
+    }
+  end
+
+  defp geo_point_from_lat_lon(lat, lon) do
+    %Geo.Point{
+      coordinates: {Decimal.to_float(lon), Decimal.to_float(lat)},
+      srid: 4326
+    }
   end
 end

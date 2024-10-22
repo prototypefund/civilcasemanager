@@ -245,7 +245,7 @@ defmodule CaseManager.Cases.Case do
       :alerted_at,
       :alerted_by
     ])
-    |> validate_required([:name, :status])
+    |> validate_required([:name, :status, :occurred_at])
     |> validate_name()
     |> put_timestamp_if_nil(:created_at)
     |> cast_assoc(:positions,

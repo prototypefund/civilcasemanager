@@ -40,7 +40,11 @@ defmodule CaseManagerWeb.CaseFormTest do
     test "saves new case", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/cases/new")
 
-      attrs = %{name: "AP0303-2001", notes: "Some notes"}
+      attrs = %{
+        name: "AP0303-2001",
+        notes: "Some notes",
+        occurred_at: ~U[2023-01-01 10:00:00Z]
+      }
 
       assert view
              |> form("#case-form", case: attrs)

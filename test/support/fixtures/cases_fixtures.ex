@@ -20,6 +20,7 @@ defmodule CaseManager.CasesFixtures do
         closed_at: ~U[2024-03-07 08:58:00Z],
         created_at: ~U[2024-03-07 08:58:00Z],
         deleted_at: ~U[2024-03-07 08:58:00Z],
+        occurred_at: ~U[2024-03-07 08:58:00Z],
         description: "some description",
         name: "DC#{random_four_digit()}-#{random_four_digit()}",
         notes: "Received call from PoB",

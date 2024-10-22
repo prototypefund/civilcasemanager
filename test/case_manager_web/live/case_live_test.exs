@@ -370,7 +370,8 @@ defmodule CaseManagerWeb.CaseLiveTest do
         CaseManager.Cases.create_case(%{
           notes: "Different case notes",
           name: "DC2000-2003",
-          status: :open
+          status: :open,
+          occurred_at: ~U[2023-01-01 10:00:00Z]
         })
 
       CaseManager.Cases.update_case(different_case, %{notes: "Updated different case notes"})

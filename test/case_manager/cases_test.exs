@@ -396,7 +396,14 @@ defmodule CaseManager.CasesTest do
 
     test "cannot set duplicate names" do
       case_fixture(%{name: "DC0001-2022"})
-      {:error, changeset} = Cases.create_case(%{name: "DC0001-2022", status: :closed})
+
+      {:error, changeset} =
+        Cases.create_case(%{
+          name: "DC0001-2022",
+          status: :closed,
+          occurred_at: ~U[2023-01-01 10:00:00Z]
+        })
+
       assert "has already been taken" in errors_on(changeset).name
     end
 
@@ -404,12 +411,23 @@ defmodule CaseManager.CasesTest do
       {:error, changeset} = Cases.create_case(%{name: "Invalid Name"})
       assert errors_on(changeset).name != []
 
-      {:error, changeset} = Cases.create_case(%{name: ""})
+      {:error, changeset} =
+        Cases.create_case(%{
+          name: "",
+          occurred_at: ~U[2023-01-01 10:00:00Z]
+        })
+
       assert "can't be blank" in errors_on(changeset).name
     end
 
     test "multiple valid ids separated by / are permitted" do
-      {:ok, case1} = Cases.create_case(%{name: "DC0001-2002 / AP0002-2022", status: :closed})
+      {:ok, case1} =
+        Cases.create_case(%{
+          name: "DC0001-2002 / AP0002-2022",
+          status: :closed,
+          occurred_at: ~U[2023-01-01 10:00:00Z]
+        })
+
       assert case1.name == "DC0001-2002 / AP0002-2022"
 
       {:error, changeset} = Cases.create_case(%{name: "Invalid/Name-2022"})
